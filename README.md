@@ -2,9 +2,11 @@
 
 This is the github Repo for Group 5's SCC230 project
 
-## Particapents - Student ID
+## Participants
 
-Samuel Chee Lok To - 38865009
+| Name               | Student ID | Desired Role |
+| ------------------ | ---------- | ------------ |
+| Samuel Chee Lok To | 38865009   | FullStack    |
 
 ## Technologies being used
 
@@ -24,15 +26,19 @@ Samuel Chee Lok To - 38865009
 
 ## Notes for Devs
 
-### Working on .md files in vscode
+### Recommended VS code extensions
 
 Would probably be best if you use these (Search codes in VScode extension tab):
 
--   shd101wyy.markdown-preview-enhanced : Previewing the MD file
--   yzhang.markdown-all-in-one : Gives lovely shortcuts to use
+| Extension ID                        | Filetype usage | Reasoning                                 |
+| ----------------------------------- | -------------- | ----------------------------------------- |
+| shd101wyy.markdown-preview-enhanced | **.md**        | To preview / edit **.md** file            |
+| yzhang.markdown-all-in-one          | **.md**        | Gives good **.md** shortcuts & formatting |
 
 ### [Requirements.md](./Requirements.md)
 
--   Main features written as: X
--   Feature FRs: X.X
--   Feature NFRs: X.X.X
+| For           | Format |
+| ------------- | ------ |
+| Main Features | X      |
+| Feature FRs   | X.X    |
+| Feature NFRs  | X.X.X  |
