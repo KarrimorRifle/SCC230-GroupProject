@@ -21,4 +21,17 @@ Samuel Chee Lok To - 38865009
 -   need user stories for each feature and a further description of features wanted
 -   Requirements will need to be reordered depending on importance of feature
 
-## Notable features and Usage of app
+## Notes for Devs
+
+### Working on .md files in vscode
+
+Would probably be best if you use these:
+
+-   shd101wyy.markdown-preview-enhanced : Previewing the MD file
+-   yzhang.markdown-all-in-one : Gives lovely shortcuts to use
+
+### [Requirements.md](./Requirements.md)
+
+Main features written as: X
+Feature FRs: X.X
+Feature NFRs: X.X.X
