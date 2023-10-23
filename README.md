@@ -43,11 +43,11 @@ To be discussed & scheduled:
 
 Would probably be best if you use these (Search codes in VScode extension tab):
 
-| Extension ID                        | Filetype usage | Reasoning                                 |
-| ----------------------------------- | -------------- | ----------------------------------------- |
-| shd101wyy.markdown-preview-enhanced | **.md**        | To preview / edit **.md** file            |
-| yzhang.markdown-all-in-one          | **.md**        | Gives good **.md** shortcuts & formatting |
-| TheUMLetTeam.umlet                  | **.uxf**       | Make use case diagrams                    |
+| Extension ID                        | Filetype usage | Reasoning                                 | Required    |
+| ----------------------------------- | -------------- | ----------------------------------------- | ----------- |
+| shd101wyy.markdown-preview-enhanced | **.md**        | To preview / edit **.md** file            | &cross;     |
+| yzhang.markdown-all-in-one          | **.md**        | Gives good **.md** shortcuts & formatting | &cross;     |
+| TheUMLetTeam.umlet                  | **.uxf**       | Make use case diagrams                    | **&check;** |
 
 ### [Requirements.md](./Requirements.md)
 
