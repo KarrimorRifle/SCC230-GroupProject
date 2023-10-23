@@ -26,6 +26,19 @@ This is the github Repo for Group 5's SCC230 project
 
 ## Notes for Devs
 
+### Catchups / meetings
+
+To be discussed & scheduled:
+
+-   preferably online
+-   twice a week (30 mins max)
+-   afternoon
+-   purpose:
+    -   Discuss key features
+    -   Distribute work
+    -   Discuss coding & requirement issues
+-   Application: Teams
+
 ### Recommended VS code extensions
 
 Would probably be best if you use these (Search codes in VScode extension tab):
