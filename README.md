@@ -8,9 +8,9 @@ Samuel Chee Lok To - 38865009
 
 ## Technologies being used
 
-Vue with composition API (TS)
-Python
-MySQL (DJango recommended due to abundance of resources for this stack: https://www.webucator.com/article/connecting-django-and-vue/)
+-   Vue with composition API (TS)
+-   Python
+-   MySQL (DJango recommended due to abundance of resources for this stack: https://www.webucator.com/article/connecting-django-and-vue/)
 
 ## Updates & notes
 
