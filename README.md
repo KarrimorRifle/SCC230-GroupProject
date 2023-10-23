@@ -9,8 +9,9 @@ Samuel Chee Lok To - 38865009
 ## Technologies being used
 
 -   Vue with composition API (TS)
+-   Bootstrap
 -   Python
--   MySQL (DJango recommended due to abundance of resources for this stack: https://www.webucator.com/article/connecting-django-and-vue/)
+-   MySQL (DJango **recommended** due to **resources** available for the stack: [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/): best to get general idea from all of them before proceeding)
 
 ## Updates & notes
 
