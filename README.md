@@ -33,6 +33,6 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 
 ### [Requirements.md](./Requirements.md)
 
-Main features written as: X
-Feature FRs: X.X
-Feature NFRs: X.X.X
+-   Main features written as: X
+-   Feature FRs: X.X
+-   Feature NFRs: X.X.X
