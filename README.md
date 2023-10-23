@@ -10,11 +10,16 @@ This is the github Repo for Group 5's SCC230 project
 
 ## Technologies being used
 
--   Vue with composition API (TS) : Frontend
--   Bootstrap : Frontend
--   Python : Backend
--   MySQL (DJango **recommended** due to **resources** available for the stack: [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/): best to get general idea from all of them before proceeding) : Backend / DB
+-   [Vue with composition API](https://vuejs.org/guide/quick-start.html) ([TS](https://www.typescriptlang.org/docs/)) : Frontend
+-   [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) : Frontend
+-   [Python](https://docs.python.org/3/) : Backend
+-   [MySQL](https://dev.mysql.com/doc/connector-python/en/) ( [DJango](https://docs.djangoproject.com/en/4.2/) **recommended** due to **resources** available for the stack: [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/): best to get general idea from all of them before proceeding) : Backend / DB
 -   Lint : Formatter
+
+### APIs
+
+-   [Barcode Lookup](https://www.barcodelookup.com/api)
+-   [Food and grocery w/ NLP](https://developer.edamam.com/food-database-api)
 
 ## Updates & notes
 
@@ -39,7 +44,7 @@ To be discussed & scheduled:
     -   Discuss coding & requirement issues
 -   Application: Teams
 
-### Recommended VS code extensions
+### VS code extensions
 
 Would probably be best if you use these (Search codes in VScode extension tab):
 
