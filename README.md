@@ -47,14 +47,14 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 | ----------------------------------- | -------------- | ----------------------------------------- |
 | shd101wyy.markdown-preview-enhanced | **.md**        | To preview / edit **.md** file            |
 | yzhang.markdown-all-in-one          | **.md**        | Gives good **.md** shortcuts & formatting |
+| TheUMLetTeam.umlet                  | **.uxf**       | Make use case diagrams                    |
 
 ### [Requirements.md](./Requirements.md)
 
-| For           | Format |
-| ------------- | ------ |
-| Main Features | X      |
-| Feature FRs   | X.X    |
-| Feature NFRs  | X.X.X  |
+| For          | Format |
+| ------------ | ------ |
+| Feature FRs  | X      |
+| Feature NFRs | X.X    |
 
 ##### Resources for Website requirements:
 
