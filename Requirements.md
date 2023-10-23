@@ -4,10 +4,10 @@
 
 | Code        | Meaning                        |
 | ----------- | ------------------------------ |
-| **A**.\_.\_ | **Important**                  |
-| **B**.\_.\_ | **Important - Low Urgency**    |
-| **C**.\_.\_ | **Low urgency**                |
-| \_.**#**.\_ | **Week to be completed**       |
+| **#**.\_.\_ | **Week to be completed**       |
+| \_.**A**.\_ | **Important**                  |
+| \_.**B**.\_ | **Important - Low Urgency**    |
+| \_.**C**.\_ | **Low urgency**                |
 | \_.\_.**F** | **Functional requirement**     |
 | \_.\_.**N** | **Non-functional requirement** |
 
