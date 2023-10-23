@@ -14,7 +14,7 @@ Samuel Chee Lok To - 38865009
 
 ## Updates & notes
 
-23/10/23
+23-10-23
 
 -   requirements are not final.
 -   need user stories for each feature and a further description of features wanted
