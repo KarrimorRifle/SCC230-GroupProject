@@ -42,3 +42,10 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 | Main Features | X      |
 | Feature FRs   | X.X    |
 | Feature NFRs  | X.X.X  |
+
+##### Resources for Website requirements:
+
+-   [Banc](https://banc.digital/blog/how-to-write-a-website-requirements-document-and-statement-of-work/)
+-   [Mindspun](https://www.mindspun.com/blog/website-requirements-document-a-complete-guide/)
+-   [Random example i came across](http://web.cse.ohio-state.edu/~bair.41/616/Project/Example_Document/Req_Doc_Example.html)
+-   [Nuclino](https://www.nuclino.com/articles/functional-requirements)
