@@ -4,12 +4,12 @@ This is the github Repo for Group 5's SCC230 project
 
 ## Participants
 
-| Name               | Student ID | Desired Role |
-| ------------------ | ---------- | ------------ |
-| Samuel Chee Lok To | 38865009   | FullStack    |
-| Blade Eastham      | 38863812   | Any          |
-| Aditya Abhijit Khan| 38730421   | Any          |
-| David Mellon       | 38790629   | Any          |
+| Name                | Student ID | Desired Role |
+| ------------------- | ---------- | ------------ |
+| Samuel Chee Lok To  | 38865009   | FullStack    |
+| Blade Eastham       | 38863812   | Any          |
+| Aditya Abhijit Khan | 38730421   | Any          |
+| David Mellon        | 38790629   | Any          |
 
 ## Technologies being used
 
@@ -57,11 +57,6 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 | TheUMLetTeam.umlet                  | **.uxf**       | Make use case diagrams                    | **&check;** |
 
 ### [Requirements.md](./Requirements.md)
-
-| For          | Format |
-| ------------ | ------ |
-| Feature FRs  | X      |
-| Feature NFRs | X.X    |
 
 ##### Resources for Website requirements:
 

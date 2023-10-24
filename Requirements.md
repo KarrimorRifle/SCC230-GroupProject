@@ -22,7 +22,9 @@ Currently planned Milestones:
 
 An issue for each requirements (**FRs & NFRs**)
 
-## Priority Brackets
+## Requirements
+
+### Priority Brackets
 
 | Code     | Meaning                  |
 | -------- | ------------------------ |
@@ -31,7 +33,12 @@ An issue for each requirements (**FRs & NFRs**)
 | \_.**B** | **Important**            |
 | \_.**C** | **Low urgency**          |
 
-## Requirements
+### FR & NFR
+
+| For          | Format |
+| ------------ | ------ |
+| Feature FRs  | X      |
+| Feature NFRs | X.X    |
 
 | ID   | Feature                         | User Story                                                                                 | Description                                                                  | Priority Bracket | Complete? |
 | ---- | ------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | ---------------- | --------- |
