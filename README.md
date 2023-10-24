@@ -64,3 +64,18 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 -   [Mindspun](https://www.mindspun.com/blog/website-requirements-document-a-complete-guide/)
 -   [Random example i came across](http://web.cse.ohio-state.edu/~bair.41/616/Project/Example_Document/Req_Doc_Example.html)
 -   [Nuclino](https://www.nuclino.com/articles/functional-requirements)
+
+### Merging and issues
+
+Creating issues:
+
+-   Issue is to be paired with a requirement:
+    -   Title: {Requirement ID} {Requirement name}
+    -   Description: {User story}
+        -   Description of what you are going to achieve
+-   On merging make sure item is self documented and tested (tests are to be in the document too, use a microsoft office application)
+    -   Before merge make sure its **peer reviewed** and all threads are resolved
+
+### Milestones
+
+Will be determined by group, information will be set by Samuel T. once requirements are fully configured
