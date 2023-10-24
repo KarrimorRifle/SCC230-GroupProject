@@ -13,7 +13,7 @@ This is the github Repo for Group 5's SCC230 project
 -   [Vue with composition API](https://vuejs.org/guide/quick-start.html) ([TS](https://www.typescriptlang.org/docs/)) : Frontend
 -   [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) : Frontend
 -   [Python](https://docs.python.org/3/) : Backend
--   [MySQL](https://dev.mysql.com/doc/connector-python/en/) ( [DJango](https://docs.djangoproject.com/en/4.2/) **recommended** due to **resources** available for the stack: [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/): best to get general idea from all of them before proceeding) : Backend / DB
+-   [DJango](https://docs.djangoproject.com/en/4.2/) **recommended** due to **resources** available for the stack: [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/)create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/: best to get general idea from all of them before proceeding : Backend / DB
 -   Lint : Formatter
 
 ### APIs
@@ -35,14 +35,8 @@ This is the github Repo for Group 5's SCC230 project
 
 To be discussed & scheduled:
 
--   preferably online
--   twice a week (30 mins max)
--   afternoon
--   purpose:
-    -   Discuss key features
-    -   Distribute work
-    -   Discuss coding & requirement issues
--   Application: Teams
+-   Wednesday - 17:00
+-   Sunday - 15:00
 
 ### VS code extensions
 

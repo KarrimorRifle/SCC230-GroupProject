@@ -4,6 +4,24 @@
 
 Make organisation of household food and meals an easy task that doesn't require **too much** cognitive processing
 
+## Bringing requirements into github
+
+### Milestones:
+
+**Milestone** will include set **FR**s and their **NFR**s
+
+Currently planned Milestones:
+
+1. Basic application with manual tracking
+2. Basic socials and manual recipes
+3. API calling to improve food tracking
+4. API calling for additional food and recipes
+5. **to be decided...**
+
+### Issues
+
+An issue for each requirements (**FRs & NFRs**)
+
 ## Priority Brackets
 
 | Code     | Meaning                  |
