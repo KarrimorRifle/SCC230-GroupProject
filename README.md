@@ -67,14 +67,28 @@ Would probably be best if you use these (Search codes in VScode extension tab):
 
 ### Merging and issues
 
-Creating issues:
+#### Creating issues:
 
 -   Issue is to be paired with a requirement:
-    -   Title: {Requirement ID} {Requirement name}
-    -   Description: {User story}
-        -   Description of what you are going to achieve
--   On merging make sure item is self documented and tested (tests are to be in the document too, use a microsoft office application)
-    -   Before merge make sure its **peer reviewed** and all threads are resolved
+    -   **Title**: {**Requirement ID**} {**Requirement name**}
+    -   **Description**: {**User story**}
+        -   Description of what you are going to _achieve_
+
+#### Developing:
+
+Code is to be:
+
+-   Well documented
+-   Clean
+-   Tested (this part is to be documented too)
+
+#### Merging issues:
+
+Code needs to be:
+
+-   Peer reviewed
+-   Accompanied with testing and development docs
+-   Reviews are to be solved
 
 ### Milestones
 
