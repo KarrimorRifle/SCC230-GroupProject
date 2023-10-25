@@ -12,11 +12,12 @@ Allowing non-developers to interact with internet-of-things (IOT) items through 
 
 Currently planned Milestones:
 
-1. Basic application with manual tracking
-2. Basic socials and manual recipes
-3. API calling to improve food tracking
-4. API calling for additional food and recipes
-5. **to be decided...**
+1. Allowing users to place code-blocks
+2. Having the code-blocks interact with a micro-controller, allowing for output
+3. Recieve inputs from a micro-controller's connected sensors
+4. Allowing users to create and log in to accounts
+5. Allowing users to save routines
+6. **to be decided...**
 
 ### Issues
 
