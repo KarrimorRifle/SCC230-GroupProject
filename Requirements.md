@@ -2,7 +2,7 @@
 
 ## App mission
 
-Make organisation of household food and meals an easy task that doesn't require **too much** cognitive processing
+Allowing non-developers to interact with internet-of-things (IOT) items through a high-level code-blocks interface, similar to scratch.
 
 ## Bringing requirements into github
 
