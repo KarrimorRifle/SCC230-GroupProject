@@ -6,7 +6,15 @@
 - Active : boolean
 - Running : boolean
 - Devices : Device[]
-- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>150</y><w>100</w><h>30</h></coordinates><panel_attributes>House/Hub</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>200</y><w>100</w><h>30</h></coordinates><panel_attributes>User</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>310</y><w>100</w><h>30</h></coordinates><panel_attributes>Triggers</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>90</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
+- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>50</x><y>290</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
+--
+- House ID : String
+- House Name : String
+- Schedules : Schedule[]
+- Devices : Device[]
+- Users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
+- Address : String
+- Logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>320</y><w>140</w><h>30</h></coordinates><panel_attributes>User</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>710</x><y>320</y><w>150</w><h>30</h></coordinates><panel_attributes>Triggers</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>340</x><y>90</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
 --
 - Device ID : String
 - Device Name : String
