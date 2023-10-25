@@ -1,7 +1,16 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>760</x><y>90</y><w>100</w><h>30</h></coordinates><panel_attributes>Schedule</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>150</y><w>100</w><h>30</h></coordinates><panel_attributes>House/Hub</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>200</y><w>100</w><h>30</h></coordinates><panel_attributes>User</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>310</y><w>100</w><h>30</h></coordinates><panel_attributes>Triggers</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>370</y><w>100</w><h>30</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>250</x><y>90</y><w>170</w><h>110</h></coordinates><panel_attributes>/Device/
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>60</x><y>90</y><w>170</w><h>140</h></coordinates><panel_attributes>Schedule (Revisit)
+--
+- Schedule ID : String
+- Schedule Name: String
+- Trigger ID : String
+- Active : boolean
+- Running : boolean
+- Devices : Device[]
+- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>150</y><w>100</w><h>30</h></coordinates><panel_attributes>House/Hub</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>200</y><w>100</w><h>30</h></coordinates><panel_attributes>User</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>310</y><w>100</w><h>30</h></coordinates><panel_attributes>Triggers</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>90</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
 --
 - Device ID : String
 - Device Name : String
 - IO : enum(INPUT, OUTPUT)
 - Pins : int[]
-- Analogue : boolean</panel_attributes><additional_attributes></additional_attributes></element></diagram>
+- Analogue : boolean
+- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element></diagram>
