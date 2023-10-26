@@ -43,7 +43,7 @@ This is the github Repo for Group 5's SCC230 project
 
 To be discussed & scheduled:
 
--   Wednesday - 17:00
+-   Wednesday - 18:30
 -   Sunday - 15:00
 
 ### VS code extensions
