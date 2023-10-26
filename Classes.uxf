@@ -1,0 +1,34 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>60</x><y>90</y><w>170</w><h>170</h></coordinates><panel_attributes>Schedule (Revisit)
+--
+- Schedule ID : String
+- Schedule Name: String
+- User ID : String
+- Trigger ID : String
+- Active : boolean
+- Running : boolean
+- Devices : Device[]
+- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>50</x><y>290</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
+--
+- House ID : String
+- House Name : String
+- Schedules : Schedule[]
+- Devices : Device[]
+- Users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
+- Address : String
+- Logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>290</y><w>180</w><h>160</h></coordinates><panel_attributes>User
+--
+- User ID : String
+- Username : String
+- Password : Hashed String
+- email : String
+- Discord ID : String
+- Schedules : Schedule[]
+- Houses : House[]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>610</x><y>140</y><w>150</w><h>30</h></coordinates><panel_attributes>Triggers</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>340</x><y>90</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
+--
+- Device ID : String
+- Device Name : String
+- IO : enum(INPUT, OUTPUT)
+- Pins : int[]
+- Analogue : boolean
+- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>140</y><w>130</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element></diagram>
