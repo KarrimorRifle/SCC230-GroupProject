@@ -4,19 +4,23 @@ This is the github Repo for Group 5's SCC230 project
 
 ## Participants
 
-| Name                | Student ID | Desired Role |
-| ------------------- | ---------- | ------------ |
-| Samuel Chee Lok To  | 38865009   | FullStack    |
-| Blade Eastham       | 38863812   | Any          |
-| Aditya Abhijit Khan | 38730421   | Any          |
-| David Mellon        | 38790629   | Any          |
+| Name                | Student ID | Desired Role      |
+| ------------------- | ---------- | ----------------- |
+| Samuel Chee Lok To  | 38865009   | Full-Stack        |
+| Blade Eastham       | 38863812   | Any               |
+| Aditya Abhijit Khan | 38730421   | Any               |
+| David Mellon        | 38790629   | Any               |
+| Kian Tomkins        | 38739836   | Hardware/Back-End |
 
 ## Technologies being used
 
 -   [Vue with composition API](https://vuejs.org/guide/quick-start.html) ([TS](https://www.typescriptlang.org/docs/)) : Frontend
 -   [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) : Frontend
 -   [Python](https://docs.python.org/3/) : Backend
--   [DJango](https://docs.djangoproject.com/en/4.2/): Backend / DB
+    -   [DJango](https://docs.djangoproject.com/en/4.2/): Backend
+-   [Arduino](https://docs.arduino.cc/): Hardware
+    -   [Firmata](https://docs.arduino.cc/hacking/software/FirmataLibrary): Backend/Hardware
+-   [MySQL](https://dev.mysql.com/doc/): Database
 -   Lint : Formatter
 
 ### APIs
