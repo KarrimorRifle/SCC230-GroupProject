@@ -89,7 +89,7 @@ User is able to access account specific systems / details
 **Postconditions:**
 User account details are different from before.
 
-#### **Name:** Load/Import Schedule
+#### **Name:** Design Schedule
 
 **Scope:**
 **Primary Actor:**
@@ -100,7 +100,7 @@ User account details are different from before.
 **Exceptions:**
 **Postconditions:**
 
-#### **Name:** Design Schedule
+#### **Name:** Load/Import Schedule
 
 **Scope:**
 **Primary Actor:**
