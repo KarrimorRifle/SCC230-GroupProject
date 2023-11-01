@@ -91,14 +91,46 @@ User account details are different from before.
 
 #### **Name:** Design Schedule
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Scheduling system
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User is logged in
+-   User has internet connection
+
 **Main Success Scenarios:**
+
+-   1- User presses design schedule
+-   2- New draft schedule created (with default trigger)
+-   3- User selects trigger
+-   4- User designs schedule with available nodes
+-   5- User clicks save schedule
+-   6- Schedule input are verified
+-   7- Schedule saved onto database
+-   8- Schedule assigned to user's account
+
 **Alternatives:**
+
+-   5a. User clicks draft toggle
+    -   6, 7, 8
+    -   9- Set draft to not true on system
+-   5b. user clicks assign to house
+    -   6,7,8,9
+    -   10- Schedule is assigned to valid house
+    -   run create schedule
+
 **Exceptions:**
+5b - User has no house, not ran
+6b - User has invalid input
+
+-   User prompted to reinput values
+    6c - Malicous inputs detected
+-   run Malicous activity handling
+
 **Postconditions:**
+1a. User has new shcedule
+1b. User has new shedule assigned to house
 
 #### **Name:** Load/Import Schedule
 
