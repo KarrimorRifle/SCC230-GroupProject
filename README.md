@@ -21,9 +21,6 @@ This is the github Repo for Group 5's SCC230 project
 
 ### APIs
 
--   [Barcode Lookup](https://www.barcodelookup.com/api)
--   [Food and grocery w/ NLP](https://developer.edamam.com/food-database-api)
-
 ### Docs
 
 -   Django:
