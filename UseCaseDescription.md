@@ -1,11 +1,13 @@
 **Name:** Sign Up
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
-**Preconditions:**
-**Main Success Scenarios:**
+**Scope:** Account system
+**Primary Actor:** User
+**Secondary Actor:** Database
+**Preconditions:** - User has no account
+**Main Success Scenarios:** 1. User selects sign up 2. User enters required details 3. Account details verified by system 4. User is brought to main page
 **Alternatives:**
+3a. Email already in use (Loop back to 2)
 **Exceptions:**
+3b. Details invalid (Loop back to 2)
 **Postconditions:**
 
 **Name:** Log In
