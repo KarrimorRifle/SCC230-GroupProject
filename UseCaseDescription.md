@@ -47,21 +47,47 @@
 **Alternatives:**
 2a. Details dont match (loop back to 1)
 **Exceptions:**
-2a. Malicous activity attempted / detected (Block IP)
+2a. Malicous activity attempted / detected - User IP blacklisted
 **Postconditions:**
 User is logged into the system
 User is able to access account specific systems / details
 
-#### **Name:** Modify Settings
+#### **Name:** Modify Account Settings
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Account system
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User has an account
+-   User is logged into system
+-   User is on website
+-   User has internet connection
+-   User is on user settings page
+
 **Main Success Scenarios:**
+
+-   1- User adjusts details
+-   2- User enters password
+-   3- User clicks save
+-   4- User password and details are verified
+-   5- User details are saved onto database/updated
+-   6- User gets notification that it has been updated
+
 **Alternatives:**
+
+-   4a. User password incorrect (loop to 2)
+-   4b. User details invalid (loop to 1)
+
 **Exceptions:**
+
+-   4b. Malicous activity detected
+    -   User email is blacklisted
+    -   User IP is blacklisted
+    -   account is deleted
+
 **Postconditions:**
+User account details are different from before.
 
 #### **Name:** Load/Import Schedule
 
