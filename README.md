@@ -18,9 +18,9 @@ This is the github Repo for Group 5's SCC230 project
 -   [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) : Frontend
 -   [Python](https://docs.python.org/3/) : Backend
     -   [DJango](https://docs.djangoproject.com/en/4.2/): Backend
--   [Arduino](): Hardware
-    -   [Firmata](): Backend/Hardware
--   [MySQL](): Database
+-   [Arduino](https://docs.arduino.cc/): Hardware
+    -   [Firmata](https://docs.arduino.cc/hacking/software/FirmataLibrary): Backend/Hardware
+-   [MySQL](https://dev.mysql.com/doc/): Database
 -   Lint : Formatter
 
 ### APIs
