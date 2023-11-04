@@ -150,6 +150,7 @@ User account details are different from before.
 -   1- User clicks import
 -   2- User selects where to import to
 -   3- User assigns devices to schedule imported
+-   4- update on database
 
 **Alternatives:**
 
@@ -162,8 +163,8 @@ User account details are different from before.
 
 #### **Name:** Export Schedule
 
-**Scope:**
-**Primary Actor:**
+**Scope:** Schedules
+**Primary Actor:** User
 **Secondary Actor:**
 **Preconditions:**
 **Main Success Scenarios:**
