@@ -258,14 +258,33 @@ User account details are different from before.
 
 #### **Name:** Create Home
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** hub
+**Primary Actor:** user
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User logged in
+-   User on website
+
 **Main Success Scenarios:**
+
+-   1- user clicks create hub
+-   2- User directed to make hub page
+-   3- User fills needed details
+-   4- User clicks confirm
+-   5- Site verifies details
+-   6- new hub is created
+-   7- User directed to assign devices pages of hub
+-   8- Database updated
+
 **Alternatives:**
+5b. Details invalid
+
+-   3 is repeated
+
 **Exceptions:**
 **Postconditions:**
+User has new hub assigned to account
 
 #### **Name:** Add Device
 
