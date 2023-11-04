@@ -288,14 +288,35 @@ User has new hub assigned to account
 
 #### **Name:** Add Device
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Hub
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User has hub on account
+-   User logged in
+-   User has admin+ permissions on hub
+-   User on hub page
+-   User has a device that can connect
+-   Device is capapble f conneccting to hub (wired or wireless)
+
 **Main Success Scenarios:**
+
+-   1- User clicks add device
+-   2- User is taken to add device page
+-   3- User inputs needed details
+-   4- User tests connections
+-   5- Device is connected to the hub
+-   6- User clicks save
+-   7- Device is registered to hub
+-   8- Device saved to hub DB
+
 **Alternatives:**
+7b. Device details not matching and doesnt connect to hub - back to 3
+
 **Exceptions:**
 **Postconditions:**
+User has new device connected to the hub
 
 #### **Name:** Manage Home
 
