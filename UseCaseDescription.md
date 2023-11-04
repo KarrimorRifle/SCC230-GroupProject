@@ -217,8 +217,10 @@ User account details are different from before.
 **Alternatives:**
 
 -   4b. Schedule is valid and user selects run
-    **Exceptions:**
-    **Postconditions:**
+
+**Exceptions:**
+**Postconditions:**
+
 -   user has a schedule saved onto the hub
 
 #### **Name:** Assign Schedule
