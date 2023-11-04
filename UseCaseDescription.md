@@ -134,14 +134,31 @@ User account details are different from before.
 
 #### **Name:** Load/Import Schedule
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Scheduling System
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User is on the website
+-   User has a link / file to import
+-   User has an account
+-   (alternative) User has a house / hub
+-   User is on scheduling page
+
 **Main Success Scenarios:**
+
+-   1- User clicks import
+-   2- User selects where to import to
+-   3- User assigns devices to schedule imported
+
 **Alternatives:**
+
+-   3b. User does nothing as schedule is imported into account
+
 **Exceptions:**
 **Postconditions:**
+
+-   User has new schedule in account or hub
 
 #### **Name:** Export Schedule
 
