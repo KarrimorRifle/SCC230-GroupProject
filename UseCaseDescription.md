@@ -148,13 +148,14 @@ User account details are different from before.
 **Main Success Scenarios:**
 
 -   1- User clicks import
--   2- User selects where to import to
--   3- User assigns devices to schedule imported
--   4- update on database
+-   2- User gives link or file
+-   3- User selects where to import to
+-   4- User assigns devices to schedule imported
+-   5- update on database
 
 **Alternatives:**
 
--   3b. User does nothing as schedule is imported into account
+-   4b. User does nothing as schedule is imported into account
 
 **Exceptions:**
 **Postconditions:**
@@ -167,10 +168,31 @@ User account details are different from before.
 **Primary Actor:** User
 **Secondary Actor:**
 **Preconditions:**
+
+-   User has account
+-   User has schedule not in draft mode
+-   User is on area which has schedules (hub or account)
+
 **Main Success Scenarios:**
+
+-   1- user clicks export
+-   2- options are shown for link or file
+-   3- user clicks file
+-   4- Schedule file is compiled
+-   5- Schedule is downloaded on browser
+
 **Alternatives:**
+
+-   3b. User clicks link
+    -   link to schedule is given where it can be imported
+
 **Exceptions:**
+
+-   Connection error when fetching resources
+
 **Postconditions:**
+
+-   user now has a schedule installed
 
 #### **Name:** Create Schedule
 
