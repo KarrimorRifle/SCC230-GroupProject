@@ -225,14 +225,36 @@ User account details are different from before.
 
 #### **Name:** Assign Schedule
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Schedule, Hub
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User has hub
+-   User is logged in
+-   User has valid schedule
+-   User is on site
+-   User is on hub page or schedule page
+
 **Main Success Scenarios:**
+(schedule page)
+
+-   Clicks assign
+-   Page shows house options (empty if none)
+-   user clicks house to assign to
+-   scheduling page shown (user has to replace devices with valid devices)
+-   User clicks assign
+-   Schedule is assigned to house & running
+
 **Alternatives:**
+4b. User clicks save
+
+-   schedule is stored as draft inside hub
+
 **Exceptions:**
 **Postconditions:**
+
+-   New schedule is assigned to hub
 
 #### **Name:** Create Home
 
