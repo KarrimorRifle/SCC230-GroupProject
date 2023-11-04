@@ -196,14 +196,30 @@ User account details are different from before.
 
 #### **Name:** Create Schedule
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Schedules, Hub
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User has account
+-   User is on site
+-   User is on hub page
+-   User has hub
+
 **Main Success Scenarios:**
+
+-   User clicks create schedule
+-   User is taken to schedule creation page
+-   User creates schedule
+-   Schedule is saved onto hub
+-   Updated in database
+
 **Alternatives:**
-**Exceptions:**
-**Postconditions:**
+
+-   4b. Schedule is valid and user selects run
+    **Exceptions:**
+    **Postconditions:**
+-   user has a schedule saved onto the hub
 
 #### **Name:** Assign Schedule
 
