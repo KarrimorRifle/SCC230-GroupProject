@@ -320,14 +320,33 @@ User has new device connected to the hub
 
 #### **Name:** Manage Home
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
+**Scope:** Hub
+**Primary Actor:** User
+**Secondary Actor:** Database
 **Preconditions:**
+
+-   User logged in
+-   User has hub on account
+-   User has admin+ permissions on hub
+-   User on hub page
+
 **Main Success Scenarios:**
+
+-   1- User clicks manage hub
+-   2- User is taken to manage hub page
+-   3- User adjusts hub details
+-   4- User role and new hub details are verified
+-   5- Hub details are updated on database
+-   6- User gets notification about the update
+
 **Alternatives:**
+
+-   4b. Hub details invalid (loop to 3)
+
 **Exceptions:**
+
 **Postconditions:**
+Hub details are different from before
 
 #### **Name:** Manage House Roles
 
