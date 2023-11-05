@@ -335,9 +335,10 @@ User has new device connected to the hub
 -   1- User clicks manage hub
 -   2- User is taken to manage hub page
 -   3- User adjusts hub details
--   4- User role and new hub details are verified
--   5- Hub details are updated on database
--   6- User gets notification about the update
+-   4- User clicks save
+-   5- User role and new hub details are verified
+-   6- Hub details are updated on database
+-   7- User gets notification about the update
 
 **Alternatives:**
 
@@ -350,11 +351,32 @@ Hub details are different from before
 
 #### **Name:** Manage House Roles
 
-**Scope:**
-**Primary Actor:**
-**Secondary Actor:**
-**Preconditions:**
+**Scope:** Hub
+**Primary Actor:** User
+**Secondary Actor:** Database
+**Preconditions:** 
+
+-   User logged in
+-   User has hub on account
+-   User has admin+ permissions on hub
+-   User on hub page
+
 **Main Success Scenarios:**
+
+-   1- User selects a member of the hub
+-   2- User clicks manage role
+-   3- User and member role verified
+-   4- User selects new role for member
+-   5- User and new member roles verified
+-   6- User clicks save
+-   7- Member role updated on database
+
 **Alternatives:**
+
+-   3b. Member role higher than User (loop to 1)
+-   5b. New member role higher than User (loop to 4)
+
 **Exceptions:**
+
 **Postconditions:**
+A member's role is updated on hub database
