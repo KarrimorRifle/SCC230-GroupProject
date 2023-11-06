@@ -29,33 +29,38 @@ An issue for each requirements (**FRs & NFRs**)
 
 ### Priority Brackets
 
-| Code     | Meaning                  |
+| Code | Meaning |
 | -------- | ------------------------ |
 | **#**.\_ | **Week to be completed** |
-| \_.**A** | **Urgent**               |
-| \_.**B** | **Important**            |
-| \_.**C** | **Low urgency**          |
+| \_.**A** | **Urgent** |
+| \_.**B** | **Important** |
+| \_.**C** | **Low urgency** |
 
 ### FR & NFR
 
-| For          | Format |
+| For | Format |
 | ------------ | ------ |
-| Feature FRs  | X      |
-| Feature NFRs | X.X    |
+| Feature FRs | X |
+| Feature NFRs | X.X |
 
-| ID  | Feature          | User Story                                                                        | Description                                                                                                  | Priority Bracket | Complete? |
+| ID | Feature | User Story | Description | Priority Bracket | Complete? |
 | --- | ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------- | --------- |
-| 1   | Sign up | As a **potential user** I want to sign up | Allow user to create an account | 5.A | &cross; |
-| 2   | Login | As a **user** I want an account to keep my details | Allow user to login to their own account | 5.A | &cross; |
-| 3   | Create Home | As a **user** I want to create a home to use link my devices | Allow user to create a home/hub to link devices to | 7.A | &cross; |
-| 4   | Register devices | As a **user** I want to register devices to the house | Allow user to connect multiple devices to a home/hub | 7.B | &cross; |
-| 5   | Design Schedule  | As a **user** I want to create a theoretical design / schedule | Allow user to make a schedule which can be hooked up to virtual devices (as a temporary palcement). | 7.B | &cross; |
-| 6   | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | Allow user to assign a design schedule to house / hub and assign devices to replace the temp virtual devices | 7.B | &cross; |
-| 7   | Create schedule | As a **user** I want to create a schedule that can be loaded instantly to a house/hub | Allow user to create a schedule that is assigned to the house on completion | 7.B | &cross; |
-| 8   | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow user to turn house schedule into a design schedule | 7.B | &cross; |
-| 9   | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account | | &cross; |
-| 10  | Hub invite | as a **user** I want to add others to the hub | Allow user to add other users to the hub |  | &cross; |
-| 11  | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
-| 12  | Modify Settings | as a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
-| 13  | Scalability | The system could be able to support several users concurrently | Allow **users** to use the system concurrently |  | &cross; | 
-| 14 | Availability |   The System
+| 1 | Sign up | As a **potential user** I want to sign up | Allow user to create an account | 5.A | &cross; |
+| 2 | Login | As a **user** I want an account to keep my details | Allow user to login to their own account | 5.A | &cross; |
+| 3 | Create Home | As a **user** I want to create a home to use link my devices | Allow user to create a home/hub to link devices to | 7.A | &cross; |
+| 4 | Register devices | As a **user** I want to register devices to the house | Allow user to connect multiple devices to a home/hub | 7.B | &cross; |
+| 5 | Design Schedule | As a **user** I want to create a theoretical design / schedule | Allow user to make a schedule which can be hooked up to virtual devices (as a temporary palcement). | 7.B | &cross; |
+| 6 | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | Allow user to assign a design schedule to house / hub and assign devices to replace the temp virtual devices | 7.B | &cross; |
+| 7 | Create schedule | As a **user** I want to create a schedule that can be loaded instantly to a house/hub | Allow user to create a schedule that is assigned to the house on completion | 7.B | &cross; |
+| 8 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow user to turn house schedule into a design schedule | 7.B | &cross; |
+| 9 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account |  | &cross; |
+| 10 | Hub invite | as a **user** I want to add others to the hub | Allow user to add other users to the hub |  | &cross; |
+| 11 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
+| 12 | Modify Settings | as a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
+| 13 | Scalability | The system could be able to support several users concurrently | Allow **users** to use the system concurrently |  | &cross; | 
+| 14 | Availability | The System should be active 24/7 for the majority of each year | Allow **users** to access the system at any time. |  | &cross; |
+| 15 | Robustness | The system should be able to run without error | Write code to handle all erroneous inputs |  | &cross; |
+| 16 | Serviceability | The System should be easily updated to suit user needs and handle errors | Write clear, manageable code to allow for fast updates. |  | &cross; |
+| 17 | User Serviceability | A **User** should be able to fix mistakes that they have made | Include options to undo, add a help page. |  | &cross; |
+| 18 | Accessibility | The device should be easy to navigate for those who have impaired use of a computer | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
+| 19 | Device Usability | The system could allow for access across multiple devices | Ensure the user interface scales to fit the display of multiple devices |  | &cross; |
