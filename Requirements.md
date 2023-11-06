@@ -56,11 +56,10 @@ An issue for each requirements (**FRs & NFRs**)
 | 9 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account |  | &cross; |
 | 10 | Hub invite | as a **user** I want to add others to the hub | Allow user to add other users to the hub |  | &cross; |
 | 11 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
-| 12 | Modify Settings | as a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
-| 13 | Scalability | The system could be able to support several users concurrently | Allow **users** to use the system concurrently |  | &cross; | 
-| 14 | Availability | The System should be active 24/7 for the majority of each year | Allow **users** to access the system at any time. |  | &cross; |
-| 15 | Robustness | The system should be able to run without error | Write code to handle all erroneous inputs |  | &cross; |
-| 16 | Serviceability | The System should be easily updated to suit user needs and handle errors | Write clear, manageable code to allow for fast updates. |  | &cross; |
-| 17 | User Serviceability | A **User** should be able to fix mistakes that they have made | Include options to undo, add a help page. |  | &cross; |
-| 18 | Accessibility | The device should be easy to navigate for those who have impaired use of a computer | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
-| 19 | Device Usability | The system could allow for access across multiple devices | Ensure the user interface scales to fit the display of multiple devices |  | &cross; |
+| 12 | Modify Settings | As a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
+| 13 | Scalability | As a **user** I want to be able to access the system regardless of other users. | Write the system to be able to support several users concurrently |  | &cross; | 
+| 14 | Availability | As a **user** I want to be able to access the system at any time | Write the system so that it is active 24/7 for the majority of each year |  | &cross; |
+| 15 | Robustness | As a **user** I do not want to encounter errors | Write code to handle all erroneous inputs |  | &cross; |
+| 16 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, add a help page. |  | &cross; |
+| 17 | Accessibility | I want to be able to effectively use the system as an **Impaired User** | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
+| 18 | Device Usability | As a **User**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
