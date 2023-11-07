@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>270</y><w>170</w><h>170</h></coordinates><panel_attributes>Schedule (Revisit)
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>230</y><w>170</w><h>200</h></coordinates><panel_attributes>Schedule (Revisit)
 --
 - Schedule ID : String
 - Schedule Name: String
@@ -7,7 +7,10 @@
 - Active : boolean
 - Running : boolean
 - Devices : Device[]
-- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
+- FunctionCode : Token[]
+- isPublic : boolean
+- likes : int
+- dislikes : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
 --
 - House ID : String
 - House Name : String
@@ -28,11 +31,11 @@
 --
 - Trigger ID : String
 - Trigger Name : String
-- Schedule IDs : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>240</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
+- Schedule IDs : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>190</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
 --
 - Device ID : String
 - Device Name : String
 - IO : enum(INPUT, OUTPUT)
 - Pins : int[]
 - Analogue : boolean
-- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>710</x><y>290</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>370</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>400;10;10;10</additional_attributes></element></diagram>
+- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>710</x><y>240</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>330</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>400;10;10;10</additional_attributes></element></diagram>
