@@ -1,33 +1,33 @@
 <diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>230</y><w>170</w><h>200</h></coordinates><panel_attributes>Schedule (Revisit)
 --
-- Schedule ID : String
-- Schedule Name: String
-- User ID : String
-- Trigger ID : String
-- Active : boolean
-- Running : boolean
-- Devices : Device[]
-- FunctionCode : Token[]
+- scheduleID : String
+- scheduleName: String
+- userID : String
+- triggerID : String
+- active : boolean
+- running : boolean
+- devices : Device[]
+- functionCode : Token[]
 - isPublic : boolean
 - likes : int
 - dislikes : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
 --
-- House ID : String
-- House Name : String
-- Schedules : Schedule[]
-- Devices : Device[]
-- Users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
-- Address : String
-- Logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>470</y><w>180</w><h>160</h></coordinates><panel_attributes>User
+- houseID : String
+- houseName : String
+- schedules : Schedule[]
+- devices : Device[]
+- users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
+- address : String
+- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>470</y><w>180</w><h>160</h></coordinates><panel_attributes>User
 --
-- User ID : String
-- Username : String
-- Password : Hashed String
+- userID : String
+- username : String
+- password : Hashed String
 - email : String
-- Discord ID : String
-- Schedules : Schedule[]
-- Houses : House[]
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>250</y><w>150</w><h>150</h></coordinates><panel_attributes>/Trigger/
+- discordID : String
+- schedules : Schedule[]
+- houses : House[]
+- useAI : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>250</y><w>150</w><h>150</h></coordinates><panel_attributes>/Trigger/
 --
 - Trigger ID : String
 - Trigger Name : String
