@@ -44,7 +44,7 @@ An issue for each requirements (**FRs & NFRs**)
 | Feature NFRs | X.X |
 
 | ID | Feature | User Story | Description | Priority Bracket | Complete? |
-| --- | ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------- | --------- |
+| --- | --- | --- | --- | --- | --- |
 | 1.0 | Sign up | As a **potential user** I want to sign up | Allow user to create an account | 5.A | &cross; |
 | 2.0 | Login | As a **user** I want an account to keep my details | Allow user to login to their own account | 5.A | &cross; |
 | 3 | Create Home | As a **user** I want to create a home to use link my devices | Allow user to create a home/hub to link devices to | 7.A | &cross; |
@@ -62,5 +62,7 @@ An issue for each requirements (**FRs & NFRs**)
 | 15.0 | Robustness | As a **user** I do not want to encounter errors | Write code to handle all erroneous inputs |  | &cross; |
 | 16.0 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, add a help page. |  | &cross; |
 | 17.0 | Accessibility | I want to be able to effectively use the system as an **Impaired User** | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
-| 18.0 | Device Usability | As a **User**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
-| 19.0 | Paired Programming | As a **User**, I would like to have AI assistance for code, similar to autocorrect | The system should implement a simple AI to suggest the next steps in a program |  | &cross; |
+| 18.0 | Device Usability | As a **user**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
+| 19.0 | Paired Programming | As a **user**, I would like to have AI assistance for code, similar to autocorrect, based on the project's title. | The system should implement a simple AI to suggest the next steps in a program, based on the title and description |  | &cross; |
+| 20.0 | Open Source | As a **user**, I would like to be able to access and upload schedule templates to a shared database. | The system should allow users to send working schedules to a shared pool |  | &cross; |
+| 20.1 | Positive Recommendations | As a **user**, I would only like to be recommended relevant and high-quality schedules from the shared database | The system should allow users to like & dislike schedules which will then be used to suggest schedules |  | &cross; |
