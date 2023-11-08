@@ -1,38 +1,41 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>270</y><w>170</w><h>170</h></coordinates><panel_attributes>Schedule (Revisit)
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>230</y><w>170</w><h>200</h></coordinates><panel_attributes>Schedule (Revisit)
 --
-- Schedule ID : String
-- Schedule Name: String
-- User ID : String
-- Trigger ID : String
-- Active : boolean
-- Running : boolean
-- Devices : Device[]
-- FunctionCode : Token[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
+- scheduleID : String
+- scheduleName: String
+- userID : String
+- triggerID : String
+- active : boolean
+- running : boolean
+- devices : Device[]
+- functionCode : Token[]
+- isPublic : boolean
+- likes : int
+- dislikes : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
 --
-- House ID : String
-- House Name : String
-- Schedules : Schedule[]
-- Devices : Device[]
-- Users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
-- Address : String
-- Logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>470</y><w>180</w><h>160</h></coordinates><panel_attributes>User
+- houseID : String
+- houseName : String
+- schedules : Schedule[]
+- devices : Device[]
+- users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
+- address : String
+- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>470</y><w>180</w><h>160</h></coordinates><panel_attributes>User
 --
-- User ID : String
-- Username : String
-- Password : Hashed String
+- userID : String
+- username : String
+- password : Hashed String
 - email : String
-- Discord ID : String
-- Schedules : Schedule[]
-- Houses : House[]
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>250</y><w>150</w><h>150</h></coordinates><panel_attributes>/Trigger/
+- discordID : String
+- schedules : Schedule[]
+- houses : House[]
+- useAI : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>250</y><w>150</w><h>150</h></coordinates><panel_attributes>/Trigger/
 --
 - Trigger ID : String
 - Trigger Name : String
-- Schedule IDs : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>240</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
+- Schedule IDs : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>190</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
 --
 - Device ID : String
 - Device Name : String
 - IO : enum(INPUT, OUTPUT)
 - Pins : int[]
 - Analogue : boolean
-- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>710</x><y>290</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>370</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>400;10;10;10</additional_attributes></element></diagram>
+- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>710</x><y>240</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>330</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>400;10;10;10</additional_attributes></element></diagram>
