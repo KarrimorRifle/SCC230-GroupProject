@@ -16,13 +16,13 @@
 - Edit schedule (must be on draft mode)
 - Generate Schedule
 - request activation
+- Add schedule
+- Draft Schedule
+- Undraft Schedule
 
 #### Hub Owner
 - Invite user
 - Remove User
-- Add schedule
-- Draft Schedule
-- Undraft Schedule
 - Delete Schedule
 - Opt out of AI usage
 - Edit Schedule (Must not be active)
