@@ -27,6 +27,7 @@
 - Opt out of AI usage
 - Edit Schedule (Must not be active)
 - Request activation (admin only)
+- Accept/deny user
 
 ##### Hub Owner
 - Edit Hub Settings
