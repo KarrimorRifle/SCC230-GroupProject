@@ -8,6 +8,7 @@
 - Delete Account
 - Join Hub
 - Edit Settings
+- reset password
 
 ### Hub  
 - Create Schedule
