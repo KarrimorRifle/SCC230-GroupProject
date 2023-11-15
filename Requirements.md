@@ -50,7 +50,7 @@ An issue for each requirements (**FRs & NFRs**)
 | 3 | Create Home | As a **user** I want to create a home to use link my devices | Allow user to create a home/hub to link devices to | 7.A | &cross; |
 | 4 | Register devices | As a **user** I want to register devices to the house | Allow user to connect multiple devices to a home/hub | 7.B | &cross; |
 | 5 | Design Schedule | As a **user** I want to create a theoretical design / schedule | Allow user to make a schedule which can be hooked up to virtual devices (as a temporary palcement). | 7.B | &cross; |
-| 6 | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | Allow user to assign a design schedule to house / hub and assign devices to replace the temp virtual devices 
+| 6 | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | Allow user to assign a design schedule to house / hub and assign devices to replace the temp virtual devices, It will then be stored and activated on the hub if it all checks out
 | 7 | Create schedule | As a **user** I want to create a schedule that can be loaded instantly to a house/hub | Allow user to create a schedule that is assigned to the house on completion | 7.B | &cross; |
 | 8 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow user to turn house schedule into a design schedule | 7.B | &cross; |
 | 9 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account |  | &cross; |
