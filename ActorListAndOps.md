@@ -16,11 +16,11 @@
 - Edit schedule (must be on draft mode)
 - Generate Schedule
 - request activation
+- Add schedule
 
 #### Hub Owner
 - Invite user
 - Remove User
-- Add schedule
 - Draft Schedule
 - Undraft Schedule
 - Delete Schedule
