@@ -18,7 +18,7 @@
 - request activation
 
 #### Hub Admin
-- Add user
+- Invite user
 - Remove User
 - Add schedule
 - Draft Schedule
@@ -26,8 +26,7 @@
 - Delete Schedule
 - Opt out of AI usage
 - Edit Schedule (Must not be active)
-- Request activation (admin only)
-- Accept/deny user
+- Accept/deny user (Hub inviting)
 
 ##### Hub Owner
 - Edit Hub Settings
