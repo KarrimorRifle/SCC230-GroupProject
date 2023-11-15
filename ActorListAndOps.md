@@ -17,11 +17,11 @@
 - Generate Schedule
 - request activation
 - Add schedule
-
+- Draft Schedule
+- 
 #### Hub Owner
 - Invite user
 - Remove User
-- Draft Schedule
 - Undraft Schedule
 - Delete Schedule
 - Opt out of AI usage
