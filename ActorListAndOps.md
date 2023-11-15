@@ -9,6 +9,7 @@
 - Join Hub
 - Edit Settings
 - reset password
+- Create Hub
 
 ### Hub  
 - Create Schedule
