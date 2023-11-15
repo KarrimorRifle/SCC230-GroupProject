@@ -18,11 +18,11 @@
 - request activation
 - Add schedule
 - Draft Schedule
-- 
+- Undraft Schedule
+
 #### Hub Owner
 - Invite user
 - Remove User
-- Undraft Schedule
 - Delete Schedule
 - Opt out of AI usage
 - Edit Schedule (Must not be active)
