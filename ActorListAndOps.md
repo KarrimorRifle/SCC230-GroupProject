@@ -25,7 +25,7 @@
 - Remove User
 - Delete Schedule
 - Opt out of AI usage
-- Edit Schedule (Must not be active)
+- Edit Schedule (Must be inactive)
 - Accept/deny user (Hub inviting)
 - Edit Hub Settings
 - Add devices
