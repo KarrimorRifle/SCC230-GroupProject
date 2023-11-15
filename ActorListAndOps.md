@@ -17,7 +17,7 @@
 - Generate Schedule
 - request activation
 
-#### Hub Admin
+#### Hub Owner
 - Invite user
 - Remove User
 - Add schedule
@@ -27,8 +27,6 @@
 - Opt out of AI usage
 - Edit Schedule (Must not be active)
 - Accept/deny user (Hub inviting)
-
-##### Hub Owner
 - Edit Hub Settings
 - Add devices
 - Remove devices
