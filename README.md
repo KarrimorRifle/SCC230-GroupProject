@@ -26,6 +26,7 @@ This is the github Repo for Group 5's SCC230 project
 ### APIs
 
 -   Basic security API (Anti-injection)
+-   OpenAI (possible use for both schedule generation & building recommendation system)
   
 ### Docs
 
