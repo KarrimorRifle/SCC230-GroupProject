@@ -16,7 +16,7 @@ This is the github Repo for Group 5's SCC230 project
 
 -   [Vue with composition API](https://vuejs.org/guide/quick-start.html) ([TS](https://www.typescriptlang.org/docs/)) : Frontend
 -   [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) : Frontend
--   [Python](https://docs.python.org/3/) : Backend
+-   [Python](https://docs.python.org/3/) [<u>**Install**</u>](https://www.python.org/downloads/): Backend
     -   [DJango](https://docs.djangoproject.com/en/4.2/): Backend
 -   [Arduino](https://docs.arduino.cc/): Hardware
     -   [Firmata](https://docs.arduino.cc/hacking/software/FirmataLibrary): Backend/Hardware
