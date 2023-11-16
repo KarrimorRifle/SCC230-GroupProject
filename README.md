@@ -22,6 +22,7 @@ This is the github Repo for Group 5's SCC230 project
     -   [Firmata](https://docs.arduino.cc/hacking/software/FirmataLibrary): Backend/Hardware
 -   [MySQL](https://dev.mysql.com/doc/): Database
 -   Lint : Formatter
+-   [Postman](https://www.postman.com/downloads/) (testing API calls)
 
 ### APIs
 
