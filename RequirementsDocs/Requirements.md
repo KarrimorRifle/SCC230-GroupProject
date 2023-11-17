@@ -18,8 +18,9 @@ Currently planned Milestones:
 3. Recieve inputs from a micro-controller's connected sensors
 4. Allowing users to create and log in to accounts
 5. Allowing users to save schedules
-6. Allowing devices to communicate over a network
-7. **to be decided...**
+6. Allowing users to create hubs and register devices to them
+7. Allowing devices to communicate over a network
+8. **to be decided...**
 
 ### Issues
 
