@@ -55,6 +55,7 @@ An issue for each requirements (**FRs & NFRs**)
 | 8 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow user to turn house schedule into a design schedule | 7.B | &cross; |
 | 9 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account |  | &cross; |
 | 10.0 | Hub invite | as a **user** I want to add others to the hub | Allow user to add other users to the hub |  | &cross; |
+| 10.1 | Select Roles | as a **user** I want to be able to select specific roles for others when inviting them to the hub | Allow user to select roles when creating an invite for others |  | &cross; |
 | 11.0 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
 | 12.0 | Modify Settings | As a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
 | 13.0 | Scalability | As a **user** I want to be able to access the system regardless of other users. | Write the system to be able to support several users concurrently |  | &cross; | 
