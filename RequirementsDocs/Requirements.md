@@ -58,15 +58,16 @@ An issue for each requirements (**FRs & NFRs**)
 | 9 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow user to import a file to add a schedule into the account |  | &cross; |
 | 10.0 | Hub invite | as a **user** I want to add others to the hub | Allow user to add other users to the hub |  | &cross; |
 | 10.1 | Select Roles | as a **user** I want to be able to select specific roles for others when inviting them to the hub | Allow user to select roles when creating an invite for others |  | &cross; |
-| 11.0 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
-| 12.0 | Modify Settings | As a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
-| 13.0 | Scalability | As a **user** I want to be able to access the system regardless of other users. | Write the system to be able to support several users concurrently |  | &cross; | 
-| 14.0 | Availability | As a **user** I want to be able to access the system at any time | Write the system so that it is active 24/7 for the majority of each year |  | &cross; |
-| 15.0 | Robustness | As a **user** I do not want to encounter errors | Write code to handle all erroneous inputs |  | &cross; |
-| 16.0 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, require user confirmation for big changes, add a help page. |  | &cross; |
-| 17.0 | Accessibility | I want to be able to effectively use the system as an **Impaired User** | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
-| 18.0 | Device Usability | As a **user**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
-| 19.0 | Paired Programming | As a **user**, I would like to have AI assistance for code, similar to autocorrect, based on the project's title. | The system should implement a simple AI to suggest the next steps in a program, based on the title and description |  | &cross; |
-| 20.0 | Open Source | As a **user**, I would like to be able to access and upload schedule templates to a shared database. | The system should allow users to send working schedules to a shared pool |  | &cross; |
-| 20.1 | Positive Recommendations | As a **user**, I would only like to be recommended relevant and high-quality schedules from the shared database | The system should allow users to like & dislike schedules which will then be used to suggest schedules |  | &cross; |
-|21|Password reset| As a **user** I would want to be able to reset my password in the case i forget it | System should allow user to reset the password with email or phone number || &cross;
+| 11.0 | Hub join request | as a **user** I want to be able to request to join a hub | Allow **user** to send a hub join request |  | &cross; |
+| 12.0 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other user's roles |  | &cross; |
+| 13.0 | Modify Settings | As a **user** I want to modify my own settings | Allow **user** to modify account settings |  | &cross; |
+| 14.0 | Scalability | As a **user** I want to be able to access the system regardless of other users. | Write the system to be able to support several users concurrently |  | &cross; | 
+| 15.0 | Availability | As a **user** I want to be able to access the system at any time | Write the system so that it is active 24/7 for the majority of each year |  | &cross; |
+| 16.0 | Robustness | As a **user** I do not want to encounter errors | Write code to handle all erroneous inputs |  | &cross; |
+| 17.0 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, require user confirmation for big changes, add a help page. |  | &cross; |
+| 18.0 | Accessibility | I want to be able to effectively use the system as an **Impaired User** | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
+| 19.0 | Device Usability | As a **user**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
+| 20.0 | Paired Programming | As a **user**, I would like to have AI assistance for code, similar to autocorrect, based on the project's title. | The system should implement a simple AI to suggest the next steps in a program, based on the title and description |  | &cross; |
+| 21.0 | Open Source | As a **user**, I would like to be able to access and upload schedule templates to a shared database. | The system should allow users to send working schedules to a shared pool |  | &cross; |
+| 21.1 | Positive Recommendations | As a **user**, I would only like to be recommended relevant and high-quality schedules from the shared database | The system should allow users to like & dislike schedules which will then be used to suggest schedules |  | &cross; |
+|22|Password reset| As a **user** I would want to be able to reset my password in the case i forget it | System should allow user to reset the password with email or phone number || &cross;
