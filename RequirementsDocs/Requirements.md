@@ -63,7 +63,7 @@ An issue for each requirements (**FRs & NFRs**)
 | 13.0 | Scalability | As a **user** I want to be able to access the system regardless of other users. | Write the system to be able to support several users concurrently |  | &cross; | 
 | 14.0 | Availability | As a **user** I want to be able to access the system at any time | Write the system so that it is active 24/7 for the majority of each year |  | &cross; |
 | 15.0 | Robustness | As a **user** I do not want to encounter errors | Write code to handle all erroneous inputs |  | &cross; |
-| 16.0 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, add a help page. |  | &cross; |
+| 16.0 | User Serviceability | As a **user** I want to be able to fix mistakes that I have made | Include options to undo, require user confirmation for big changes, add a help page. |  | &cross; |
 | 17.0 | Accessibility | I want to be able to effectively use the system as an **Impaired User** | Ensure the UI is colorblind-friendly, easy to read, and can be easily navigated without the use of a cursor. |  | &cross; |
 | 18.0 | Device Usability | As a **user**, I wouuld like to be able to access the site across multiple devices | The system could allow for access across multiple devices |  | &cross; |
 | 19.0 | Paired Programming | As a **user**, I would like to have AI assistance for code, similar to autocorrect, based on the project's title. | The system should implement a simple AI to suggest the next steps in a program, based on the title and description |  | &cross; |
