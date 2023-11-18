@@ -10,6 +10,10 @@
 - Edit Settings
 - reset password
 - Create Hub
+- Design Schedule
+- Export Schedule
+- Import Schedule
+- Share(Public) Schedule
 
 ### Hub  
 - Create Schedule
