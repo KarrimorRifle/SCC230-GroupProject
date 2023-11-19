@@ -36,3 +36,4 @@
 - Remove devices
 - Activate Schedule
 - Deactivate schedule
+- Manage Roles
