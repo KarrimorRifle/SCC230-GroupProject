@@ -46,14 +46,16 @@ An issue for each requirements (**FRs & NFRs**)
 
 | ID | Feature | User Story | Description | Priority Bracket | Complete? |
 | --- | --- | --- | --- | --- | --- |
-| 1.0 | Sign up | As a **potential user** I want to sign up | The app shall allow **user** to create an account | 5.A | &cross; |
-| 2.0 | Login | As a **user** I want an account to keep my details | The app shall allow **user** to login to their own account | 5.A | &cross; |
+| 1.0 | Sign up | As a **potential user** I want to sign up | The **app** shall allow **user** to create an account | 5.A | &cross; |
+| 2.0 | Login | As a **user** I want an account to keep my details | The **app** shall allow **user** to login to their own account | 5.A | &cross; |
 | 3 | Create Hub | As a **user** I want to create a home to use link my devices | The **user** shall be able to create a **hub** to link devices to | 7.A | &cross; |
-| 4 | Register devices | As a **user** I want to register devices to the house | The app shall allow **user** to connect multiple devices to a **hub** | 7.B | &cross; |
-| 4.1 | See device status | As a **user** I want to be able to see which devices are currently connected to my hub | **User** shall be able to see all previously connected devices and their current status |  | &cross; |
-| 5 | Design Schedule | As a **user** I want to create a theoretical schedule for certain IoT devices | The app shall allow **user** to make a schedule | 7.B | &cross; |
+| 4 | Register devices | As a **user** I want to register devices to the house | The **app** shall allow **user** to connect multiple devices to a **hub** | 7.B | &cross; |
+| 4.1 | See device status | As a **user** I want to be able to see which devices are currently connected to my hub | **User** shall be able to see all previously connected devices and their current connectivity status |  | &cross; |
+| 4.2 | Auto-Assign device | As a **user**, If a schedule is missing a required device, I want that device to be automatically assigned to this schedule when registered to the **hub** | If the newly registered device matches a schedule's missing required device the **app** shall automatically assign it to the schedule upon device registration to the **hub** |  | &cross; |
+| 5 | Design Schedule | As a **user** I want to create a theoretical schedule for certain IoT devices | The **app** shall allow **user** to make a schedule | 7.B | &cross; |
 | 6 | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | The **user** shall be able to assign a designed schedule to **hub** |  | &cross; |
-| 6.1 | Assign devices | As a **user** I want any schedules I assign to the hub to automatically be linked to appropriate devices | The app shall assign to the schedule the required devices that are currently linked to the hub |  | &cross; |
+| 6.1 | Assign devices | As a **user** I want any schedules I assign to the hub to automatically be linked to appropriate devices | The **app** shall assign to the schedule the required devices that are currently linked to the **hub** within 1 second |  | &cross; |
+| 6.2 | Missing Device Warning | As a **user** I want to know if a required device to run my schedule is not currently linked to the **hub** | The **app** shall notify the **user** if any required device is not currently linked to the **hub** within 1 second of schedule assignment |  | &cross; |
 | 7 | Create schedule | As a **user** I want to create a schedule that can be loaded instantly to a hub | Allow **user** to create a schedule that is assigned to the **hub** on completion | 7.B | &cross; |
 | 8 | Delete schedule | As a **user** I want to delete a schedule that I have previously made | Allow **user** to delete a schedule from their account |  | &cross; |
 | 9 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow **user** to turn their schedule into a shareable format | 7.B | &cross; |
