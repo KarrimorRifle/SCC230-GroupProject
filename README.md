@@ -23,11 +23,15 @@ This is the github Repo for Group 5's SCC230 project
 -   [MySQL](https://dev.mysql.com/doc/): Database
 -   Lint : Formatter
 -   [Postman](https://www.postman.com/downloads/) (testing API calls)
+-   Docker
+-   Github actions : CICD
+-   AWS / Some other server hosting solution
 
 ### APIs
 
 -   Basic security API (Anti-injection)
 -   OpenAI (possible use for both schedule generation & building recommendation system)
+-   Our backend system
   
 ### Docs
 
