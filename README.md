@@ -10,7 +10,7 @@ This is the github Repo for Group 5's SCC230 project
 | Blade Eastham       | 38863812   | Document & Research|
 | Aditya Abhijit Khan | 38730421   | All rounder       |
 | David Mellon        | 38790629   | N/A               |
-| Kian Tomkins        | 38739836   | Hardware/Logic    |
+| Kian Tomkins        | 38739836   | Senior Backend    |
 
 ## Technologies being used
 
