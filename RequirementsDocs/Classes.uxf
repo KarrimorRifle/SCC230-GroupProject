@@ -1,41 +1,45 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>280</x><y>230</y><w>170</w><h>200</h></coordinates><panel_attributes>Schedule (Revisit)
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>320</x><y>250</y><w>170</w><h>180</h></coordinates><panel_attributes>Schedule
 --
-- scheduleID : String
-- scheduleName: String
-- userID : String
-- triggerID : String
+- id : String
+- name: String
+- user : User
+- trigger : Trigger
 - active : boolean
 - running : boolean
 - devices : Device[]
 - functionCode : Token[]
 - isPublic : boolean
-- likes : int
-- dislikes : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>470</y><w>260</w><h>160</h></coordinates><panel_attributes>House/Hub
+- pubRating : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>490</y><w>170</w><h>160</h></coordinates><panel_attributes>House/Hub
 --
 - houseID : String
 - houseName : String
 - schedules : Schedule[]
 - devices : Device[]
-- users : &lt;User, enum(VIEW, EDIT, ADMIN)&gt;
+- users : &lt;User, &gt;
 - address : String
-- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>470</y><w>180</w><h>160</h></coordinates><panel_attributes>User
+- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>490</y><w>360</w><h>160</h></coordinates><panel_attributes>User
 --
 - userID : String
 - username : String
-- password : Hashed String
+- password : Encrypted Hashed String
 - email : String
-- discordID : String
 - schedules : Schedule[]
 - houses : House[]
-- useAI : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>250</y><w>150</w><h>150</h></coordinates><panel_attributes>/Trigger/
+- useAI : boolean
+- houseRoles : dict(House, enum(VIEW, EDIT, ADMIN, OWNER))</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>320</y><w>150</w><h>80</h></coordinates><panel_attributes>/Trigger/
 --
-- Trigger ID : String
-- Trigger Name : String
-- Schedule IDs : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>190</y><w>170</w><h>120</h></coordinates><panel_attributes>/Device/
+- id : String
+- name : String
+- schedules : Schedules</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>160</y><w>150</w><h>90</h></coordinates><panel_attributes>/Device/
 --
-- Device ID : String
-- Device Name : String
-- IO : enum(INPUT, OUTPUT)
-- Pins : int[]
-- Analogue : boolean
-- Active - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>710</x><y>240</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>330</y><w>420</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>400;10;10;10</additional_attributes></element></diagram>
+- id : String
+- name : String
+- api : Api
+- isActive - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>650</x><y>240</y><w>30</w><h>100</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>UMLClass</id><coordinates><x>810</x><y>160</y><w>310</w><h>60</h></coordinates><panel_attributes>API
+--
+- requestType  : enum(GET, POST, PUT, PATCH, DELETE)
+- data : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>350</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>720</x><y>190</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>420</y><w>30</w><h>90</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>560</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>320</y><w>230</w><h>80</h></coordinates><panel_attributes>CodeBlock
+--
+- colour : enum()
+- text : String
+- type : enum(INPUT, OUTPUT, LOGIC)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>340</y><w>120</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element></diagram>
