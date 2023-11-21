@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>700</x><y>330</y><w>170</w><h>180</h></coordinates><panel_attributes>Schedule
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>320</x><y>280</y><w>170</w><h>180</h></coordinates><panel_attributes>Schedule
 --
 - id : String
 - name: String
@@ -9,7 +9,7 @@
 - devices : Device[]
 - functionCode : Token[]
 - isPublic : boolean
-- pubRating : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>570</y><w>170</w><h>160</h></coordinates><panel_attributes>House/Hub
+- pubRating : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>520</y><w>170</w><h>160</h></coordinates><panel_attributes>House/Hub
 --
 - houseID : String
 - houseName : String
@@ -17,7 +17,7 @@
 - devices : Device[]
 - users : &lt;User, &gt;
 - address : String
-- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>960</x><y>570</y><w>360</w><h>160</h></coordinates><panel_attributes>User
+- logs : .log</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>520</y><w>360</w><h>160</h></coordinates><panel_attributes>User
 --
 - userID : String
 - username : String
@@ -26,21 +26,22 @@
 - schedules : Schedule[]
 - houses : House[]
 - useAI : boolean
-- houseRoles : dict(House, enum(VIEW, EDIT, ADMIN, OWNER))</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>960</x><y>400</y><w>150</w><h>80</h></coordinates><panel_attributes>/Trigger/
+- houseRoles : dict(House, enum(VIEW, EDIT, ADMIN, OWNER))</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>350</y><w>150</w><h>80</h></coordinates><panel_attributes>/Trigger/
 --
 - id : String
 - name : String
-- schedules : Schedules</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>960</x><y>150</y><w>150</w><h>110</h></coordinates><panel_attributes>/Device/
+- schedules : Schedules</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>100</y><w>150</w><h>120</h></coordinates><panel_attributes>/Device/
 --
 - id : String
-- Device Name : String
+- name : String
+- deviceType : String
 - isOutput : boolean
 - api : Api
-- isActive - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1030</x><y>250</y><w>30</w><h>170</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1190</x><y>150</y><w>310</w><h>60</h></coordinates><panel_attributes>API
+- isActive - boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>650</x><y>210</y><w>30</w><h>160</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;140</additional_attributes></element><element><id>UMLClass</id><coordinates><x>810</x><y>100</y><w>310</w><h>60</h></coordinates><panel_attributes>API
 --
 - requestType  : enum(GET, POST, PUT, PATCH, DELETE)
-- data : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>430</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1100</x><y>180</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>500</y><w>30</w><h>90</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>640</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>400</y><w>230</w><h>80</h></coordinates><panel_attributes>CodeBlock
+- data : String[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>380</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>720</x><y>130</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>450</y><w>30</w><h>90</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>590</y><w>120</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>350</y><w>230</w><h>80</h></coordinates><panel_attributes>CodeBlock
 --
 - colour : enum()
 - text : String
-- type : enum(INPUT, OUTPUT, LOGIC)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>420</y><w>120</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element></diagram>
+- type : enum(INPUT, OUTPUT, LOGIC)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>370</y><w>120</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element></diagram>
