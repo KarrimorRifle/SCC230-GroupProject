@@ -4,12 +4,12 @@ This is the github Repo for Group 5's SCC230 project
 
 ## Participants
 
-| Name                | Student ID | Desired Role      |
+| Name                | Student ID | Role      |
 | ------------------- | ---------- | ----------------- |
-| Samuel Chee Lok To  | 38865009   | Full-Stack        |
-| Blade Eastham       | 38863812   | Any               |
-| Aditya Abhijit Khan | 38730421   | Any               |
-| David Mellon        | 38790629   | Any               |
+| Samuel Chee Lok To  | 38865009   | Team Lead        |
+| Blade Eastham       | 38863812   | Document & Research|
+| Aditya Abhijit Khan | 38730421   | All rounder       |
+| David Mellon        | 38790629   | N/A               |
 | Kian Tomkins        | 38739836   | Hardware/Logic    |
 
 ## Technologies being used
