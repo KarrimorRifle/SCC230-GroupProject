@@ -50,20 +50,23 @@ An issue for each requirements (**FRs & NFRs**)
 | 1.1 | Login | As a **user** I want an account to keep my details | The **app** shall allow **user** to login to their own account |  | &cross; |
 | 1.2 |Password reset| As a **user** I would want to be able to reset my password in the case i forget it | System should allow **user** to reset the password with email or phone number || &cross;
 | 2 | Create Hub | As a **user** I want to create a home to use link my devices | The **user** shall be able to create a **hub** to link devices to |  | &cross; |
+| 2.1 | Initial Invites | As a **user** I want to initially send invites to other **users** to join the new hub I am creating | The **user** shall be able to create a **hub** invite to multiple **users** during hub creation process |  | &cross; |
 | 3 | Register devices | As a **user** I want to register devices to the house | The **app** shall allow **user** to connect multiple devices to a **hub** |  | &cross; |
 | 3.1 | See device status | As a **user** I want to be able to see which devices are currently connected to my hub | **User** shall be able to see all previously connected devices and their current connectivity status |  | &cross; |
 | 3.2 | Auto-Assign device | As a **user**, If a schedule is missing a required device, I want that device to be automatically assigned to this schedule when registered to the **hub** | If the newly registered device matches a schedule's missing required device the **app** shall automatically assign it to the schedule upon device registration to the **hub** |  | &cross; |
 | 4 | Design Schedule | As a **user** I want to create a theoretical schedule for certain IoT devices | The **app** shall allow **user** to make a schedule |  | &cross; |
+| 4.1 | Device requirements | As a **user** I want my schedules to have a list of device types that they require to run | The **app** shall create a list of device types required for the schedule once the **user** saves their design schedule |  | &cross; |
 | 5 | Assign Schedule | As a **user** I want to utilise my designed schedule and put it on a house/hub | The **user** shall be able to assign a designed schedule to **hub** |  | &cross; |
 | 5.1 | Assign devices | As a **user** I want any schedules I assign to the hub to automatically be linked to appropriate devices | The **app** shall assign to the schedule the required devices that are currently linked to the **hub** within 1 second |  | &cross; |
 | 5.2 | Missing Device Warning | As a **user** I want to know if a required device to run my schedule is not currently linked to the **hub** | The **app** shall notify the **user** if any required device is not currently linked to the **hub** within 1 second of schedule assignment |  | &cross; |
 | 6 | Create schedule | As a **user** I want to create a schedule that can be loaded instantly to a hub | Allow **user** to create a schedule that is assigned to the **hub** on completion | 7.B | &cross; |
 | 7 | Delete schedule | As a **user** I want to delete a schedule that I have previously made | Allow **user** to delete a schedule from their account |  | &cross; |
-| 8.0 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow **user** to turn their schedule into a shareable format |  | &cross; |
+| 8 | Export schedule | As a **user** I want to turn my schedules into a shareable template | Allow **user** to turn their schedule into a shareable format |  | &cross; |
 | 8.1 | Import Schedule | As a **user** I want to be be able to import templates from others | Allow **user** to import a file to add a schedule into the account |  | &cross; |
-| 9.0 | Hub invite | as a **user** I want to add others to the hub | Allow **user** to add other **users** to the **hub** |  | &cross; |
+| 9 | Hub invite | as a **user** I want to add others to the hub | Allow **user** to add other **users** to the **hub** |  | &cross; |
 | 9.1 | Select Roles | as a **user** I want to be able to select specific roles for others when inviting them to the **hub** | Allow **user** to select roles when creating an invite for others |  | &cross; |
-| 10.0 | Hub join request | as a **user** I want to be able to request to join a **hub** | Allow **user** to send a **hub** join request |  | &cross; |
+| 9.2 | Accept/Deny hub invite | as a **user** I want to be able to accept or deny an invite to join a **hub** | Allow **user** to select roles when creating an invite for others |  | &cross; |
+| 10 | Hub join request | as a **user** I want to be able to request to join a **hub** | Allow **user** to accept or deny a **hub** join invite |  | &cross; |
 | 10.1 | Accept/Deny join request | as a **hub owner** I want to be able to accept or deny a **user** request to join my **hub** | Allow **hub owner** to accept or deny a **hub** join request |  | &cross; |
 | 11.0 | Manage Roles | As a **Hub admin** I want to manage roles of other accounts on the hub | allow **hub admin** to change other **user**'s roles |  | &cross; |
 | 12.0 | Remove schedule | As a **user** with appropriate role i want to be able to remove an inactive or unwanted schedule from the **hub** | Allow **user** (perm oriented) to remove a schedule from the **hub** |  | &cross; |
