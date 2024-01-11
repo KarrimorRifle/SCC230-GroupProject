@@ -13,3 +13,9 @@ running vue web server:
     `cd app`
     `npm run serve`
     open localhost:8080
+
+running lint:
+    `npm run lint`
+
+running unit tests:
+    `npm run test:unit`
