@@ -41,7 +41,7 @@
         </div>
         <button type="submit" class="btn btn-primary mb-5">Submit</button>
         <div class="form-text">
-          Don't have an account? <a class="link">Sign Up</a>
+          Don't have an account? <a class="link" href="/signup">Sign Up</a>
         </div>
       </form>
     </div>
