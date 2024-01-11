@@ -2,9 +2,23 @@
 import NavBar from "@/components/NavBar.vue";
 import "bootstrap";
 </script>
-<template>
-  <nav-bar />
-  <router-view />
+<template style="background-color: rgb(240, 240, 240)">
+  <div
+    data-bs-theme="dark"
+    style="
+      height: 100vh;
+      width: 100%;
+      background: rgb(63, 94, 251);
+      background: radial-gradient(
+        circle,
+        rgb(3, 132, 212) 0%,
+        rgb(7, 44, 103) 100%
+      );
+    "
+  >
+    <nav-bar />
+    <router-view />
+  </div>
 </template>
 
 <style>
