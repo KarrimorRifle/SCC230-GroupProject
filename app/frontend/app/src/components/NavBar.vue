@@ -36,42 +36,7 @@
         </ul>
         <form class="d-flex" role="search">
           <div class="nav-item">
-            <a
-              class="nav-link text-light"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Log in
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end me-3">
-              <form action="" v-if="!loggedIn" class="p-3">
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
-                    >Email address</label
-                  >
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >Password</label
-                  >
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="exampleInputPassword1"
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-              <div v-else></div>
-            </ul>
+            <a class="nav-link text-light" href="/login"> Log in </a>
           </div>
         </form>
       </div>
