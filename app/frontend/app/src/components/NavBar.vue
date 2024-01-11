@@ -40,23 +40,36 @@
             <a class="nav-link text-light" aria-disabled="true">Disabled</a>
           </li>
         </ul>
-        <div class="nav-item me-3">
-          <a
-            class="nav-link text-secondary"
-            href="/signup"
-            :class="{ active: route.path == '/signup' }"
-          >
-            Sign up
-          </a>
+        <div v-if="!loggedIn" class="d-flex justify-content-center">
+          <div class="nav-item me-3">
+            <a
+              class="nav-link text-secondary"
+              href="/signup"
+              :class="{ 'active text-light': route.path == '/signup' }"
+            >
+              Sign up
+            </a>
+          </div>
+          <div class="nav-item">
+            <a
+              class="nav-link text-light"
+              href="/login"
+              :class="{ active: route.path == '/login' }"
+            >
+              Log in
+            </a>
+          </div>
         </div>
-        <div class="nav-item">
-          <a
-            class="nav-link text-light"
-            href="/login"
-            :class="{ active: route.path == '/login' }"
-          >
-            Log in
-          </a>
+        <div v-else>
+          <div class="nav-item">
+            <a
+              class="nav-link text-light"
+              href="/account"
+              :class="{ active: route.path == '/account' }"
+            >
+              Account
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +78,7 @@
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
+let loggedIn = false;
 
 const route = useRoute();
 console.log(route);
