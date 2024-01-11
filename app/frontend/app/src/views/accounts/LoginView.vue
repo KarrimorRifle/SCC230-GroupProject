@@ -54,10 +54,3 @@ const login = () => {
   console.log("logging in...");
 };
 </script>
-
-<style>
-a.link {
-  text-decoration: underline !important;
-  cursor: pointer;
-}
-</style>
