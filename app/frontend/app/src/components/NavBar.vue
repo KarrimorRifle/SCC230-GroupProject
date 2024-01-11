@@ -1,5 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary px-3">
+  <nav
+    class="navbar navbar-expand-lg bg-body-tertiary px-3"
+    data-bs-theme="dark"
+  >
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <img
@@ -34,19 +37,40 @@
         <form class="d-flex" role="search">
           <div class="nav-item">
             <a
-              class="nav-link"
+              class="nav-link text-light"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Dropdown
+              Log in
             </a>
             <ul class="dropdown-menu dropdown-menu-end me-3">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <form action="" v-if="!loggedIn" class="p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"
+                    >Email address</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword1"
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+              <div v-else></div>
             </ul>
           </div>
         </form>
@@ -54,3 +78,6 @@
     </div>
   </nav>
 </template>
+<script lang="ts" setup>
+let loggedIn = false;
+</script>
