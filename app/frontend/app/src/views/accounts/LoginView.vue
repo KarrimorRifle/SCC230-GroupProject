@@ -39,7 +39,9 @@
             <a class="link">Forgot password</a>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary mb-5">Submit</button>
+        <button type="submit" class="btn btn-primary mb-5" @click="login()">
+          Submit
+        </button>
         <div class="form-text">
           Don't have an account? <a class="link" href="/signup">Sign Up</a>
         </div>
