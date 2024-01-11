@@ -25,24 +25,53 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a
+              class="nav-link text-light"
+              :class="{ active: route.path == '/' }"
+              aria-current="page"
+              href="/"
+              >Home</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link text-light" href="#">Link</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            <a class="nav-link text-light" aria-disabled="true">Disabled</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <div class="nav-item">
-            <a class="nav-link text-light" href="/login"> Log in </a>
-          </div>
-        </form>
+        <div class="nav-item me-3">
+          <a
+            class="nav-link text-secondary"
+            href="/signup"
+            :class="{ active: route.path == '/signup' }"
+          >
+            Sign up
+          </a>
+        </div>
+        <div class="nav-item">
+          <a
+            class="nav-link text-light"
+            href="/login"
+            :class="{ active: route.path == '/login' }"
+          >
+            Log in
+          </a>
+        </div>
       </div>
     </div>
   </nav>
 </template>
+
 <script lang="ts" setup>
-let loggedIn = false;
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+console.log(route);
 </script>
+
+<style>
+.active {
+  font-weight: 600 !important;
+}
+</style>
