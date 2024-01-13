@@ -1,6 +1,8 @@
 import mysql.connector
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_bcrypt import Bcrypt
+import uuid
+import datetime
 
 #db connection
 connection = mysql.connector.connect(
@@ -32,8 +34,22 @@ def accounts():
         query = ("SELECT * FROM accounts"
                  "WHERE Email = {}".format(email))
         cursor.execute(query)
+        #creating a new account
         if cursor.fetchone() is None:
-            return
+            query = ("INSERT INTO accounts VALUES (FirstName, Surname, Email, Pass)"
+                     "({},{},{},{})".format(request.headers.get("firstName"),request.headers.get("surname"),email,request.headers.get("password")))
+            try:
+                cursor.execute(query)
+                connection.commit()
+                sessionID = str(uuid.uuid4())
+                sessionExpiry = datetime.now() + datetime.timedelta(days = 1)
+                response = make_response()
+                response.set_cookie('session_id',sessionID, max_age=datetime.timedelta(days=1))
+                return response
+            except Exception as e:
+                connection.rollback()
+                return jsonify({"error": str(e)}), 500
+        #sending back error message
         else:
             return jsonify({"error": "Email already in use"}), 409
         
