@@ -68,7 +68,6 @@ def getAccount():
     
     cursor.execute(query)
     return cursor.fetchone()
-
         
 
 #running app

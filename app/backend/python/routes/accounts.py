@@ -56,7 +56,7 @@ def accountsResonse():
             query = ("UPDATE accounts "
                       f"SET {updateParams} "
                       "WHERE SessionID = %s AND AccountID = %s")
-            values.extend([sessionID, account['AccountID']])
+            values.extend([account['SessionID'], account['AccountID']])
 
             try:
                 cursor.execute(query, values)
@@ -77,7 +77,7 @@ def accountsResonse():
             return jsonify({"error": "Session ID is invalid"}), 401
         
         if (not request.json.get("password") is None) and bcrypt.checkpw(request.json.get('password').encode('utf-8'), account['Password'].encode('utf-8')):
-            query = (f"DELETE FROM accounts WHERE SessionID = {sessionID} AND AccountID = {account['AccountID']}" )
+            query = (f"DELETE FROM accounts WHERE SessionID = {account['SessionID']} AND AccountID = {account['AccountID']}" )
             try:
                 cursor.execute(query)
                 connection.commit()
@@ -98,3 +98,13 @@ def accountsResonse():
             return jsonify(account)
         else:
             return 401
+
+def getAccount():
+    cursor = current_app.config['cursor']
+    connection= current_app.config['connection']
+    sessionID = request.cookies.get('session_id')
+    query = ("SELECT * FROM accounts "
+                "WHERE SessionID = '{}'".format(sessionID))
+    
+    cursor.execute(query)
+    return cursor.fetchone()
