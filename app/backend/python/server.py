@@ -28,6 +28,35 @@ app.register_blueprint(accounts)
 #       return jsonify(object), statusCode
 ##getting query params
 # var = request.args.get("queryParamName")
+@app.route("login", methods=["POST"])
+def login():
+    email = request.json.get("Email")
+    password = request.json.get("Password")
+    password = password.encode("utf-8")
+    
+    query = f"SELECT * FROM accounts WHERE Email = %s"
+    cursor.execute(query, (email,))
+    account = cursor.fetchone()
+    if account is None:
+        return jsonify({"error":"Details don't match our system"}), 403
+
+    if bcrypt.checkpw(password, account["Password".encode("utf-8")]):
+        response = make_response(jsonify({"success":"Logged in successfully"}))
+        sessionID = str(uuid.uuid4())
+        sessionExpiry = datetime.now() + timedelta(days = 1)
+
+        try:
+            cursor.execute(f"UPDATE accounts SET SessionID = {sessionID}, SessionExpiry = {sessionExpiry} WHERE AccountID = {account.get('AccountID')}")
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return jsonify({'error':"Internal server error"}), 500
+        
+        response.set_cookie('session_id',sessionID, max_age=24*60*60)
+        return(response)
+
+    else:
+        return jsonify({"error":"Details don't match our system"}), 403
 
 def getAccount():
     sessionID = request.cookies.get('session_id')
