@@ -38,7 +38,7 @@ def getAccount():
 def accounts():
     #Creation of an account
     if request.method == 'POST':
-        email = request.json.get('email')
+        email = request.json.get('Email')
         query = ("SELECT * FROM accounts "
                  "WHERE Email = '{}'".format(email))
         cursor.execute(query)
@@ -49,7 +49,7 @@ def accounts():
             sessionExpiry = datetime.now() + datetime.timedelta(days = 1)
             response = make_response(jsonify({"success":"Account created successfully"}))
             query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp "
-                     "VALUES ('{}','{}','{}','{}')".format(request.json.get("firstName"),request.json.get("surname"),email,bcrypt.hashpw(request.json.get("password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+                     "VALUES ('{}','{}','{}','{}')".format(request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
             try:
                 cursor.execute(query)
                 connection.commit()
