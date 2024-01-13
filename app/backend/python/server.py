@@ -26,6 +26,14 @@ bcrypt = Bcrypt(app)
 ##getting query params
 # var = request.args.get("queryParamName")
 
+def getAccount():
+    sessionID = request.cookies.get('session_id')
+    query = ("SELECT * FROM accounts "
+                "WHERE SessionID = '{}'".format(sessionID))
+    
+    cursor.execute(query)
+    return cursor.fetchone()
+
 @app.route("/accounts" , methods=['POST', 'PATCH', 'DELETE'])
 def accounts():
     #Creation of an account
@@ -55,11 +63,7 @@ def accounts():
             return jsonify({"error" : "Email already in use"}), 409
 
     elif request.method == 'PATCH':
-        sessionID = request.cookies.get('session_id')
-        query = ("SELECT * FROM accounts "
-                 "WHERE SessionID = '{}'".format(sessionID))
-        cursor.execute(query)
-        account = cursor.fetchone()
+        account = getAccount()
 
         if account is None:
             return jsonify({"error": "Session ID is invalid"}), 401
@@ -88,6 +92,26 @@ def accounts():
                 connection.rollback()
                 return jsonify({"error" : "Account couldn't be updated"}), 500
         
+        else:
+            return({"error": "Forbidden access"}), 401
+        
+    elif request.method == "DELETE":
+
+        account = getAccount()
+
+        if account is None:
+            return jsonify({"error": "Session ID is invalid"}), 401
+        
+        if (not request.json.get("password") is None) and bcrypt.checkpw(request.json.get('password').encode('utf-8'), account['Password'].encode('utf-8')):
+            query = (f"DELETE FROM accounts WHERE SessionID = {sessionID} AND AccountID = {account['AccountID']}" )
+            try:
+                cursor.execute(query)
+                connection.commit()
+                return(jsonify({"success":"Successfully deleted account!"}))
+            except Exception as e:
+                connection.rollback()
+                return(jsonify({"error":"Unable to delete account"})), 500
+
         else:
             return({"error": "Forbidden access"}), 401
         
