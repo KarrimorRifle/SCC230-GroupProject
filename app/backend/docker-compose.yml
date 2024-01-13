@@ -1,7 +1,12 @@
 services:
   pythonapp:
     build: ./python/
-    command: sh -c "sleep 10s ; python3 ./server.py"
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "flask", "run", "--host=0.0.0.0"]
+    volumes:
+      - ./python:/app
+    environment:
+      - FLASK_APP=server.py
+      - FLASK_ENV=development
     depends_on:
       - mysql
   
@@ -9,7 +14,6 @@ services:
     build: ./mysql/
     restart: always
     environment:
-      MYSQL_DATABASE: 'db'
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - '3306:3306'

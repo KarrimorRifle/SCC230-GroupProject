@@ -1,6 +1,6 @@
 import mysql.connector
 from flask import Flask, request, jsonify
-from flask_bycrypt import Bycrypt
+from flask_bcrypt import Bcrypt
 
 #db connection
 connection = mysql.connector.connect(
@@ -12,6 +12,7 @@ cursor = connection.cursor()
 
 #setting up Flask
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 #handling paths and different methods
 #@app.route("/path/<param>", methods = ['requestMethod1','requestMethod2'])

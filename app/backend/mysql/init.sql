@@ -11,4 +11,5 @@ CREATE TABLE accounts(
 );
 
 INSERT INTO accounts(FirstName, Surname, Email, Pass)
-Values("Jhon","Doe","jhondoe@gmail.com", SHA2("JaneDoe123.",256) ),("Jane","Doe","janedoe@gmail.com",SHA2("JhonDoe123.",256));
+-- passwords are 'JhonDoe123.' and 'JaneDoe123.' respectively
+Values("Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
