@@ -1,7 +1,17 @@
-FROM python:3.9
+FROM alpine:3.19
 
-RUN pip install mysql-connector-python
-RUN pip install flask
+RUN apk add --update py3-pip
+RUN set -e; \
+        apk add --no-cache --virtual .build-deps \
+                gcc \
+                libc-dev \
+                linux-headers \
+                mariadb-dev \
+                python3-dev \
+                postgresql-dev \
+        ;
+RUN pip install mysql-connector-python --break-system-packages
+RUN pip install flask --break-system-packages
 
 WORKDIR /usr/app/src
 

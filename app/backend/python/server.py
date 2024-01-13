@@ -10,9 +10,13 @@ print("DB connected")
 #setting up a port to listen on
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "Home!"
+#handling paths and different methods
+#@app.route("/path", methods = ['requestMethod1','requestMethod2'])
+#def home():
+#   if request.method == 'requestMethod1'
+#    return "Home!"
+#   else
+#       return "niafn"
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, port=5050)
