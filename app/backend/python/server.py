@@ -7,7 +7,9 @@ connection = mysql.connector.connect(
 )
 print("DB connected")
 
-#setting up a port to listen on
+cursor = connection.cursor()
+
+#setting up Flask
 app = Flask(__name__)
 
 #handling paths and different methods
@@ -20,6 +22,19 @@ app = Flask(__name__)
 ##getting query params
 # var = request.args.get("queryParamName")
 
+@app.route("/accounts" , methods=['POST', 'PATCH', 'DELETE'])
+def accounts():
+    if request.method == 'POST':
+        email = request.headers.get('email')
+        query = ("SELECT * FROM accounts"
+                 "WHERE Email = {}".format(email))
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return
+        else:
+            return jsonify({"error": "Account already exists"}), 409
+        
 
+#running app
 if __name__ == "__main__":
     app.run(debug = True, port=5050)
