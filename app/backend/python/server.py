@@ -30,28 +30,66 @@ bcrypt = Bcrypt(app)
 def accounts():
     #Creation of an account
     if request.method == 'POST':
-        email = request.headers.get('email')
-        query = ("SELECT * FROM accounts"
-                 "WHERE Email = {}".format(email))
+        email = request.json.get('email')
+        query = ("SELECT * FROM accounts "
+                 "WHERE Email = '{}'".format(email))
         cursor.execute(query)
+
         #creating a new account
         if cursor.fetchone() is None:
-            query = ("INSERT INTO accounts VALUES (FirstName, Surname, Email, Pass)"
-                     "({},{},{},{})".format(request.headers.get("firstName"),request.headers.get("surname"),email,request.headers.get("password")))
+            sessionID = str(uuid.uuid4())
+            sessionExpiry = datetime.now() + datetime.timedelta(days = 1)
+            response = make_response(jsonify({"success":"Account created successfully"}))
+            query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp "
+                     "VALUES ('{}','{}','{}','{}')".format(request.json.get("firstName"),request.json.get("surname"),email,bcrypt.hashpw(request.json.get("password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
             try:
                 cursor.execute(query)
                 connection.commit()
-                sessionID = str(uuid.uuid4())
-                sessionExpiry = datetime.now() + datetime.timedelta(days = 1)
-                response = make_response()
-                response.set_cookie('session_id',sessionID, max_age=datetime.timedelta(days=1))
+                response.set_cookie('session_id',sessionID, max_age=24*60*60)
                 return response
             except Exception as e:
                 connection.rollback()
                 return jsonify({"error": str(e)}), 500
         #sending back error message
         else:
-            return jsonify({"error": "Email already in use"}), 409
+            return jsonify({"error" : "Email already in use"}), 409
+
+    elif request.method == 'PATCH':
+        sessionID = request.cookies.get('session_id')
+        query = ("SELECT * FROM accounts "
+                 "WHERE SessionID = '{}'".format(sessionID))
+        cursor.execute(query)
+        account = cursor.fetchone()
+
+        if account is None:
+            return jsonify({"error": "Session ID is invalid"}), 401
+        
+        if (not request.json.get("password") is None) and bcrypt.checkpw(request.json.get('password').encode('utf-8'), account['Password'].encode('utf-8')):
+            
+            updateParams = []
+            values = []
+            for key, value in request.json.items():
+                if not key[0].isupper():
+                    continue
+                updateParams.append(f"{key}=%s")
+                values.append(value)
+            updateParams = ', '.join(updateParams)
+
+            query = ("UPDATE accounts "
+                      f"SET {updateParams} "
+                      "WHERE SessionID = %s AND AccountID = %s")
+            values.extend([sessionID, account['AccountID']])
+
+            try:
+                cursor.execute(query, values)
+                connection.commit()
+                return jsonify({"success" : "Account has been successfully updated"})
+            except Exception as e:
+                connection.rollback()
+                return jsonify({"error" : "Account couldn't be updated"}), 500
+        
+        else:
+            return({"error": "Forbidden access"}), 401
         
 
 #running app

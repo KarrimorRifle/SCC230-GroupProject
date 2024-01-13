@@ -8,7 +8,7 @@ CREATE TABLE accounts(
     Email varchar(100) NOT NULL,
     `Password` VARCHAR(100) NOT NULL,
     SessionID VARCHAR(100),
-    SessionExpiry DATE,
+    SessionExp DATETIME,
     PRIMARY KEY (AccountID)
 );
 
