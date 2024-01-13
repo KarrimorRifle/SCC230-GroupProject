@@ -9,4 +9,6 @@
     ### Starting the server
         Run: `docker-compose up`
 
-Main applications
+## Accessing the backend server
+When started the server is listening on `localhost:5000`
+    Tests can be ran using postman or VUE itself

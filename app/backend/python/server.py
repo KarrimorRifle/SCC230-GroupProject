@@ -33,7 +33,7 @@ def getAccount():
     cursor.execute(query)
     return cursor.fetchone()
 
-@app.route("/accounts" , methods=['POST', 'PATCH', 'DELETE'])
+@app.route("/accounts" , methods=['POST', 'PATCH', 'DELETE', 'GET'])
 def accounts():
     #Creation of an account
     if request.method == 'POST':
@@ -113,6 +113,16 @@ def accounts():
 
         else:
             return({"error": "Forbidden access"}), 401
+    
+    elif request.method == "GET":
+        account = getAccount()
+        account.pop('Password', None)
+        account.pop('SessionID', None)
+        account.pop('SessionExp', None)
+        if not (account is None):
+            return jsonify(account)
+        else:
+            return 401
         
 
 #running app
