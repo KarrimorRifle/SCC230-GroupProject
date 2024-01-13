@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, current_app
 import bcrypt
 import uuid
 from datetime import datetime, timedelta
@@ -8,6 +8,8 @@ accounts = Blueprint('accounts', __name__)
 
 @accounts.route("/accounts" , methods=['POST', 'PATCH', 'DELETE', 'GET'])
 def accountsResonse():
+    cursor = current_app.config['cursor']
+    connection= current_app.config['connection']
     #Creation of an account
     if request.method == 'POST':
         email = request.json.get('Email')

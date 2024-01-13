@@ -15,6 +15,8 @@ cursor = connection.cursor()
 
 #setting up Flask
 app = Flask(__name__)
+app.config['cursor'] = cursor
+app.config['connection'] = connection
 app.register_blueprint(accounts)
 
 #handling paths and different methods
