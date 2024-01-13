@@ -9,11 +9,19 @@ services:
       - FLASK_ENV=development
     depends_on:
       - mysql
+    ports:
+      - '5000:5000'
   
   mysql:
     build: ./mysql/
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
     ports:
       - '3306:3306'
+
+volumes:
+  mysql_data:

@@ -1,6 +1,9 @@
 CREATE DATABASE Accounts;
 USE Accounts
 
+-- To reset DB delete the container and start up again
+-- if any changes were made do the last line AND `docker-compose build`
+
 CREATE TABLE accounts(
     AccountID int not null AUTO_INCREMENT,
     FirstName varchar(100) NOT NULL,

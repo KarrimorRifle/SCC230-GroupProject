@@ -1,8 +1,8 @@
 import mysql.connector
 from flask import Flask, request, jsonify, make_response
-from flask_bcrypt import Bcrypt
+import bcrypt
 import uuid
-import datetime
+from datetime import datetime, timedelta
 
 #db connection
 connection = mysql.connector.connect(
@@ -14,7 +14,6 @@ cursor = connection.cursor()
 
 #setting up Flask
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 #handling paths and different methods
 #@app.route("/path/<param>", methods = ['requestMethod1','requestMethod2'])
@@ -46,10 +45,10 @@ def accounts():
         #creating a new account
         if cursor.fetchone() is None:
             sessionID = str(uuid.uuid4())
-            sessionExpiry = datetime.now() + datetime.timedelta(days = 1)
+            sessionExpiry = datetime.now() + timedelta(days = 1)
             response = make_response(jsonify({"success":"Account created successfully"}))
-            query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp "
-                     "VALUES ('{}','{}','{}','{}')".format(request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+            query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
+                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
             try:
                 cursor.execute(query)
                 connection.commit()
@@ -118,4 +117,4 @@ def accounts():
 
 #running app
 if __name__ == "__main__":
-    app.run(debug = True, port=5050)
+    app.run(debug = True, port=5000)
