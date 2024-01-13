@@ -11,12 +11,15 @@ print("DB connected")
 app = Flask(__name__)
 
 #handling paths and different methods
-#@app.route("/path", methods = ['requestMethod1','requestMethod2'])
-#def home():
+#@app.route("/path/<param>", methods = ['requestMethod1','requestMethod2'])
+#def home(param):
 #   if request.method == 'requestMethod1'
 #    return "Home!"
 #   else
-#       return "niafn"
+#       return jsonify(object), statusCode
+##getting query params
+# var = request.args.get("queryParamName")
+
 
 if __name__ == "__main__":
     app.run(debug = True, port=5050)
