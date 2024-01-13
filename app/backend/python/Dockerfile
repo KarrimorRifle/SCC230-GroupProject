@@ -10,7 +10,7 @@ RUN set -e; \
                 python3-dev \
                 postgresql-dev \
         ;
-RUN pip install mysql-connector-python flask flask-bycrypt--break-system-packages
+RUN pip install mysql-connector-python flask flask-bycrypt --break-system-packages
 
 WORKDIR /usr/app/src
 
