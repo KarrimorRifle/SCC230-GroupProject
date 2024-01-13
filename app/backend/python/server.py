@@ -24,6 +24,7 @@ app = Flask(__name__)
 
 @app.route("/accounts" , methods=['POST', 'PATCH', 'DELETE'])
 def accounts():
+    #Creation of an account
     if request.method == 'POST':
         email = request.headers.get('email')
         query = ("SELECT * FROM accounts"
@@ -32,7 +33,7 @@ def accounts():
         if cursor.fetchone() is None:
             return
         else:
-            return jsonify({"error": "Account already exists"}), 409
+            return jsonify({"error": "Email already in use"}), 409
         
 
 #running app
