@@ -1,4 +1,7 @@
 import mysql.connector
+from mysql.connector import Error
+from mysql.connector import errorcode
+from mysql.connector import FieldType
 from flask import Flask, request, jsonify, make_response
 import bcrypt
 import uuid
@@ -11,7 +14,7 @@ connection = mysql.connector.connect(
 )
 print("DB connected")
 
-cursor = connection.cursor()
+cursor = connection.cursor(dictionary = True)
 
 #setting up Flask
 app = Flask(__name__)
@@ -28,7 +31,7 @@ app.register_blueprint(accounts)
 #       return jsonify(object), statusCode
 ##getting query params
 # var = request.args.get("queryParamName")
-@app.route("login", methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login():
     email = request.json.get("Email")
     password = request.json.get("Password")
@@ -40,17 +43,17 @@ def login():
     if account is None:
         return jsonify({"error":"Details don't match our system"}), 403
 
-    if bcrypt.checkpw(password, account["Password".encode("utf-8")]):
+    if bcrypt.checkpw(password, account.get("Password").encode("utf-8")):
         response = make_response(jsonify({"success":"Logged in successfully"}))
         sessionID = str(uuid.uuid4())
-        sessionExpiry = datetime.now() + timedelta(days = 1)
+        sessionExp = datetime.now() + timedelta(days = 1)
 
         try:
-            cursor.execute(f"UPDATE accounts SET SessionID = {sessionID}, SessionExpiry = {sessionExpiry} WHERE AccountID = {account.get('AccountID')}")
+            cursor.execute("UPDATE accounts SET SessionID = %s, SessionExp = %s WHERE AccountID = %s",(sessionID,sessionExp,account.get("AccountID")))
             connection.commit()
         except Exception as e:
             connection.rollback()
-            return jsonify({'error':"Internal server error"}), 500
+            return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
         
         response.set_cookie('session_id',sessionID, max_age=24*60*60)
         return(response)
