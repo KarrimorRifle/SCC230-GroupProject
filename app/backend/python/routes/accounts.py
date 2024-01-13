@@ -76,15 +76,15 @@ def accountsResonse():
         if account is None:
             return jsonify({"error": "Session ID is invalid"}), 401
         
-        if (not request.json.get("password") is None) and bcrypt.checkpw(request.json.get('password').encode('utf-8'), account['Password'].encode('utf-8')):
-            query = (f"DELETE FROM accounts WHERE SessionID = {account['SessionID']} AND AccountID = {account['AccountID']}" )
+        if (not request.json.get("Password") is None) and bcrypt.checkpw(request.json.get('Password').encode('utf-8'), account['Password'].encode('utf-8')):
+            query = ("DELETE FROM accounts WHERE SessionID = %s AND AccountID = %s" )
             try:
-                cursor.execute(query)
+                cursor.execute(query, (account['SessionID'], account['AccountID']))
                 connection.commit()
                 return(jsonify({"success":"Successfully deleted account!"}))
             except Exception as e:
                 connection.rollback()
-                return(jsonify({"error":"Unable to delete account"})), 500
+                return(jsonify({"error":"Unable to delete account", "details":f"{e}"})), 500
 
         else:
             return({"error": "Forbidden access"}), 401
