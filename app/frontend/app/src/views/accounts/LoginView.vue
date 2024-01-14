@@ -20,7 +20,7 @@
             type="email"
             class="form-control"
             id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            v-model="email"
           />
         </div>
         <div class="mb-3">
@@ -34,14 +34,13 @@
             type="password"
             class="form-control"
             id="exampleInputPassword1"
+            v-model="password"
           />
           <div class="form-text" style="width: 100%">
             <a class="link">Forgot password</a>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary mb-5" @click="login()">
-          Submit
-        </button>
+        <button class="btn btn-primary mb-5" @click="login">Submit</button>
         <div class="form-text">
           Don't have an account? <a class="link" href="/signup">Sign Up</a>
         </div>
@@ -50,7 +49,23 @@
   </div>
 </template>
 <script lang="ts" setup>
-const login = () => {
-  console.log("logging in...");
+import { ref } from "vue";
+import axios, { AxiosError } from "axios";
+
+const email = ref("");
+const password = ref("");
+
+const login = async (event: Event) => {
+  event.preventDefault();
+  try {
+    let data = await axios.post("http://localhost:5000/login", {
+      Email: email.value,
+      Password: password.value,
+    });
+  } catch (err: AxiosError) {
+    //handle error message
+  }
+  console.log(email.value);
+  console.log(password.value);
 };
 </script>

@@ -1,9 +1,9 @@
-FROM alpine:3.19
+FROM python
 
-RUN apk add --no-cache bash
-RUN apk add --update py3-pip
-RUN apk add --update musl-dev gcc cargo
-RUN pip install mysql-connector-python flask bcrypt --break-system-packages
+# RUN apk add --no-cache bash
+# RUN apk add --update py3-pip
+# RUN apk add --update musl-dev gcc cargo
+RUN pip install mysql-connector-python flask bcrypt flask-cors
 
 WORKDIR /usr/app/src
 

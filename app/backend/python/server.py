@@ -1,8 +1,6 @@
 import mysql.connector
-from mysql.connector import Error
-from mysql.connector import errorcode
-from mysql.connector import FieldType
 from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
 import bcrypt
 import uuid
 from datetime import datetime, timedelta
@@ -21,6 +19,7 @@ app = Flask(__name__)
 app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
+CORS(app)
 
 #handling paths and different methods
 #@app.route("/path/<param>", methods = ['requestMethod1','requestMethod2'])
