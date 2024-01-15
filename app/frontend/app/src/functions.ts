@@ -1,3 +1,6 @@
+import axios, { AxiosError } from "axios";
+import router from "./router";
+
 export const getCookies = () => {
   const cookies: string = document.cookie;
   let returnValue: Record<string, string> = {};
@@ -27,4 +30,21 @@ export const setCookies = (cookies: Record<string, string>) => {
 
 export const deleteCookie = (name: string) => {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+};
+
+export const getAccount = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/accounts", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (err: AxiosError | any) {
+    const cookies = getCookies();
+    console.log(cookies);
+    delete cookies["session_id"];
+    console.log(cookies);
+    setCookies(cookies);
+    deleteCookie("session_id");
+    router.push("/login?error");
+  }
 };

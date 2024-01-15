@@ -100,7 +100,7 @@ const fetchData = async () => {
         withCredentials: true,
       });
       account.value = response.data;
-    } catch (err: AxiosError) {
+    } catch (err: AxiosError | any) {
       let cookies = getCookies();
       console.log(cookies);
       delete cookies["session_id"];
