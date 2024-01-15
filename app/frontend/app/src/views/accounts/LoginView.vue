@@ -8,7 +8,10 @@
       class="card"
       style="width: 35%; margin-top: 6rem; height: 23rem; padding-top: 1rem"
     >
-      <form action="" class="p-3 pb-0 card-body">
+      <form action="" class="p-3 pt-0 pb-0 card-body">
+        <div style="min-height: 1.3rem" class="form-text text-warning">
+          {{ error }}
+        </div>
         <div class="mb-3">
           <label
             for="exampleInputEmail1"
@@ -51,9 +54,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import axios, { AxiosError } from "axios";
+import router from "@/router";
 
 const email = ref("");
 const password = ref("");
+const error = ref("");
 
 const login = async (event: Event) => {
   event.preventDefault();
@@ -66,8 +71,9 @@ const login = async (event: Event) => {
       },
       { withCredentials: true }
     );
+    router.push({ path: "/home" });
   } catch (err: AxiosError) {
-    //handle error message
+    error.value = err.response.data.error;
   }
   console.log(email.value);
   console.log(password.value);
