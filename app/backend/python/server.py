@@ -63,9 +63,9 @@ def login():
 def getAccount():
     sessionID = request.cookies.get('session_id')
     query = ("SELECT * FROM accounts "
-                "WHERE SessionID = '{}'".format(sessionID))
+                "WHERE SessionID = %s")
     
-    cursor.execute(query)
+    cursor.execute(query, (sessionID,))
     return cursor.fetchone()
         
 
