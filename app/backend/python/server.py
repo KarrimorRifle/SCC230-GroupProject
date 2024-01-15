@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 #handling paths and different methods
 #@app.route("/path/<param>", methods = ['requestMethod1','requestMethod2'])

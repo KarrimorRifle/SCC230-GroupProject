@@ -58,10 +58,14 @@ const password = ref("");
 const login = async (event: Event) => {
   event.preventDefault();
   try {
-    let data = await axios.post("http://localhost:5000/login", {
-      Email: email.value,
-      Password: password.value,
-    });
+    let data = await axios.post(
+      "http://localhost:5000/login",
+      {
+        Email: email.value,
+        Password: password.value,
+      },
+      { withCredentials: true }
+    );
   } catch (err: AxiosError) {
     //handle error message
   }

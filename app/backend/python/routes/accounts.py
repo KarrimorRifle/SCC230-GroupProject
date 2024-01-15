@@ -27,7 +27,7 @@ def accountsResonse():
             try:
                 cursor.execute(query)
                 connection.commit()
-                response.set_cookie('session_id',sessionID, max_age=24*60*60)
+                response.set_cookie('session_id',value=sessionID, max_age=24*60*60, samesite='None', secure=True)
                 return response
             except Exception as e:
                 connection.rollback()
