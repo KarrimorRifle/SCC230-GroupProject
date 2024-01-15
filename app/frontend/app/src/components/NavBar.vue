@@ -78,10 +78,11 @@
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
+import { getCookies } from "@/functions";
 let loggedIn = false;
 
 const route = useRoute();
-console.log(route);
+if (getCookies()["session_id"] != null) loggedIn = true;
 </script>
 
 <style>
