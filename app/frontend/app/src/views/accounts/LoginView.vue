@@ -6,12 +6,14 @@
   >
     <div
       class="card"
-      style="width: 35%; margin-top: 6rem; height: 23rem; padding-top: 1rem"
+      style="width: 35%; margin-top: 6rem; height: 26rem; padding-top: 1rem"
     >
-      <form action="" class="p-3 pt-0 pb-0 card-body">
-        <div style="min-height: 1.3rem" class="form-text text-warning">
-          {{ error }}
-        </div>
+      <h3 class="m-0 p-0">Login</h3>
+      <div style="min-height: 1.3rem" class="form-text text-warning">
+        {{ error }}
+      </div>
+      <hr class="m-0" />
+      <form action="" class="p-3 pt-3 pb-0 card-body bg">
         <div class="mb-3">
           <label
             for="exampleInputEmail1"
@@ -80,3 +82,9 @@ const login = async (event: Event) => {
   console.log(password.value);
 };
 </script>
+
+<style>
+.bg {
+  background-color: #1d2b39;
+}
+</style>
