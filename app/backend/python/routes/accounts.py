@@ -91,6 +91,8 @@ def accountsResonse():
     
     elif request.method == "GET":
         account = getAccount()
+        if account == None:
+            return jsonify({"error":"Session ID invalid"}), 403
         account.pop('Password', None)
         account.pop('SessionID', None)
         account.pop('SessionExp', None)
