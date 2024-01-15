@@ -62,6 +62,7 @@ const error = ref("");
 
 const login = async (event: Event) => {
   event.preventDefault();
+  email.value = email.value.toLowerCase();
   try {
     let data = await axios.post(
       "http://localhost:5000/login",
