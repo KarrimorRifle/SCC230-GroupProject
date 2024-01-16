@@ -49,6 +49,8 @@ def accountsResonse():
             for key, value in request.json.items():
                 if not key[0].isupper():
                     continue
+                if value == "":
+                    continue
                 updateParams.append(f"{key}=%s")
                 values.append(value)
             updateParams = ', '.join(updateParams)
@@ -91,6 +93,8 @@ def accountsResonse():
     
     elif request.method == "GET":
         account = getAccount()
+        if account == None:
+            return jsonify({"error":"Session ID invalid"}), 403
         account.pop('Password', None)
         account.pop('SessionID', None)
         account.pop('SessionExp', None)
@@ -104,7 +108,7 @@ def getAccount():
     connection= current_app.config['connection']
     sessionID = request.cookies.get('session_id')
     query = ("SELECT * FROM accounts "
-                "WHERE SessionID = '{}'".format(sessionID))
+                "WHERE SessionID = %s")
     
-    cursor.execute(query)
+    cursor.execute(query, (sessionID,))
     return cursor.fetchone()

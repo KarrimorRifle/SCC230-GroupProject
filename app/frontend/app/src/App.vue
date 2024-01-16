@@ -6,7 +6,8 @@ import "bootstrap";
   <div
     data-bs-theme="dark"
     style="
-      height: 100vh;
+      min-height: 100vh;
+      height: 100%;
       width: 100%;
       background: rgb(63, 94, 251);
       background: radial-gradient(
