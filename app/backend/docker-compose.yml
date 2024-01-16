@@ -11,6 +11,12 @@ services:
       - mysql
     ports:
       - '5000:5000'
+
+  tests:
+    build: ./python/
+    command: ["python", "-m", "unittest", "discover"]
+    depends_on:
+      - pythonapp
   
   mysql:
     build: ./mysql/
