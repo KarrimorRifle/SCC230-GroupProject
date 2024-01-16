@@ -62,13 +62,17 @@
         </div>
         <div v-else>
           <div class="nav-item">
-            <a
-              class="nav-link text-light"
-              href="/account"
-              :class="{ active: route.path == '/account' }"
-            >
-              Account
-            </a>
+            <div class="btn-group">
+              <a
+                class="text-light account"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                :class="{ active: route.path == '/account' }"
+              >
+                Account
+              </a>
+              <account-dropdown />
+            </div>
           </div>
         </div>
       </div>
@@ -78,14 +82,50 @@
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
-let loggedIn = false;
+import { deleteCookie, getCookies, setCookies } from "@/functions";
+import AccountDropdown from "./AccountDropdown.vue";
+import { ref } from "vue";
+import axios, { AxiosError } from "axios";
+import router from "@/router";
+let loggedIn = ref(false);
+const account = ref({});
 
 const route = useRoute();
-console.log(route);
+if (getCookies()["session_id"] != null) loggedIn.value = true;
+
+const fetchData = async () => {
+  if (loggedIn.value == true) {
+    try {
+      const response = await axios.get("http://localhost:5000/accounts", {
+        withCredentials: true,
+      });
+      account.value = response.data;
+    } catch (err: AxiosError | any) {
+      let cookies = getCookies();
+      console.log(cookies);
+      delete cookies["session_id"];
+      console.log(cookies);
+      setCookies(cookies);
+      deleteCookie("session_id");
+      loggedIn.value = false;
+      router.push("/login");
+    }
+  }
+};
+
+fetchData();
 </script>
 
-<style>
-.active {
+<style lang="scss">
+a.active {
   font-weight: 600 !important;
+}
+
+.account {
+  text-decoration: none !important;
+  font-weight: 300 !important;
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>
