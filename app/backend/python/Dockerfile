@@ -1,7 +1,7 @@
-FROM python
+FROM python:latest
 
-COPY /app /app
-WORKDIR /app
+COPY /app /python/app
+WORKDIR /python/app
 
 # RUN apk add --no-cache bash
 # RUN apk add --update py3-pip
@@ -11,6 +11,7 @@ RUN pip install mysql-connector-python flask bcrypt flask-cors && \
         --disabled-password \
         --no-create-home \
         pyuser
+
 
 # Make the wait-for-it.sh script executable
 RUN chmod +x ./wait-for-it.sh
