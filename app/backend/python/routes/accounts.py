@@ -49,6 +49,8 @@ def accountsResonse():
             for key, value in request.json.items():
                 if not key[0].isupper():
                     continue
+                if value == "":
+                    continue
                 updateParams.append(f"{key}=%s")
                 values.append(value)
             updateParams = ', '.join(updateParams)
