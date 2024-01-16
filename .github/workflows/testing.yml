@@ -16,14 +16,7 @@ jobs:
       #    password: ${{ secrets.DOCKER_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
-      #- name: Setup Docker Compose
-      #  run: |
-      #    sudo apt-get update
-      #    sudo apt-get -y docker-compose
-      #  shell: bash
-      - name: Build Docker Compose
+      - name: Run Python Backend Tests
         run: |
           cd app/backend/python
           docker-compose run tests
-      #- name: Run Tests
-      #  run: docker-compose run tests
