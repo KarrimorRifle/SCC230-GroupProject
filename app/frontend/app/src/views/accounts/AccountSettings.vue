@@ -166,8 +166,8 @@ fillData();
 const updateDetails = async () => {
   if (password.value == "") return;
 
-  if (Password.value == Password2.value) {
-    pass2Error.value = "Values don't match";
+  if (Password.value != Password2.value) {
+    pass2Error.value = "Passwords don't match";
   } else {
     pass2Error.value = "";
   }
@@ -196,7 +196,8 @@ const updateDetails = async () => {
     data["Surname"] = Surname.value;
 
   if (Email.value != accountData.value.Email) data["Email"] = Email.value;
-  if (Password.value != password.value) data["Password"] = Password.value;
+  if (Password.value != password.value && Password.value != "")
+    data["Password"] = Password.value;
 
   data["password"] = password.value;
 
@@ -204,7 +205,7 @@ const updateDetails = async () => {
     await axios.patch("http://localhost:5000/accounts", data, {
       withCredentials: true,
     });
-    router.push("home");
+    router.push("/account");
   } catch (err: AxiosError | any) {
     error.value = "Unable to update details, try again later";
   }
@@ -226,8 +227,9 @@ const deleteAccount = async () => {
   try {
     await axios.delete("http://localhost:5000/accounts", {
       withCredentials: true,
-      data: { Password: password },
+      data: { Password: password.value },
     });
+    router.push("/signup");
   } catch (err: AxiosError | any) {
     error.value = "Unable to delete account, try again later";
   }
