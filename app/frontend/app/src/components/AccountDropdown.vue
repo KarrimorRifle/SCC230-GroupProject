@@ -29,3 +29,10 @@ let User = {
   Surname: "Jone",
 };
 </script>
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'AccountDropdown'
+})
+</script>
