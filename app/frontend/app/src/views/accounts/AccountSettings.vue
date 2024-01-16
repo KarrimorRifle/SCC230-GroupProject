@@ -3,6 +3,7 @@
     <h1 class="text-light py-3 m-0" style="background-color: #01404d">
       Account details
     </h1>
+    <div class="text-bg-warning">{{ error }}</div>
     <hr class="text-light m-0" />
     <div class="d-flex align-items-center">
       <form action="" class="px-3 card-body bg" @submit.prevent="">
@@ -111,11 +112,19 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-success mt-2 me-2 mb-2">UPDPATE</button>
-        <button type="button" class="btn btn-secondary me-2" @click="setData">
+        <button class="btn btn-success mt-2 me-5 mb-2" @click="updateDetails">
+          UPDPATE
+        </button>
+        <button type="button" class="btn btn-secondary me-5" @click="setData">
           RESET
         </button>
-        <button class="btn btn-danger">DELETE</button>
+        <button
+          class="btn btn-danger"
+          @click="warn()"
+          @dblclick="deleteAccount()"
+        >
+          DELETE
+        </button>
       </form>
     </div>
   </div>
@@ -125,6 +134,7 @@
 import { ref } from "vue";
 import { getAccount } from "@/functions";
 import axios, { AxiosError } from "axios";
+import router from "@/router";
 
 const Email = ref("");
 const Password = ref("");
@@ -139,6 +149,7 @@ const pass1Error = ref("");
 const pass2Error = ref("");
 
 const accountData = ref();
+let confirmDelete = false;
 
 const setData = () => {
   Email.value = accountData.value.Email;
@@ -190,12 +201,35 @@ const updateDetails = async () => {
   data["password"] = password.value;
 
   try {
-    axios.patch("http://localhost:5000/accounts", {
+    await axios.patch("http://localhost:5000/accounts", data, {
       withCredentials: true,
-      ...data,
+    });
+    router.push("home");
+  } catch (err: AxiosError | any) {
+    error.value = "Unable to update details, try again later";
+  }
+};
+
+const warn = () => {
+  error.value =
+    "This will delete your account: Enter password and double click twice to confirm deletion";
+};
+
+const deleteAccount = async () => {
+  if (password.value == "") return;
+  if (!confirmDelete) {
+    confirmDelete = true;
+    return;
+  }
+
+  //after confirm delete on
+  try {
+    await axios.delete("http://localhost:5000/accounts", {
+      withCredentials: true,
+      data: { Password: password },
     });
   } catch (err: AxiosError | any) {
-    error.value = err;
+    error.value = "Unable to delete account, try again later";
   }
 };
 </script>
