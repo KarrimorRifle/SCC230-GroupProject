@@ -16,5 +16,7 @@ jobs:
       #    password: ${{ secrets.DOCKER_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Move To Backend Dir
+        run: cd /app/backend/python
       - name: Run Tests
         run: docker-compose run tests
