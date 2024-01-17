@@ -14,7 +14,7 @@ services:
 
   tests:
     build: ./python/
-    command: ["./wait-for-it.sh", "mysql:3306", "--", "python", "-m", "unittest", "discover"]
+    command: ["/python/app/wait-for-it.sh", "mysql:3306", "--", "python", "-m", "unittest", "discover"]
     depends_on:
       - pythonapp
   
