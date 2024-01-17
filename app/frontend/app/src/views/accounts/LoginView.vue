@@ -75,7 +75,7 @@ const login = async (event: Event) => {
       { withCredentials: true }
     );
     router.push({ path: "/home" });
-  } catch (err: AxiosError|any) {
+  } catch (err: AxiosError | any) {
     error.value = err.response.data.error;
   }
   console.log(email.value);
