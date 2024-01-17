@@ -3,7 +3,7 @@ services:
     build: ./python/
     command: ["./wait-for-it.sh", "mysql:3306", "--", "flask", "run", "--host=0.0.0.0"]
     volumes:
-      - ./python:/usr/app/src
+      - ./python:/python
     environment:
       - FLASK_APP=server.py
       - FLASK_ENV=development
@@ -14,9 +14,9 @@ services:
 
   tests:
     build: ./python/
-    command: ["python", "-m", "unittest", "discover"]
+    command: ["/python/app/wait-for-it.sh", "mysql:3306", "--", "python", "-m", "unittest", "discover"]
     depends_on:
-      - pythonapp
+      - mysql
   
   mysql:
     build: ./mysql/
