@@ -19,5 +19,5 @@ jobs:
       - name: Run Python Backend Tests
         run: |
           cd app/backend/python
-          docker-compose build
+        #  docker-compose build
           docker-compose run tests
