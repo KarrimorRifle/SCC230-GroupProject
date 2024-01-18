@@ -1,3 +1,11 @@
+#Title:         iota/User.py
+#Desc:          File to hold the User Class and related Functions
+#               The Function of the User Class is to hold information about users
+#
+#Last Update:   2024-1-18
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 ##IMPORTS##
 from iota.Hub import Hub
 from iota.Schedule import Schedule

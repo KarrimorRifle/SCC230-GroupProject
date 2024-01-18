@@ -1,3 +1,11 @@
+#Title:         iota/Schedule.py
+#Desc:          File to hold the Schedule Class and related Functions
+#               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
+#
+#Last Update:   2024-1-18
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 ##IMPORTS##
 from iota.Trigger import Trigger
 from iota.Device import Device
@@ -38,3 +46,19 @@ class Schedule:
         self.isActive = isActive
         self.code = code
 
+#Translates the schedule to actual code
+def translateSchedule(code):
+    for i in range(code[0].length):
+        match((code[0][i][0]).upper):
+            case "FOR":
+                print()
+            case "WHILE":
+                print()
+            case "IF":
+               print()
+            case "OTHERWISE":
+                print()
+            case "END":
+                print()
+            case "SET":
+                print()

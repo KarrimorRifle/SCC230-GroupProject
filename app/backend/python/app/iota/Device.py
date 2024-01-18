@@ -1,3 +1,11 @@
+#Title:         iota/Device.py
+#Desc:          File to hold the Device Class and related Functions
+#               The Function of the Device Class is to hold information about IOT Devices
+#
+#Last Update:   2024-1-18
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 ##IMPORTS##
 from iota.Api import Api
 

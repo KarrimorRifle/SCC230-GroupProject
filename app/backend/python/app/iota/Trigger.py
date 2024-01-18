@@ -1,3 +1,11 @@
+#Title:         iota/Trigger.py
+#Desc:          File to hold the Trigger Class and related Functions
+#               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
+#
+#Last Update:   2024-1-18
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 ##IMPORTS##
 import json
 
