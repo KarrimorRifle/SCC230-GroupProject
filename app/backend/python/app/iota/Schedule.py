@@ -56,77 +56,77 @@ class Schedule:
         self.code = code
 
 
-    #Finds the end of a conditional statement or loop
-    def findEnd(code:[functionCode], index:int, statement:functionCode):
-        while(code[index].commandType!="END" and not (statement.name in code[index].linkedCommands)):
-            index+=1
-        return index
+#Finds the end of a conditional statement or loop
+def findEnd(code:[functionCode], index:int, statement:functionCode):
+    while(code[index].commandType!="END" and not (statement.name in code[index].linkedCommands)):
+        index+=1
+    return index
 
-    #Runs all the lines in a condition statement or loop
-    def runConditional(code:[functionCode], index:int):
-        #Creates a temporary index to run the required commands
-        _index=index
-        #Loops through every statement until the end statement
-        while(_index != findEnd(code,index,code[index])):
-            _index+=1
-            translateSchedule(code=code, index=_index)
-            
+#Runs all the lines in a condition statement or loop
+def runConditional(code:[functionCode], index:int):
+    #Creates a temporary index to run the required commands
+    _index=index
+    #Loops through every statement until the end statement
+    while(_index != findEnd(code,index,code[index])):
+        _index+=1
+        translateSchedule(code=code, index=_index)
+        
 
-    #Translates the schedule to actual code
-    def translateSchedule(code:[functionCode], index:int=0):
-        #Checks the type of statement that is at code[index]
-        match(code[index].commandType):
-            #Code for a for loop
-            case "FOR":
-                for i in range (code[index].params[0]):
-                    code[index].hasRun=True
-                    runConditional(code, index)
-
-                #Returns the location of the end of the for loop, where the code should jump to next.
-                return(findEnd(code,index,code[index]))
-            #Code for a while loop
-            case "WHILE":
-                while(eval(f"{' '.join(code[index].params)}")):
-                    code[index].hasRun=True
-                    runConditional(code, index)
-
-                #Returns the location of the end of the for loop, where the code should jump to next.
-                return(findEnd(code,index,code[index]))
-            #Code for an if statement
-            case "IF":
-                if(eval(f"{' '.join(code[index].params)}")):
-                    code[index].hasRun=True
-                    runConditional(code, index)
-                    
-                #Returns the location of the end of the for loop, where the code should jump to next.
-                return(findEnd(code,index,code[index]))
-            #Code for an else/else if statement
-            case "OTHERWISE":
-                #Value to check if all conditions for the else statement to be run are met
-                allConditions=True
-
-                #Checks if the if statement is correct, if the OTHERWISE statement is equal to an elif statement
-                if(len(code[index].params) != 0):
-                    if(not(eval(f"{' '.join(code[index].params)}"))):
-                        allConditions=False
-                #Checks if any of the linked if and elif statements ran
-                for i in range (len(code[index].linkedCommands)):
-                    if(code[index].linkedCommands[i].hasRun):
-                    allConditions=False
-                    break
-                
-                if(allConditions):
-                    code[index].hasRun=True
-                    runConditional(code, index)
-
-                #Returns the location of the end of the for loop, where the code should jump to next.
-                return(findEnd(code,index,code[index]))
-            #Code for a set statement
-            case "SET":
-                print(code[index].params[0])
+#Translates the schedule to actual code
+def translateSchedule(code:[functionCode], index:int=0):
+    #Checks the type of statement that is at code[index]
+    match(code[index].commandType):
+        #Code for a for loop
+        case "FOR":
+            for i in range (code[index].params[0]):
                 code[index].hasRun=True
-                return index+1
-                #set a value to param 2 (requires prereq devices working)
-            #Default case to ignore End or invalid statements
-            case _:
-                pass
+                runConditional(code, index)
+
+            #Returns the location of the end of the for loop, where the code should jump to next.
+            return(findEnd(code,index,code[index]))
+        #Code for a while loop
+        case "WHILE":
+            while(eval(f"{' '.join(code[index].params)}")):
+                code[index].hasRun=True
+                runConditional(code, index)
+
+            #Returns the location of the end of the for loop, where the code should jump to next.
+            return(findEnd(code,index,code[index]))
+        #Code for an if statement
+        case "IF":
+            if(eval(f"{' '.join(code[index].params)}")):
+                code[index].hasRun=True
+                runConditional(code, index)
+                
+            #Returns the location of the end of the for loop, where the code should jump to next.
+            return(findEnd(code,index,code[index]))
+        #Code for an else/else if statement
+        case "OTHERWISE":
+            #Value to check if all conditions for the else statement to be run are met
+            allConditions=True
+
+            #Checks if the if statement is correct, if the OTHERWISE statement is equal to an elif statement
+            if(len(code[index].params) != 0):
+                if(not(eval(f"{' '.join(code[index].params)}"))):
+                    allConditions=False
+            #Checks if any of the linked if and elif statements ran
+            for i in range (len(code[index].linkedCommands)):
+                if(code[index].linkedCommands[i].hasRun):
+                   allConditions=False
+                   break
+            
+            if(allConditions):
+                code[index].hasRun=True
+                runConditional(code, index)
+
+            #Returns the location of the end of the for loop, where the code should jump to next.
+            return(findEnd(code,index,code[index]))
+        #Code for a set statement
+        case "SET":
+            print(code[index].params[0])
+            code[index].hasRun=True
+            return index+1
+            #set a value to param 2 (requires prereq devices working)
+        #Default case to ignore End or invalid statements
+        case _:
+            pass
