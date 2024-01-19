@@ -22,7 +22,7 @@ class User:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, password:str, email:str="",
-                 houseRoles:dict={None:0}, schedules:Schedule=[None]):
+                 houseRoles:dict={}, schedules:Schedule=[]):
         self.id = id
         self.username=username
         self.password=password

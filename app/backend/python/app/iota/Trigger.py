@@ -17,7 +17,7 @@ class Trigger:
     #data   Holds the data that is needed to set off the trigger
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, data:dict={None:None}):
+    def __init__(self, id:str, name:str, data:dict={}):
         self.id = id
         self.name = name
         self.data = data

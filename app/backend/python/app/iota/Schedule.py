@@ -13,19 +13,19 @@ from iota.Device import Device
 ##CLASS DEFINITIONS##
 class functionCode():
     ##VALUES##
-    #commandType    The type of command the code is, for translating to python i.e. IF, FOR, ELSE etc.
+    #commandType    The type of command the code is, for translating to python index.e. IF, FOR, ELSE etc.
     #number         Which command of commandType the code is
     #name           The name of the command, to be used throughout the code
-    #linkedCommands The commands it is linked to, i.e. which if statement an else statement is linked to
-    #parameters     The parameters that the command takes
+    #linkedCommands The commands it is linked to, index.e. which if statement an else statement is linked to
+    #params         The params that the command takes
     #hasRun         Whether or not the command has run or not - useful for if/else statments
 
-    def __init__(self, commandType:str, number:int, linkedCommands:[str]=None, parameters:[]=None):
+    def __init__(self, commandType:str, number:int, linkedCommands:[str]=[], params:list=[]):
         self.commandType = commandType
         self.number = number
         self.name = commandType+str(number)
         self.linkedCommands = linkedCommands
-        self.parameters = parameters
+        self.params = params
         self.hasRun = False
     
 class Schedule:
@@ -42,7 +42,7 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, rating:int=0, isPublic:bool=False,
-                 triggers:Trigger=[None], devices:Device=[None], code:[functionCode] = None,
+                 triggers:[Trigger]=[], devices:[Device]=[], code:[functionCode] = [],
                  isRunning:bool=False, isActive:bool=False):
         self.id = id
         self.name = name
@@ -56,32 +56,77 @@ class Schedule:
         self.code = code
 
 
+    #Finds the end of a conditional statement or loop
+    def findEnd(code:[functionCode], index:int, statement:functionCode):
+        while(code[index].commandType!="END" and not (statement.name in code[index].linkedCommands)):
+            index+=1
+        return index
 
-#Translates the schedule to actual code
-def translateSchedule(code:[functionCode]):
-    for i in range(code.length):
-        match(code[i].commandType):
+    #Runs all the lines in a condition statement or loop
+    def runConditional(code:[functionCode], index:int):
+        #Creates a temporary index to run the required commands
+        _index=index
+        #Loops through every statement until the end statement
+        while(_index != findEnd(code,index,code[index])):
+            _index+=1
+            translateSchedule(code=code, index=_index)
+            
+
+    #Translates the schedule to actual code
+    def translateSchedule(code:[functionCode], index:int=0):
+        #Checks the type of statement that is at code[index]
+        match(code[index].commandType):
+            #Code for a for loop
             case "FOR":
-                for code[i].commandName in range (code[i].paramaters[0]):
-                    pass
-                    #Functionality to find end of loop and recursively execute code in loop.
+                for i in range (code[index].params[0]):
+                    code[index].hasRun=True
+                    runConditional(code, index)
+
+                #Returns the location of the end of the for loop, where the code should jump to next.
+                return(findEnd(code,index,code[index]))
+            #Code for a while loop
             case "WHILE":
-                while(eval(f"{code[i].paramaters[0]}{code[i].paramaters[1]}{code[i].paramaters[2]}")):
-                      pass
-                    #Functionality to find end of loop and recursively execute code in loop.
+                while(eval(f"{' '.join(code[index].params)}")):
+                    code[index].hasRun=True
+                    runConditional(code, index)
+
+                #Returns the location of the end of the for loop, where the code should jump to next.
+                return(findEnd(code,index,code[index]))
+            #Code for an if statement
             case "IF":
-                if(eval(f"{code[i].paramaters[0]}{code[i].paramaters[1]}{code[i].paramaters[2]}")):
-                    pass
-                    #Functionality to find end of if statement and recursively execute code in loop.
+                if(eval(f"{' '.join(code[index].params)}")):
+                    code[index].hasRun=True
+                    runConditional(code, index)
+                    
+                #Returns the location of the end of the for loop, where the code should jump to next.
+                return(findEnd(code,index,code[index]))
+            #Code for an else/else if statement
             case "OTHERWISE":
-                if(code[i].paramaters.length == 0):
-                    pass
-                    #Find related functionCode and check if it has run
-                else:
-                    pass
-                    #Find related functionCode and check if it has run then add parameters for elif statement
+                #Value to check if all conditions for the else statement to be run are met
+                allConditions=True
+
+                #Checks if the if statement is correct, if the OTHERWISE statement is equal to an elif statement
+                if(len(code[index].params) != 0):
+                    if(not(eval(f"{' '.join(code[index].params)}"))):
+                        allConditions=False
+                #Checks if any of the linked if and elif statements ran
+                for i in range (len(code[index].linkedCommands)):
+                    if(code[index].linkedCommands[i].hasRun):
+                    allConditions=False
+                    break
+                
+                if(allConditions):
+                    code[index].hasRun=True
+                    runConditional(code, index)
+
+                #Returns the location of the end of the for loop, where the code should jump to next.
+                return(findEnd(code,index,code[index]))
+            #Code for a set statement
             case "SET":
-                pass
+                print(code[index].params[0])
+                code[index].hasRun=True
+                return index+1
                 #set a value to param 2 (requires prereq devices working)
+            #Default case to ignore End or invalid statements
             case _:
                 pass
