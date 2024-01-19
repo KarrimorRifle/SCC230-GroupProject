@@ -8,7 +8,7 @@ from routes.accounts import accounts
 
 #db connection
 connection = mysql.connector.connect(
-    user = "root", password = "root", host = "mysql", port="3306", database='Accounts'
+    user = "user", password = "pass", host = "mysql", port="3306", database='Accounts'
 )
 print("DB connected")
 
