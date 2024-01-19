@@ -7,27 +7,37 @@ services:
     environment:
       - FLASK_APP=server.py
       - FLASK_ENV=development
-    depends_on:
-      - mysql
     ports:
       - '5000:5000'
+    networks:
+      - custom_network
+    depends_on:
+      - mysql
 
   tests:
     build: ./python/
     command: ["/python/app/wait-for-it.sh", "mysql:3306", "--", "python", "-m", "unittest", "discover"]
+    networks:
+      - custom_network
     depends_on:
       - mysql
   
   mysql:
-    build: ./mysql/
-    restart: always
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: Root
+      MYSQL_DATABASE: Accounts
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql_data:/var/lib/mysql
+    networks:
+      - custom_network
     ports:
-      - '3306:3306'
+      - "3306:3306"
 
 volumes:
   mysql_data:
+
+networks:
+  custom_network:
