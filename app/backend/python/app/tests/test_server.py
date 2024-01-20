@@ -1,9 +1,7 @@
 import unittest
-from server import app, getAccount
+from server import app
 
-from flask import request, jsonify, make_response
-
-class test_accounts(unittest.TestCase):
+class test_server(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
 
