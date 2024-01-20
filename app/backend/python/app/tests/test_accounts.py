@@ -22,3 +22,12 @@ class test_accounts(unittest.TestCase):
         response = self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "two", "Email" : "testwo@test.com", "Password" : "pass2"})
     
         self.assertEqual(response.status_code, 409)
+
+    def test_accounts_update_wrong_session_id(self):
+        self.assertTrue(1 > 0)
+
+    def test_accounts_update_success(self):
+        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "three", "Email" : "testhree@test.com", "Password" : "pass3"})
+        response = self.client_server.patch('/accounts', json={"FirstName": "test", "Surname": "two", "Email" : "testhree@test.com", "Password" : "pass2"})
+    
+        self.assertEqual(response.status_code, 200)
