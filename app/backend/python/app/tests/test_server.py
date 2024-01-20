@@ -19,7 +19,12 @@ class test_accounts(unittest.TestCase):
         self.assertEqual(response.status_code, 415)
 
     def test_server_login_wrong_email(self):
-        response = self.client_server.post("/login", json={"Email": "fake@mail.com", "Password": "fakePassword"})
+        response = self.client_server.post("/login", json={"Email": "fake@mail.com", "Password": "JhonDoe123."})
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_server_login_wrong_password(self):
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "Something"})
 
         self.assertEqual(response.status_code, 403)
 
@@ -27,3 +32,8 @@ class test_accounts(unittest.TestCase):
         response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
 
         self.assertEqual(response.status_code, 200)
+
+    def test_server_get_account(self):
+        self.test_server_login_correct_details()
+
+        self.assertIsNotNone(self.client_server.get('/getAccount'))

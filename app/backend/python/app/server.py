@@ -54,7 +54,7 @@ def login():
             connection.rollback()
             return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
         
-        response.set_cookie('session_id',sessionID, max_age=24*60*60)
+        response.set_cookie('session_id', sessionID, max_age=24*60*60)
         return(response)
 
     else:
@@ -65,7 +65,7 @@ def getAccount():
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
     
-    cursor.execute(query, (sessionID,))
+    cursor.execute(query, (sessionID))
     return cursor.fetchone()
         
 
