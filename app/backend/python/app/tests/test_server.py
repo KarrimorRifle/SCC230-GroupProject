@@ -1,12 +1,7 @@
 import unittest
-from unittest.mock import patch, MagicMock
-from routes.accounts import accounts
 from server import app, getAccount
 
-from flask import request, jsonify, make_response, Blueprint, current_app
-import bcrypt
-import uuid
-from datetime import datetime, timedelta
+from flask import request, jsonify, make_response
 
 class test_accounts(unittest.TestCase):
     def setUp(self):
