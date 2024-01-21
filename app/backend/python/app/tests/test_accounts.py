@@ -60,5 +60,4 @@ class test_accounts(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         response = self.client_server.get("/accounts")
-        self.assertNotEqual(response.status_code, 401)
-        self.assertNotEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
