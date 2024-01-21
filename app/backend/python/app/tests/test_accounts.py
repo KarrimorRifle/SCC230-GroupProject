@@ -27,13 +27,19 @@ class test_accounts(unittest.TestCase):
         self.assertTrue(1 > 0)
 
     def test_accounts_update_success(self):
-        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "three", "Email" : "testhree@test.com", "Password" : "pass3"})
-        response = self.client_server.post('/login', json={"Email" : "testhree@test.com", "Password" : "pass3"})
+        response = self.client_server.post("/login", json={"Email": "janedoe@gmail.com", "Password": "JaneDoe123."})
         self.assertEqual(response.status_code, 200)
 
-        response = self.client_server.patch('/accounts', json={"Email" : "testhree@test.com", "Password" : "pass3"})
-        print(response.get_data(as_text=True))
+        response = self.client_server.patch('/accounts', json={"Password" : "JaneDoe123.", "FirstName": "test", "Surname": "Doe", "Email" : "janedoe2@gmail.com"})
         self.assertEqual(response.status_code, 200)
+
+    def test_accounts_update_wrong_password(self):
+        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "four", "Email" : "testfour@test.com", "Password" : "pass4"})
+        response = self.client_server.post("/login", json={"Email": "testfour@test.com", "Password": "pass4"})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client_server.patch('/accounts', json={"Password" : "wrongpass", "FirstName": "test4", "Surname": "four", "Email" : "testfour2@gmail.com"})
+        self.assertEqual(response.status_code, 401)
 
     def test_accounts_get_success(self):
         self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
