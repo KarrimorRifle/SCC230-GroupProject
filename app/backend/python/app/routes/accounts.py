@@ -42,7 +42,7 @@ def accountsResonse():
         if account is None:
             return jsonify({"error": "Session ID is invalid"}), 401
         
-        if (not request.json.get("password") is None) and bcrypt.checkpw(request.json.get('password').encode('utf-8'), account['Password'].encode('utf-8')):
+        if (not request.json.get("Password") is None) and bcrypt.checkpw(request.json.get('Password').encode('utf-8'), account['Password'].encode('utf-8')):
             
             updateParams = []
             values = []

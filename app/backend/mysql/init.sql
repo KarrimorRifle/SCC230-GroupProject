@@ -1,4 +1,3 @@
-CREATE DATABASE Accounts;
 USE Accounts
 
 -- To reset DB delete the container and start up again
