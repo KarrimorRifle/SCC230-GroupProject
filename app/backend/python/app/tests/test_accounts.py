@@ -28,6 +28,16 @@ class test_accounts(unittest.TestCase):
 
     def test_accounts_update_success(self):
         self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "three", "Email" : "testhree@test.com", "Password" : "pass3"})
-        response = self.client_server.patch('/accounts', json={"FirstName": "test", "Surname": "two", "Email" : "testhree@test.com", "Password" : "pass2"})
-    
+        response = self.client_server.post('/login', json={"Email" : "testhree@test.com", "Password" : "pass3"})
         self.assertEqual(response.status_code, 200)
+
+        response = self.client_server.patch('/accounts', json={"Email" : "testhree@test.com", "Password" : "pass3"})
+        print(response.get_data(as_text=True))
+        self.assertEqual(response.status_code, 200)
+
+    def test_accounts_get_success(self):
+        self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        
+        response = self.client_server.get("/accounts")
+        self.assertNotEqual(response, 401)
+        self.assertNotEqual(response, 403)
