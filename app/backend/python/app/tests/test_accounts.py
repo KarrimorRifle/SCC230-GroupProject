@@ -23,14 +23,12 @@ class test_accounts(unittest.TestCase):
     
         self.assertEqual(response.status_code, 409)
 
-    def test_accounts_update_wrong_session_id(self):
-        self.assertTrue(1 > 0)
-
     def test_accounts_update_success(self):
-        response = self.client_server.post("/login", json={"Email": "janedoe@gmail.com", "Password": "JaneDoe123."})
+        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "nine", "Email" : "testnine@test.com", "Password" : "pass9"})
+        response = self.client_server.post("/login", json={"Email": "testnine@test.com", "Password": "pass9"})
         self.assertEqual(response.status_code, 200)
 
-        response = self.client_server.patch('/accounts', json={"Password" : "JaneDoe123.", "FirstName": "test", "Surname": "Doe", "Email" : "janedoe2@gmail.com"})
+        response = self.client_server.patch('/accounts', json={"Password" : "pass9", "FirstName": "test9", "Surname": "9", "Email" : "testnine2@gmail.com"})
         self.assertEqual(response.status_code, 200)
 
     def test_accounts_update_wrong_password(self):
@@ -41,9 +39,26 @@ class test_accounts(unittest.TestCase):
         response = self.client_server.patch('/accounts', json={"Password" : "wrongpass", "FirstName": "test4", "Surname": "four", "Email" : "testfour2@gmail.com"})
         self.assertEqual(response.status_code, 401)
 
+    def test_accounts_delete_success(self):
+        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "five", "Email" : "testfive@test.com", "Password" : "pass5"})
+        response = self.client_server.post("/login", json={"Email": "testfive@test.com", "Password": "pass5"})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client_server.delete('/accounts', json={"Password" : "pass5"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_accounts_delete_wrong_password(self):
+        self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "six", "Email" : "testsix@test.com", "Password" : "pass6"})
+        response = self.client_server.post("/login", json={"Email": "testsix@test.com", "Password": "pass6"})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client_server.delete('/accounts', json={"Password" : "wrongpass"})
+        self.assertEqual(response.status_code, 401)
+
     def test_accounts_get_success(self):
-        self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        self.assertEqual(response.status_code, 200)
         
         response = self.client_server.get("/accounts")
-        self.assertNotEqual(response, 401)
-        self.assertNotEqual(response, 403)
+        self.assertNotEqual(response.status_code, 401)
+        self.assertNotEqual(response.status_code, 403)
