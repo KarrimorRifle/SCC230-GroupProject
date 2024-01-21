@@ -1,3 +1,11 @@
+#Title:         iota/Hub.py
+#Desc:          File to hold the Hub Class and related Functions
+#               The Function of the Hub Class is to act as the bridge between Devices and their User 
+#
+#Last Update:   2024-1-18
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 ##IMPORTS##
 from iota.Schedule import Schedule
 
@@ -12,8 +20,8 @@ class Hub:
     #schedules  Holds the schedules that the hub is a part of
 
     ##CONSTRUCTOR##
-    def __init__(self, id: str, name: str, address: str="", logs=[None],
-                 schedules: Schedule=[None]):
+    def __init__(self, id: str, name: str, address: str="", logs=[],
+                 schedules: Schedule=[]):
         self.id = id
         self.name = name
         self.address = address
