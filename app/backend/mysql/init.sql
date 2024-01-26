@@ -12,46 +12,46 @@ CREATE TABLE accounts(
 );
 
 CREATE TABLE `hubs`(
-    `hubID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `hubName` VARCHAR(255) NOT NULL
+    `HubID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `HubName` VARCHAR(255) NOT NULL
 );
 
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
-    `accountID` BIGINT NOT NULL,
-    `hubID` BIGINT UNSIGNED NOT NULL,
-    `permissionLevel` INT NOT NULL,
-    CONSTRAINT UserHubRelation PRIMARY KEY (accountID, hubID),
-    FOREIGN KEY (accountID) REFERENCES accounts(AccountID),
-    FOREIGN KEY (hubID) REFERENCES hubs(hubID)
+    `AccountID` BIGINT NOT NULL,
+    `HubID` BIGINT UNSIGNED NOT NULL,
+    `PermissionLevel` INT NOT NULL,
+    CONSTRAINT UserHubRelation PRIMARY KEY (AccountID, HubID),
+    FOREIGN KEY (AccountID) REFERENCES accounts(AccountID),
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
 CREATE TABLE `triggers`(
-    `triggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `triggerName` VARCHAR(255) NOT NULL,
-    `eventListenerID` BIGINT NOT NULL 
+    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `TriggerName` VARCHAR(255) NOT NULL,
+    `EventListenerID` BIGINT NOT NULL 
 );
 
 CREATE TABLE `devices`(
-    `deviceID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `deviceName` VARCHAR(255) NOT NULL,
-    `deviceType` VARCHAR(255) NOT NULL,
-    `ipAddress` VARCHAR(255) NOT NULL UNIQUE,
-    `hubID` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (hubID) REFERENCES hubs(hubID)
+    `DeviceID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceName` VARCHAR(255) NOT NULL,
+    `DeviceType` VARCHAR(255) NOT NULL,
+    `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
+    `HubID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
 CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 
 CREATE TABLE `schedules`(
-    `eventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `scheduleName` VARCHAR(255) NOT NULL,
-    `hubID` BIGINT UNSIGNED NOT NULL,
-    `deviceInstructions` JSON NOT NULL,
-    `triggerID` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (hubID) REFERENCES hubs(hubID),
-    FOREIGN KEY (triggerID) REFERENCES triggers(triggerID)
+    `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `ScheduleName` VARCHAR(255) NOT NULL,
+    `HubID` BIGINT UNSIGNED NOT NULL,
+    `DeviceInstructions` JSON NOT NULL,
+    `TriggerID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID),
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
 
 -- To reset DB delete the container and start up again
