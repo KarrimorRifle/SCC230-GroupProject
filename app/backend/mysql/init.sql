@@ -1,14 +1,14 @@
-CREATE DATABASE IF NOT EXISTS Accounts;
-USE Accounts;
+USE DB;
 
-CREATE TABLE `accounts`(
-    `accountID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `firstName` VARCHAR(255) NOT NULL,
-    `surname` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `password` VARCHAR(255) NOT NULL,
-    `sessionID` VARCHAR(255),
-    `sessionExp` DATETIME
+CREATE TABLE accounts(
+    `AccountID` BIGINT not null AUTO_INCREMENT,
+    `FirstName` varchar(100) NOT NULL,
+    `Surname` varchar(100) NOT NULL,
+    `Email` varchar(100) NOT NULL,
+    `Password` VARCHAR(100) NOT NULL,
+    `SessionID` VARCHAR(100),
+    `SessionExp` DATETIME,
+    PRIMARY KEY (AccountID)
 );
 
 CREATE TABLE `hubs`(
@@ -19,11 +19,11 @@ CREATE TABLE `hubs`(
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
-    `accountID` BIGINT UNSIGNED NOT NULL,
+    `accountID` BIGINT NOT NULL,
     `hubID` BIGINT UNSIGNED NOT NULL,
     `permissionLevel` INT NOT NULL,
     CONSTRAINT UserHubRelation PRIMARY KEY (accountID, hubID),
-    FOREIGN KEY (accountID) REFERENCES accounts(accountID),
+    FOREIGN KEY (accountID) REFERENCES accounts(AccountID),
     FOREIGN KEY (hubID) REFERENCES hubs(hubID)
 );
 
@@ -57,8 +57,6 @@ CREATE TABLE `schedules`(
 -- To reset DB delete the container and start up again
 -- if any changes were made do the last line AND `docker-compose build`
 
-INSERT INTO accounts(AccountID, FirstName, Surname, Email, `Password`, SessionID, SessionExp)
+INSERT INTO accounts(FirstName, Surname, Email, `Password`)
 -- passwords are 'JhonDoe123.' and 'JaneDoe123.' respectively
-VALUES
-("1", "Jhon", "Doe", "jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS", "1", "2023-01-22 11:03:53"),
-("2", "Jane", "Doe", "janedoe@gmail.com", "$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO", "2", "2022-07-14 16:13:28");
+Values("Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
