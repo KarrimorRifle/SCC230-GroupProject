@@ -8,7 +8,8 @@
 
 ##IMPORTS##
 from iota.Hub import Hub
-from iota.Schedule import Schedule
+from iota.Device import Device
+from iota import genRandomID
 
 ##CLASS DEFINITION##
 class User:
@@ -19,7 +20,6 @@ class User:
     #email          Holds the email tied to the user's account
     #allowEmails    Whether or not the the user would like to recieve Emails. 
     #houseRoles     Holds the user's homes and their permission level within them (User:int)
-    #schedules      Holds the schedules the user has saved
     #debug          Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
@@ -32,3 +32,4 @@ class User:
         self.houseRoles = houseRoles
         self.allowEmails = allowEmails
         self.debug = debug
+        self.variableStore = Device(genRandomID(12, prefix="VAR-"), f"VARIABLE-STORE", isActive=True)

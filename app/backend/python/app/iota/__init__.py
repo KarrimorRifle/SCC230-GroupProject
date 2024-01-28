@@ -14,7 +14,5 @@ def genRandomID(length:int, ids:list[str]=[], prefix:str="", suffix:str="") -> l
             exists = True
             break
     if(exists):
-        ids.append(genRandomID(length, ids, prefix, suffix))
-    else:
-        ids.append(randID)
-    return ids
+        return(genRandomID(length, ids, prefix, suffix))
+    return(randID)
