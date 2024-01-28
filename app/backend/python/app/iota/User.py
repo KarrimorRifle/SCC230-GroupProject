@@ -20,13 +20,15 @@ class User:
     #allowEmails    Whether or not the the user would like to recieve Emails. 
     #houseRoles     Holds the user's homes and their permission level within them (User:int)
     #schedules      Holds the schedules the user has saved
+    #debug          Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, password:str, email:str,
-                 allowEmails:bool=True, houseRoles:dict[Hub, int]={}):
+                 allowEmails:bool=True, houseRoles:dict[Hub, int]={}, debug:bool=False):
         self.id = id
         self.username=username
         self.password=password
         self.email=email
         self.houseRoles = houseRoles
         self.allowEmails = allowEmails
+        self.debug = debug

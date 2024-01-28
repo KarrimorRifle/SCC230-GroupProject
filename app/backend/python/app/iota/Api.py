@@ -25,8 +25,10 @@ class Api:
     #id         Holds the ID for the API to be stored in the Database
     #reqType    Holds the type of request that the API uses 
     #data       Holds the data sent to and from the API
+    #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, reqType:requestType=None, data:list=[]):
+    def __init__(self, id:str, reqType:requestType=None, data:list=[], debug:bool=False):
         self.id = id
         self.reqType = reqType
+        self.debug = debug

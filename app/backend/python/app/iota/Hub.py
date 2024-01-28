@@ -18,12 +18,14 @@ class Hub:
     #users      Holds the users that are on the hub
     #logs       Holds the previous actions of the hub
     #schedules  Holds the schedules that the hub is a part of
+    #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
     def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
-                 schedules: list[Schedule]=[]):
+                 schedules: list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
         self.address = address
         self.logs = logs
-        self.schedules = schedules    
+        self.schedules = schedules
+        self.debug = debug

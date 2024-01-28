@@ -15,8 +15,10 @@ class Trigger:
     ##VALUES##
     #id     Holds the id to store the Trigger in the database
     #data   Holds the data that is needed to set off the trigger
+    #debug  Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, data:dict[Device, list[str]]={}):
+    def __init__(self, id:str, data:dict[Device, list[str]]={}, debug:bool=False):
         self.id = id
         self.data = data
+        self.debug = debug
