@@ -21,7 +21,7 @@ class FunctionCode():
     #hasRun         Holds the number of times a FunctionCode has run
 
     ##CONSTRUCTOR##
-    def __init__(self, commandType:str, number:int, linkedCommands:list=[], params:list[any]=[]):
+    def __init__(self, commandType:str, number:int, linkedCommands:list=[], params:list[str]=[]):
         self.commandType = commandType
         self.number = number
         self.name = commandType+str(number)
@@ -63,26 +63,26 @@ class Schedule:
             case "FOR":
                 for i in range (self.code[index].params[0]):
                     self.code[index].hasRun+=1
-                    self.__runConditional(self.code, index)
+                    self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
-                return(self.__findEnd(self.code, index, self.code[index]))
+                return(self.__findEnd(index, self.code[index]))
             #Code for a while loop
             case "WHILE":
                 while(eval(f"{' '.join(self.code[index].params)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(self.code, index)
+                    self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
-                return(self.__findEnd(self.code, index, self.code[index]))
+                return(self.__findEnd(index, self.code[index]))
             #Code for an if statement
             case "IF":
                 if(eval(f"{' '.join(self.code[index].params)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(self.code, index)
+                    self.__runConditional(index)
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
-                return(self.__findEnd(self.code, index, self.code[index]))
+                return(self.__findEnd(index, self.code[index]))
             #Code for an else/else if statement
             case "OTHERWISE":
                 #Value to check if all conditions for the else statement to be run are met
@@ -100,22 +100,24 @@ class Schedule:
                 #Runs the code if all the checks pass
                 if(allConditions):
                     self. code[index].hasRun+=1
-                    self.__runConditional(self.code, index)
+                    self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
-                return(self.__findEnd(self.code, index, self.code[index]))
+                return(self.__findEnd(index, self.code[index]))
             #Code for a set statement
             case "SET":
+                print(f"SET {self.code[index].params[0]} To {self.code[index].params[1]}")
                 #set a value of param 1 to param 2 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
             case "GET":
+                print(f"GET {self.code[index].params[0]}")
                 #get value of param 1 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
             #Default case to ignore End or invalid statements
             case _:
-                pass
+                return index+1
 
     def findDevices(self) -> list[Device]:
         #Find all the devices that the schedule uses. 
@@ -132,9 +134,9 @@ class Schedule:
         #Creates a temporary index to run the required commands
         _index=index
         #Loops through every statement until the end statement
-        while(_index != self.__findEnd(self.code, index, self.code[index])):
+        while(_index != self.__findEnd(index, self.code[index])):
             _index+=1
-            self.translateSchedule(code=self.code, index=_index)
+            self.translateSchedule(index=_index)
 
     #Finds the end of a conditional statement or loop
     def __findEnd(self, index:int, statement:FunctionCode) -> int:

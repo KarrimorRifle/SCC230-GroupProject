@@ -23,11 +23,10 @@ class User:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, password:str, email:str,
-                 allowEmails:bool, houseRoles:dict[Hub, int]={}, schedules:list[Schedule]=[]):
+                 allowEmails:bool=True, houseRoles:dict[Hub, int]={}):
         self.id = id
         self.username=username
         self.password=password
         self.email=email
         self.houseRoles = houseRoles
-        self.schedules = schedules
         self.allowEmails = allowEmails
