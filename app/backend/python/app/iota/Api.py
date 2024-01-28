@@ -2,7 +2,7 @@
 #Desc:          File to hold the Api Class and related Functions
 #               The Function of the Api Class is to define the method to communicate with IOT Devices
 #
-#Last Update:   2024-1-18
+#Last Update:   2024-1-27
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
