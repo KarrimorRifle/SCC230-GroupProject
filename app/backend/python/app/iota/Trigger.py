@@ -8,6 +8,7 @@
 
 ##IMPORTS##
 import json
+from iota.Device import Device
 
 #CLASS DEFINITION#
 class Trigger:
@@ -17,7 +18,7 @@ class Trigger:
     #data   Holds the data that is needed to set off the trigger
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, data:dict={}):
+    def __init__(self, id:str, name:str, data:dict[Device, any]={}):
         self.id = id
         self.name = name
         self.data = data

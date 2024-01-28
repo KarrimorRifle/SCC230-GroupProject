@@ -27,6 +27,6 @@ class Api:
     #data       Holds the data sent to and from the API
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, reqType:requestType=None, data = {}):
+    def __init__(self, id:str, reqType:requestType=None, data:list=[]):
         self.id = id
         self.reqType = reqType

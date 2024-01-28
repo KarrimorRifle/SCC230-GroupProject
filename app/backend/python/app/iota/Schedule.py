@@ -21,7 +21,7 @@ class FunctionCode():
     #hasRun         Holds the number of times a FunctionCode has run
 
     ##CONSTRUCTOR##
-    def __init__(self, commandType:str, number:int, linkedCommands:list=[], params:list=[]):
+    def __init__(self, commandType:str, number:int, linkedCommands:list=[], params:list[any]=[]):
         self.commandType = commandType
         self.number = number
         self.name = commandType+str(number)
@@ -43,7 +43,7 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1,
-                 triggers:[Trigger]=[], code:[FunctionCode] = [], isActive:bool=False):
+                 triggers:list[Trigger]=[], code:list[FunctionCode] = [], isActive:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
@@ -117,11 +117,11 @@ class Schedule:
             case _:
                 pass
 
-    def findDevices(self) -> [Device]:
+    def findDevices(self) -> list[Device]:
         #Find all the devices that the schedule uses. 
         return []
 
-    def initDevices(self) -> {Device: bool}:
+    def initDevices(self) -> dict[Device, bool]:
         #Checks if all the devices connected to the schedule can be accessed
         #Calls the functions to initiate connections. 
         pass

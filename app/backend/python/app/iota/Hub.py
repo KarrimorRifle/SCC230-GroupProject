@@ -20,8 +20,8 @@ class Hub:
     #schedules  Holds the schedules that the hub is a part of
 
     ##CONSTRUCTOR##
-    def __init__(self, id: str, name: str, address: str="", logs=[],
-                 schedules: Schedule=[]):
+    def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
+                 schedules: list[Schedule]=[]):
         self.id = id
         self.name = name
         self.address = address
