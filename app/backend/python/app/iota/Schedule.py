@@ -17,7 +17,7 @@ class FunctionCode():
     #number         Which command of commandType the code is
     #name           The name of the command, to be used throughout the code
     #linkedCommands The commands it is linked to, i.e. which if statement an else statement is linked to
-    #params         The params that the command takes
+    #params         The parameters that the command takes
     #hasRun         Holds the number of times a FunctionCode has run
 
     ##CONSTRUCTOR##
