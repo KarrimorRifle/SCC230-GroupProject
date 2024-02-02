@@ -2,13 +2,21 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-1-27
+#Last Update:   2024-2-2
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
 from iota.Trigger import Trigger
 from iota.Device import Device
+
+##CONSTANTS##
+COMM_ELSE = "OTHERWISE"
+COMM_FOR = "FOR"
+COMM_GET = "GET"
+COMM_IF = "IF"
+COMM_SET = "SET"
+COMM_WHILE = "WHILE"
 
 ##CLASS DEFINITIONS##
 class FunctionCode():
