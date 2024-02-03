@@ -13,7 +13,6 @@ from iota.Device import Device
 ##CONSTANTS##
 COMM_ELSE = "OTHERWISE"
 COMM_FOR = "FOR"
-COMM_GET = "GET"
 COMM_IF = "IF"
 COMM_SET = "SET"
 COMM_WHILE = "WHILE"
@@ -36,23 +35,25 @@ class FunctionCode():
         self.linkedCommands = linkedCommands
         self.params = params
         self.hasRun = 0
-    
+
 class Schedule:
     ##VALUES##
-    #id             Holds the ID for the schedule to be stored in the database
-    #name           Holds the name that the user will see for the schedule
-    #isPublic       Checks if the schedule is in the open source page
-    #rating         Holds the sum of the ratings left by other users 
-    #trigger        Holds the triggers that will activate the schedule
-    #devices        Holds the devices linked to the schedule
-    #isRunning      Checks if the schedule is currently running
-    #isActive       Checks if the schedule is currently able to run
-    #FunctionCode   Holds the untranslated code for a schedule
-    #debug          Enables print statements for debugging purpose
+    #id         Holds the ID for the schedule to be stored in the database
+    #name       Holds the name that the user will see for the schedule
+    #isPublic   Checks if the schedule is in the open source page
+    #rating     Holds the sum of the ratings left by other users 
+    #triggers   Holds the triggers that will activate the schedule
+    #code       Holds the untranslated code for a schedule
+    #devices    Holds the devices linked to the schedule
+    #variables  Holds the variables used throughout the code
+    #isRunning  Checks if the schedule is currently running
+    #isActive   Checks if the schedule is currently able to run
+    #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, triggers:list[Trigger]=[],
-                 code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
+    def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
+                 triggers:list[Trigger]=[], code:list[FunctionCode] = [], 
+                 isActive:bool=False, debug:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
@@ -62,11 +63,37 @@ class Schedule:
         self.isActive = isActive
         self.code = code
         self.devices = self.findDevices()
+        self.variables = {}
         self.debug = debug
 
     ##PUBLIC METHODS##
+    #Runs the code to completion, and resets the values needed
+    def runCode(self):
+        i=0
+        while i<len(self.code):
+            try:
+                i=self.__translateSchedule(i)
+            except:
+                self.__addToErrorLog
+        self.__resetCounts()
+        self.variables = {}
+
+    #Searches the schedule to find all instances of Devices being accessed
+    def findDevices(self) -> list[Device]:
+        #Find all the devices that the schedule uses. 
+        return []
+
+    #Initialises all the device
+    def initDevices(self) -> dict[Device, bool]:
+        #Checks if all the devices connected to the schedule can be accessed
+        #Calls the functions to initiate connections. 
+        pass
+        
+    ##PRIVATE METHODS##
     #Translates the schedule to actual code
-    def translateSchedule(self, index:int=0) -> int:
+    def __translateSchedule(self, index:int=0) -> int:
+        self.isRunning=True
+
         if(self.debug):
             print(f"{self.code[index].commandType + ' ' + (' '.join(self.code[index].params)):<40}({self.id})")
 
@@ -119,7 +146,7 @@ class Schedule:
                     self.__runConditional(index)
 
                 elif(self.debug):
-                        print(f"{'OTHERWISE CONDITIONS NOT MET':<40}({self.id})")
+                    print(f"{'OTHERWISE CONDITIONS NOT MET':<40}({self.id})")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -128,32 +155,21 @@ class Schedule:
                 if(self.debug):
                     #print response from set statement
                     pass
-
-                #set a value of param 1 to param 2 (requires prereq devices working)
-                self.code[index].hasRun+=1
-                return index+1
-            case "GET":
-                if(self.debug):
-                    #print get statement
+                
+                #Checks if the value being set is a variable or a device value
+                if("[" in self.code[index].params[0]):
+                    eval(f"{self.code[index].params[0]}={self.code[index].params[1]}")
+                else:
+                    #Code to set a device value
                     pass
 
-                #get value of param 1 (requires prereq devices working)
+                #set a value of param 1 to param 2 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
             #Default case to ignore End or invalid statements
             case _:
                 return index+1
 
-    def findDevices(self) -> list[Device]:
-        #Find all the devices that the schedule uses. 
-        return []
-
-    def initDevices(self) -> dict[Device, bool]:
-        #Checks if all the devices connected to the schedule can be accessed
-        #Calls the functions to initiate connections. 
-        pass
-        
-    ##PRIVATE METHODS##
     #Runs all the lines in a condition statement or loop
     def __runConditional(self, index:int):
         if(self.debug):
@@ -164,7 +180,7 @@ class Schedule:
         #Loops through every statement until the end statement
         while(_index != self.__findEnd(index, self.code[index])):
             _index+=1
-            self.translateSchedule(index=_index)
+            self.__translateSchedule(index=_index)
 
     #Finds the end of a conditional statement or loop
     def __findEnd(self, index:int, statement:FunctionCode) -> int:
@@ -172,7 +188,19 @@ class Schedule:
             index+=1
 
         return index
+    
+    #Resets the number of times a piece of code has run for future schedules
+    def __resetCounts(self):
+        self.isRunning = False
 
-    def __warnUser(self):
+        for i in range(len(self.code)):
+            self.code[i].hasRun = 0
+
+    #Changes an instance of a device at location to an evaluable format
+    def __resolveDevice(self, location:str) -> str:
+        pass
+
+    #Adds an error to a log in the database
+    def __addToErrorLog(self, exception:str):
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass

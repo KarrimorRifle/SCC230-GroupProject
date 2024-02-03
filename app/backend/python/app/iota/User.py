@@ -7,7 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Hub import Hub
 from iota.Device import Device
 from iota import genRandomID
 
@@ -19,17 +18,14 @@ class User:
     #password       Holds the password which the user will need to access their account
     #email          Holds the email tied to the user's account
     #allowEmails    Whether or not the the user would like to recieve Emails. 
-    #houseRoles     Holds the user's homes and their permission level within them (User:int)
     #debug          Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, password:str, email:str,
-                 allowEmails:bool=True, houseRoles:dict[Hub, int]={}, debug:bool=False):
+                 allowEmails:bool=True, debug:bool=False):
         self.id = id
         self.username=username
         self.password=password
         self.email=email
-        self.houseRoles = houseRoles
         self.allowEmails = allowEmails
         self.debug = debug
-        self.variableStore = Device(genRandomID(12, prefix="VAR-"), f"VARIABLE-STORE", isActive=True)

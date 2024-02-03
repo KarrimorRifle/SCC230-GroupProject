@@ -31,3 +31,6 @@ class Device:
     #Updates the Data
     def updateData(self) -> dict[str, any]:
         pass
+
+def getDeviceByID(id) -> Device:
+    pass
