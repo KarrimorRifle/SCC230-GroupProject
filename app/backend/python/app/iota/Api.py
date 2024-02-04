@@ -2,7 +2,7 @@
 #Desc:          File to hold the Api Class and related Functions
 #               The Function of the Api Class is to define the method to communicate with IOT Devices
 #
-#Last Update:   2024-1-18
+#Last Update:   2024-1-27
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -25,8 +25,13 @@ class Api:
     #id         Holds the ID for the API to be stored in the Database
     #reqType    Holds the type of request that the API uses 
     #data       Holds the data sent to and from the API
+    #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, reqType:requestType=None, data = {}):
+    def __init__(self, id:str, reqType:requestType=None, data:list=[], debug:bool=False):
         self.id = id
         self.reqType = reqType
+        self.debug = debug
+
+def loadFromDatabase(id:str) -> Api:
+    pass
