@@ -32,3 +32,6 @@ class Api:
         self.id = id
         self.reqType = reqType
         self.debug = debug
+
+def loadFromDatabase(id:str) -> Api:
+    pass

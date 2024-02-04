@@ -22,3 +22,9 @@ class Trigger:
         self.id = id
         self.data = data
         self.debug = debug
+
+def loadFromDatabase(id:str):
+    pass
+
+def checkTriggers():
+    pass

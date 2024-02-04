@@ -32,5 +32,5 @@ class Device:
     def updateData(self) -> dict[str, any]:
         pass
 
-def getDeviceByID(id) -> Device:
+def loadFromDatabase(id:str) -> Device:
     pass

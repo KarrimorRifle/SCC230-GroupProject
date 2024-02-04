@@ -31,3 +31,6 @@ class Hub:
         self.users=users
         self.schedules = schedules
         self.debug = debug
+
+def loadFromDatabase(id:str) -> Hub:
+    pass

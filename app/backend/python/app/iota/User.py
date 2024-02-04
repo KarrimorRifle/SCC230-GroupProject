@@ -29,3 +29,7 @@ class User:
         self.email=email
         self.allowEmails = allowEmails
         self.debug = debug
+
+
+def loadFromDatabase(id:str) -> User:
+    pass

@@ -1,3 +1,10 @@
+#Title:         iota/__init__.py
+#Desc:          File to initialise the IOTA module and hold general functions
+#
+#Last Update:   2024-2-4
+#Updated By:    Kian Tomkins
+#Interpreter:   Python 3.11
+
 import string as s
 from random import choice
 
