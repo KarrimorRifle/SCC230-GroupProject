@@ -205,5 +205,5 @@ class Schedule:
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
 
-def loadFromDatabase(id:str) > Schedule:
+def loadFromDatabase(id:str) -> Schedule:
     pass
