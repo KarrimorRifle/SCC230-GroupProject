@@ -52,6 +52,8 @@ def accountsResonse():
                 if value == "":
                     continue
                 updateParams.append(f"{key}=%s")
+                if key == "Password":
+                    value = bcrypt.hashpw(value.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
                 values.append(value)
             updateParams = ', '.join(updateParams)
 
