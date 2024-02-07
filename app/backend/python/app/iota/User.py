@@ -10,12 +10,7 @@
 from iota.Device import Device
 from iota import genRandomID
 
-from flask import request, jsonify, make_response, Blueprint, current_app
-import bcrypt
-import uuid
-from datetime import datetime, timedelta
-
-user = Blueprint('user', __name__)
+from flask import current_app
 
 ##CLASS DEFINITION##
 class User:
