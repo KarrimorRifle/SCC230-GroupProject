@@ -18,10 +18,10 @@ CREATE TABLE `hubs`(
 
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
-CREATE TABLE `accounts_hubsRelation`(
+CREATE TABLE `accounts_hubs`(
     `AccountID` BIGINT NOT NULL,
     `HubID` BIGINT UNSIGNED NOT NULL,
-    `PermissionLevel` INT NOT NULL,
+    `PermissionLevel` ENUM('OWNER', 'ADMIN', 'VIEWER'),
     CONSTRAINT UserHubRelation PRIMARY KEY (AccountID, HubID),
     FOREIGN KEY (AccountID) REFERENCES accounts(AccountID),
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
