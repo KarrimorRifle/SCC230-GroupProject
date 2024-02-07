@@ -5,6 +5,7 @@ import bcrypt
 import uuid
 from datetime import datetime, timedelta
 from routes.accounts import accounts
+from routes.hub import hub
 
 #db connection
 connection = mysql.connector.connect(
@@ -19,6 +20,7 @@ app = Flask(__name__)
 app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
+app.register_blueprint(hub)
 CORS(app, supports_credentials=True)
 
 #handling paths and different methods
