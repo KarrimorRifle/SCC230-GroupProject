@@ -1,7 +1,7 @@
 import mysql.connector
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
-from iota.User import user
+from routes.accounts import accounts
 
 #db connection
 connection = mysql.connector.connect(
@@ -15,7 +15,7 @@ cursor = connection.cursor(dictionary = True)
 app = Flask(__name__)
 app.config['cursor'] = cursor
 app.config['connection'] = connection
-app.register_blueprint(user)
+app.register_blueprint(accounts)
 CORS(app, supports_credentials=True)
 
 #running app
