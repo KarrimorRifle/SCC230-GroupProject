@@ -62,7 +62,7 @@ def login():
     
 @app.route("/logout", methods=["DELETE"])
 def logout():
-    sessionID = request.cookies.session_id
+    sessionID = request.cookies.get('session_id')
     try:
         cursor.execute("UPDATE accounts SET SessionID = NULL, SessionExp = %s WHERE SessionID = %s",(datetime.now(), sessionID))
         connection.commit()
