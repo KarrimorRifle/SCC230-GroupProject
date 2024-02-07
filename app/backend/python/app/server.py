@@ -59,6 +59,17 @@ def login():
 
     else:
         return jsonify({"error":"Details don't match our system"}), 403
+    
+@app.route("/logout", methods=["DELETE"])
+def logout():
+    sessionID = request.cookies.get('session_id')
+    try:
+        cursor.execute("UPDATE accounts SET SessionID = NULL, SessionExp = %s WHERE SessionID = %s",(datetime.now(), sessionID))
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
+    return
 
 def getAccount():
     sessionID = request.cookies.get('session_id')
