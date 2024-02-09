@@ -1,5 +1,5 @@
-import {Schedule} from "./types"
-export const retrieveSchedules = async(): Promise<Schedule[]> => {
+import { Schedule } from "./types";
+export const getSchedules = async (): Promise<Schedule[]> => {
   //use user details to return schedules
-  return [<Schedule>{},<Schedule>{},<Schedule>{},<Schedule>{},]
-}
+  return [<Schedule>{}, <Schedule>{}, <Schedule>{}, <Schedule>{}];
+};

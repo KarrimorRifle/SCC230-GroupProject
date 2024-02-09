@@ -1,4 +1,11 @@
-export type CommandType = "FOR" | "WHILE" | "IF" | "OTHERWISE" | "SET" | "GET" | "END";
+export type CommandType =
+  | "FOR"
+  | "WHILE"
+  | "IF"
+  | "OTHERWISE"
+  | "SET"
+  | "GET"
+  | "END";
 
 //functions of either of these types aren't required on front end hence unimplemented
 export interface FunctionCode {
