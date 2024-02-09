@@ -34,7 +34,16 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#">Link</a>
+            <!-- add v-if="loggedIn" -->
+            <a
+              class="nav-link text-light"
+              href="/schedules"
+              :class="{ active: route.path == '/schedules' }"
+              >Schedules</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light">Link</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light" aria-disabled="true">Disabled</a>
@@ -82,7 +91,11 @@
 
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
-import { deleteCookie, getCookies, setCookies } from "@/functions";
+import {
+  deleteCookie,
+  getCookies,
+  setCookies,
+} from "@/modules/common/functions";
 import AccountDropdown from "./AccountDropdown.vue";
 import { ref } from "vue";
 import axios, { AxiosError } from "axios";
