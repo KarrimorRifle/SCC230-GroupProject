@@ -48,10 +48,28 @@ CREATE TABLE `schedules`(
     `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
     `HubID` BIGINT UNSIGNED NOT NULL,
-    `DeviceInstructions` JSON NOT NULL,
     `TriggerID` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+);
+
+CREATE TABLE `function_block_params`(
+    `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `Value` VARCHAR(255) NOT NULL,
+    `FunctionBlockID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
+);
+
+CREATE TABLE `linked_function_blocks`(
+    `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `ParentID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
+    `LinkedTo` INT NOT NULL FOREIGN KEY REFERENCES function_blocks(Num)
+);
+
+CREATE TABLE `function_blocks`( 
+    `FunctionBlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `CommandType` VARCHAR(20) NOT NULL,
+    `Num` INT NOT NULL,
+    `ScheduleID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FOREIGN KEY REFERENCES schedules(EventID)
 );
 
 -- To reset DB delete the container and start up again
