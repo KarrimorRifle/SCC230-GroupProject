@@ -49,6 +49,9 @@ CREATE TABLE `schedules`(
     `ScheduleName` VARCHAR(255) NOT NULL,
     `HubID` BIGINT UNSIGNED NOT NULL,
     `TriggerID` BIGINT UNSIGNED NOT NULL,
+    `IsActive` TINYINT UNSIGNED NOT NULL,
+    `IsPublic` TINYINT UNSIGNED NOT NULL,
+    `Rating` TINYINT UNSIGNED,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
