@@ -16,6 +16,7 @@
 #     def test_get_schedules_success(self):
 #         response = self.client_server.get('/schedule')
 #         self.assertEqual(response, 200)
+#         self.assertIn('EventID', response.data)
 #         self.assertIn('Name', response.data)
 #         self.assertIn('IsActive', response.data)
 #         self.assertIn('IsPublic', response.data)
