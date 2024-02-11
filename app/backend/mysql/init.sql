@@ -1,7 +1,7 @@
 USE DB;
 
 CREATE TABLE accounts(
-    `AccountID` BIGINT not null AUTO_INCREMENT,
+    `AccountID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `FirstName` varchar(100) NOT NULL,
     `Surname` varchar(100) NOT NULL,
     `Email` varchar(100) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE `hubs`(
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
-    `AccountID` BIGINT NOT NULL,
+    `AccountID` BIGINT UNSIGNED NOT NULL,
     `HubID` BIGINT UNSIGNED NOT NULL,
     `PermissionLevel` INT NOT NULL,
     CONSTRAINT UserHubRelation PRIMARY KEY (AccountID, HubID),
@@ -51,33 +51,40 @@ CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 CREATE TABLE `schedules`(
     `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
-    `AuthorID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES accounts(AccountID),
+    `AuthorID` BIGINT UNSIGNED NOT NULL,
     `HubID` BIGINT UNSIGNED,
-    `TriggerID` BIGINT UNSIGNED NOT NULL,
+    `TriggerID` BIGINT UNSIGNED,
     `IsActive` TINYINT UNSIGNED NOT NULL,
     `IsPublic` TINYINT UNSIGNED NOT NULL,
     `Rating` TINYINT UNSIGNED,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID),
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID),
+    INDEX `idx_EventID` (`EventID`)
+);
+
+CREATE TABLE `function_blocks`( 
+    `BlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `CommandType` VARCHAR(20) NOT NULL,
+    `Num` INT NOT NULL,
+    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
+    INDEX `idx_BlockID` (`BlockID`)
 );
 
 CREATE TABLE `function_block_params`(
     `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Value` VARCHAR(255) NOT NULL,
-    `FunctionBlockID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
+    `FunctionBlockID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
 
 CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `ParentID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
-    `LinkedTo` INT NOT NULL FOREIGN KEY REFERENCES function_blocks(Num)
-);
-
-CREATE TABLE `function_blocks`( 
-    `FunctionBlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `CommandType` VARCHAR(20) NOT NULL,
-    `Num` INT NOT NULL,
-    `ScheduleID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FOREIGN KEY REFERENCES schedules(EventID)
+    `ParentID` BIGINT UNSIGNED NOT NULL,
+    `LinkedTo` INT NOT NULL,
+    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
+    FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
 );
 
 -- To reset DB delete the container and start up again
