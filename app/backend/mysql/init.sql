@@ -11,6 +11,10 @@ CREATE TABLE accounts(
     PRIMARY KEY (AccountID)
 );
 
+INSERT INTO accounts(FirstName, Surname, Email, `Password`)
+-- passwords are 'JhonDoe123.' and 'JaneDoe123.' respectively
+    Values("Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
+
 CREATE TABLE `hubs`(
     `HubID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `HubName` VARCHAR(255) NOT NULL
@@ -77,7 +81,3 @@ CREATE TABLE `function_blocks`(
 
 -- To reset DB delete the container and start up again
 -- if any changes were made do the last line AND `docker-compose build`
-
-INSERT INTO accounts(FirstName, Surname, Email, `Password`)
--- passwords are 'JhonDoe123.' and 'JaneDoe123.' respectively
-Values("Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
