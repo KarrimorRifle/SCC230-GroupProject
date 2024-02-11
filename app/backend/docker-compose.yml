@@ -20,7 +20,7 @@ services:
     networks:
       - custom_network
     depends_on:
-      - mysql
+      - pythonapp
   
   mysql:
     image: mysql:latest
