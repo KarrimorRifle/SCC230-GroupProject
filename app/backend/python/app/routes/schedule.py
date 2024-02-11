@@ -23,6 +23,21 @@ def create_schedule(account, cursor, connection):
         connection.rollback()
         return jsonify({"error": str(e)}), 500
     
+    code = request.json.get("Code")
+
+    functionBlocks = code["functionBlocks"]
+    blockParams = code["functionBlockParams"]
+    blockLinks = code["functionBlockLinks"]
+
+    for block in functionBlocks:
+        pass
+
+    for params in blockParams:
+        pass
+
+    for links in blockLinks:
+        pass
+    
     query = ("INSERT INTO ")
     
     return jsonify({'success':'Schedule Created'})
