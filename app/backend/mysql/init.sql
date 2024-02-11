@@ -48,10 +48,16 @@ CREATE TABLE `devices`(
 
 CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 
+CREATE TABLE `device_schedule_relations`(
+    `ScheduleID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES schedules(EventID),
+    `DeviceID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES devices(DeviceID),
+    `DeviceName` VARCHAR(255) NOT NULL FOREIGN KEY REFERENCES devices(DeviceName)
+)
+
 CREATE TABLE `schedules`(
     `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
-    `HubID` BIGINT UNSIGNED NOT NULL,
+    `HubID` BIGINT UNSIGNED,
     `TriggerID` BIGINT UNSIGNED NOT NULL,
     `IsActive` TINYINT UNSIGNED NOT NULL,
     `IsPublic` TINYINT UNSIGNED NOT NULL,
