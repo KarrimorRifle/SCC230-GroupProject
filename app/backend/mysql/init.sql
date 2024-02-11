@@ -48,15 +48,10 @@ CREATE TABLE `devices`(
 
 CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 
-CREATE TABLE `device_schedule_relations`(
-    `ScheduleID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES schedules(EventID),
-    `DeviceID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES devices(DeviceID),
-    `DeviceName` VARCHAR(255) NOT NULL FOREIGN KEY REFERENCES devices(DeviceName)
-)
-
 CREATE TABLE `schedules`(
     `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
+    `AuthorID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES accounts(AccountID),
     `HubID` BIGINT UNSIGNED,
     `TriggerID` BIGINT UNSIGNED NOT NULL,
     `IsActive` TINYINT UNSIGNED NOT NULL,
@@ -72,7 +67,7 @@ CREATE TABLE `function_block_params`(
     `FunctionBlockID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
 );
 
-CREATE TABLE `linked_function_blocks`(
+CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ParentID` BIGINT UNSIGNED NOT NULL FOREIGN KEY REFERENCES function_blocks(FunctionBlockID)
     `LinkedTo` INT NOT NULL FOREIGN KEY REFERENCES function_blocks(Num)
