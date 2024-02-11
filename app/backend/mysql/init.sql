@@ -59,8 +59,7 @@ CREATE TABLE `schedules`(
     `Rating` TINYINT UNSIGNED,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID),
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID),
-    INDEX `idx_EventID` (`EventID`)
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
 
 CREATE TABLE `function_blocks`( 
@@ -68,9 +67,10 @@ CREATE TABLE `function_blocks`(
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL,
     `ScheduleID` BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
-    INDEX `idx_BlockID` (`BlockID`)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
 );
+
+CREATE INDEX idx_function_blocks_blockID ON `function_blocks` (`BlockID`);
 
 CREATE TABLE `function_block_params`(
     `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -86,6 +86,8 @@ CREATE TABLE `function_block_links`(
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
     FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
 );
+
+CREATE INDEX idx_function_links_ID ON `function_block_links` (`LinkID`);
 
 -- To reset DB delete the container and start up again
 -- if any changes were made do the last line AND `docker-compose build`
