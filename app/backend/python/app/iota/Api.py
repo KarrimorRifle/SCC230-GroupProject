@@ -9,7 +9,7 @@
 ##IMPORTS##
 from enum import Enum
 import json
-import requests
+#import requests
 
 ##ENUM DEFINITIONS##
 class requestType(Enum):
