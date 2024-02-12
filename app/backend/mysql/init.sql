@@ -65,9 +65,10 @@ CREATE TABLE `schedules`(
 CREATE TABLE `function_blocks`( 
     `BlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
-    `Num` INT NOT NULL,
+    `Num` INT NOT NULL UNIQUE, 
     `ScheduleID` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    -- `num` referenced as foreign key, must be unique.
 );
 
 CREATE TABLE `function_block_params`(
@@ -77,14 +78,13 @@ CREATE TABLE `function_block_params`(
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
 
--- PLZ HELP ( ; _ ; )
--- CREATE TABLE `function_block_links`(
---     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     `ParentID` BIGINT UNSIGNED NOT NULL,
---     `LinkedTo` INT NOT NULL,
---     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
---     FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
--- );
+CREATE TABLE `function_block_links`(
+    `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `ParentID` BIGINT UNSIGNED NOT NULL,
+    `LinkedTo` INT NOT NULL,
+    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
+    FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
+);
 
 -- To reset DB delete the container and start up again
 -- if any changes were made do the last line AND `docker-compose build`
