@@ -26,16 +26,9 @@ def create_schedule(account, cursor, connection):
     code = request.json.get("Code")
 
     functionBlocks = code["functionBlocks"]
-    blockParams = code["functionBlockParams"]
-    blockLinks = code["functionBlockLinks"]
 
+    # FUNCTION BLOCK WILL HOLD ALL VALUES BLOCKS IN SCHEDULE CLASS HAS WILL THEN BE PARSED INTO 3 TABLES HERE
     for block in functionBlocks:
-        pass
-
-    for params in blockParams:
-        pass
-
-    for links in blockLinks:
         pass
     
     query = ("INSERT INTO ")
