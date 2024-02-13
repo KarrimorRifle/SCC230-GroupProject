@@ -2,7 +2,7 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-2-2
+#Last Update:   2024-2-11
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -28,10 +28,9 @@ class FunctionCode():
     #hasRun         Holds the number of times a FunctionCode has run
 
     ##CONSTRUCTOR##
-    def __init__(self, commandType:str, number:int, linkedCommands:list=[], params:list[str]=[]):
+    def __init__(self, commandType:str, number:int, linkedCommands:list=[int], params:list[str]=[]):
         self.commandType = commandType
         self.number = number
-        self.name = commandType+str(number)
         self.linkedCommands = linkedCommands
         self.params = params
         self.hasRun = 0
@@ -71,10 +70,11 @@ class Schedule:
     def runCode(self):
         i=0
         while i<len(self.code):
-            try:
+            #try:
                 i=self.__translateSchedule(i)
-            except:
-                self.__addToErrorLog
+            #except Exception as e:
+            #    self.__addToErrorLog(e)
+            #    break
         self.__resetCounts()
         self.variables = {}
 
@@ -94,6 +94,11 @@ class Schedule:
     def __translateSchedule(self, index:int=0) -> int:
         self.isRunning=True
 
+        #evaluates all the parameters
+        evalParams = []
+        for i in range(len(self.code[index].params)):
+            evalParams.append(self.__resolveVariable(self.code[index].params[i]))
+
         if(self.debug):
             print(f"{self.code[index].commandType + ' ' + (' '.join(self.code[index].params)):<40}({self.id})")
 
@@ -101,25 +106,25 @@ class Schedule:
         match(self.code[index].commandType):
             #Code for a for loop
             case "FOR":
-                for i in range (self.code[index].params[0]):
+                for i in range (eval(evalParams[0])):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index)
+                    self.__runConditional(index+1)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for a while loop
-            case "WHILE":
-                while(eval(f"{' '.join(self.code[index].params)}")):
+            case "WHILE":                   
+                while(eval(f"{' '.join(evalParams)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index)
+                    self.__runConditional(index+1)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for an if statement
             case "IF":
-                if(eval(f"{' '.join(self.code[index].params)}")):
+                if(eval(f"{' '.join(evalParams)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index)
+                    self.__runConditional(index+1)
                 elif(self.debug):
                     print(f"{'IF CONDITIONS NOT MET':<40}({self.id})")
                     
@@ -131,20 +136,18 @@ class Schedule:
                 allConditions=True
 
                 #Checks if the if statement is correct, if the OTHERWISE statement is equal to an elif statement
-                if(len(self.code[index].params) != 0):
-                    if(not(eval(f"{' '.join(self.code[index].params)}"))):
+                if(len(evalParams) != 0):
+                    if(not(eval(f"{' '.join(evalParams)}"))):
                         allConditions=False
                 #Checks if any of the linked if and elif statements ran
                 for i in range (len(self.code[index].linkedCommands)):
-                    if(self.code[index].linkedCommands[i].hasRun>0):
+                    if(self.code[self.code[index].linkedCommands[i]-1].hasRun>0):
                         allConditions=False
-                    break
+                        break
                 #Runs the code if all the checks pass
                 if(allConditions):
-
                     self.code[index].hasRun+=1
                     self.__runConditional(index)
-
                 elif(self.debug):
                     print(f"{'OTHERWISE CONDITIONS NOT MET':<40}({self.id})")
                     
@@ -155,17 +158,12 @@ class Schedule:
                 if(self.debug):
                     #print response from set statement
                     pass
-                
-                #Checks if the value being set is a variable or a device value
-                if("[" in self.code[index].params[0]):
-                    eval(f"{self.code[index].params[0]}={self.code[index].params[1]}")
-                else:
-                    #Code to set a device value
-                    pass
+                exec(f"{evalParams[0]}={evalParams[1]}")
 
                 #set a value of param 1 to param 2 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
+            
             #Default case to ignore End or invalid statements
             case _:
                 return index+1
@@ -184,9 +182,10 @@ class Schedule:
 
     #Finds the end of a conditional statement or loop
     def __findEnd(self, index:int, statement:FunctionCode) -> int:
-        while(self.code[index].commandType!="END" and not (statement.name in self.code[index].linkedCommands)):
+        while(not(self.code[index].commandType=="END" and (statement.number in self.code[index].linkedCommands))):
             index+=1
-
+        if(self.debug):
+            print(f"{f'END FOUND FOR {statement.number} AT {index}':<40}({self.id})")
         return index
     
     #Resets the number of times a piece of code has run for future schedules
@@ -196,9 +195,39 @@ class Schedule:
         for i in range(len(self.code)):
             self.code[i].hasRun = 0
 
-    #Changes an instance of a device at location to an evaluable format
-    def __resolveDevice(self, location:str) -> str:
-        pass
+    #Changes an instance of a value to an evaluable format
+    def __resolveVariable(self, variable:str) -> str:
+        operators = ['<', '>', '<=', '>=', '==', '!=']
+
+        if('.' in variable):
+            variable = variable.split('.')
+            #Checks if the variable passed in is a variable stored in the schedule
+            if(variable[0] == 'var'):
+                #checks if the variable already exists
+                if(variable[1] not in self.variables.keys()):
+                    self.variables.update({variable[1]:''})
+                return f'self.variables["{variable[1]}"]'
+            else:
+                #checks if the variable passed is a valid device variable  
+                for i in range(len(self.devices)):
+                    if(variable[0] == self.devices[i].name and variable[1] in self.devices[i].data.keys()):
+                        return f'self.devices[{i}].data["{variable[1]}"]'
+        
+        #checks if the variable is a number
+        try:
+            _v = float(variable)
+        except:
+            #Checks if the variable is an operator
+            if(variable not in operators):
+                #Checks if the variable is already in quotations
+                if(variable[0] == '"' or variable[0] == "'"):
+                    variable[0] = ""
+                if(variable[-1] == '"' or variable[-1] == "'"):
+                    variable[-1] = "" 
+                #returns the string in quotation marks
+                return str('"' + variable + '"')
+
+        return str(variable)
 
     #Adds an error to a log in the database
     def __addToErrorLog(self, exception:str):
