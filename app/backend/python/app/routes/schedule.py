@@ -4,18 +4,20 @@ from accounts import getAccount
 schedule = Blueprint('schedule', __name__)
 
 
-def get_schedules(account, cursor, connection):
+def get_schedules(account, cursor):
     query = ("SELECT EventID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
-    return jsonify(schedules)
+    return jsonify(schedules), 200
 
-#TO BE UPDATED BASED ON TRIGGER AND HUB
+#TO BE UPDATED BASED ON DATABASE ID CHANGES
 def create_schedule(account, cursor, connection):
-    query = ("INSERT INTO schedule (ScheduleName, AuthorID, HubID, TriggerID, IsActive, IsPublic, Rating) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(request.json.get("ScheduleName"),account['AccountID'],None, None, request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get("Rating")))
+    # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
+    scheduleName = request.json.get("ScheduleName")
+    query = ("INSERT INTO schedule (ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
+                     "VALUES ('{}','{}','{}','{}','{}')".format(scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), None))
     try:
         cursor.execute(query)
         connection.commit()
@@ -23,19 +25,23 @@ def create_schedule(account, cursor, connection):
         connection.rollback()
         return jsonify({"error": str(e)}), 500
     
-    code = request.json.get("Code")
-
-    functionBlocks = code["functionBlocks"]
-
-    # FUNCTION BLOCK WILL HOLD ALL VALUES BLOCKS IN SCHEDULE CLASS HAS WILL THEN BE PARSED INTO 3 TABLES HERE
-    for block in functionBlocks:
-        pass
+    # UPDATE THIS SECTION BASED ON ID CHANGES IN DB
+    query = ("SELECT EventID FROM schedules "
+                "WHERE ScheduleName = %s AND AuthorID = %s")
     
-    query = ("INSERT INTO ")
-    
-    return jsonify({'success':'Schedule Created'})
+    cursor.execute(query, (scheduleName, account['AccountID'],))
 
-@schedule.route("/accounts" , methods=['POST', 'PATCH', 'DELETE', 'GET'])
+    scheduleID = cursor.fetchone()
+
+    if scheduleID is None:
+        return jsonify({"error":"Schedule ID could not be retrieved"}), 500
+
+    return jsonify(scheduleID), 200
+
+def delete_schedule(account, cursor, connection):
+    query = ("DELETE FROM schedules WHERE AuthorID = %s AND EventID = %s" )
+
+@schedule.route("/schedule" , methods=['POST', 'GET'])
 def scheduleResponse(self):
     account = getAccount()
     if account is None:
@@ -44,7 +50,9 @@ def scheduleResponse(self):
     connection = current_app.config['connection']
 
     if request.method == 'GET':
-        return get_schedules(account, cursor, connection)
+        return get_schedules(account, cursor)
+    elif request.method == 'POST':
+        return create_schedule(account, cursor, connection)
 
     cursor.close()
     connection.close()
