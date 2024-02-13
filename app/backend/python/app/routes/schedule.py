@@ -3,7 +3,7 @@ from accounts import getAccount
 
 schedule = Blueprint('schedule', __name__)
 
-
+# Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
     query = ("SELECT EventID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
                 "WHERE AuthorID = %s")
@@ -38,11 +38,90 @@ def create_schedule(account, cursor, connection):
 
     return jsonify(scheduleID), 200
 
-def delete_schedule(account, cursor, connection):
-    query = ("DELETE FROM schedules WHERE AuthorID = %s AND EventID = %s" )
+def get_schedule_detail(account, cursor, scheduleID):
+    query = ("SELECT * FROM schedules "
+                "WHERE AuthorID = %s AND ScheduleID = %s")
+    cursor.execute(query, (account['AccountID'], scheduleID,))
+    schedule = cursor.fetchone()
+
+    if schedule is None:
+        return 401
+
+    query = ("SELECT * FROM function_blocks "
+                "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    functionBlocks = cursor.fetchall()
+
+    # FIX TRIGGER IN DATABASE TO MATCH TRIGGER CLASS THEN SORT THIS
+    query = ("SELECT TriggerID, TriggerName, EventListenerID FROM triggers "
+                "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    triggers = cursor.fetchall()
+
+    emptyBlock = {'CommandType': '', 'Number': 0, 'LinkedCommands': [int], 'Params': [str]}
+    code = [emptyBlock for _ in range(len(functionBlocks))]
+
+    i = 0
+    for block in functionBlocks:
+        type = block['CommandType']
+        num = block['Num']
+
+        query = ("SELECT Link FROM function_block_links "
+                "WHERE ScheduleID = %s AND ParentID = %s")
+        cursor.execute(query, (scheduleID, block['BlockID'],))
+        linkedCommands = cursor.fetchall()
+
+        query = ("SELECT Value FROM function_block_params "
+                "WHERE ScheduleID = %s AND ParentID = %s")
+        cursor.execute(query, (scheduleID, block['BlockID'],))
+        params = cursor.fetchall()
+
+        funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': linkedCommands, 'Params': params}
+        code[i] = funcBlock
+        i+=1
+
+    details = {'ScheduleID': schedule['EventID'],
+               'AuthorID': schedule['AuthorID'],
+               'Name': schedule['ScheduleName'],
+               'IsActive': schedule['IsActive'],
+               'IsPublic': schedule['IsPublic'],
+               'Rating': schedule['Rating'],
+               'Code': code,
+               'Triggers': triggers}
+    
+    return jsonify(details), 200
+
+# Function deletes schedule of specified ID as long as user is the author
+def delete_schedule(account, cursor, connection, scheduleID):
+    query = ("SELECT EventID FROM schedules "
+                "WHERE AuthorID = %s")
+    checkID = cursor.execute(query, (account['AccountID'],))
+
+    if scheduleID != checkID:
+        return({"error": "Forbidden access"}), 401 
+
+    mainQuery = ("DELETE FROM schedules WHERE AuthorID = %s AND EventID = %s" )
+    queries = [("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
+               ("DELETE FROM triggers WHERE ScheduleID = %s" )]
+
+    try:
+        cursor.execute(mainQuery, (account['AccountID'], scheduleID))
+        for i in range(queries):
+            cursor.execute(queries[i], (scheduleID,))
+        connection.commit()
+        return(jsonify({"success":"Successfully deleted schedule!"}))
+    except Exception as e:
+        connection.rollback()
+        return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
+
+# WORK IN PROGRESS
+def update_schedule(account, cursor, connection, scheduleID):
+    pass
 
 @schedule.route("/schedule" , methods=['POST', 'GET'])
-def scheduleResponse(self):
+def scheduleResponse():
     account = getAccount()
     if account is None:
         return jsonify({"error": "Session ID is invalid"}), 401
@@ -53,6 +132,25 @@ def scheduleResponse(self):
         return get_schedules(account, cursor)
     elif request.method == 'POST':
         return create_schedule(account, cursor, connection)
+
+    cursor.close()
+    connection.close()
+
+# TO BE FIXED ONCE THE DATABASE CHANGES ARE MADE WITH IDs
+@schedule.route("/schedule/<int:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
+def scheduleResponse(scheduleID):
+    account = getAccount()
+    if account is None:
+        return jsonify({"error": "Session ID is invalid"}), 401
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+
+    if request.method == 'GET':
+        return get_schedule_detail(account, cursor, scheduleID)
+    elif request.method == 'DELETE':
+        return delete_schedule(account, cursor, connection, scheduleID)
+    elif request.method == 'PATCH':
+        pass
 
     cursor.close()
     connection.close()
