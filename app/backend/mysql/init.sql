@@ -58,9 +58,8 @@ CREATE TABLE `schedules`(
     `IsActive` TINYINT UNSIGNED NOT NULL,
     `IsPublic` TINYINT UNSIGNED NOT NULL,
     `Rating` TINYINT UNSIGNED,
-    FOREIGN KEY (HubID) REFERENCES hubs(HubID),
-    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID),
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+    -- FOREIGN KEY (HubID) REFERENCES hubs(HubID),
+    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
 );
 
 CREATE TABLE `function_blocks`( 
@@ -76,13 +75,17 @@ CREATE TABLE `function_block_params`(
     `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Value` VARCHAR(255) NOT NULL,
     `FunctionBlockID` BIGINT UNSIGNED NOT NULL,
+    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
 
 CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ParentID` BIGINT UNSIGNED NOT NULL,
-    `LinkedTo` INT NOT NULL,
+    `Link` INT NOT NULL,
+    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
     FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
 );
