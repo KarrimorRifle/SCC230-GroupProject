@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response, Blueprint, current_app
-from accounts import getAccount
+from .accounts import getAccount
 
 schedule = Blueprint('schedule', __name__)
 
@@ -138,7 +138,7 @@ def scheduleResponse():
 
 # TO BE FIXED ONCE THE DATABASE CHANGES ARE MADE WITH IDs
 @schedule.route("/schedule/<int:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
-def scheduleResponse(scheduleID):
+def scheduleDetails(scheduleID):
     account = getAccount()
     if account is None:
         return jsonify({"error": "Session ID is invalid"}), 401
