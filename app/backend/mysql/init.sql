@@ -31,14 +31,6 @@ CREATE TABLE `accounts_hubsRelation`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
-CREATE TABLE `triggers`(
-    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `TriggerName` VARCHAR(255) NOT NULL,
-    `ScheduleID` BIGINT UNSIGNED NOT NULL,
-    `EventListenerID` BIGINT NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
-);
-
 CREATE TABLE `devices`(
     `DeviceID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
@@ -60,6 +52,14 @@ CREATE TABLE `schedules`(
     `Rating` TINYINT UNSIGNED,
     -- FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
+);
+
+CREATE TABLE `triggers`(
+    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `TriggerName` VARCHAR(255) NOT NULL,
+    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    `EventListenerID` BIGINT NOT NULL,
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
 );
 
 CREATE TABLE `function_blocks`( 
@@ -87,7 +87,7 @@ CREATE TABLE `function_block_links`(
     `ScheduleID` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
-    FOREIGN KEY (LinkedTo) REFERENCES function_blocks(Num)
+    FOREIGN KEY (Link) REFERENCES function_blocks(Num)
 );
 
 -- To reset DB delete the container and start up again
