@@ -40,7 +40,7 @@ def create_schedule(account, cursor, connection):
 
 def get_schedule_detail(account, cursor, scheduleID):
     query = ("SELECT * FROM schedules "
-                "WHERE AuthorID = %s AND ScheduleID = %s")
+                "WHERE AuthorID = %s AND EventID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     schedule = cursor.fetchone()
 
@@ -63,9 +63,6 @@ def get_schedule_detail(account, cursor, scheduleID):
 
     i = 0
     for block in functionBlocks:
-        type = block['CommandType']
-        num = block['Num']
-
         query = ("SELECT Link FROM function_block_links "
                 "WHERE ScheduleID = %s AND ParentID = %s")
         cursor.execute(query, (scheduleID, block['BlockID'],))
@@ -82,7 +79,7 @@ def get_schedule_detail(account, cursor, scheduleID):
 
     details = {'EventID': schedule['EventID'],
                'AuthorID': schedule['AuthorID'],
-               'Name': schedule['ScheduleName'],
+               'ScheduleName': schedule['ScheduleName'],
                'IsActive': schedule['IsActive'],
                'IsPublic': schedule['IsPublic'],
                'Rating': schedule['Rating'],
