@@ -25,7 +25,8 @@ class User:
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, password:str, email:str,
                  allowEmails:bool=True, debug:bool=False):
-        self.id = id
+
+        self.id=id
         self.username=username
         self.password=password
         self.email=email

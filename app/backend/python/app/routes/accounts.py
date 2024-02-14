@@ -2,6 +2,7 @@ from flask import request, jsonify, make_response, Blueprint, current_app
 import bcrypt
 import uuid
 from datetime import datetime, timedelta
+from iota import genRandomID
 
 accounts = Blueprint('accounts', __name__)
 
@@ -19,11 +20,18 @@ def accountsResonse():
 
         #creating a new account
         if cursor.fetchone() is None:
+            
+
+            #Get current Ids
+            query = ("SELECT AccountID FROM accounts")
+            cursor.execute(query, (id,))
+            accountIDs = cursor.fetchall()
             sessionID = str(uuid.uuid4())
             sessionExpiry = datetime.now() + timedelta(days = 1)
             response = make_response(jsonify({"success":"Account created successfully"}))
-            query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+            query = ("INSERT INTO accounts (AccountID, FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
+                     "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+            #Account Id generates with prefix Acc
             try:
                 cursor.execute(query)
                 connection.commit()
