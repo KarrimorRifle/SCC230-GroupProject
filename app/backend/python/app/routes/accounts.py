@@ -24,7 +24,7 @@ def accountsResonse():
 
             #Get current Ids
             query = ("SELECT AccountID FROM accounts")
-            cursor.execute(query, (id,))
+            cursor.execute(query)
             accountIDs = cursor.fetchall()
             sessionID = str(uuid.uuid4())
             sessionExpiry = datetime.now() + timedelta(days = 1)
