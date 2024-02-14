@@ -38,7 +38,7 @@ CREATE TABLE `devices`(
     `DeviceName` VARCHAR(255) NOT NULL,
     `DeviceType` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
-    `HubID` BIGINT UNSIGNED NOT NULL,
+    `HubID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
@@ -47,7 +47,7 @@ CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 CREATE TABLE `schedules`(
     `EventID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
-    `HubID` BIGINT UNSIGNED NOT NULL,
+    `HubID` varchar(100) NOT NULL,
     `DeviceInstructions` JSON NOT NULL,
     `TriggerID` BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
