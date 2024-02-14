@@ -115,6 +115,7 @@ def login():
     password = password.encode("utf-8")
     
     query = f"SELECT * FROM accounts WHERE Email = %s"
+    cursor.fetchall()
     cursor.execute(query, (email,))
     account = cursor.fetchone()
     if account is None:
@@ -159,5 +160,6 @@ def getAccount():
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
     
+    cursor.fetchall()
     cursor.execute(query, (sessionID,))
     return cursor.fetchone()
