@@ -16,8 +16,8 @@ def get_schedules(account, cursor):
 def create_schedule(account, cursor, connection):
     # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
     scheduleName = request.json.get("ScheduleName")
-    query = ("INSERT INTO schedule (ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
-                     "VALUES ('{}','{}','{}','{}','{}')".format(scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), None))
+    query = ("INSERT INTO schedules (ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
+                     "VALUES ('{}','{}','{}','{}','{}')".format(scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
     try:
         cursor.execute(query)
         connection.commit()
@@ -80,7 +80,7 @@ def get_schedule_detail(account, cursor, scheduleID):
         code[i] = funcBlock
         i+=1
 
-    details = {'ScheduleID': schedule['EventID'],
+    details = {'EventID': schedule['EventID'],
                'AuthorID': schedule['AuthorID'],
                'Name': schedule['ScheduleName'],
                'IsActive': schedule['IsActive'],
@@ -94,27 +94,28 @@ def get_schedule_detail(account, cursor, scheduleID):
 # Function deletes schedule of specified ID as long as user is the author
 def delete_schedule(account, cursor, connection, scheduleID):
     query = ("SELECT EventID FROM schedules "
-                "WHERE AuthorID = %s")
-    checkID = cursor.execute(query, (account['AccountID'],))
+                "WHERE AuthorID = %s AND EventID = %s")
+    cursor.execute(query, (account['AccountID'], scheduleID,))
+    checkID = cursor.fetchone()
 
-    if scheduleID != checkID:
-        return({"error": "Forbidden access"}), 401 
+    if checkID is None:
+        return({"error": "Forbidden access"}), 401
 
-    mainQuery = ("DELETE FROM schedules WHERE AuthorID = %s AND EventID = %s" )
-    queries = [("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
+    queries = [("DELETE FROM schedules WHERE EventID = %s" ),
+               ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
                ("DELETE FROM triggers WHERE ScheduleID = %s" )]
 
-    try:
-        cursor.execute(mainQuery, (account['AccountID'], scheduleID))
-        for i in range(queries):
+    for i in range(len(queries)):
+        try:
             cursor.execute(queries[i], (scheduleID,))
-        connection.commit()
-        return(jsonify({"success":"Successfully deleted schedule!"}))
-    except Exception as e:
-        connection.rollback()
-        return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
+
+    return(jsonify({"success":"Successfully deleted schedule!"}))
 
 # WORK IN PROGRESS
 def update_schedule(account, cursor, connection, scheduleID):
