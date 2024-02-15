@@ -112,7 +112,7 @@ def delete_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 
-    return(jsonify({"success":"Successfully deleted schedule!"}))
+    return jsonify(scheduleID), 200
 
 # WORK IN PROGRESS
 def update_schedule(account, cursor, connection, scheduleID):
