@@ -126,9 +126,11 @@ def update_schedule(account, cursor, connection, scheduleID):
 
 @schedule.route("/schedule" , methods=['POST', 'GET'])
 def scheduleResponse():
+    #Get current user info
     account = getAccount()
     if account is None:
         return jsonify({"error": "Session ID is invalid"}), 401
+
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
 
@@ -143,9 +145,11 @@ def scheduleResponse():
 # TO BE FIXED ONCE THE DATABASE CHANGES ARE MADE WITH IDs
 @schedule.route("/schedule/<int:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
 def scheduleDetails(scheduleID):
+    #Get current user info
     account = getAccount()
     if account is None:
         return jsonify({"error": "Session ID is invalid"}), 401
+
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
 
