@@ -116,7 +116,13 @@ def delete_schedule(account, cursor, connection, scheduleID):
 
 # WORK IN PROGRESS
 def update_schedule(account, cursor, connection, scheduleID):
-    pass
+    query = ("SELECT EventID FROM schedules "
+                "WHERE AuthorID = %s AND EventID = %s")
+    cursor.execute(query, (account['AccountID'], scheduleID,))
+    checkID = cursor.fetchone()
+
+    if checkID is None:
+        return({"error": "Forbidden access"}), 401
 
 @schedule.route("/schedule" , methods=['POST', 'GET'])
 def scheduleResponse():
@@ -148,7 +154,7 @@ def scheduleDetails(scheduleID):
     elif request.method == 'DELETE':
         return delete_schedule(account, cursor, connection, scheduleID)
     elif request.method == 'PATCH':
-        pass
+        return update_schedule(account, cursor, connection, scheduleID)
 
     cursor.close()
     connection.close()
