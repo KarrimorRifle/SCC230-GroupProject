@@ -67,7 +67,7 @@ class test_accounts(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         response = self.client_server.get("/accounts")
-        self.assertEqual(response['AccountID'], "Accojk42VvlqdeBpOBc")
+        self.assertEqual(response['AccountID'], "Accojk42VvlqdeBpOBc",msg='{0}'.format(response))
 
 
 class test_login_out(unittest.TestCase):
