@@ -20,9 +20,6 @@ def accountsResonse():
 
         #creating a new account
         if cursor.fetchone() is None:
-            
-
-            #Get current Ids
             query = ("SELECT AccountID FROM accounts")
             cursor.execute(query)
             accountIDs = cursor.fetchall()
@@ -31,7 +28,6 @@ def accountsResonse():
             response = make_response(jsonify({"success":"Account created successfully"}))
             query = ("INSERT INTO accounts (AccountID, FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
                      "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
-            #Account Id generates with prefix Acc
             try:
                 cursor.execute(query)
                 connection.commit()
