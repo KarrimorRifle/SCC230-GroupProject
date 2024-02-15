@@ -61,6 +61,14 @@ class test_accounts(unittest.TestCase):
         
         response = self.client_server.get("/accounts")
         self.assertEqual(response.status_code, 200)
+    
+    def test_accounts_get_returns_correct(self):
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client_server.get("/accounts")
+        print(response)
+        #self.assertEqual(response.json().pop('AccountID'), "Accojk42VvlqdeBpOBc")
 
 
 class test_login_out(unittest.TestCase):
