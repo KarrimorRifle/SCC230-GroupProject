@@ -1,5 +1,6 @@
 from flask import request, jsonify, make_response, Blueprint, current_app
 from .accounts import getAccount
+from iota import genRandomID
 
 schedule = Blueprint('schedule', __name__)
 
@@ -16,8 +17,11 @@ def get_schedules(account, cursor):
 def create_schedule(account, cursor, connection):
     # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
     scheduleName = request.json.get("ScheduleName")
-    query = ("INSERT INTO schedules (ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
-                     "VALUES ('{}','{}','{}','{}','{}')".format(scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
+    query = ("SELECT EventID FROM schedules")
+    cursor.execute(query)
+    scheduleIDs = cursor.fetchall()
+    query = ("INSERT INTO schedules (EventID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
+                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=scheduleIDs, prefix='Sch'), scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
     try:
         cursor.execute(query)
         connection.commit()
@@ -143,7 +147,7 @@ def scheduleResponse():
     connection.close()
 
 # TO BE FIXED ONCE THE DATABASE CHANGES ARE MADE WITH IDs
-@schedule.route("/schedule/<int:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
+@schedule.route("/schedule/<string:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
 def scheduleDetails(scheduleID):
     #Get current user info
     account = getAccount()
