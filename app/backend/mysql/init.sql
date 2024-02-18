@@ -28,9 +28,8 @@ CREATE TABLE `accounts_hubsRelation`(
 );
 
 CREATE TABLE `triggers`(
-    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `TriggerName` VARCHAR(255) NOT NULL,
-    `EventListenerID` BIGINT NOT NULL 
+    `TriggerID` varchar(100) NOT NULL PRIMARY KEY,
+    `Data` JSON NOT NULL
 );
 
 CREATE TABLE `devices`(
@@ -45,11 +44,11 @@ CREATE TABLE `devices`(
 CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 
 CREATE TABLE `schedules`(
-    `EventID` varchar(100) NOT NULL PRIMARY KEY,
+    `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
     `HubID` varchar(100) NOT NULL,
     `DeviceInstructions` JSON NOT NULL,
-    `TriggerID` BIGINT UNSIGNED NOT NULL,
+    `TriggerID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
