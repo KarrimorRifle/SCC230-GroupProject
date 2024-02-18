@@ -9,10 +9,9 @@ class test_accounts(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
 
-    def test_accounts_creation_valid(self):
+    def test_schedule_creation(self):
         test = iota.Schedule("Sched1","testSched",True,3,[],[],False,False)
-        print(test)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(test['rating'], 3)
 
     
     # def test_accounts_get_returns_correct(self):
@@ -21,5 +20,3 @@ class test_accounts(unittest.TestCase):
         
     # response = self.client_server.get("/accounts")
     # self.assertEqual(loads(response.text)['AccountID'], "Accojk42VvlqdeBpOBc")
-test =sSchedule("Sched1","testSched",True,3,[],[],False,False)
-print(test)

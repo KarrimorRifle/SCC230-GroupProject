@@ -28,7 +28,7 @@ DEFAULT_PREFIX = {
 }
 
 #Creates a random ID
-def genRandomID(length:int=16, ids:list[str]=[], prefix:str="", suffix:str="") -> list[str]:
+def __genRandomID(length:int, prefix:str="") -> str:
     #Create the ID
     chars=s.ascii_letters+s.digits
     randID= prefix + ''.join(choice(chars) for _ in range(length-len(prefix)))
