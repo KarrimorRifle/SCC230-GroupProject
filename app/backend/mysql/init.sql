@@ -57,7 +57,7 @@ CREATE TABLE `schedules`(
 CREATE TABLE `triggers`(
     `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `TriggerName` VARCHAR(255) NOT NULL,
-    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    `ScheduleID` varchar(100) NOT NULL,
     `EventListenerID` BIGINT NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
 );
@@ -66,7 +66,7 @@ CREATE TABLE `function_blocks`(
     `BlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL UNIQUE, 
-    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
     -- `num` referenced as foreign key, must be unique.
 );
@@ -75,7 +75,7 @@ CREATE TABLE `function_block_params`(
     `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Value` VARCHAR(255) NOT NULL,
     `FunctionBlockID` BIGINT UNSIGNED NOT NULL,
-    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
@@ -84,7 +84,7 @@ CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ParentID` BIGINT UNSIGNED NOT NULL,
     `Link` INT NOT NULL,
-    `ScheduleID` BIGINT UNSIGNED NOT NULL,
+    `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
     FOREIGN KEY (Link) REFERENCES function_blocks(Num)
