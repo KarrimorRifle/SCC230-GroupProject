@@ -20,27 +20,17 @@ def create_schedule(account, cursor, connection):
     query = ("SELECT EventID FROM schedules")
     cursor.execute(query)
     scheduleIDs = cursor.fetchall()
+    thisID = genRandomID(ids=scheduleIDs, prefix='Sch')
     query = ("INSERT INTO schedules (EventID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=scheduleIDs, prefix='Sch'), scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
+                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
     try:
         cursor.execute(query)
         connection.commit()
     except Exception as e:
         connection.rollback()
         return jsonify({"error": str(e)}), 500
-    
-    # UPDATE THIS SECTION BASED ON ID CHANGES IN DB
-    query = ("SELECT EventID FROM schedules "
-                "WHERE ScheduleName = %s AND AuthorID = %s")
-    
-    cursor.execute(query, (scheduleName, account['AccountID'],))
 
-    scheduleID = cursor.fetchone()
-
-    if scheduleID is None:
-        return jsonify({"error":"Schedule ID could not be retrieved"}), 500
-
-    return jsonify(scheduleID), 200
+    return jsonify({'EventID':thisID}), 200
 
 def get_schedule_detail(account, cursor, scheduleID):
     query = ("SELECT * FROM schedules "
@@ -127,6 +117,62 @@ def update_schedule(account, cursor, connection, scheduleID):
 
     if checkID is None:
         return({"error": "Forbidden access"}), 401
+    
+    updateParams = []
+    values = []
+    newCode = {}
+    newTriggers = {}
+    for key, value in request.json.items():
+        if not key[0].isupper():
+            continue
+        if value == "":
+            continue
+        updateParams.append(f"{key}=%s")
+        if key == "Code":
+            newCode = value
+            continue
+        if key == "Triggers":
+            newTriggers = value
+            continue
+        values.append(value)
+    updateParams = ', '.join(updateParams)
+
+    query = ("UPDATE schedules "
+              f"SET {updateParams} "
+              "WHERE EventID = %s AND AuthorID = %s")
+    values.extend([scheduleID, account['AccountID']])
+
+    try:
+        cursor.execute(query, values)
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error" : "Schedule couldn't be updated"}), 500
+    
+    queries = [("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
+               ("DELETE FROM triggers WHERE ScheduleID = %s" )]
+
+    for i in range(len(queries)):
+        try:
+            cursor.execute(queries[i], (scheduleID,))
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to update schedule", "details":f"{e}"})), 500
+        
+    query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
+             "VALUES ('{}','{}','{}')".format(newTriggers['TriggerName'], scheduleID, newTriggers['EventListenerID']))
+    
+    try:
+        cursor.execute(queries[i], (scheduleID,))
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return(jsonify({"error":"Unable to update schedule", "details":f"{e}"})), 500
+    
+
 
 @schedule.route("/schedule" , methods=['POST', 'GET'])
 def scheduleResponse():
