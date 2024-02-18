@@ -10,6 +10,6 @@ class test_accounts(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_schedule_creation(self):
-        test = schedule("Sched1","testSched",True,3,[],[],False,False)
+        test = schedule.schedule("Sched1","testSched",True,3,[],[],False,False)
 
         self.assertEqual(test['rating'], 3)
