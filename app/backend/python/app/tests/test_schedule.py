@@ -12,9 +12,9 @@ class test_accounts(unittest.TestCase):
     def test_schedule_creation_max_args(self):
         test = Schedule.Schedule("Sched1","testSched",True,3,[],False,False)
 
-        self.assertEqual(test['rating'], 3)
+        self.assertEqual(test.rating, 3)
 
     def test_schedule_creation_min_args(self):
         test = Schedule.Schedule("Sched1","testSched")
 
-        self.assertEqual(test['name'], "testSched")
+        self.assertEqual(test.name, "testSched")
