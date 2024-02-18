@@ -1,5 +1,5 @@
 import unittest
-#from server import app
+from server import app
 import sys
 from json import loads
 sys.path.append((sys.path[0])[:-6])
