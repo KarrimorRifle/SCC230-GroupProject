@@ -23,7 +23,7 @@ class Trigger:
     def __init__(self, id:str, data:dict[Device, list[str]]={}, ScheduleIDs:list[str]=[], debug:bool=False):
         self.id = id
         self.data = data
-        self.scheduleIDs = scheduleIDs
+        self.ScheduleIDs = ScheduleIDs
         self.debug = debug
 
 def loadFromDatabase(id:str):
