@@ -1,7 +1,7 @@
 USE DB;
 
 CREATE TABLE accounts(
-    `AccountID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `AccountID` varchar(100) NOT NULL,
     `FirstName` varchar(100) NOT NULL,
     `Surname` varchar(100) NOT NULL,
     `Email` varchar(100) NOT NULL,
@@ -11,20 +11,20 @@ CREATE TABLE accounts(
     PRIMARY KEY (AccountID)
 );
 
-INSERT INTO accounts(FirstName, Surname, Email, `Password`)
+INSERT INTO accounts(AccountID, FirstName, Surname, Email, `Password`)
 -- passwords are 'JhonDoe123.' and 'JaneDoe123.' respectively
-    Values("Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
+Values("Accojk42VvlqdeBpOBc","Jhon","Doe","jhondoe@gmail.com", "$2b$12$IdHh.7xshmNM2kzFq9ei8eZkv1Qio3Ds2OVHvuGuymVl3yBcIdtSS" ),("Acc89kaE64Aize3NX2j","Jane","Doe","janedoe@gmail.com","$2b$12$0tJQMTo/mbqHli7jO5qDGOewD39brx1Z3nkLgA0U3biwD3iug1wEO");
 
 CREATE TABLE `hubs`(
-    `HubID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `HubID` varchar(100) NOT NULL PRIMARY KEY,
     `HubName` VARCHAR(255) NOT NULL
 );
 
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
-    `AccountID` BIGINT UNSIGNED NOT NULL,
-    `HubID` BIGINT UNSIGNED NOT NULL,
+    `AccountID` varchar(100) NOT NULL,
+    `HubID` varchar(100) NOT NULL,
     `PermissionLevel` INT NOT NULL,
     CONSTRAINT UserHubRelation PRIMARY KEY (AccountID, HubID),
     FOREIGN KEY (AccountID) REFERENCES accounts(AccountID),
@@ -36,21 +36,21 @@ CREATE TABLE `devices`(
     `DeviceName` VARCHAR(255) NOT NULL,
     `DeviceType` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
-    `HubID` BIGINT UNSIGNED NOT NULL,
+    `HubID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
 CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
 
 CREATE TABLE `schedules`(
-    `EventID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `EventID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
-    `AuthorID` BIGINT UNSIGNED NOT NULL,
-    -- `HubID` BIGINT UNSIGNED,
+    `AuthorID` varchar(100) NOT NULL,
+    `HubID` varchar(100),
     `IsActive` TINYINT UNSIGNED NOT NULL,
     `IsPublic` TINYINT UNSIGNED NOT NULL,
     `Rating` TINYINT UNSIGNED,
-    -- FOREIGN KEY (HubID) REFERENCES hubs(HubID),
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
 );
 
