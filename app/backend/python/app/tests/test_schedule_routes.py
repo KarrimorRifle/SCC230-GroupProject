@@ -19,7 +19,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
-        url += str(data['EventID'])
+        url += data['EventID']
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
 
@@ -41,7 +41,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
-        url += str(data['EventID'])
+        url += data['EventID']
         response = self.client_server.get(url)
 
         data = json.loads(response.data)
