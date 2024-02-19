@@ -63,7 +63,7 @@ CREATE TABLE `triggers`(
 );
 
 CREATE TABLE `function_blocks`( 
-    `BlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `BlockID` varchar(100) NOT NULL PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL, 
     `ScheduleID` varchar(100) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE `function_blocks`(
 CREATE TABLE `function_block_params`(
     `ParamID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Value` VARCHAR(255) NOT NULL,
-    `FunctionBlockID` BIGINT UNSIGNED NOT NULL,
+    `FunctionBlockID` varchar(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
@@ -82,7 +82,7 @@ CREATE TABLE `function_block_params`(
 
 CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `ParentID` BIGINT UNSIGNED NOT NULL,
+    `ParentID` varchar(100) NOT NULL,
     `Link` INT NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
