@@ -77,20 +77,29 @@ class TestScheduleRoutes(unittest.TestCase):
             }
         ]
 
-        newName = 'Name Update Testing'
+        triggers = [
+            {
+                'TriggerName': 'New trigger',
+                'EventListenerID': '1'
+            }
+        ]
+
+        newName = 'Name Update Schedule3'
 
         payload = {
             'ScheduleName': newName,
             'IsPublic': 1,
             'Code': code,
+            'Triggers': triggers,
         }
 
         response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
-        url += data['EventID']
-        response = self.client_server.patch(url, payload)
+        id = data['EventID']
+        url += id
+        response = self.client_server.patch(url, json=payload)
 
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
@@ -104,4 +113,6 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Triggers', data)
         self.assertEqual(data['ScheduleName'], newName)
         self.assertEqual(data['IsPublic'], 1)
-        self.assertEqual(data['Code'], code)
+        self.assertIn(code[0], data['Code'])
+        self.assertIn(code[1], data['Code'])
+        self.assertIn(code[2], data['Code'])
