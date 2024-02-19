@@ -54,3 +54,54 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
         self.assertIn('Triggers', data)
+    
+    def test_update_schedule_success(self):
+        code = [
+            {
+                'CommandType': 'IF',
+                'Number': 1,
+                'LinkedCommands': [2],
+                'Params': ['a', 'b', 'c'],
+            },
+            {
+                'CommandType': 'OTHERWISE',
+                'Number': 2,
+                'LinkedCommands': [],
+                'Params': ['e', 'f', 'g'],
+            },
+            {
+                'CommandType': 'WHILE',
+                'Number': 3,
+                'LinkedCommands': [],
+                'Params': ['h', 'i', 'j'],
+            }
+        ]
+
+        newName = 'Name Update Testing'
+
+        payload = {
+            'ScheduleName': newName,
+            'IsPublic': 1,
+            'Code': code,
+        }
+
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        url = '/schedule/'
+        url += data['EventID']
+        response = self.client_server.patch(url, payload)
+
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('EventID', data)
+        self.assertIn('ScheduleName', data)
+        self.assertIn('IsActive', data)
+        self.assertIn('IsPublic', data)
+        self.assertIn('Rating', data)
+        self.assertIn('AuthorID', data)
+        self.assertIn('Code', data)
+        self.assertIn('Triggers', data)
+        self.assertEqual(data['ScheduleName'], newName)
+        self.assertEqual(data['IsPublic'], 1)
+        self.assertEqual(data['Code'], code)
