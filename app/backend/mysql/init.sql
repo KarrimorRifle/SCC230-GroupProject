@@ -32,7 +32,7 @@ CREATE TABLE `accounts_hubsRelation`(
 );
 
 CREATE TABLE `devices`(
-    `DeviceID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
     `DeviceType` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
@@ -55,12 +55,18 @@ CREATE TABLE `schedules`(
 );
 
 CREATE TABLE `triggers`(
-    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `TriggerName` VARCHAR(255) NOT NULL,
+    `TriggerID` VARCHAR(100) NOT NULL PRIMARY KEY,
+    `DeviceID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    `EventListenerID` BIGINT NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID)
 );
+
+CREATE TABLE `trigger_data`(
+    `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `TriggerID` varchar(100) NOT NULL,
+    `Data` varchar(255) NOT NULL,
+)
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
