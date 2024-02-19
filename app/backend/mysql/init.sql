@@ -65,7 +65,7 @@ CREATE TABLE `triggers`(
 CREATE TABLE `function_blocks`( 
     `BlockID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
-    `Num` INT NOT NULL UNIQUE, 
+    `Num` INT NOT NULL, 
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
     -- `num` referenced as foreign key, must be unique.
@@ -86,8 +86,7 @@ CREATE TABLE `function_block_links`(
     `Link` INT NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
-    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID),
-    FOREIGN KEY (Link) REFERENCES function_blocks(Num)
+    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID)
 );
 
 -- To reset DB delete the container and start up again
