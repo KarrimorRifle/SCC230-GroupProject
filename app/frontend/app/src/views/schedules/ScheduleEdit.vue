@@ -1,5 +1,5 @@
 <template>
-  <div class="main mx-0">
+  <div class="main mx-0 d-flex">
     <div class="header">
       <h2>Name of the schedule</h2>
     </div>
@@ -18,9 +18,10 @@ import BlockEditor from "./BlockEditor.vue";
 </script>
 <style>
 .main {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: rgb(35, 39, 49);
+  flex-direction: column;
 }
 
 .header {
