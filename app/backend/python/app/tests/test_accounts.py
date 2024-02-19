@@ -2,6 +2,7 @@ import unittest
 from server import app
 
 from flask import request, jsonify, make_response
+from json import loads
 
 class test_accounts(unittest.TestCase):
     def setUp(self):
@@ -60,4 +61,37 @@ class test_accounts(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         response = self.client_server.get("/accounts")
+        self.assertEqual(response.status_code, 200)
+    
+    def test_accounts_get_returns_correct(self):
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client_server.get("/accounts")
+        self.assertEqual(loads(response.text)['AccountID'], "Accojk42VvlqdeBpOBc")
+
+
+class test_login_out(unittest.TestCase):
+    def setUp(self):
+        self.client_server = app.test_client()
+
+    def test_login_no_data(self):
+        response = self.client_server.post("/login")
+
+        #checks if response status code is correct
+        self.assertEqual(response.status_code, 415)
+
+    def test_login_wrong_email(self):
+        response = self.client_server.post("/login", json={"Email": "fake@mail.com", "Password": "JhonDoe123."})
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_login_wrong_password(self):
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "Something"})
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_login_correct_details(self):
+        response = self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+
         self.assertEqual(response.status_code, 200)

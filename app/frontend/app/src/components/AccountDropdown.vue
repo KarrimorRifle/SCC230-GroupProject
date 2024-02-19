@@ -19,9 +19,22 @@
 </template>
 
 <script lang="ts" setup>
-const logout = () => {
-  //handle logging out
-  return "hi";
+import router from "@/router";
+import axios from "axios";
+import { deleteCookie } from "@/functions";
+
+const logout = async () => {
+  let data;
+  try {
+    data = await axios.delete("http://localhost:5000/logout", {
+      withCredentials: true,
+    });
+    deleteCookie("SessionID");
+    router.push("home");
+  } catch (e) {
+    console.log(e);
+    console.log(data);
+  }
 };
 
 let User = {

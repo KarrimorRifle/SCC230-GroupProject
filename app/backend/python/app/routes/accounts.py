@@ -2,6 +2,7 @@ from flask import request, jsonify, make_response, Blueprint, current_app
 import bcrypt
 import uuid
 from datetime import datetime, timedelta
+from iota import genRandomID
 
 accounts = Blueprint('accounts', __name__)
 
@@ -19,11 +20,14 @@ def accountsResonse():
 
         #creating a new account
         if cursor.fetchone() is None:
+            query = ("SELECT AccountID FROM accounts")
+            cursor.execute(query)
+            accountIDs = cursor.fetchall()
             sessionID = str(uuid.uuid4())
             sessionExpiry = datetime.now() + timedelta(days = 1)
             response = make_response(jsonify({"success":"Account created successfully"}))
-            query = ("INSERT INTO accounts (FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+            query = ("INSERT INTO accounts (AccountID, FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
+                     "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
             try:
                 cursor.execute(query)
                 connection.commit()
@@ -52,6 +56,8 @@ def accountsResonse():
                 if value == "":
                     continue
                 updateParams.append(f"{key}=%s")
+                if key == "Password":
+                    value = bcrypt.hashpw(value.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
                 values.append(value)
             updateParams = ', '.join(updateParams)
 
@@ -102,7 +108,54 @@ def accountsResonse():
             return jsonify(account)
         else:
             return 401
+        
+@accounts.route("/login", methods=["POST"])
+def login():
+    cursor = current_app.config['cursor']
+    connection= current_app.config['connection']
 
+    email = request.json.get("Email")
+    password = request.json.get("Password")
+    password = password.encode("utf-8")
+    
+    query = f"SELECT * FROM accounts WHERE Email = %s"
+    cursor.execute(query, (email,))
+    account = cursor.fetchone()
+    if account is None:
+        return jsonify({"error":"Details don't match our system"}), 403
+
+    if bcrypt.checkpw(password, account.get("Password").encode("utf-8")):
+        response = make_response(jsonify({"success":"Logged in successfully"}))
+        sessionID = str(uuid.uuid4())
+        sessionExp = datetime.now() + timedelta(days = 1)
+
+        try:
+            cursor.execute("UPDATE accounts SET SessionID = %s, SessionExp = %s WHERE AccountID = %s",(sessionID,sessionExp,account.get("AccountID")))
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
+        
+        response.set_cookie('session_id', sessionID, max_age=24*60*60)
+        return(response)
+
+    else:
+        return jsonify({"error":"Details don't match our system"}), 403
+    
+@accounts.route("/logout", methods=["DELETE"])
+def logout():
+    cursor = current_app.config['cursor']
+    connection= current_app.config['connection']
+
+    sessionID = request.cookies.get('session_id')
+    try:
+        cursor.execute("UPDATE accounts SET SessionID = NULL, SessionExp = %s WHERE SessionID = %s",(datetime.now(), sessionID))
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
+    return
+        
 def getAccount():
     cursor = current_app.config['cursor']
     connection= current_app.config['connection']
