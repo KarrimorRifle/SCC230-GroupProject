@@ -76,12 +76,13 @@ CREATE TABLE `trigger_data`(
     `DeviceID` varchar(100) NOT NULL,
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
+    `PosNum` INT UNSIGNED NOT NULL,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
 
-INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`)
-Values("TestTrigger","TestDevice",'');
+INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`PosNum`)
+Values("TestTrigger","TestDevice",'',0);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,

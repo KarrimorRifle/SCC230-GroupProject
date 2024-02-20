@@ -41,7 +41,7 @@ def loadFromDatabase(id:str):
         nextLine = cursor.fetchone()
         data = {}
         while(nextLine != None):
-            data[nextLine['DeviceID']].append(nextLine['Data'])
+            data[nextLine['DeviceID']][nexLine['PosNum']] = nexLine['data']
             nextLine = cursor.fetchone()
         return Trigger(str(Trigger['TriggerID']), data, ScheduleID)
     else:
