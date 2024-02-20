@@ -34,5 +34,5 @@ export interface Device {
   id: string;
   name: string;
   isActive: boolean;
-  data: Record<string,number | boolean>; //string is variable name which is the key, value can be either a number or boolean
+  data: Record<string, number | boolean>; //string is variable name which is the key, value can be either a number or boolean
 }
