@@ -76,9 +76,12 @@ CREATE TABLE `trigger_data`(
     `DeviceID` varchar(100) NOT NULL,
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
+    `ListPos` INT UNSIGNED NOT NULL,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
+
+ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
 
 INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`)
 Values("TestTrigger","TestDevice",'');
@@ -97,9 +100,12 @@ CREATE TABLE `function_block_params`(
     `Value` VARCHAR(255) NOT NULL,
     `FunctionBlockID` varchar(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
+    `ListPos` INT UNSIGNED NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
+
+ALTER TABLE function_block_params MODIFY ListPos INT DEFAULT 0;
 
 CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
