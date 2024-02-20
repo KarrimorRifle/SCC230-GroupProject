@@ -5,8 +5,10 @@
     </div>
     <div class="container-fluid mx-0 px-0">
       <div class="row mx-0">
-        <div class="col-9 px-0">hello</div>
-        <div class="col-3 px-0">
+        <div class="col-8 px-0">
+          <block-item function-type="IF" />
+        </div>
+        <div class="col-4 px-0">
           <block-editor />
         </div>
       </div>
@@ -15,12 +17,13 @@
 </template>
 <script setup lang="ts">
 import BlockEditor from "./BlockEditor.vue";
+import BlockItem from "./BlockItem.vue";
 </script>
 <style>
 .main {
   height: 100%;
   width: 100%;
-  background-color: rgb(35, 39, 49);
+  background-color: rgb(45, 50, 64);
   flex-direction: column;
 }
 
