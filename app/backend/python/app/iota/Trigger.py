@@ -2,7 +2,7 @@
 #Desc:          File to hold the Trigger Class and related Functions
 #               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
 #
-#Last Update:   2024-2-18
+#Last Update:   2024-2-20
 #Updated By:    Blade Eastham
 #Interpreter:   Python 3.11
 
@@ -29,20 +29,22 @@ class Trigger:
 def loadFromDatabase(id:str):
     cursor = current_app.config['cursor']
     connection= current_app.config['connection']
-    query = ("SELECT ScheduleID FROM schedules"
-                "WHERE TriggerID = %s")
-    cursor.execute(query, (id,))
-    ScheduleIDs = cursor.fetchall()
+
     query = ("SELECT * FROM triggers "
                 "WHERE TriggerID = %s")
-
     cursor.execute(query, (id,))
     Trigger = cursor.fetchone()
+    if(trigger!=None):
+        query = ("SELECT ScheduleID FROM schedules"
+                    "WHERE TriggerID = %s")
+        cursor.execute(query, (id,))
+        ScheduleIDs = cursor.fetchall()
 
-    #data parsing here
-    #I don't know the format
+        data = json.loads(trigger['Data'])
 
-    return Trigger(str(Trigger['TriggerID']), Trigger['Data'], ScheduleIDs)
+        return Trigger(str(Trigger['TriggerID']), data, ScheduleIDs)
+    else:
+        return None
 
 def checkTriggers():
     pass
