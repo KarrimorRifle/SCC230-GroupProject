@@ -21,10 +21,10 @@ class Trigger:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, data:dict[Device, list[str]]={}, ScheduleIDs:list[str]=[], debug:bool=False):
+    def __init__(self, id:str, data:dict[Device, list[str]]={}, ScheduleID:str, debug:bool=False):
         self.id = id
         self.data = data
-        self.ScheduleIDs = ScheduleIDs
+        self.ScheduleID = ScheduleID
         self.debug = debug
 
 def loadFromDatabase(id:str):
@@ -36,9 +36,16 @@ def loadFromDatabase(id:str):
     cursor.execute(query, (id,))
     Trigger = cursor.fetchone()
     if(trigger!=None):
-        data = 
-
-        return Trigger(str(Trigger['TriggerID']), data, ScheduleIDs)
+        ScheduleID = Trigger['ScheduleID']
+        query = ("SELECT * FROM triggers "
+                    "WHERE TriggerID = %s")
+        cursor.execute(query, (id,))
+        nextDevice = cursor.fetchone()
+        data = {}
+        while(nextDevice != None):
+            data[nextDevice['DeviceID']] = nextDevice['Data']
+            nextDevice = cursor.fetchone()
+        return Trigger(str(Trigger['TriggerID']), data, ScheduleID)
     else:
         return None
 
