@@ -8,7 +8,7 @@
 
 ##IMPORTS##
 import json
-from flask import current_app
+from server import app
 
 #CLASS DEFINITION#
 class Trigger:
@@ -26,8 +26,8 @@ class Trigger:
         self.debug = debug
 
 def loadFromDatabase(id:str):
-    cursor = current_app.config['cursor']
-    connection= current_app.config['connection']
+    cursor = app.config['cursor']
+    connection= app.config['connection']
 
     query = ("SELECT * FROM triggers "
                 "WHERE TriggerID = %s")
