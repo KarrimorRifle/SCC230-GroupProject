@@ -61,19 +61,19 @@ class TestScheduleRoutes(unittest.TestCase):
                 'CommandType': 'IF',
                 'Number': 1,
                 'LinkedCommands': [2],
-                'Params': ['a', 'b', 'c'],
+                'Params': ['5', '>=', '4'],
             },
             {
                 'CommandType': 'OTHERWISE',
                 'Number': 2,
                 'LinkedCommands': [],
-                'Params': ['e', 'f', 'g'],
+                'Params': ['7', '==', '7'],
             },
             {
                 'CommandType': 'WHILE',
                 'Number': 3,
                 'LinkedCommands': [],
-                'Params': ['h', 'i', 'j'],
+                'Params': ['9', '<=', '10'],
             }
         ]
 
