@@ -43,7 +43,7 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
-INSERT INTO triggers(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
+INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
 Values("TestDevice","Test Device","Test Device","1.1.1.1","TestHub");
 
 CREATE TABLE `schedules`(
