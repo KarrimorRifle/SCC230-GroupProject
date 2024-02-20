@@ -8,9 +8,8 @@
 
 ##IMPORTS##
 import json
-from iota.Device import Device
-from iota.Schedule import Schedule
 from server import app
+from flask import current_app
 
 #CLASS DEFINITION#
 class Trigger:
@@ -21,7 +20,7 @@ class Trigger:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, data:dict[Device, list[str]]={}, ScheduleID:str, debug:bool=False):
+    def __init__(self, id:str, ScheduleID:str, data:dict[str, list[str]],  debug:bool=False):
         self.id = id
         self.data = data
         self.ScheduleID = ScheduleID

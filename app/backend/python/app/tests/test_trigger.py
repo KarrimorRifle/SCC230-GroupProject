@@ -10,7 +10,7 @@ class test_accounts(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_trigger_creation(self):
-        test = Trigger.Trigger("Trig1")
+        test = Trigger.Trigger("Trig1",{})
 
         self.assertEqual(test.id, "Trig1")
 
