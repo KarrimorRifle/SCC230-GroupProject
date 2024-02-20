@@ -4,7 +4,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
 import BlockItem from "./BlockItem.vue";
 </script>
 <style>
