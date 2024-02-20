@@ -27,9 +27,9 @@ def accountsResonse():
             sessionExpiry = datetime.now() + timedelta(days = 1)
             response = make_response(jsonify({"success":"Account created successfully"}))
             query = ("INSERT INTO accounts (AccountID, FirstName, Surname, Email, `Password`, SessionID, SessionExp) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry))
+                     "VALUES (%s,%s,%s,%s,%s,%s,%s)")
             try:
-                cursor.execute(query)
+                cursor.execute(query, (genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry,))
                 connection.commit()
                 response.set_cookie('session_id',value=sessionID, max_age=24*60*60, samesite='None', secure=True)
                 return response
