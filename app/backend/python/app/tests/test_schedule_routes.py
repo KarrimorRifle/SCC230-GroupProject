@@ -77,7 +77,9 @@ class TestScheduleRoutes(unittest.TestCase):
             }
         ]
 
-        trigger = {'Dev2ds2sd2123342': ['Var', '==', '5'], 'Dev6gde4d21n5345': ['Var2', '==', '8']}
+        val1 = ['Var', '==', '5']
+        val2 = ['Var2', '==', '8']
+        trigger = {'TestDevice': val1, 'TestDevice': val2}
 
         newName = 'Name Update Schedule3'
 

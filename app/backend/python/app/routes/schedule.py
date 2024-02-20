@@ -215,7 +215,7 @@ def update_schedule(account, cursor, connection, scheduleID):
                     "VALUES ")
         values = ()
 
-        for key, val in newTriggers:
+        for key, val in newTriggers.items():
             for v in val:
                 query += ("(%s,%s,%s),")
                 values += (triggerID, key, v,)
