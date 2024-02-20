@@ -9,6 +9,7 @@
 ##IMPORTS##
 import json
 from server import app
+from iota.Api import Api
 
 #CLASS DEFINITION#
 class Trigger:
