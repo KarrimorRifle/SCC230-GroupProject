@@ -17,8 +17,11 @@ class test_triggers(unittest.TestCase):
     def test_trigger_loadFromDB(self):
         test = Trigger.loadFromDatabase("TestTrigger")
 
-        expected = Trigger.Trigger("TestTrigger",{'TestDevice':''},"TestSchedule")
+        expected = Trigger.Trigger(id="TestTrigger",data={'TestDevice':''},ScheduleID="TestSchedule")
 
-        self.assertEqual(test,expected)
+        self.assertEqual(test.id,expected.id)
+        self.assertEqual(test.ScheduleID,expected.ScheduleID)
+        self.assertEqual(test.data,expected.data)
+        self.assertEqual(test.debug,expected.debug)
 
     #add test for load from DB (requires DB creation)
