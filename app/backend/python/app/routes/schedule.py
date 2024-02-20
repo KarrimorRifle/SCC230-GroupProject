@@ -211,14 +211,16 @@ def update_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
         
-        query = ("INSERT INTO trigger_data (TriggerID, DeviceID, Data) "
+        query = ("INSERT INTO trigger_data (TriggerID, DeviceID, Data, ListPos) "
                     "VALUES ")
         values = ()
 
         for key, val in newTriggers.items():
+            pos = 0
             for v in val:
-                query += ("(%s,%s,%s),")
-                values += (triggerID, key, v,)
+                query += ("(%s,%s,%s,%s),")
+                values += (triggerID, key, v,pos,)
+                pos += 1
         
         query = query[:-1]
         try:
@@ -253,7 +255,7 @@ def update_schedule(account, cursor, connection, scheduleID):
                  "VALUES "),
                 ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
                  "VALUES "),
-                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
+                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID, ListPos) "
                  "VALUES ")]
     values = [(), (), ()]
 
@@ -267,10 +269,12 @@ def update_schedule(account, cursor, connection, scheduleID):
         for link in funcBlock['LinkedCommands']:
             queries[1] += ("(%s,%s,%s),")
             values[1] += (blockID, link, scheduleID,)
-            
+
+        pos = 0
         for param in funcBlock['Params']:
-            queries[2] += ("(%s,%s,%s),")
-            values[2] += (param, blockID, scheduleID,)
+            queries[2] += ("(%s,%s,%s,%s),")
+            values[2] += (param, blockID, scheduleID, pos,)
+            pos += 1
 
     i = 0
     for query in queries:
