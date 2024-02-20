@@ -52,26 +52,35 @@ def get_schedule_detail(account, cursor, scheduleID):
     cursor.execute(query, (scheduleID,))
     triggers = cursor.fetchall()
 
-    emptyBlock = {'CommandType': '', 'Number': 0, 'LinkedCommands': [int], 'Params': [str]}
-    code = [emptyBlock for _ in range(len(functionBlocks))]
+    code = []
 
-    i = 0
+    query = ("SELECT Link, ParentID FROM function_block_links "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    linkedCommands = cursor.fetchall()
+    linkedCommands = [link for link in linkedCommands]
+
+    query = ("SELECT Value, FunctionBlockID FROM function_block_params "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    params = cursor.fetchall()
+    params = [param for param in params]
+
+    links = []
+    paramVals = []
     for block in functionBlocks:
-        query = ("SELECT Link FROM function_block_links "
-                "WHERE ScheduleID = %s AND ParentID = %s")
-        cursor.execute(query, (scheduleID, block['BlockID'],))
-        linkedCommands = cursor.fetchall()
-        linkedCommands = [command['Link'] for command in linkedCommands]
+        for link in linkedCommands:
+            if link['ParentID'] == block['BlockID']:
+                links.append(link['Link'])
 
-        query = ("SELECT Value FROM function_block_params "
-                "WHERE ScheduleID = %s AND FunctionBlockID = %s")
-        cursor.execute(query, (scheduleID, block['BlockID'],))
-        params = cursor.fetchall()
-        params = [param['Value'] for param in params]
+        for param in params:
+            if param['FunctionBlockID'] == block['BlockID']:
+                paramVals.append(param['Value'])
 
-        funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': linkedCommands, 'Params': params}
-        code[i] = funcBlock
-        i+=1
+        funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
+        code.append(funcBlock)
+        links = []
+        paramVals = []
 
     details = {'EventID': schedule['EventID'],
                'AuthorID': schedule['AuthorID'],
@@ -184,10 +193,11 @@ def update_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to initiate update schedule code", "details":f"{e}"})), 500
     
+    query = ("SELECT BlockID FROM function_blocks")
+    cursor.execute(query)
+    blockIDs = cursor.fetchall()
+
     for funcBlock in newCode:
-        query = ("SELECT EventID FROM schedules")
-        cursor.execute(query)
-        blockIDs = cursor.fetchall()
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
         query = ("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
                  "VALUES ('{}','{}','{}','{}')".format(blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID))
@@ -230,6 +240,7 @@ def scheduleResponse():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+    cursor.fetchall()
 
     if request.method == 'GET':
         return get_schedules(account, cursor)
@@ -249,6 +260,7 @@ def scheduleDetails(scheduleID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+    cursor.fetchall()
 
     if request.method == 'GET':
         return get_schedule_detail(account, cursor, scheduleID)
