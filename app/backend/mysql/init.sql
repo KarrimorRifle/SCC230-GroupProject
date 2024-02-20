@@ -56,16 +56,17 @@ CREATE TABLE `schedules`(
 
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL PRIMARY KEY,
-    `DeviceID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
-    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID)
 );
 
 CREATE TABLE `trigger_data`(
-    `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `TriggerID` varchar(100) NOT NULL,
+    'DeviceID' varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID)
 )
 
 CREATE TABLE `function_blocks`( 
