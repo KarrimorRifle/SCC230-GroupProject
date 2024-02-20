@@ -37,14 +37,22 @@
               :key="'condition' + index"
             >
               <div class="input-group">
+                <div
+                  v-if="display"
+                  class="input-group-text border-light p-0"
+                  style="width: 5rem"
+                ></div>
                 <input
+                  v-else
                   type="number"
                   class="input-group-text border-light p-0"
+                  :class="{ disabled: display }"
                   style="width: 5rem"
                   v-model="item.value1"
                 />
                 <button
                   class="btn btn-outline-secondary text-light btn-sm"
+                  :class="{ disabled: display }"
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -101,9 +109,16 @@
                     </button>
                   </li>
                 </ul>
+                <div
+                  v-if="display"
+                  class="input-group-text border-light p-0"
+                  style="width: 5rem"
+                ></div>
                 <input
+                  v-else
                   type="number"
                   class="input-group-text border-light p-0"
+                  :class="{ disabled: display }"
                   style="width: 5rem"
                   v-model="item.value2"
                 />
@@ -181,6 +196,7 @@
         <div class="col-3 justify-content-end px-0">
           <button
             class="btn btn-outline-success btn-sm text-light"
+            :class="{ disabled: display }"
             style="font-size: 80%"
             @click="
               conditions.conditions.push({
@@ -209,7 +225,7 @@
     <button
       class="d-flex align-content-center justify-content-center mt-1"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
-      @click="console.log(getCodeContent())"
+      v-if="lastBlock"
     >
       <img
         src="@/assets/plus.svg"
@@ -259,7 +275,8 @@ const getCodeContent = (): string[] | boolean => {
 
 defineProps<{
   trigger?: boolean;
-  lastCommand?: boolean;
+  lastBlock?: boolean;
+  display?: boolean;
   commandType: CommandType;
 }>();
 
