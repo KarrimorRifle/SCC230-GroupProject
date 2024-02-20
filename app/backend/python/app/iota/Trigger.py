@@ -32,18 +32,18 @@ def loadFromDatabase(id:str):
     query = ("SELECT * FROM triggers "
                 "WHERE TriggerID = %s")
     cursor.execute(query, (id,))
-    Trigger = cursor.fetchone()
+    trigger = cursor.fetchone()
     if(trigger!=None):
-        ScheduleID = Trigger['ScheduleID']
+        ScheduleID = trigger['ScheduleID']
         query = ("SELECT * FROM trigger_data "
                     "WHERE TriggerID = %s")
         cursor.execute(query, (id,))
         nextLine = cursor.fetchone()
         data = {}
         while(nextLine != None):
-            data[nextLine['DeviceID']].append(nextLine['Data'])
+            data[nextLine['DeviceID']] = nextLine['Data']
             nextLine = cursor.fetchone()
-        return Trigger(str(Trigger['TriggerID']), data, ScheduleID)
+        return Trigger(id=trigger['TriggerID'], data=data, ScheduleID=ScheduleID)
     else:
         return None
 
