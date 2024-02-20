@@ -1,6 +1,6 @@
 <template>
   <div id="editor" class="main p-3">
-    <block-item :function-type="'IF'" />
+    <block-item :command-type="'IF'" />
   </div>
 </template>
 <script setup lang="ts">
