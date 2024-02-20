@@ -10,6 +10,7 @@
 import json
 from iota.Device import Device
 from iota.Schedule import Schedule
+from server import app
 
 #CLASS DEFINITION#
 class Trigger:
@@ -35,12 +36,7 @@ def loadFromDatabase(id:str):
     cursor.execute(query, (id,))
     Trigger = cursor.fetchone()
     if(trigger!=None):
-        query = ("SELECT ScheduleID FROM schedules"
-                    "WHERE TriggerID = %s")
-        cursor.execute(query, (id,))
-        ScheduleIDs = cursor.fetchall()
-
-        data = json.loads(trigger['Data'])
+        data = 
 
         return Trigger(str(Trigger['TriggerID']), data, ScheduleIDs)
     else:
