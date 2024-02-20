@@ -22,9 +22,9 @@ def create_schedule(account, cursor, connection):
     scheduleIDs = cursor.fetchall()
     thisID = genRandomID(ids=scheduleIDs, prefix='Sch')
     query = ("INSERT INTO schedules (EventID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
-                     "VALUES ('{}','{}','{}','{}','{}','{}')".format(thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating')))
+                     "VALUES (%s,%s,%s,%s,%s,%s)")
     try:
-        cursor.execute(query)
+        cursor.execute(query, (thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating'),))
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -52,26 +52,35 @@ def get_schedule_detail(account, cursor, scheduleID):
     cursor.execute(query, (scheduleID,))
     triggers = cursor.fetchall()
 
-    emptyBlock = {'CommandType': '', 'Number': 0, 'LinkedCommands': [int], 'Params': [str]}
-    code = [emptyBlock for _ in range(len(functionBlocks))]
+    code = []
 
-    i = 0
+    query = ("SELECT Link, ParentID FROM function_block_links "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    linkedCommands = cursor.fetchall()
+    linkedCommands = [link for link in linkedCommands]
+
+    query = ("SELECT Value, FunctionBlockID FROM function_block_params "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    params = cursor.fetchall()
+    params = [param for param in params]
+
+    links = []
+    paramVals = []
     for block in functionBlocks:
-        query = ("SELECT Link FROM function_block_links "
-                "WHERE ScheduleID = %s AND ParentID = %s")
-        cursor.execute(query, (scheduleID, block['BlockID'],))
-        linkedCommands = cursor.fetchall()
-        linkedCommands = [command['Link'] for command in linkedCommands]
+        for link in linkedCommands:
+            if link['ParentID'] == block['BlockID']:
+                links.append(link['Link'])
 
-        query = ("SELECT Value FROM function_block_params "
-                "WHERE ScheduleID = %s AND FunctionBlockID = %s")
-        cursor.execute(query, (scheduleID, block['BlockID'],))
-        params = cursor.fetchall()
-        params = [param['Value'] for param in params]
+        for param in params:
+            if param['FunctionBlockID'] == block['BlockID']:
+                paramVals.append(param['Value'])
 
-        funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': linkedCommands, 'Params': params}
-        code[i] = funcBlock
-        i+=1
+        funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
+        code.append(funcBlock)
+        links = []
+        paramVals = []
 
     details = {'EventID': schedule['EventID'],
                'AuthorID': schedule['AuthorID'],
@@ -100,13 +109,14 @@ def delete_schedule(account, cursor, connection, scheduleID):
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
                ("DELETE FROM triggers WHERE ScheduleID = %s" )]
 
-    for i in range(len(queries)):
-        try:
-            cursor.execute(queries[i], (scheduleID,))
-            connection.commit()
-        except Exception as e:
-            connection.rollback()
-            return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
+    for query in queries:
+        cursor.execute(query, (scheduleID,))
+
+    try:
+        connection.commit()
+    except:
+        connection.rollback()
+        return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 
     return jsonify(scheduleID), 200
 
@@ -158,16 +168,20 @@ def update_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to complete update schedule", "details":f"{e}"})), 500
         
+        query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
+                    "VALUES ")
+        values = ()
         for trigger in newTriggers:
-            query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
-                    "VALUES ('{}','{}','{}')".format(trigger['TriggerName'], scheduleID, trigger['EventListenerID']))
-            
-            try:
-                cursor.execute(query)
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
+            query += ("(%s,%s,%s),")
+            values += (trigger['TriggerName'], scheduleID, trigger['EventListenerID'],)
+
+        query = query[:-1]
+        try:
+            cursor.execute(query, values)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
 
     if newCode == []:
         return get_schedule_detail(account, cursor, scheduleID)
@@ -176,48 +190,54 @@ def update_schedule(account, cursor, connection, scheduleID):
                ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" )]
 
-    for i in range(len(queries)):
-        try:
-            cursor.execute(queries[i], (scheduleID,))
-            connection.commit()
-        except Exception as e:
-            connection.rollback()
-            return(jsonify({"error":"Unable to initiate update schedule code", "details":f"{e}"})), 500
-    
-    for funcBlock in newCode:
-        query = ("SELECT EventID FROM schedules")
-        cursor.execute(query)
-        blockIDs = cursor.fetchall()
-        blockID = genRandomID(ids=blockIDs, prefix='Fun')
-        query = ("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
-                 "VALUES ('{}','{}','{}','{}')".format(blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID))
+    for query in queries:
+        cursor.execute(query, (scheduleID,))
 
-        try:
-            cursor.execute(query)
-            connection.commit()
-        except Exception as e:
-            connection.rollback()
-            return(jsonify({"error":"Unable to complete update schedule code", "details":f"{e}"})), 500
+    try:
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return(jsonify({"error":"Unable to initiate update schedule code", "details":f"{e}"})), 500
+    
+    query = ("SELECT BlockID FROM function_blocks")
+    cursor.execute(query)
+    blockIDs = cursor.fetchall()
+    blockIDs = [blockID['BlockID'] for blockID in blockIDs]
+
+    queries = [("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
+                 "VALUES "),
+                ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
+                 "VALUES "),
+                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
+                 "VALUES ")]
+    values = [(), (), ()]
+
+    for funcBlock in newCode:
+        blockID = genRandomID(ids=blockIDs, prefix='Fun')
+        blockIDs.append(blockID)
+
+        queries[0] += ("(%s,%s,%s,%s),")
+        values[0] += (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,)
 
         for link in funcBlock['LinkedCommands']:
-            query = ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
-                 "VALUES ('{}','{}','{}')".format(blockID, link, scheduleID))
-            try:
-                cursor.execute(query)
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to complete update schedule code links", "details":f"{e}"})), 500
+            queries[1] += ("(%s,%s,%s),")
+            values[1] += (blockID, link, scheduleID,)
             
         for param in funcBlock['Params']:
-            query = ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
-                 "VALUES ('{}','{}','{}')".format(param, blockID, scheduleID))
-            try:
-                cursor.execute(query)
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to complete update schedule code params", "details":f"{e}"})), 500
+            queries[2] += ("(%s,%s,%s),")
+            values[2] += (param, blockID, scheduleID,)
+
+    i = 0
+    for query in queries:
+        query = query[:-1]
+        cursor.execute(query, values[i])
+        i+=1
+
+    try:
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
             
     return get_schedule_detail(account, cursor, scheduleID)
 
@@ -230,6 +250,7 @@ def scheduleResponse():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+    cursor.fetchall()
 
     if request.method == 'GET':
         return get_schedules(account, cursor)
@@ -249,6 +270,7 @@ def scheduleDetails(scheduleID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+    cursor.fetchall()
 
     if request.method == 'GET':
         return get_schedule_detail(account, cursor, scheduleID)
