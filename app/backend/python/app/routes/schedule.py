@@ -6,7 +6,7 @@ schedule = Blueprint('schedule', __name__)
 
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
-    query = ("SELECT EventID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
@@ -17,11 +17,11 @@ def get_schedules(account, cursor):
 def create_schedule(account, cursor, connection):
     # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
     scheduleName = request.json.get("ScheduleName")
-    query = ("SELECT EventID FROM schedules")
+    query = ("SELECT ScheduleID FROM schedules")
     cursor.execute(query)
     scheduleIDs = cursor.fetchall()
     thisID = genRandomID(ids=scheduleIDs, prefix='Sch')
-    query = ("INSERT INTO schedules (EventID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
+    query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
                      "VALUES (%s,%s,%s,%s,%s,%s)")
     try:
         cursor.execute(query, (thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating'),))
@@ -30,11 +30,11 @@ def create_schedule(account, cursor, connection):
         connection.rollback()
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({'EventID':thisID}), 200
+    return jsonify({'ScheduleID':thisID}), 200
 
 def get_schedule_detail(account, cursor, scheduleID):
     query = ("SELECT * FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     schedule = cursor.fetchone()
 
@@ -82,7 +82,7 @@ def get_schedule_detail(account, cursor, scheduleID):
         links = []
         paramVals = []
 
-    details = {'EventID': schedule['EventID'],
+    details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
                'ScheduleName': schedule['ScheduleName'],
                'IsActive': schedule['IsActive'],
@@ -95,15 +95,15 @@ def get_schedule_detail(account, cursor, scheduleID):
 
 # Function deletes schedule of specified ID as long as user is the author
 def delete_schedule(account, cursor, connection, scheduleID):
-    query = ("SELECT EventID FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+    query = ("SELECT ScheduleID FROM schedules "
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
     if checkID is None:
         return({"error": "Forbidden access"}), 401
 
-    queries = [("DELETE FROM schedules WHERE EventID = %s" ),
+    queries = [("DELETE FROM schedules WHERE ScheduleID = %s" ),
                ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
@@ -122,8 +122,8 @@ def delete_schedule(account, cursor, connection, scheduleID):
 
 # WORK IN PROGRESS
 def update_schedule(account, cursor, connection, scheduleID):
-    query = ("SELECT EventID FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+    query = ("SELECT ScheduleID FROM schedules "
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
@@ -149,7 +149,7 @@ def update_schedule(account, cursor, connection, scheduleID):
         values.append(value)
     updateParams = ', '.join(updateParams)
 
-    query = (f"UPDATE schedules SET {updateParams} WHERE EventID = %s AND AuthorID = %s")
+    query = (f"UPDATE schedules SET {updateParams} WHERE ScheduleID = %s AND AuthorID = %s")
     values.extend([scheduleID, account['AccountID']])
 
     try:

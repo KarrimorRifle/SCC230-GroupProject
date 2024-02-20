@@ -40,10 +40,8 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
-CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
-
 CREATE TABLE `schedules`(
-    `EventID` varchar(100) NOT NULL PRIMARY KEY,
+    `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
     `AuthorID` varchar(100) NOT NULL,
     `HubID` varchar(100),
@@ -57,24 +55,24 @@ CREATE TABLE `schedules`(
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL PRIMARY KEY,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
 );
 
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `TriggerID` varchar(100) NOT NULL,
-    'DeviceID' varchar(100) NOT NULL,
+    `DeviceID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID),
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID)
-)
+);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL, 
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
     -- `num` referenced as foreign key, must be unique.
 );
 
@@ -83,7 +81,7 @@ CREATE TABLE `function_block_params`(
     `Value` VARCHAR(255) NOT NULL,
     `FunctionBlockID` varchar(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
 
@@ -92,7 +90,7 @@ CREATE TABLE `function_block_links`(
     `ParentID` varchar(100) NOT NULL,
     `Link` INT NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID), 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID)
 );
 
