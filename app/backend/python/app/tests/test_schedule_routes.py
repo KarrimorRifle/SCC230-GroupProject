@@ -53,7 +53,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
-        self.assertIn('Triggers', data)
+        self.assertIn('Trigger', data)
     
     def test_update_schedule_success(self):
         code = [
@@ -77,12 +77,7 @@ class TestScheduleRoutes(unittest.TestCase):
             }
         ]
 
-        triggers = [
-            {
-                'TriggerName': 'New trigger',
-                'EventListenerID': '1'
-            }
-        ]
+        trigger = {'Dev2ds2sd2123342': ['Var', '==', '5'], 'Dev6gde4d21n5345': ['Var2', '==', '8']}
 
         newName = 'Name Update Schedule3'
 
@@ -90,7 +85,7 @@ class TestScheduleRoutes(unittest.TestCase):
             'ScheduleName': newName,
             'IsPublic': 1,
             'Code': code,
-            'Triggers': triggers,
+            'Trigger': trigger,
         }
 
         response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
@@ -110,7 +105,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
-        self.assertIn('Triggers', data)
+        self.assertIn('Trigger', data)
         self.assertEqual(data['ScheduleName'], newName)
         self.assertEqual(data['IsPublic'], 1)
         self.assertIn(code[0], data['Code'])
