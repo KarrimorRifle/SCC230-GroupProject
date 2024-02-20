@@ -2,7 +2,7 @@ export type CommandType =
   | "FOR"
   | "WHILE"
   | "IF"
-  | "OTHERWISE"
+  | "ELSE"
   | "SET"
   | "GET"
   | "END";
