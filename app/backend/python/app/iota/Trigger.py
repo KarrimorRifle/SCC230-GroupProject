@@ -8,7 +8,6 @@
 
 ##IMPORTS##
 import json
-from server import app
 from flask import current_app
 
 #CLASS DEFINITION#
@@ -42,7 +41,7 @@ def loadFromDatabase(id:str):
         nextLine = cursor.fetchone()
         data = {}
         while(nextLine != None):
-            data[nextLine['DeviceID']].appent(nextLine['Data'])
+            data[nextLine['DeviceID']].append(nextLine['Data'])
             nextLine = cursor.fetchone()
         return Trigger(str(Trigger['TriggerID']), data, ScheduleID)
     else:
