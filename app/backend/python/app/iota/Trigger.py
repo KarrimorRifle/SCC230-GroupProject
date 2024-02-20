@@ -33,7 +33,7 @@ def loadFromDatabase(id:str):
                 "WHERE TriggerID = %s")
     cursor.execute(query, (id,))
     Trigger = cursor.fetchone()
-    if(trigger!=None):
+    if(Trigger!=None):
         ScheduleID = Trigger['ScheduleID']
         query = ("SELECT * FROM trigger_data "
                     "WHERE TriggerID = %s")
