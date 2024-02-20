@@ -9,7 +9,7 @@
 ##IMPORTS##
 import json
 from server import app
-from iota.Api import Api
+from flask import current_app
 
 #CLASS DEFINITION#
 class Trigger:
