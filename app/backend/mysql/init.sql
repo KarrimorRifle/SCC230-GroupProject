@@ -83,8 +83,10 @@ CREATE TABLE `trigger_data`(
 
 ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
 
-INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`)
-Values("TestTrigger","TestDevice",'');
+ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
+
+INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`PosNum`)
+Values("TestTrigger","TestDevice",'',0);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
