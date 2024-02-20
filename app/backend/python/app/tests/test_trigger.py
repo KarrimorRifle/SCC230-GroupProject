@@ -13,3 +13,5 @@ class test_accounts(unittest.TestCase):
         test = Trigger.Trigger("Trig1")
 
         self.assertEqual(test.id, "Trig1")
+
+    #add test for load from DB (requires DB creation)
