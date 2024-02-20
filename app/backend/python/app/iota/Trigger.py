@@ -27,7 +27,6 @@ class Trigger:
 
 def loadFromDatabase(id:str):
     cursor = app.config['cursor']
-    connection= app.config['connection']
 
     query = ("SELECT * FROM triggers "
                 "WHERE TriggerID = %s")
