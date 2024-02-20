@@ -11,7 +11,7 @@ export type CommandType =
 export interface FunctionCode {
   commandType: CommandType;
   number: number;
-  linkedCommands?: FunctionCode[];
+  linkedCommands?: number[];
   params?: string[];
 }
 
@@ -34,5 +34,5 @@ export interface Device {
   id: string;
   name: string;
   isActive: boolean;
-  data: Record<string, any>;
+  data: Record<string,number | boolean>; //string is variable name which is the key, value can be either a number or boolean
 }
