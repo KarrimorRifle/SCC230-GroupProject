@@ -10,7 +10,7 @@
 from iota.Device import Device
 from iota import genRandomID
 
-from flask import current_app
+from server import app
 
 ##CLASS DEFINITION##
 class User:
@@ -34,8 +34,7 @@ class User:
 
 
 def loadFromDatabase(id:str) -> User:
-    cursor = current_app.config['cursor']
-    connection= current_app.config['connection']
+    cursor = app.config['cursor']
     query = ("SELECT * FROM accounts "
                 "WHERE AccountID = %s")
 
