@@ -1,7 +1,7 @@
 <template>
-  <div class="nub d-flex" v-if="!trigger">
+  <div class="nub d-flex" v-if="!trigger" id="female-slot">
     <div
-      class="card flex-grow-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
+      class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
       style="border-color: white"
     >
       <div class="card-body py-1"></div>
@@ -213,7 +213,10 @@
       </div>
     </div>
   </div>
-  <div class="d-flex nub justify-content-center">
+  <div class="d-flex nub" id="male-slot">
+    <div class="card border-0 px-1" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="card-body py-1"></div>
+    </div>
     <div
       class="card rounded-0 rounded-bottom border-top-0"
       style="border-color: white"
@@ -221,7 +224,7 @@
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
   </div>
-  <div class="d-flex nub justify-content-center">
+  <div class="d-flex nub justify-content-center" id="add-item">
     <button
       class="d-flex align-content-center justify-content-center mt-1"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
