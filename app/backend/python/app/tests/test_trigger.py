@@ -5,7 +5,7 @@ from json import loads
 sys.path.append((sys.path[0])[:-6])
 import iota.Trigger as Trigger
 
-class test_accounts(unittest.TestCase):
+class test_triggers(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
 
