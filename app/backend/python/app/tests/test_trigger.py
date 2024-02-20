@@ -10,7 +10,7 @@ class test_accounts(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_trigger_creation(self):
-        test = Trigger.Trigger("Trig1",{})
+        test = Trigger.Trigger("Trig1","SchedID", {})
 
         self.assertEqual(test.id, "Trig1")
 
@@ -20,6 +20,5 @@ class test_accounts(unittest.TestCase):
         expected = Trigger.Trigger("TestTrigger",{'TestDevice':''},"TestSchedule")
 
         self.assertEqual(test,expected)
-        pass
 
     #add test for load from DB (requires DB creation)
