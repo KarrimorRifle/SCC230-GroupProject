@@ -80,7 +80,7 @@ fetchData();
 }
 
 .main {
-  height: 100vh;
+  height: 100%;
   width: 90%;
 }
 
