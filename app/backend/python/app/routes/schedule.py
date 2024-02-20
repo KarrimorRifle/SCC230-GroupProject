@@ -202,6 +202,7 @@ def update_schedule(account, cursor, connection, scheduleID):
     query = ("SELECT BlockID FROM function_blocks")
     cursor.execute(query)
     blockIDs = cursor.fetchall()
+    blockIDs = [blockID['BlockID'] for blockID in blockIDs]
 
     queries = [("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
                  "VALUES "),
@@ -213,6 +214,7 @@ def update_schedule(account, cursor, connection, scheduleID):
 
     for funcBlock in newCode:
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
+        blockIDs.append(blockID)
 
         queries[0] += ("(%s,%s,%s,%s),")
         values[0] += (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,)
