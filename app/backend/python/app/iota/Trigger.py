@@ -21,7 +21,7 @@ class Trigger:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, data:dict[Device, list[str]]={}, ScheduleID:str, debug:bool=False):
+    def __init__(self, id:str, ScheduleID:str, data:dict[Device, list[str]],  debug:bool=False):
         self.id = id
         self.data = data
         self.ScheduleID = ScheduleID
