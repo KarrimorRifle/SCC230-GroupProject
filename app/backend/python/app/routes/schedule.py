@@ -74,6 +74,7 @@ def get_schedule_detail(account, cursor, scheduleID):
     cursor.execute(query, (scheduleID,))
     params = cursor.fetchall()
     params = [param for param in params]
+    params = sorted(params, key=lambda x: x['ListPos'])
 
     links = []
     paramVals = []
@@ -82,7 +83,6 @@ def get_schedule_detail(account, cursor, scheduleID):
             if link['ParentID'] == block['BlockID']:
                 links.append(link['Link'])
 
-        #FIX TO SORT LIST POS
         for param in params:
             if param['FunctionBlockID'] == block['BlockID']:
                 paramVals.append(param['Value'])
