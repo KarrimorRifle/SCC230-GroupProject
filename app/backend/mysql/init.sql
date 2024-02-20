@@ -59,7 +59,7 @@ CREATE TABLE `schedules`(
 );
 
 INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`,`Rating`)
-Values("TestSchedule","Test Schedule","DB","TestHub",0,0,0);
+Values("TestSchedule","Test Schedule","Accojk42VvlqdeBpOBc","TestHub",0,0,0);
 
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
