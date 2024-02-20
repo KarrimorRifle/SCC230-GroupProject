@@ -205,10 +205,11 @@
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
   </div>
-  <div class="d-flex nub justify-content-center" v-if="lastCommand">
+  <div class="d-flex nub justify-content-center">
     <button
       class="d-flex align-content-center justify-content-center mt-1"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
+      @click="console.log(getCodeContent())"
     >
       <img
         src="@/assets/plus.svg"
@@ -220,7 +221,7 @@
 </template>
 <script setup lang="ts">
 import { CommandType } from "@/modules/schedules/types";
-import { defineProps, ref } from "vue";
+import { defineProps, ref, defineExpose } from "vue";
 
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 // const compare = ref<CompareValue>("==");
@@ -238,15 +239,32 @@ const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
   joining: [],
 });
 
-// const getConditions(){ getCodeBlock
-//   let strings = [];
-//   string = conditions.value.conditions[0].value1 + conditions.value.conditions[0].compare
-// }
+const getCodeContent = (): string[] | boolean => {
+  let strings: string[] = [];
+  try {
+    conditions.value.conditions.forEach((item, index) => {
+      if (item.value1 == undefined || item.value2 == undefined)
+        throw new Error("INVALID");
+      strings.push(item.value1 + "");
+      strings.push(item.compare);
+      strings.push(item.value2 + "");
+      if (conditions.value.joining[index])
+        strings.push(conditions.value.joining[index]);
+    });
+  } catch {
+    return false;
+  }
+  return strings;
+};
 
 defineProps<{
   trigger?: boolean;
   lastCommand?: boolean;
   commandType: CommandType;
+}>();
+
+defineExpose<{
+  getCodeContent: string[] | boolean;
 }>();
 </script>
 <style>
