@@ -69,7 +69,7 @@ def get_schedule_detail(account, cursor, scheduleID):
     linkedCommands = cursor.fetchall()
     linkedCommands = [link for link in linkedCommands]
 
-    query = ("SELECT Value, FunctionBlockID FROM function_block_params "
+    query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
              "WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
     params = cursor.fetchall()
@@ -82,6 +82,7 @@ def get_schedule_detail(account, cursor, scheduleID):
             if link['ParentID'] == block['BlockID']:
                 links.append(link['Link'])
 
+        #FIX TO SORT LIST POS
         for param in params:
             if param['FunctionBlockID'] == block['BlockID']:
                 paramVals.append(param['Value'])
@@ -138,7 +139,7 @@ def delete_schedule(account, cursor, connection, scheduleID):
 
     return jsonify(scheduleID), 200
 
-# WORK IN PROGRESS
+# Function updates schedule of specified ID if user is author and based on input params
 def update_schedule(account, cursor, connection, scheduleID):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
