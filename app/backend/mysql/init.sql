@@ -20,6 +20,9 @@ CREATE TABLE `hubs`(
     `HubName` VARCHAR(255) NOT NULL
 );
 
+INSERT INTO hubs('HubID','HubName')
+Values("TestHub","Test Hub");
+
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
@@ -40,6 +43,9 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
+INSERT INTO triggers('DeviceID','DeviceName','DeviceType','IpAddress','HubID')
+Values("TestDevice","Test Device","Test Device","1.1.1.1","TestHub");
+
 CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
@@ -52,12 +58,18 @@ CREATE TABLE `schedules`(
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
 );
 
+INSERT INTO schedules('ScheduleID','ScheduleName','AuthorID','HubID','IsActive','IsPublic','Rating')
+Values("TestSchedule","Test Schedule","DB","TestHub",0,0,0);
+
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     PRIMARY KEY (TriggerID, ScheduleID),
     FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
 );
+
+INSERT INTO triggers('TriggerID','ScheduleID')
+Values("TestTrigger","TestSchedule");
 
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -67,6 +79,9 @@ CREATE TABLE `trigger_data`(
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
+
+INSERT INTO trigger_data('TriggerID','DeviceID','Data')
+Values("TestTrigger","TestDevice",'');
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
