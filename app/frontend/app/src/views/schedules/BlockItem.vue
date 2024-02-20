@@ -1,5 +1,29 @@
 <template>
-  <div id="functionCodeItem" class="card border-0">
+  <div class="nub d-flex">
+    <div
+      class="card flex-grow-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
+      style="border-color: white"
+    >
+      <div class="card-body py-1"></div>
+    </div>
+    <div
+      style="border-color: white; background-color: rgba(0, 0, 0, 0)"
+      class="card border-top-0 rounded-top-0"
+    >
+      <div class="card-body p-0 px-3"></div>
+    </div>
+    <div
+      class="card flex-grow-1 border-bottom-0 rounded-bottom-0 border-start-0 rounded-start-0"
+      style="border-color: white"
+    >
+      <div class="card-body py-1"></div>
+    </div>
+  </div>
+  <div
+    id="functionCodeItem"
+    class="card rounded-top-0 border-bottom-0 border-top-0"
+    style="border-color: white"
+  >
     <div class="card-body p-2">
       <div class="row">
         <div class="col-2 px-0 d-flex align-items-start justify-content-center">
@@ -173,10 +197,17 @@
       </div>
     </div>
   </div>
+  <div class="d-flex nub justify-content-center">
+    <div
+      class="card rounded-0 rounded-bottom border-top-0"
+      style="border-color: white"
+    >
+      <div class="card-body p-0 px-3 py-1"></div>
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
 import { CommandType } from "@/modules/schedules/types";
-import { BIconCloudDownloadFill } from "bootstrap-vue";
 import { defineProps, ref } from "vue";
 
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
@@ -207,6 +238,10 @@ defineProps<{
 <style>
 #functionCodeItem {
   width: 28rem !important;
+}
+
+.nub {
+  width: 28rem;
 }
 
 .dropdown-menu {
