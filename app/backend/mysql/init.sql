@@ -53,18 +53,19 @@ CREATE TABLE `schedules`(
 );
 
 CREATE TABLE `triggers`(
-    `TriggerID` VARCHAR(100) NOT NULL PRIMARY KEY,
+    `TriggerID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
+    PRIMARY KEY (TriggerID, ScheduleID),
     FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
 );
 
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `TriggerID` varchar(100) NOT NULL,
     `DeviceID` varchar(100) NOT NULL,
+    `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID),
-    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID)
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
 );
 
 CREATE TABLE `function_blocks`( 
