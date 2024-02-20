@@ -168,16 +168,20 @@ def update_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to complete update schedule", "details":f"{e}"})), 500
         
+        query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
+                    "VALUES ")
+        values = ()
         for trigger in newTriggers:
-            query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
-                    "VALUES (%s,%s,%s)")
-            
-            try:
-                cursor.execute(query, (trigger['TriggerName'], scheduleID, trigger['EventListenerID'],))
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
+            query += ("(%s,%s,%s),")
+            values += (trigger['TriggerName'], scheduleID, trigger['EventListenerID'],)
+
+        query = query[:-1]
+        try:
+            cursor.execute(query, values)
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
 
     if newCode == []:
         return get_schedule_detail(account, cursor, scheduleID)
@@ -199,37 +203,39 @@ def update_schedule(account, cursor, connection, scheduleID):
     cursor.execute(query)
     blockIDs = cursor.fetchall()
 
+    queries = [("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
+                 "VALUES "),
+                ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
+                 "VALUES "),
+                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
+                 "VALUES ")]
+    values = [(), (), ()]
+
     for funcBlock in newCode:
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
-        query = ("INSERT INTO function_blocks (BlockID, CommandType, Num, ScheduleID) "
-                 "VALUES (%s,%s,%s,%s)")
 
-        try:
-            cursor.execute(query, (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,))
-            connection.commit()
-        except Exception as e:
-            connection.rollback()
-            return(jsonify({"error":"Unable to complete update schedule code", "details":f"{e}"})), 500
+        queries[0] += ("(%s,%s,%s,%s),")
+        values[0] += (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,)
 
         for link in funcBlock['LinkedCommands']:
-            query = ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
-                 "VALUES (%s,%s,%s)")
-            try:
-                cursor.execute(query, (blockID, link, scheduleID,))
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to complete update schedule code links", "details":f"{e}"})), 500
+            queries[1] += ("(%s,%s,%s),")
+            values[1] += (blockID, link, scheduleID,)
             
         for param in funcBlock['Params']:
-            query = ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
-                 "VALUES (%s,%s,%s)")
-            try:
-                cursor.execute(query, (param, blockID, scheduleID,))
-                connection.commit()
-            except Exception as e:
-                connection.rollback()
-                return(jsonify({"error":"Unable to complete update schedule code params", "details":f"{e}"})), 500
+            queries[2] += ("(%s,%s,%s),")
+            values[2] += (param, blockID, scheduleID,)
+
+    i = 0
+    for query in queries:
+        query = query[:-1]
+        cursor.execute(query, values[i])
+        i+=1
+
+    try:
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
             
     return get_schedule_detail(account, cursor, scheduleID)
 
