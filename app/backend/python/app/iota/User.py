@@ -32,7 +32,7 @@ class User:
         self.allowEmails = allowEmails
         self.debug = debug
 
-
+# Function creates User object based on User data in DB
 def loadFromDatabase(id:str) -> User:
     cursor = app.config['cursor']
     query = ("SELECT * FROM accounts "
