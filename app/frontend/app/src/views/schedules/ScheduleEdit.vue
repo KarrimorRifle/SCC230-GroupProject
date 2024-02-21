@@ -6,7 +6,7 @@
     <div class="container-fluid mx-0 px-0">
       <div class="row mx-0">
         <div class="col-8 p-3" style="max-height: 100">
-          <block-conditionals command-type="IF" />
+          <trigger-block />
         </div>
         <div class="col-4 px-0">
           <block-menu />
@@ -18,6 +18,7 @@
 <script setup lang="ts">
 import BlockMenu from "./BlockMenu.vue";
 import BlockItem from "./BlockItem.vue";
+import TriggerBlock from "./TriggerBlock.vue";
 import BlockConditionals from "./BlockConditionals.vue";
 </script>
 <style>
