@@ -42,7 +42,7 @@
         <div
           class="px-0 d-flex align-items-start justify-content-center"
           :class="{
-            'col-2': commandType == 'SET',
+            'col-1': commandType == 'SET',
             'col-4': commandType == 'END',
             'col-5': commandType == 'FOR',
           }"
@@ -62,7 +62,7 @@
             style="width: 5rem"
           />
         </div>
-        <div class="col-8 px-0" v-else-if="commandType != 'END'">
+        <div class="col-9 px-0" v-else-if="commandType != 'END'">
           <!-- <div class="input-group" v-if="display">
             <button class="input-group-text dropdown-toggle">hi</button>
             <button class="input-group-text dropdown-toggle">hello</button>
@@ -75,10 +75,10 @@
             :key="'SET' + index"
           >
             <button class="input-group-text dropdown-toggle border-light">
-              hi
+              ------------
             </button>
             <button class="input-group-text dropdown-toggle border-light">
-              hello
+              ------------
             </button>
             <div class="input-group-text">=</div>
             <div
