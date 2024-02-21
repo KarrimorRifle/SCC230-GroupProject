@@ -58,7 +58,7 @@
           <input
             v-else
             v-model="forValue"
-            class="input-group-text p-0"
+            class="input-group-text p-0 border-light"
             style="width: 5rem"
           />
         </div>

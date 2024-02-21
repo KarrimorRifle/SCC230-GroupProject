@@ -6,7 +6,7 @@
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
     >
-      <block-conditionals :command-type="command" :display="false" />
+      <block-conditionals :command-type="command" :display="true" />
     </button>
     <button
       v-for="(command, index) in other"

@@ -47,7 +47,7 @@
               <div class="input-group">
                 <div
                   v-if="display"
-                  class="input-group-text border-light p-0"
+                  class="input-group-text p-0"
                   style="width: 5rem"
                 ></div>
                 <input
@@ -119,7 +119,7 @@
                 </ul>
                 <div
                   v-if="display"
-                  class="input-group-text border-light p-0"
+                  class="input-group-text p-0"
                   style="width: 5rem"
                 ></div>
                 <input
@@ -189,11 +189,12 @@
                 "
               >
                 <button
-                  class="btn btn-sm btn-outline-danger px-3"
+                  class="btn btn-sm btn-outline-danger px-2 me-2"
                   @click="
                     conditions.joining.splice(index - 1, 1);
                     conditions.conditions.splice(index, 1);
                   "
+                  :class="{ disabled: display }"
                 >
                   <img
                     src="../../assets/delete-svgrepo-com.svg"
