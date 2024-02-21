@@ -14,7 +14,7 @@
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
     >
-      <block-item :command-type="command" :display="false" />
+      <block-item :command-type="command" :display="true" />
     </button>
   </div>
 </template>

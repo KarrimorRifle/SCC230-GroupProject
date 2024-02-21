@@ -26,8 +26,7 @@
   </div>
   <div
     id="functionCodeItem"
-    class="card rounded-top-0 border-top-0"
-    :class="{ 'border-bottom-0': commandType != 'END' }"
+    class="card rounded-top-0 border-top-0 border-bottom-0"
     style="border-color: white"
     :style="{ width: width }"
   >
@@ -63,14 +62,20 @@
           />
         </div>
         <div class="col-9 px-0" v-else-if="commandType != 'END'">
-          <!-- <div class="input-group" v-if="display">
-            <button class="input-group-text dropdown-toggle">hi</button>
-            <button class="input-group-text dropdown-toggle">hello</button>
+          <div class="input-group" v-if="display">
+            <button class="input-group-text">------------</button>
+            <button class="input-group-text">------------</button>
             <div class="input-group-text">=</div>
-            <input class="input-group-text" type="text" style="width: 5rem" />
-          </div> -->
+            <input
+              class="input-group-text"
+              type="number"
+              style="width: 5rem"
+              placeholder="00"
+            />
+          </div>
           <div
             class="input-group"
+            v-else
             v-for="(item, index) in setValue"
             :key="'SET' + index"
           >
