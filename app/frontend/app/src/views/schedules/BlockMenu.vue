@@ -1,31 +1,32 @@
 <template>
   <div id="editor" class="main p-3">
     <button
-      v-for="(command, index) in other"
-      :key="index"
-      class="mb-2 d-flex flex-column"
-      style="background-color: rgba(0, 0, 0, 0); border-style: none"
-    >
-      <block-conditionals :command-type="command" :display="true" />
-    </button>
-    <button
       v-for="(command, index) in conditionals"
       :key="index"
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
     >
-      <block-conditionals :command-type="command" :display="true" />
+      <block-conditionals :command-type="command" :display="false" />
+    </button>
+    <button
+      v-for="(command, index) in other"
+      :key="index"
+      class="mb-2 d-flex flex-column"
+      style="background-color: rgba(0, 0, 0, 0); border-style: none"
+    >
+      <block-item :command-type="command" :display="false" />
     </button>
   </div>
 </template>
 <script setup lang="ts">
 import BlockConditionals from "./BlockConditionals.vue";
+import BlockItem from "./BlockItem.vue";
 import { ref } from "vue";
 import { CommandType } from "@/modules/schedules/types";
 
-const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE", "END"]);
+const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
 
-const other = ref<CommandType[]>(["SET", "FOR"]);
+const other = ref<CommandType[]>(["SET", "FOR", "END"]);
 </script>
 <style>
 #editor {
