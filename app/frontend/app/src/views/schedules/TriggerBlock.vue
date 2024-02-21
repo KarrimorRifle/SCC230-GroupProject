@@ -2,7 +2,7 @@
   <div
     id="functionCodeItem"
     class="card border-bottom-0"
-    style="border-color: rgba(0, 0, 0, 0); background-color: rgb(25, 58, 104)"
+    style="border-color: rgba(0, 0, 0, 0); background-color: rgb(30, 69, 124)"
     :style="{ width: '28rem' }"
   >
     <div class="card-body p-2">
@@ -184,7 +184,7 @@
         </div>
         <div class="col-auto justify-content-end px-0">
           <button
-            class="btn btn-outline-success btn-sm text-light"
+            class="btn btn-success btn-sm text-light"
             :class="{ disabled: display }"
             style="font-size: 80%"
             @click="
@@ -208,7 +208,7 @@
     </div>
     <div
       class="card rounded-0 rounded-bottom border-top-0"
-      style="border-color: rgba(0, 0, 0, 0); background-color: rgb(25, 58, 104)"
+      style="border-color: rgba(0, 0, 0, 0); background-color: rgb(30, 69, 124)"
     >
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
