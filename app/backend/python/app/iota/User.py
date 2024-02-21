@@ -2,15 +2,15 @@
 #Desc:          File to hold the User Class and related Functions
 #               The Function of the User Class is to hold information about users
 #
-#Last Update:   2024-1-27
-#Updated By:    Kian Tomkins
+#Last Update:   2024-2-21
+#Updated By:    Aditya Khan
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
 from iota.Device import Device
 from iota import genRandomID
 
-from flask import current_app
+from server import app
 
 ##CLASS DEFINITION##
 class User:
@@ -32,10 +32,9 @@ class User:
         self.allowEmails = allowEmails
         self.debug = debug
 
-
+# Function creates User object based on User data in DB
 def loadFromDatabase(id:str) -> User:
-    cursor = current_app.config['cursor']
-    connection= current_app.config['connection']
+    cursor = app.config['cursor']
     query = ("SELECT * FROM accounts "
                 "WHERE AccountID = %s")
 
