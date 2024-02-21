@@ -3,7 +3,7 @@
     class="nub d-flex"
     v-if="!trigger"
     id="female-slot"
-    :style="{ width: width }"
+    :style="{ width: '28rem' }"
   >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
@@ -26,23 +26,18 @@
   </div>
   <div
     id="functionCodeItem"
-    class="card rounded-top-0 border-top-0"
-    :class="{ 'border-bottom-0': commandType != 'END' }"
+    class="card rounded-top-0 border-top-0 border-bottom-0"
     style="border-color: white"
-    :style="{ width: width }"
+    :style="{ width: '28rem' }"
   >
     <div class="card-body p-2">
       <div class="row d-flex justify-content-center">
         <div
-          class="col-2 px-0 d-flex align-items-start justify-content-center"
-          :class="{
-            'col-2': commandType != 'END',
-            'col-4': commandType == 'END',
-          }"
+          class="col-2 px-0 d-flex align-items-start justify-content-center col-2"
         >
           <b class="pt-1">{{ commandType }}</b>
         </div>
-        <div class="col-7 px-0" v-if="commandType != 'END'">
+        <div class="col-7 px-0">
           <div class="d-flex flex-column">
             <div
               class="d-flex mb-1"
@@ -210,10 +205,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="col-auto justify-content-end px-0"
-          v-if="commandType != 'END'"
-        >
+        <div class="col-auto justify-content-end px-0">
           <button
             class="btn btn-outline-success btn-sm text-light"
             :class="{ disabled: display }"
@@ -233,12 +225,7 @@
       </div>
     </div>
   </div>
-  <div
-    class="d-flex nub"
-    id="male-slot"
-    :style="{ width: width }"
-    v-if="commandType != 'END'"
-  >
+  <div class="d-flex nub" id="male-slot" :style="{ width: '28rem' }">
     <div class="card border-0 px-1" style="background-color: rgba(0, 0, 0, 0)">
       <div class="card-body py-1"></div>
     </div>
@@ -300,11 +287,6 @@ const getCodeContent = (): string[] | boolean => {
   }
   return strings;
 };
-
-const width = computed(() => {
-  if (props.commandType == "END") return "7rem";
-  else return "28rem";
-});
 
 const props = defineProps<{
   trigger?: boolean;
