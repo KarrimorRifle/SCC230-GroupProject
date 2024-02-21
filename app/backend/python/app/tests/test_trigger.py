@@ -10,14 +10,16 @@ class test_triggers(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_trigger_creation(self):
-        test = Trigger.Trigger("Trig1","SchedID", {})
+        test = Trigger.Trigger("Trgk09uujd33d82isjf","Schk129jd2i23kd34jf", {})
 
-        self.assertEqual(test.id, "Trig1")
+        self.assertEqual(test.id, "Trgk09uujd33d82isjf")
+        self.assertEqual(test.data, {})
+        self.assertEqual(test.ScheduleID, "Schk129jd2i23kd34jf")
 
     def test_trigger_loadFromDB(self):
-        test = Trigger.loadFromDatabase("TestTrigger")
+        test = Trigger.loadFromDatabase("Trgk2190ej849dj345j")
 
-        expected = Trigger.Trigger(id="TestTrigger",data={'TestDevice':''},ScheduleID="TestSchedule")
+        expected = Trigger.Trigger(id="Trgk2190ej849dj345j",data={'Dev4t3rgd34df423gfs':''},ScheduleID="Schk129jd2i23kd34jf")
 
         self.assertEqual(test.id,expected.id)
         self.assertEqual(test.ScheduleID,expected.ScheduleID)
