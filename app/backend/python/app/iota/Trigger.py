@@ -29,20 +29,26 @@ class Trigger:
 def loadFromDatabase(id:str):
     cursor = app.config['cursor']
 
-    query = ("SELECT * FROM triggers "
+    query = ("SELECT TriggerID, ScheduleID FROM triggers "
                 "WHERE TriggerID = %s")
     cursor.execute(query, (id,))
     trigger = cursor.fetchone()
     if(trigger!=None):
         ScheduleID = trigger['ScheduleID']
-        query = ("SELECT * FROM trigger_data "
+        query = ("SELECT DeviceID, Data, ListPos FROM trigger_data "
                     "WHERE TriggerID = %s")
         cursor.execute(query, (id,))
-        nextLine = cursor.fetchone()
+        triggerData = cursor.fetchall()
+        triggerData = [row for row in triggerData]
+        triggerData = sorted(triggerData, key=lambda x: x['ListPos'])
+
         data = {}
-        while(nextLine != None):
-            data[nextLine['DeviceID']] = nextLine['Data']
-            nextLine = cursor.fetchone()
+        for row in triggerData:
+            if data.get(row['DeviceID']) is None:
+                data[row['DeviceID']] = []
+            
+            data[row['DeviceID']].append(row['Data'])
+
         return Trigger(id=trigger['TriggerID'], data=data, ScheduleID=ScheduleID)
     else:
         return None
