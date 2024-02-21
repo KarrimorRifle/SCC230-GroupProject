@@ -2,8 +2,6 @@ import unittest
 import json
 from server import app
 
-from flask import request, jsonify, make_response
-
 class TestScheduleRoutes(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
@@ -79,7 +77,7 @@ class TestScheduleRoutes(unittest.TestCase):
 
         val1 = ['Var', '==', '5']
         val2 = ['Var2', '==', '8']
-        trigger = {'TestDevice': val1, 'TestDevice': val2}
+        trigger = {'Dev4t3rgd34df423gfs': val1, 'Dev4t3rgd34df423gfs': val2}
 
         newName = 'Name Update Schedule3'
 
