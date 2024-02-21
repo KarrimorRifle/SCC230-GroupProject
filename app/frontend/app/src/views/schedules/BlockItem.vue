@@ -32,209 +32,53 @@
     :style="{ width: width }"
   >
     <div class="card-body p-2">
-      <div class="row d-flex justify-content-center">
+      <div
+        class="row d-flex"
+        :class="{
+          'justify-content-center': commandType != 'FOR',
+          'justify-content-start': commandType == 'FOR',
+        }"
+      >
         <div
-          class="col-2 px-0 d-flex align-items-start justify-content-center"
+          class="px-0 d-flex align-items-start justify-content-center"
           :class="{
-            'col-2': commandType != 'END',
+            'col-2': commandType == 'SET',
             'col-4': commandType == 'END',
+            'col-5': commandType == 'FOR',
           }"
         >
           <b class="pt-1">{{ commandType }}</b>
         </div>
-        <div class="col-7 px-0" v-if="commandType != 'END'">
-          <div class="d-flex flex-column">
-            <div
-              class="d-flex mb-1"
-              v-for="(item, index) in conditions.conditions"
-              :key="'condition' + index"
-            >
-              <div class="input-group">
-                <div
-                  v-if="display"
-                  class="input-group-text border-light p-0"
-                  style="width: 5rem"
-                ></div>
-                <input
-                  v-else
-                  type="number"
-                  class="input-group-text border-light p-0"
-                  :class="{ disabled: display }"
-                  style="width: 5rem"
-                  v-model="item.value1"
-                />
-                <button
-                  class="btn btn-outline-secondary text-light btn-sm"
-                  :class="{ disabled: display }"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {{ item.compare }}
-                </button>
-                <ul class="dropdown-menu" style="min-width: 2.5rem">
-                  <li>
-                    <button
-                      @click="item.compare = '=='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "==" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '!='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "!=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '>='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ ">=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '<='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "<=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '>'"
-                      class="dropdown-item px-2"
-                    >
-                      {{ ">" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '<'"
-                      class="dropdown-item px-1"
-                    >
-                      {{ "<" }}
-                    </button>
-                  </li>
-                </ul>
-                <div
-                  v-if="display"
-                  class="input-group-text border-light p-0"
-                  style="width: 5rem"
-                ></div>
-                <input
-                  v-else
-                  type="number"
-                  class="input-group-text border-light p-0"
-                  :class="{ disabled: display }"
-                  style="width: 5rem"
-                  v-model="item.value2"
-                />
-              </div>
-              <div v-if="conditions.joining[index]" class="d-inline-block">
-                <button
-                  class="btn btn-outline-info text-light btn-sm mb-1"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style="font-size: 80%"
-                >
-                  {{ conditions.joining[index] }}
-                </button>
-                <ul
-                  class="dropdown-menu pb-0"
-                  style="font-size: 80%; min-width: 3rem !important"
-                >
-                  <li>
-                    <button
-                      @click="conditions.joining[index] = 'AND'"
-                      class="dropdown-item px-2"
-                    >
-                      AND
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="conditions.joining[index] = 'OR'"
-                      class="dropdown-item px-2"
-                    >
-                      OR
-                    </button>
-                  </li>
-                  <div
-                    class="dropdown-divider mb-0"
-                    v-if="conditions.conditions.length > 1"
-                  ></div>
-                  <li>
-                    <button
-                      class="dropdown-item text-danger px-0 d-flex justify-content-center py-2"
-                      @click="
-                        conditions.joining.splice(index, 1);
-                        conditions.conditions.splice(index, 1);
-                      "
-                      v-if="conditions.conditions.length > 1"
-                    >
-                      <img
-                        src="../../assets/delete-svgrepo-com.svg"
-                        alt="delete icon"
-                        style="max-width: 1.5rem"
-                      />
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div v-else-if="conditions.conditions.length > 1">
-                <button
-                  class="btn btn-sm btn-outline-danger px-3"
-                  @click="
-                    conditions.joining.splice(index - 1, 1);
-                    conditions.conditions.splice(index, 1);
-                  "
-                >
-                  <img
-                    src="../../assets/delete-svgrepo-com.svg"
-                    alt="delete icon"
-                    style="width: 1.2rem"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="col-3" v-if="commandType == 'FOR'">
+          <div
+            class="input-group-text"
+            style="width: 5rem; height: 1.6rem"
+            v-if="display"
+          ></div>
+          <input
+            v-else
+            v-model="forValue"
+            class="input-group-text p-0"
+            style="width: 5rem"
+          />
         </div>
+        <div class="col-7 px-0" v-else-if="commandType != 'END'">lol</div>
         <div
           class="col-auto justify-content-end px-0"
-          v-if="commandType != 'END'"
+          v-if="commandType != 'END' && commandType != 'FOR'"
         >
           <button
             class="btn btn-outline-success btn-sm text-light"
             :class="{ disabled: display }"
             style="font-size: 80%"
-            @click="
-              conditions.conditions.push({
-                value1: undefined,
-                compare: '==',
-                value2: undefined,
-              });
-              conditions.joining.push('AND');
-            "
           >
-            + condition
+            +
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div
-    class="d-flex nub"
-    id="male-slot"
-    :style="{ width: width }"
-    v-if="commandType != 'END'"
-  >
+  <div class="d-flex nub" id="male-slot" :style="{ width: width }">
     <div class="card border-0 px-1" style="background-color: rgba(0, 0, 0, 0)">
       <div class="card-body py-1"></div>
     </div>
@@ -260,37 +104,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import { CommandType } from "@/modules/schedules/types";
+import { CommandType, Device } from "@/modules/schedules/types";
 import { defineProps, ref, defineExpose, computed } from "vue";
 
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
-// const compare = ref<CompareValue>("==");
-
-interface Condition {
-  value1: number | undefined;
-  compare: CompareValue;
-  value2: number | undefined;
-}
-
-type Joining = "AND" | "OR";
-
-const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
-  conditions: [{ value1: undefined, compare: "==", value2: undefined }],
-  joining: [],
-});
+const forValue = ref<number>(2);
 
 const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
   try {
-    conditions.value.conditions.forEach((item, index) => {
-      if (item.value1 == undefined || item.value2 == undefined)
-        throw new Error("INVALID");
-      strings.push(item.value1 + "");
-      strings.push(item.compare);
-      strings.push(item.value2 + "");
-      if (conditions.value.joining[index])
-        strings.push(conditions.value.joining[index]);
-    });
+    console.log("hi");
   } catch {
     return false;
   }
@@ -299,6 +122,7 @@ const getCodeContent = (): string[] | boolean => {
 
 const width = computed(() => {
   if (props.commandType == "END") return "7rem";
+  else if (props.commandType == "FOR") return "12rem";
   else return "28rem";
 });
 
@@ -307,6 +131,7 @@ const props = defineProps<{
   lastBlock?: boolean;
   display?: boolean;
   commandType: CommandType;
+  devices?: Device[];
 }>();
 
 defineExpose<{
