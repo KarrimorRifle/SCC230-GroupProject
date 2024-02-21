@@ -110,6 +110,29 @@ import { defineProps, ref, defineExpose, computed } from "vue";
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 const forValue = ref<number>(2);
 
+//stuff to do set
+interface deviceSetValue {
+  device?: Device;
+  variable?: string;
+  value?: number | boolean;
+}
+
+const availableDevices = ref<Device[]>([]);
+
+// const dummyData: deviceSetValue = {
+//   device: {
+//     id: "fhvdssf-ajfa=-fanif",
+//     name: "BIG ENERGY",
+//     isActive: true,
+//     data: {
+//       temperature: 50,
+//       on: true,
+//     },
+//   },
+// };
+
+const setValue = ref<deviceSetValue[]>([{}]);
+
 const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
   try {
