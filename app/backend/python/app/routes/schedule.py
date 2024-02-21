@@ -6,7 +6,7 @@ schedule = Blueprint('schedule', __name__)
 
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
-    query = ("SELECT EventID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
@@ -17,11 +17,11 @@ def get_schedules(account, cursor):
 def create_schedule(account, cursor, connection):
     # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
     scheduleName = request.json.get("ScheduleName")
-    query = ("SELECT EventID FROM schedules")
+    query = ("SELECT ScheduleID FROM schedules")
     cursor.execute(query)
     scheduleIDs = cursor.fetchall()
     thisID = genRandomID(ids=scheduleIDs, prefix='Sch')
-    query = ("INSERT INTO schedules (EventID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
+    query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
                      "VALUES (%s,%s,%s,%s,%s,%s)")
     try:
         cursor.execute(query, (thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating'),))
@@ -30,11 +30,11 @@ def create_schedule(account, cursor, connection):
         connection.rollback()
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({'EventID':thisID}), 200
+    return jsonify({'ScheduleID':thisID}), 200
 
 def get_schedule_detail(account, cursor, scheduleID):
     query = ("SELECT * FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     schedule = cursor.fetchone()
 
@@ -46,11 +46,20 @@ def get_schedule_detail(account, cursor, scheduleID):
     cursor.execute(query, (scheduleID,))
     functionBlocks = cursor.fetchall()
 
-    # FIX TRIGGER IN DATABASE TO MATCH TRIGGER CLASS THEN SORT THIS
-    query = ("SELECT TriggerID, TriggerName, EventListenerID FROM triggers "
+    query = ("SELECT TriggerID FROM triggers "
                 "WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
-    triggers = cursor.fetchall()
+    trigger = cursor.fetchone()
+
+    triggerDict = {}
+    if trigger is not None:
+        query = ("SELECT DeviceID, Data FROM trigger_data "
+                    "WHERE TriggerID = %s")
+        cursor.execute(query, (trigger['TriggerID'],))
+        triggerData = cursor.fetchall()
+
+        for data in triggerData:
+            triggerDict[data['DeviceID']] = data['Data']
 
     code = []
 
@@ -60,11 +69,12 @@ def get_schedule_detail(account, cursor, scheduleID):
     linkedCommands = cursor.fetchall()
     linkedCommands = [link for link in linkedCommands]
 
-    query = ("SELECT Value, FunctionBlockID FROM function_block_params "
+    query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
              "WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
     params = cursor.fetchall()
     params = [param for param in params]
+    params = sorted(params, key=lambda x: x['ListPos'])
 
     links = []
     paramVals = []
@@ -82,28 +92,37 @@ def get_schedule_detail(account, cursor, scheduleID):
         links = []
         paramVals = []
 
-    details = {'EventID': schedule['EventID'],
+    details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
                'ScheduleName': schedule['ScheduleName'],
                'IsActive': schedule['IsActive'],
                'IsPublic': schedule['IsPublic'],
                'Rating': schedule['Rating'],
                'Code': code,
-               'Triggers': triggers}
+               'Trigger': triggerDict}
     
     return jsonify(details), 200
 
 # Function deletes schedule of specified ID as long as user is the author
 def delete_schedule(account, cursor, connection, scheduleID):
-    query = ("SELECT EventID FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+    query = ("SELECT ScheduleID FROM schedules "
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
     if checkID is None:
         return({"error": "Forbidden access"}), 401
+    
+    query = ("SELECT TriggerID FROM triggers "
+                "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    trigger = cursor.fetchone()
 
-    queries = [("DELETE FROM schedules WHERE EventID = %s" ),
+    if trigger is not None:
+        query = ("DELETE FROM trigger_data WHERE TriggerID = %s")
+        cursor.execute(query, (trigger['TriggerID'],))
+
+    queries = [("DELETE FROM schedules WHERE ScheduleID = %s" ),
                ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
@@ -120,10 +139,10 @@ def delete_schedule(account, cursor, connection, scheduleID):
 
     return jsonify(scheduleID), 200
 
-# WORK IN PROGRESS
+# Function updates schedule of specified ID if user is author and based on input params
 def update_schedule(account, cursor, connection, scheduleID):
-    query = ("SELECT EventID FROM schedules "
-                "WHERE AuthorID = %s AND EventID = %s")
+    query = ("SELECT ScheduleID FROM schedules "
+                "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
@@ -133,7 +152,7 @@ def update_schedule(account, cursor, connection, scheduleID):
     updateParams = []
     values = []
     newCode = [dict]
-    newTriggers = []
+    newTriggers = {}
     for key, value in request.json.items():
         if not key[0].isupper():
             continue
@@ -142,14 +161,14 @@ def update_schedule(account, cursor, connection, scheduleID):
         if key == "Code":
             newCode = value
             continue
-        if key == "Triggers":
+        if key == "Trigger":
             newTriggers = value
             continue
         updateParams.append(f"{key}=%s")
         values.append(value)
     updateParams = ', '.join(updateParams)
 
-    query = (f"UPDATE schedules SET {updateParams} WHERE EventID = %s AND AuthorID = %s")
+    query = (f"UPDATE schedules SET {updateParams} WHERE ScheduleID = %s AND AuthorID = %s")
     values.extend([scheduleID, account['AccountID']])
 
     try:
@@ -159,29 +178,58 @@ def update_schedule(account, cursor, connection, scheduleID):
         connection.rollback()
         return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
     
-    if newTriggers != []:
-        query = ("DELETE FROM triggers WHERE ScheduleID = %s" )
+    if newTriggers != {}:
+        query = ("SELECT TriggerID FROM triggers "
+                 "WHERE ScheduleID = %s")
+        cursor.execute(query, (scheduleID,))
+        trigger = cursor.fetchone()
+
+        if trigger is not None:
+            query = ("DELETE FROM trigger_data WHERE TriggerID = %s")
+            cursor.execute(query, (trigger['TriggerID'],))
+
+            query = ("DELETE FROM triggers WHERE ScheduleID = %s" )
+            try:
+                cursor.execute(query, (scheduleID,))
+                connection.commit()
+            except Exception as e:
+                connection.rollback()
+                return(jsonify({"error":"Unable to complete update schedule", "details":f"{e}"})), 500
+        
+        query = ("SELECT TriggerID FROM triggers")
+        cursor.execute(query)
+        triggers = cursor.fetchall()
+        triggers = [trig['TriggerID'] for trig in triggers]
+        
+        query = ("INSERT INTO triggers (TriggerID, ScheduleID) "
+                    "VALUES (%s,%s)")
+
+        triggerID = genRandomID(ids=triggers, prefix='Trg')
         try:
-            cursor.execute(query, (scheduleID,))
+            cursor.execute(query, (triggerID, scheduleID,))
             connection.commit()
         except Exception as e:
             connection.rollback()
-            return(jsonify({"error":"Unable to complete update schedule", "details":f"{e}"})), 500
+            return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
         
-        query = ("INSERT INTO triggers (TriggerName, ScheduleID, EventListenerID) "
+        query = ("INSERT INTO trigger_data (TriggerID, DeviceID, Data, ListPos) "
                     "VALUES ")
         values = ()
-        for trigger in newTriggers:
-            query += ("(%s,%s,%s),")
-            values += (trigger['TriggerName'], scheduleID, trigger['EventListenerID'],)
 
+        for key, val in newTriggers.items():
+            pos = 0
+            for v in val:
+                query += ("(%s,%s,%s,%s),")
+                values += (triggerID, key, v,pos,)
+                pos += 1
+        
         query = query[:-1]
         try:
             cursor.execute(query, values)
             connection.commit()
         except Exception as e:
             connection.rollback()
-            return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
+            return(jsonify({"error":"Unable to update schedule trigger data", "details":f"{e}"})), 500
 
     if newCode == []:
         return get_schedule_detail(account, cursor, scheduleID)
@@ -208,11 +256,14 @@ def update_schedule(account, cursor, connection, scheduleID):
                  "VALUES "),
                 ("INSERT INTO function_block_links (ParentID, Link, ScheduleID) "
                  "VALUES "),
-                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID) "
+                ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID, ListPos) "
                  "VALUES ")]
     values = [(), (), ()]
 
+    commandTypes = ['FOR', 'WHILE', 'IF', 'ELSE', 'SET']
     for funcBlock in newCode:
+        if funcBlock['CommandType'] not in commandTypes:
+            return (jsonify({'error':'Invalid argument CommandType must be FOR, WHILE, IF, ELSE, SET; Returning empty Code.'})), 400
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
         blockIDs.append(blockID)
 
@@ -222,10 +273,12 @@ def update_schedule(account, cursor, connection, scheduleID):
         for link in funcBlock['LinkedCommands']:
             queries[1] += ("(%s,%s,%s),")
             values[1] += (blockID, link, scheduleID,)
-            
+
+        pos = 0
         for param in funcBlock['Params']:
-            queries[2] += ("(%s,%s,%s),")
-            values[2] += (param, blockID, scheduleID,)
+            queries[2] += ("(%s,%s,%s,%s),")
+            values[2] += (param, blockID, scheduleID, pos,)
+            pos += 1
 
     i = 0
     for query in queries:

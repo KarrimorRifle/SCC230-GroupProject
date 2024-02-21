@@ -20,6 +20,9 @@ CREATE TABLE `hubs`(
     `HubName` VARCHAR(255) NOT NULL
 );
 
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk23098jwij123msd","Test Hub");
+
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
@@ -32,7 +35,7 @@ CREATE TABLE `accounts_hubsRelation`(
 );
 
 CREATE TABLE `devices`(
-    `DeviceID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
     `DeviceType` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
@@ -40,10 +43,11 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
-CREATE INDEX idx_devices_deviceName ON `devices` (`deviceName`);
+INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
+Values("Dev4t3rgd34df423gfs","Test Device","Test Device","1.1.1.1","Hubk23098jwij123msd");
 
 CREATE TABLE `schedules`(
-    `EventID` varchar(100) NOT NULL PRIMARY KEY,
+    `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
     `AuthorID` varchar(100) NOT NULL,
     `HubID` varchar(100),
@@ -54,20 +58,40 @@ CREATE TABLE `schedules`(
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
 );
 
+INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`,`Rating`)
+Values("Schk129jd2i23kd34jf","Test Schedule","Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",0,0,0);
+
 CREATE TABLE `triggers`(
-    `TriggerID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `TriggerName` VARCHAR(255) NOT NULL,
+    `TriggerID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    `EventListenerID` BIGINT NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    PRIMARY KEY (TriggerID, ScheduleID),
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
 );
+
+INSERT INTO triggers(`TriggerID`,`ScheduleID`)
+Values("Trgk2190ej849dj345j","Schk129jd2i23kd34jf");
+
+CREATE TABLE `trigger_data`(
+    `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceID` varchar(100) NOT NULL,
+    `TriggerID` varchar(100) NOT NULL,
+    `Data` varchar(255) NOT NULL,
+    `ListPos` INT UNSIGNED NOT NULL,
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+);
+
+ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
+
+INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
+Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "4",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL, 
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
     -- `num` referenced as foreign key, must be unique.
 );
 
@@ -76,16 +100,19 @@ CREATE TABLE `function_block_params`(
     `Value` VARCHAR(255) NOT NULL,
     `FunctionBlockID` varchar(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID),
+    `ListPos` INT UNSIGNED NOT NULL,
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID),
     FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
 );
+
+ALTER TABLE function_block_params MODIFY ListPos INT DEFAULT 0;
 
 CREATE TABLE `function_block_links`(
     `LinkID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ParentID` varchar(100) NOT NULL,
     `Link` INT NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(EventID), 
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID), 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID)
 );
 
