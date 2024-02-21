@@ -2,8 +2,8 @@
 #Desc:          File to hold the Trigger Class and related Functions
 #               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
 #
-#Last Update:   2024-2-20
-#Updated By:    Blade Eastham
+#Last Update:   2024-2-21
+#Updated By:    Aditya Khan
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
