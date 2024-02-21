@@ -7,7 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-import json
 from server import app
 
 #CLASS DEFINITION#
@@ -25,6 +24,8 @@ class Trigger:
         self.ScheduleID = ScheduleID
         self.debug = debug
 
+
+# Function creates Trigger object based on Trigger data in DB
 def loadFromDatabase(id:str):
     cursor = app.config['cursor']
 
