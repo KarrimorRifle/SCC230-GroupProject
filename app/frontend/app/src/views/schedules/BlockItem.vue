@@ -49,7 +49,7 @@
         >
           <b class="pt-1">{{ commandType }}</b>
         </div>
-        <div class="col-3" v-if="commandType == 'FOR'">
+        <div class="col-2" v-if="commandType == 'FOR'">
           <div
             class="input-group-text"
             style="width: 5rem; height: 1.6rem"
@@ -62,7 +62,46 @@
             style="width: 5rem"
           />
         </div>
-        <div class="col-7 px-0" v-else-if="commandType != 'END'">lol</div>
+        <div class="col-8 px-0" v-else-if="commandType != 'END'">
+          <!-- <div class="input-group" v-if="display">
+            <button class="input-group-text dropdown-toggle">hi</button>
+            <button class="input-group-text dropdown-toggle">hello</button>
+            <div class="input-group-text">=</div>
+            <input class="input-group-text" type="text" style="width: 5rem" />
+          </div> -->
+          <div
+            class="input-group"
+            v-for="(item, index) in setValue"
+            :key="'SET' + index"
+          >
+            <button class="input-group-text dropdown-toggle border-light">
+              hi
+            </button>
+            <button class="input-group-text dropdown-toggle border-light">
+              hello
+            </button>
+            <div class="input-group-text">=</div>
+            <div
+              class="input-group-text border-light"
+              v-if="
+                item.device != undefined &&
+                typeof item.device.data[item.variable] == 'boolean'
+              "
+            >
+              <input
+                class="form-check-input mt-0 border-primary"
+                type="checkbox"
+              />
+            </div>
+            <input
+              class="input-group-text border-light"
+              type="number"
+              style="width: 5rem"
+              placeholder="00"
+              v-else
+            />
+          </div>
+        </div>
         <div
           class="col-auto justify-content-end px-0"
           v-if="commandType != 'END' && commandType != 'FOR'"
@@ -164,5 +203,10 @@ defineExpose<{
 <style>
 .dropdown-menu {
   width: 30px !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 </style>
