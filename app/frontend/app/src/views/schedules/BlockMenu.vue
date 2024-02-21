@@ -1,5 +1,6 @@
 <template>
   <div id="editor" class="main p-3">
+    <trigger-block />
     <button
       v-for="(command, index) in conditionals"
       :key="index"
@@ -21,6 +22,7 @@
 <script setup lang="ts">
 import BlockConditionals from "./BlockConditionals.vue";
 import BlockItem from "./BlockItem.vue";
+import TriggerBlock from "./TriggerBlock.vue";
 import { ref } from "vue";
 import { CommandType } from "@/modules/schedules/types";
 
