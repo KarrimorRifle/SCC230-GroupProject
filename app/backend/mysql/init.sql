@@ -21,7 +21,7 @@ CREATE TABLE `hubs`(
 );
 
 INSERT INTO hubs(`HubID`,`HubName`)
-Values("TestHub","Test Hub");
+Values("Hubk23098jwij123msd","Test Hub");
 
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
@@ -44,7 +44,7 @@ CREATE TABLE `devices`(
 );
 
 INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
-Values("TestDevice","Test Device","Test Device","1.1.1.1","TestHub");
+Values("Dev4t3rgd34df423gfs","Test Device","Test Device","1.1.1.1","Hubk23098jwij123msd");
 
 CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
@@ -59,7 +59,7 @@ CREATE TABLE `schedules`(
 );
 
 INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`,`Rating`)
-Values("TestSchedule","Test Schedule","Accojk42VvlqdeBpOBc","TestHub",0,0,0);
+Values("Schk129jd2i23kd34jf","Test Schedule","Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",0,0,0);
 
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `triggers`(
 );
 
 INSERT INTO triggers(`TriggerID`,`ScheduleID`)
-Values("TestTrigger","TestSchedule");
+Values("Trgk2190ej849dj345j","Schk129jd2i23kd34jf");
 
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -84,7 +84,7 @@ CREATE TABLE `trigger_data`(
 ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
 
 INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
-Values("TestTrigger","TestDevice",'',0);
+Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs",'',0);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
