@@ -2,8 +2,8 @@
 #Desc:          File to hold the User Class and related Functions
 #               The Function of the User Class is to hold information about users
 #
-#Last Update:   2024-1-27
-#Updated By:    Kian Tomkins
+#Last Update:   2024-2-21
+#Updated By:    Aditya Khan
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
