@@ -129,7 +129,7 @@ const validDevices = ref<Device[]>([
   },
 ]);
 
-const variables = ref<string[]>(['test1','test2']); 
+const variables = ref<string[]>(["test1", "test2"]);
 </script>
 <style>
 .main {
