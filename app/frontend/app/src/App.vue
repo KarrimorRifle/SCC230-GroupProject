@@ -7,8 +7,10 @@ import "bootstrap";
     data-bs-theme="dark"
     style="
       min-height: 100vh;
-      height: 100%;
+      height: 100vh;
       width: 100%;
+      display: flex;
+      flex-direction: column;
       background: rgb(63, 94, 251);
       background: radial-gradient(
         circle,
@@ -28,7 +30,7 @@ import "bootstrap";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  /* color: #2c3e50; */
 }
 
 nav {

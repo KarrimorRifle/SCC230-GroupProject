@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import axios from "axios";
-import { deleteCookie } from "@/functions";
+import { deleteCookie } from "@/modules/common/functions";
 
 const logout = async () => {
   let data;

@@ -7,7 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Trigger import Trigger
 from iota.Device import Device
 
 ##CONSTANTS##
@@ -21,8 +20,7 @@ COMM_WHILE = "WHILE"
 class FunctionCode():
     ##VALUES##
     #commandType    The type of command the code is, for translating to python i.e. IF, FOR, ELSE etc.
-    #number         Which command of commandType the code is
-    #name           The name of the command, to be used throughout the code
+    #number         Effectively the line number the code is at
     #linkedCommands The commands it is linked to, i.e. which if statement an else statement is linked to
     #params         The parameters that the command takes
     #hasRun         Holds the number of times a FunctionCode has run
@@ -33,6 +31,7 @@ class FunctionCode():
         self.number = number
         self.linkedCommands = linkedCommands
         self.params = params
+
         self.hasRun = 0
 
 class Schedule:
@@ -51,16 +50,15 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
-                 triggers:list[Trigger]=[], code:list[FunctionCode] = [], 
-                 isActive:bool=False, debug:bool=False):
+                 code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
         if(isPublic):
             self.rating = rating
-        self.triggers = triggers
         self.isActive = isActive
         self.code = code
+        
         self.devices = self.findDevices()
         self.variables = {}
         self.debug = debug
@@ -100,7 +98,7 @@ class Schedule:
             evalParams.append(self.__resolveVariable(self.code[index].params[i]))
 
         if(self.debug):
-            print(f"{self.code[index].commandType + ' ' + (' '.join(self.code[index].params)):<40}({self.id})")
+            print(f"{self.code[index].commandType + ' ' + (' '.join(evalParams)):<60}({self.id})")
 
         #Checks the type of statement that is at code[index]
         match(self.code[index].commandType):
@@ -108,15 +106,23 @@ class Schedule:
             case "FOR":
                 for i in range (eval(evalParams[0])):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index+1)
+
+                    #Creates an iterator variable for the current loop
+                    self.variables[f"i{self.code[index].number}"] = self.code[index].hasRun
+                    
+                    self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for a while loop
-            case "WHILE":                   
+            case "WHILE":                
                 while(eval(f"{' '.join(evalParams)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index+1)
+
+                    #Creates an iterator variable for the current loop
+                    self.variables[f"i{self.code[index].number}"] = self.code[index].hasRun
+                    
+                    self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -124,9 +130,9 @@ class Schedule:
             case "IF":
                 if(eval(f"{' '.join(evalParams)}")):
                     self.code[index].hasRun+=1
-                    self.__runConditional(index+1)
+                    self.__runConditional(index)
                 elif(self.debug):
-                    print(f"{'IF CONDITIONS NOT MET':<40}({self.id})")
+                    print(f"{'IF CONDITIONS NOT MET':<60}({self.id})")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -141,7 +147,7 @@ class Schedule:
                         allConditions=False
                 #Checks if any of the linked if and elif statements ran
                 for i in range (len(self.code[index].linkedCommands)):
-                    if(self.code[self.code[index].linkedCommands[i]-1].hasRun>0):
+                    if(self.code[self.code[index].linkedCommands[i-1]].hasRun>0):
                         allConditions=False
                         break
                 #Runs the code if all the checks pass
@@ -149,7 +155,7 @@ class Schedule:
                     self.code[index].hasRun+=1
                     self.__runConditional(index)
                 elif(self.debug):
-                    print(f"{'OTHERWISE CONDITIONS NOT MET':<40}({self.id})")
+                    print(f"{'OTHERWISE CONDITIONS NOT MET':<60}({self.id})")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -171,7 +177,7 @@ class Schedule:
     #Runs all the lines in a condition statement or loop
     def __runConditional(self, index:int):
         if(self.debug):
-            print(f"{'RUN CONDITIONAL':<40}({self.id})")
+            print(f"{'RUN CONDITIONAL':<60}({self.id})")
 
         #Creates a temporary index to run the required commands
         _index=index
@@ -184,9 +190,10 @@ class Schedule:
     def __findEnd(self, index:int, statement:FunctionCode) -> int:
         while(not(self.code[index].commandType=="END" and (statement.number in self.code[index].linkedCommands))):
             index+=1
-        if(self.debug):
-            print(f"{f'END FOUND FOR {statement.number} AT {index}':<40}({self.id})")
         return index
+    
+
+
     
     #Resets the number of times a piece of code has run for future schedules
     def __resetCounts(self):
@@ -196,7 +203,8 @@ class Schedule:
             self.code[i].hasRun = 0
 
     #Changes an instance of a value to an evaluable format
-    def __resolveVariable(self, variable:str) -> str:
+    def __resolveVariable(self, variable:any) -> str:
+        variable = str(variable)
         operators = ['<', '>', '<=', '>=', '==', '!=']
 
         if('.' in variable):
@@ -217,15 +225,8 @@ class Schedule:
         try:
             _v = float(variable)
         except:
-            #Checks if the variable is an operator
             if(variable not in operators):
-                #Checks if the variable is already in quotations
-                if(variable[0] == '"' or variable[0] == "'"):
-                    variable[0] = ""
-                if(variable[-1] == '"' or variable[-1] == "'"):
-                    variable[-1] = "" 
-                #returns the string in quotation marks
-                return str('"' + variable + '"')
+                return '"' + variable + '"'
 
         return str(variable)
 
@@ -233,6 +234,3 @@ class Schedule:
     def __addToErrorLog(self, exception:str):
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
-
-def loadFromDatabase(id:str) -> Schedule:
-    pass
