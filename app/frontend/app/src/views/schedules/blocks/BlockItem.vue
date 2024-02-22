@@ -133,7 +133,27 @@
                 </button>
               </li>
             </ul>
-            <div class="input-group-text">=</div>
+            <button
+              class="input-group-text"
+              style="background-color: rgba(0, 0, 0, 0)"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ setValue.action }}
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-dark"
+              style="min-width: 34px !important"
+            >
+              <li v-for="action in availableActions" :key="action">
+                <button
+                  class="dropdown-item p-0 d-flex justify-content-center"
+                  @click="setValue.action = action"
+                >
+                  {{ action }}
+                </button>
+              </li>
+            </ul>
             <!-- <div
               class="input-group-text border-light"
               v-if="
@@ -190,6 +210,7 @@ type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 const forValue = ref<number>(2);
 
 type setActions = "=" | "+=" | "-=" | "/=" | "*=";
+const availableActions = ref<setActions[]>(["=", "+=", "-=", "/=", "*="]);
 interface deviceSetValue {
   displayVariable: string;
   variable: string;
@@ -219,7 +240,7 @@ const width = computed(() => {
   if (props.commandType == "END") return "7rem";
   else if (props.commandType == "FOR" || props.commandType == "WAIT")
     return "12rem";
-  else return "23rem";
+  else return "28rem";
 });
 
 const props = defineProps<{
