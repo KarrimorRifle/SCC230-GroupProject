@@ -23,6 +23,8 @@
               v-else
               :command-type="command"
               @delete="commands.splice(index, 1)"
+              :devices="validDevices"
+              :schedule-vars="variables"
             />
           </div>
           <div style="width: 7rem" class="mt-1">

@@ -3,7 +3,7 @@
     class="nub d-flex"
     v-if="!trigger"
     id="female-slot"
-    :style="{ width: '28rem' }"
+    :style="{ width: '30rem' }"
   >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
@@ -28,7 +28,7 @@
   <div
     id="functionCodeItem"
     class="card rounded-top-0 border-top-0 border-bottom-0"
-    :style="{ 'border-color': borderColor, width: '28rem' }"
+    :style="{ 'border-color': borderColor, width: '30rem' }"
   >
     <button
       class="p-0"
@@ -74,79 +74,240 @@
                   <div class="input-group-text p-0" style="width: 5rem"></div>
                 </template>
                 <template v-else>
-                  <input
-                    type="number"
-                    class="input-group-text border-light p-0"
-                    :class="{ disabled: display }"
-                    style="width: 5rem"
-                    v-model="item.value1"
-                  />
-                  <button
-                    class="btn btn-outline-secondary text-light btn-sm"
-                    :class="{ disabled: display }"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    {{ item.compare }}
-                  </button>
-                  <ul class="dropdown-menu" style="min-width: 2.5rem">
-                    <li>
-                      <button
-                        @click="item.compare = '=='"
-                        class="dropdown-item px-2"
+                  <div class="input-group">
+                    <button
+                      class="input-group-text dropdown-toggle border-light"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {{ item.value1 ?? "-------" }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
+                      <template
+                        v-for="(device, index) in devices"
+                        :key="device.id"
                       >
-                        {{ "==" }}
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="item.compare = '!='"
-                        class="dropdown-item px-2"
+                        <li class="mt-2">
+                          <b>{{ index + 1 }}: {{ device.name }}</b>
+                        </li>
+                        <li class="pt-0 pb-1 px-1">
+                          <hr class="dropdown-divider m-0" />
+                        </li>
+                        <li v-for="key in Object.keys(device.data)" :key="key">
+                          <button
+                            class="dropdown-item"
+                            @click="
+                              item.value1 = device.id + '.' + key;
+                              item.type = device.data[key];
+                              item.varChosen = false;
+                              item.value2 =
+                                device.data[key] == 'NUMBER' ? 0 : false;
+                            "
+                          >
+                            {{ key }}
+                          </button>
+                        </li>
+                      </template>
+                      <template v-if="scheduleVars">
+                        <li class="mt-2">
+                          <b>Schedule Vars</b>
+                        </li>
+                        <li class="pt-0 pb-1 px-1">
+                          <hr class="dropdown-divider m-0" />
+                        </li>
+                        <li
+                          v-for="(variable, index) in Object.keys(scheduleVars)"
+                          :key="index"
+                        >
+                          <button
+                            class="dropdown-item"
+                            @click="
+                              item.value1 = 'var.' + variable;
+                              item.type = scheduleVars[variable];
+                              item.varChosen = false;
+                              item.value2 =
+                                scheduleVars[variable] == 'NUMBER' ? 0 : false;
+                            "
+                          >
+                            {{ variable }}
+                          </button>
+                        </li>
+                      </template>
+                    </ul>
+                    <button
+                      class="input-group-text"
+                      style="background-color: rgba(0, 0, 0, 0)"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {{ item.compare }}
+                    </button>
+                    <ul class="dropdown-menu" style="min-width: 2.5rem">
+                      <li>
+                        <button
+                          @click="item.compare = '=='"
+                          class="dropdown-item px-2"
+                        >
+                          {{ "==" }}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="item.compare = '!='"
+                          class="dropdown-item px-2"
+                        >
+                          {{ "!=" }}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="item.compare = '>='"
+                          class="dropdown-item px-2"
+                        >
+                          {{ ">=" }}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="item.compare = '<='"
+                          class="dropdown-item px-2"
+                        >
+                          {{ "<=" }}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="item.compare = '>'"
+                          class="dropdown-item px-2"
+                        >
+                          {{ ">" }}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          @click="item.compare = '<'"
+                          class="dropdown-item px-1"
+                        >
+                          {{ "<" }}
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      v-if="item.varChosen"
+                      class="input-group-text border-light"
+                    >
+                      {{ item.value2 }}
+                    </div>
+                    <input
+                      class="input-group-text border-light"
+                      type="number"
+                      style="width: 5rem"
+                      placeholder="00"
+                      :v-model="item.value2"
+                      v-else-if="item.type == 'NUMBER'"
+                    />
+                    <div
+                      class="input-group-text border-light"
+                      v-else-if="item.type == 'BOOLEAN'"
+                    >
+                      <input
+                        class="form-check-input mt-0 border-primary"
+                        type="checkbox"
+                        :v-model="item.value2"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      class="input-group-text border-light dropdown-toggle dropdown-toggle-split"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
+                      <li class="mt-2">
+                        <b>Custom</b>
+                      </li>
+                      <li class="pt-0 pb-1 px-1">
+                        <hr class="dropdown-divider m-0" />
+                      </li>
+                      <li>
+                        <button
+                          class="dropdown-item"
+                          @click="item.varChosen = false"
+                          :class="{
+                            'disabled text-secondary': item.type != 'NUMBER',
+                          }"
+                        >
+                          Number
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          class="dropdown-item"
+                          @click="item.varChosen = false"
+                          :class="{
+                            'disabled text-secondary': item.type != 'BOOLEAN',
+                          }"
+                        >
+                          Boolean
+                        </button>
+                      </li>
+                      <template
+                        v-for="(device, index) in devices"
+                        :key="device.id"
                       >
-                        {{ "!=" }}
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="item.compare = '>='"
-                        class="dropdown-item px-2"
-                      >
-                        {{ ">=" }}
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="item.compare = '<='"
-                        class="dropdown-item px-2"
-                      >
-                        {{ "<=" }}
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="item.compare = '>'"
-                        class="dropdown-item px-2"
-                      >
-                        {{ ">" }}
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        @click="item.compare = '<'"
-                        class="dropdown-item px-1"
-                      >
-                        {{ "<" }}
-                      </button>
-                    </li>
-                  </ul>
-                  <input
-                    type="number"
-                    class="input-group-text border-light p-0"
-                    :class="{ disabled: display }"
-                    style="width: 5rem"
-                    v-model="item.value2"
-                  />
+                        <li class="mt-2">
+                          <b>{{ index + 1 }}: {{ device.name }}</b>
+                        </li>
+                        <li class="pt-0 pb-1 px-1">
+                          <hr class="dropdown-divider m-0" />
+                        </li>
+                        <li v-for="key in Object.keys(device.data)" :key="key">
+                          <button
+                            class="dropdown-item"
+                            @click="
+                              item.value2 = device.id + '.' + key;
+                              item.varChosen = true;
+                            "
+                            :class="{
+                              'disabled text-secondary':
+                                item.type != device.data[key],
+                            }"
+                          >
+                            {{ key }}
+                          </button>
+                        </li>
+                      </template>
+                      <template v-if="scheduleVars">
+                        <li class="mt-2">
+                          <b>Schedule Vars</b>
+                        </li>
+                        <li class="pt-0 pb-1 px-1">
+                          <hr class="dropdown-divider m-0" />
+                        </li>
+                        <li
+                          v-for="(variable, index) in Object.keys(scheduleVars)"
+                          :key="index"
+                        >
+                          <button
+                            class="dropdown-item"
+                            @click="
+                              item.value2 = 'var.' + variable;
+                              item.varChosen = true;
+                            "
+                            :class="{
+                              'disabled text-secondary':
+                                item.type != scheduleVars[variable],
+                            }"
+                          >
+                            {{ variable }}
+                          </button>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
                 </template>
               </div>
               <div v-if="conditions.joining[index]" class="d-inline-block">
@@ -234,6 +395,8 @@
                 value1: undefined,
                 compare: '==',
                 value2: undefined,
+                type: 'NUMBER',
+                varChosen: false,
               });
               if (conditions.conditions.length > 1)
                 conditions.joining.push('AND');
@@ -245,7 +408,7 @@
       </div>
     </div>
   </div>
-  <div class="d-flex nub" id="male-slot" :style="{ width: '28rem' }">
+  <div class="d-flex nub" id="male-slot" :style="{ width: '30rem' }">
     <div class="card border-0 px-1" style="background-color: rgba(0, 0, 0, 0)">
       <div class="card-body py-1"></div>
     </div>
@@ -258,15 +421,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { CommandType } from "@/modules/schedules/types";
+import { CommandType, Device } from "@/modules/schedules/types";
 import { defineProps, ref, defineExpose, computed } from "vue";
 
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 
 interface Condition {
-  value1: number | undefined;
+  value1: string | undefined;
+  type: "NUMBER" | "BOOLEAN";
   compare: CompareValue;
-  value2: number | undefined;
+  value2: number | string | boolean | undefined;
+  varChosen: boolean;
 }
 
 type Joining = "AND" | "OR";
@@ -294,12 +459,22 @@ const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
   elseAvailable?: boolean;
+  devices?: Device[];
+  scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }>();
 
 const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
   conditions:
     props.commandType != "ELSE"
-      ? [{ value1: undefined, compare: "==", value2: undefined }]
+      ? [
+          {
+            value1: undefined,
+            compare: "==",
+            value2: undefined,
+            type: "NUMBER",
+            varChosen: false,
+          },
+        ]
       : [],
   joining: [],
 });
