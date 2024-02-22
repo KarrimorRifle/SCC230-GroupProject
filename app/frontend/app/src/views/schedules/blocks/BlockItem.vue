@@ -208,7 +208,10 @@
               <li>
                 <button
                   class="dropdown-item"
-                  @click="setValue.varChosen = false"
+                  @click="
+                    setValue.varChosen = false;
+                    setValue.value = 0;
+                  "
                   :class="{
                     'disabled text-secondary': setValue.type != 'NUMBER',
                   }"
@@ -219,7 +222,10 @@
               <li>
                 <button
                   class="dropdown-item"
-                  @click="setValue.varChosen = false"
+                  @click="
+                    setValue.varChosen = false;
+                    setValue.value = false;
+                  "
                   :class="{
                     'disabled text-secondary': setValue.type != 'BOOLEAN',
                   }"

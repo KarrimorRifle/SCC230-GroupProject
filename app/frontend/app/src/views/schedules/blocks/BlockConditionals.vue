@@ -3,7 +3,7 @@
     class="nub d-flex"
     v-if="!trigger"
     id="female-slot"
-    :style="{ width: '30rem' }"
+    :style="{ width: '29rem' }"
   >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
@@ -28,7 +28,7 @@
   <div
     id="functionCodeItem"
     class="card rounded-top-0 border-top-0 border-bottom-0"
-    :style="{ 'border-color': borderColor, width: '30rem' }"
+    :style="{ 'border-color': borderColor, width: '29rem' }"
   >
     <button
       class="p-0"
@@ -52,7 +52,7 @@
         >
           <b class="pt-1" :style="{ color: borderColor }">{{ commandType }}</b>
         </div>
-        <div class="col-7 px-0">
+        <div class="col-9 px-0">
           <div class="d-flex flex-column">
             <div
               class="d-flex mb-1"
@@ -81,7 +81,7 @@
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      {{ item.value1 ?? "-------" }}
+                      {{ item.DValue1 ?? item.value1 ?? "-------" }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
                       <template
@@ -99,6 +99,7 @@
                             class="dropdown-item"
                             @click="
                               item.value1 = device.id + '.' + key;
+                              item.DValue1 = index + 1 + ': ' + key;
                               item.type = device.data[key];
                               item.varChosen = false;
                               item.value2 =
@@ -124,6 +125,7 @@
                             class="dropdown-item"
                             @click="
                               item.value1 = 'var.' + variable;
+                              item.DValue1 = 'SCH: ' + variable;
                               item.type = scheduleVars[variable];
                               item.varChosen = false;
                               item.value2 =
@@ -197,7 +199,7 @@
                       v-if="item.varChosen"
                       class="input-group-text border-light"
                     >
-                      {{ item.value2 }}
+                      {{ item.DValue2 ?? item.value2 }}
                     </div>
                     <input
                       class="input-group-text border-light"
@@ -235,7 +237,10 @@
                       <li>
                         <button
                           class="dropdown-item"
-                          @click="item.varChosen = false"
+                          @click="
+                            item.varChosen = false;
+                            item.value2 = 0;
+                          "
                           :class="{
                             'disabled text-secondary': item.type != 'NUMBER',
                           }"
@@ -246,7 +251,10 @@
                       <li>
                         <button
                           class="dropdown-item"
-                          @click="item.varChosen = false"
+                          @click="
+                            item.varChosen = false;
+                            item.value2 = false;
+                          "
                           :class="{
                             'disabled text-secondary': item.type != 'BOOLEAN',
                           }"
@@ -269,6 +277,7 @@
                             class="dropdown-item"
                             @click="
                               item.value2 = device.id + '.' + key;
+                              item.DValue2 = index + 1 + ': ' + key;
                               item.varChosen = true;
                             "
                             :class="{
@@ -295,6 +304,7 @@
                             class="dropdown-item"
                             @click="
                               item.value2 = 'var.' + variable;
+                              item.DValue2 = 'SCH: ' + variable;
                               item.varChosen = true;
                             "
                             :class="{
@@ -385,9 +395,9 @@
             </div>
           </div>
         </div>
-        <div class="col-auto justify-content-end px-0">
+        <div class="col justify-content-end px-0">
           <button
-            class="btn btn-outline-success btn-sm text-light"
+            class="btn btn-success btn-sm text-light"
             :class="{ disabled: display }"
             style="font-size: 80%"
             @click="
@@ -402,13 +412,13 @@
                 conditions.joining.push('AND');
             "
           >
-            + condition
+            +
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="d-flex nub" id="male-slot" :style="{ width: '30rem' }">
+  <div class="d-flex nub" id="male-slot" :style="{ width: '29rem' }">
     <div class="card border-0 px-1" style="background-color: rgba(0, 0, 0, 0)">
       <div class="card-body py-1"></div>
     </div>
@@ -428,9 +438,11 @@ type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 
 interface Condition {
   value1: string | undefined;
+  DValue1?: string;
   type: "NUMBER" | "BOOLEAN";
   compare: CompareValue;
   value2: number | string | boolean | undefined;
+  DValue2?: string;
   varChosen: boolean;
 }
 
