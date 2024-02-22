@@ -166,6 +166,7 @@
                         <button
                           @click="item.compare = '>='"
                           class="dropdown-item px-2"
+                          v-if="item.type == 'NUMBER'"
                         >
                           {{ ">=" }}
                         </button>
@@ -174,6 +175,7 @@
                         <button
                           @click="item.compare = '<='"
                           class="dropdown-item px-2"
+                          v-if="item.type == 'NUMBER'"
                         >
                           {{ "<=" }}
                         </button>
@@ -181,6 +183,7 @@
                       <li>
                         <button
                           @click="item.compare = '>'"
+                          v-if="item.type == 'NUMBER'"
                           class="dropdown-item px-2"
                         >
                           {{ ">" }}
@@ -190,6 +193,7 @@
                         <button
                           @click="item.compare = '<'"
                           class="dropdown-item px-1"
+                          v-if="item.type == 'NUMBER'"
                         >
                           {{ "<" }}
                         </button>
