@@ -5,7 +5,7 @@
     </div>
     <div class="container-fluid mx-0 px-0">
       <div class="row mx-0">
-        <div class="col p-3" style="max-height: 100">
+        <div class="col p-3" style="max-height: 100%">
           <trigger-block />
           <div
             v-for="(command, index) in commands"
