@@ -232,7 +232,8 @@
                 compare: '==',
                 value2: undefined,
               });
-              conditions.joining.push('AND');
+              if (conditions.conditions.length > 1)
+                conditions.joining.push('AND');
             "
           >
             + condition
@@ -281,11 +282,6 @@ interface Condition {
 
 type Joining = "AND" | "OR";
 
-const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
-  conditions: [{ value1: undefined, compare: "==", value2: undefined }],
-  joining: [],
-});
-
 const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
   try {
@@ -310,6 +306,14 @@ const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
 }>();
+
+const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
+  conditions:
+    props.commandType != "ELSE"
+      ? [{ value1: undefined, compare: "==", value2: undefined }]
+      : [],
+  joining: [],
+});
 
 defineExpose<{
   getCodeContent: string[] | boolean;
