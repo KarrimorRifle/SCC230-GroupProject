@@ -32,7 +32,7 @@
   >
     <button
       class="p-0"
-      :class="{ disabled: display }"
+      v-if="!display"
       style="
         color: rgb(213, 29, 29);
         position: absolute;
