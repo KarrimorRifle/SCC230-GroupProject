@@ -109,29 +109,36 @@
                     @click="
                       setValue.variable = device.id + '.' + key;
                       setValue.displayVariable = index + 1 + ': ' + key;
+                      setValue.type = device.data[key];
                     "
                   >
                     {{ key }}
                   </button>
                 </li>
               </template>
-              <li class="mt-2">
-                <b>Schedule Vars</b>
-              </li>
-              <li class="pt-0 pb-1 px-1">
-                <hr class="dropdown-divider m-0" />
-              </li>
-              <li v-for="(variable, index) in scheduleVars" :key="index">
-                <button
-                  class="dropdown-item"
-                  @click="
-                    setValue.variable = 'var.' + variable;
-                    setValue.displayVariable = 'SCH: ' + variable;
-                  "
+              <template v-if="scheduleVars">
+                <li class="mt-2">
+                  <b>Schedule Vars</b>
+                </li>
+                <li class="pt-0 pb-1 px-1">
+                  <hr class="dropdown-divider m-0" />
+                </li>
+                <li
+                  v-for="(variable, index) in Object.keys(scheduleVars)"
+                  :key="index"
                 >
-                  {{ variable }}
-                </button>
-              </li>
+                  <button
+                    class="dropdown-item"
+                    @click="
+                      setValue.variable = 'var.' + variable;
+                      setValue.displayVariable = 'SCH: ' + variable;
+                      setValue.type = scheduleVars[variable];
+                    "
+                  >
+                    {{ variable }}
+                  </button>
+                </li>
+              </template>
             </ul>
             <button
               class="input-group-text"
@@ -154,24 +161,32 @@
                 </button>
               </li>
             </ul>
-            <!-- <div
-              class="input-group-text border-light"
-              v-if="
-                item.device != undefined &&
-                typeof item.device.data[item.variable] == 'boolean'
-              "
-            >
-              <input
-                class="form-check-input mt-0 border-primary"
-                type="checkbox"
-              />
-            </div> -->
             <input
               class="input-group-text border-light"
               type="number"
               style="width: 5rem"
               placeholder="00"
+              :v-model="setValue.value"
+              v-if="setValue.type == 'NUMBER'"
             />
+            <div
+              class="input-group-text border-light"
+              v-if="setValue.type == 'BOOLEAN'"
+            >
+              <input
+                class="form-check-input mt-0 border-primary"
+                type="checkbox"
+                :v-model="setValue.value"
+              />
+            </div>
+            <button
+              type="button"
+              class="input-group-text border-light dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
           </div>
         </div>
       </div>
@@ -213,6 +228,7 @@ type setActions = "=" | "+=" | "-=" | "/=" | "*=";
 const availableActions = ref<setActions[]>(["=", "+=", "-=", "/=", "*="]);
 interface deviceSetValue {
   displayVariable: string;
+  type: "NUMBER" | "BOOLEAN" | "ANY";
   variable: string;
   action: setActions;
   value: number | boolean;
@@ -223,6 +239,7 @@ const setValue = ref<deviceSetValue>({
   variable: "",
   action: "=",
   value: 2,
+  type: "NUMBER",
 });
 
 const getCodeContent = (): string[] | boolean => {
@@ -249,7 +266,7 @@ const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
   devices?: Device[];
-  scheduleVars?: string[];
+  scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   endSelectable?: boolean;
 }>();
 

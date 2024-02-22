@@ -131,7 +131,10 @@ const validDevices = ref<Device[]>([
   },
 ]);
 
-const variables = ref<string[]>(["test1", "test2"]);
+const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
+  test1: "BOOLEAN",
+  test2: "NUMBER",
+});
 </script>
 <style>
 .main {

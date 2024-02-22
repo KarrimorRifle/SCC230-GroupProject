@@ -23,7 +23,7 @@ export interface Schedule {
   ratings: number[]; //was just one value, but instead should be a computed value
   triggers: Trigger[];
   code: FunctionCode[];
-  customVars?: string[];
+  customVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
 
 export interface Trigger {
