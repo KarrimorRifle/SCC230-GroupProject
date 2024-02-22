@@ -132,7 +132,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { getAccount } from "@/functions";
+import { getAccount } from "../../modules/common/functions";
 import axios, { AxiosError } from "axios";
 import router from "@/router";
 

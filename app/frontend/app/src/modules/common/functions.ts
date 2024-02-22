@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import router from "./router";
+import router from "../../router";
 
 export const getCookies = () => {
   const cookies: string = document.cookie;
