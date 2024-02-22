@@ -7,19 +7,20 @@
   >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body py-1"></div>
     </div>
     <div
-      style="border-color: white; background-color: rgba(0, 0, 0, 0)"
+      style="background-color: rgba(0, 0, 0, 0)"
+      :style="{ 'border-color': borderColor }"
       class="card border-top-0 rounded-top-0"
     >
       <div class="card-body p-0 px-3"></div>
     </div>
     <div
       class="card flex-grow-1 border-bottom-0 rounded-bottom-0 border-start-0 rounded-start-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body py-1"></div>
     </div>
@@ -27,8 +28,7 @@
   <div
     id="functionCodeItem"
     class="card rounded-top-0 border-top-0 border-bottom-0"
-    style="border-color: white"
-    :style="{ width: width }"
+    :style="{ 'border-color': borderColor, width: width }"
   >
     <div class="card-body p-2">
       <button
@@ -61,7 +61,7 @@
             'col-5': commandType == 'FOR',
           }"
         >
-          <b class="pt-1">{{ commandType }}</b>
+          <b class="pt-1" :style="{ color: borderColor }">{{ commandType }}</b>
         </div>
         <div class="col-2" v-if="commandType == 'FOR'">
           <div
@@ -81,12 +81,11 @@
             <button class="input-group-text">------------</button>
             <button class="input-group-text">------------</button>
             <div class="input-group-text">=</div>
-            <input
+            <div
               class="input-group-text"
               type="number"
               style="width: 5rem"
-              placeholder="00"
-            />
+            ></div>
           </div>
           <div
             class="input-group"
@@ -143,7 +142,7 @@
     </div>
     <div
       class="card rounded-0 rounded-bottom border-top-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
@@ -214,7 +213,14 @@ const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
   devices?: Device[];
+  endSelectable?: boolean;
 }>();
+
+const borderColor = computed(() => {
+  if (props.endSelectable || props.commandType != "END" || !props.display)
+    return "white";
+  return "gray";
+});
 
 defineExpose<{
   getCodeContent: string[] | boolean;

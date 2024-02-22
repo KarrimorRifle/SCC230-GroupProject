@@ -17,9 +17,16 @@
       :key="index"
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
-      @click="$emit('chosen', command)"
+      @click="blockItemSelect(command)"
+      :style="{
+        cursor: !endAvailable && command == 'END' ? 'default' : 'pointer',
+      }"
     >
-      <block-item :command-type="command" :display="true" />
+      <block-item
+        :command-type="command"
+        :display="true"
+        :end-selectable="endAvailable"
+      />
     </button>
     <button class="btn btn-danger mt-5" @click="$emit('close')">CLOSE</button>
   </div>
@@ -28,12 +35,24 @@
 import BlockConditionals from "./blocks/BlockConditionals.vue";
 import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
-import { ref } from "vue";
+import { ref, defineProps, defineEmits } from "vue";
 import { CommandType } from "@/modules/schedules/types";
 
 const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
 
 const other = ref<CommandType[]>(["SET", "FOR", "END"]);
+
+const props = defineProps<{
+  endAvailable: boolean;
+}>();
+
+const emit = defineEmits(["chosen", "close"]);
+
+const blockItemSelect = (command: CommandType) => {
+  if (props.endAvailable || command != "END") {
+    emit("chosen", command);
+  }
+};
 </script>
 <style>
 #editor {

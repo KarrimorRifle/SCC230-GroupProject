@@ -37,7 +37,11 @@
           </div>
         </div>
         <div class="col-4 px-0" v-if="menu">
-          <block-menu @close="menu = false" @chosen="addNewBlock" />
+          <block-menu
+            @close="menu = false"
+            @chosen="addNewBlock"
+            :end-available="endAvailable"
+          />
         </div>
       </div>
     </div>
@@ -48,7 +52,7 @@ import BlockMenu from "./BlockMenu.vue";
 import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import BlockConditionals from "./blocks/BlockConditionals.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { CommandType } from "@/modules/schedules/types";
 
 const menu = ref<boolean>(false);
@@ -59,6 +63,16 @@ const blocks = ref<(typeof BlockItem)[]>();
 const addNewBlock = (commandType: CommandType) => {
   commands.value.push(commandType);
 };
+
+const endAvailable = computed(() => {
+  let conditionalsCount = 0;
+  let endCount = 0;
+  commands.value.forEach((item) => {
+    if (item == "END") endCount++;
+    if (["WHILE", "IF", "ELSE", "FOR"].includes(item)) conditionalsCount++;
+  });
+  return conditionalsCount > endCount;
+});
 </script>
 <style>
 .main {
