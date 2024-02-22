@@ -18,10 +18,11 @@ export interface FunctionCode {
 export interface Schedule {
   id: string;
   name: string;
+  AuthorID: string;
   isPublic: boolean;
   isActive: boolean;
   ratings: number[]; //was just one value, but instead should be a computed value
-  triggers: Trigger[];
+  triggers: Record<string, string[]>;
   code: FunctionCode[];
   customVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
