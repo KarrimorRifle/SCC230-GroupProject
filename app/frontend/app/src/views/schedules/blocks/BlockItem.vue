@@ -341,9 +341,19 @@ const getCodeContent = (): string[] | boolean => {
   switch (props.commandType) {
     case "FOR":
     case "WAIT":
+      if (forValue.value == 0) return false;
       return [forValue.value + ""];
     case "END":
       return [];
+    case "SET":
+      if (setValue.value.variable == "") return false;
+      return [
+        setValue.value.variable,
+        setValue.value.action,
+        setValue.value.value + "",
+      ];
+    default:
+      return false;
   }
 };
 
