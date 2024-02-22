@@ -47,7 +47,7 @@ import { CommandType } from "@/modules/schedules/types";
 
 const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
 
-const other = ref<CommandType[]>(["SET", "FOR", "END"]);
+const other = ref<CommandType[]>(["SET", "FOR", "WAIT", "END"]);
 
 const props = defineProps<{
   endAvailable: boolean;

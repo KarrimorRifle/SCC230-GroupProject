@@ -13,7 +13,7 @@
             style="margin-top: -0.6rem"
           >
             <block-item
-              v-if="['SET', 'FOR', 'END'].includes(command)"
+              v-if="['SET', 'FOR', 'END', 'WAIT'].includes(command)"
               :command-type="command"
               @delete="commands.splice(index, 1)"
             />

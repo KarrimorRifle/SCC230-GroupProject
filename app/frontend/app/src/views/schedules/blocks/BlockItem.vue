@@ -49,8 +49,8 @@
       <div
         class="row d-flex"
         :class="{
-          'justify-content-center': commandType != 'FOR',
-          'justify-content-start': commandType == 'FOR',
+          'justify-content-center': !['FOR', 'WAIT'].includes(commandType),
+          'justify-content-start': ['FOR', 'WAIT'].includes(commandType),
         }"
       >
         <div
@@ -58,12 +58,12 @@
           :class="{
             'col-1': commandType == 'SET',
             'col-4': commandType == 'END',
-            'col-5': commandType == 'FOR',
+            'col-5': ['FOR', 'WAIT'].includes(commandType),
           }"
         >
           <b class="pt-1" :style="{ color: borderColor }">{{ commandType }}</b>
         </div>
-        <div class="col-2" v-if="commandType == 'FOR'">
+        <div class="col-7" v-if="['FOR', 'WAIT'].includes(commandType)">
           <div
             class="input-group-text"
             style="width: 5rem; height: 1.6rem"
@@ -123,7 +123,7 @@
         </div>
         <div
           class="col-auto justify-content-end px-0"
-          v-if="commandType != 'END' && commandType != 'FOR'"
+          v-if="!['FOR', 'END', 'WAIT'].includes(commandType)"
         >
           <button
             class="btn btn-outline-success btn-sm text-light"
@@ -195,6 +195,7 @@ const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
   switch (props.commandType) {
     case "FOR":
+    case "WAIT":
       return [forValue.value + ""];
     case "END":
       return [];
@@ -203,7 +204,8 @@ const getCodeContent = (): string[] | boolean => {
 
 const width = computed(() => {
   if (props.commandType == "END") return "7rem";
-  else if (props.commandType == "FOR") return "12rem";
+  else if (props.commandType == "FOR" || props.commandType == "WAIT")
+    return "12rem";
   else return "28rem";
 });
 
