@@ -7,19 +7,20 @@
   >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body py-1"></div>
     </div>
     <div
-      style="border-color: white; background-color: rgba(0, 0, 0, 0)"
+      style="background-color: rgba(0, 0, 0, 0)"
+      :style="{ 'border-color': borderColor }"
       class="card border-top-0 rounded-top-0"
     >
       <div class="card-body p-0 px-3"></div>
     </div>
     <div
       class="card flex-grow-1 border-bottom-0 rounded-bottom-0 border-start-0 rounded-start-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body py-1"></div>
     </div>
@@ -27,8 +28,7 @@
   <div
     id="functionCodeItem"
     class="card rounded-top-0 border-top-0 border-bottom-0"
-    style="border-color: white"
-    :style="{ width: '28rem' }"
+    :style="{ 'border-color': borderColor, width: '28rem' }"
   >
     <button
       class="p-0"
@@ -50,7 +50,7 @@
         <div
           class="col-2 px-0 d-flex align-items-start justify-content-center col-2"
         >
-          <b class="pt-1">{{ commandType }}</b>
+          <b class="pt-1" :style="{ color: borderColor }">{{ commandType }}</b>
         </div>
         <div class="col-7 px-0">
           <div class="d-flex flex-column">
@@ -248,7 +248,7 @@
     </div>
     <div
       class="card rounded-0 rounded-bottom border-top-0"
-      style="border-color: white"
+      :style="{ 'border-color': borderColor }"
     >
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
@@ -314,6 +314,12 @@ const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
       ? [{ value1: undefined, compare: "==", value2: undefined }]
       : [],
   joining: [],
+});
+
+const borderColor = computed(() => {
+  if (props.commandType != "ELSE" || props.elseAvailable || !props.display)
+    return "WHITE";
+  return "GRAY";
 });
 
 defineExpose<{
