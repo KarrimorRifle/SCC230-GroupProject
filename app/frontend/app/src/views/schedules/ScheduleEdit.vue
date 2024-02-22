@@ -5,11 +5,39 @@
     </div>
     <div class="container-fluid mx-0 px-0">
       <div class="row mx-0">
-        <div class="col-8 p-3" style="max-height: 100">
+        <div class="col p-3" style="max-height: 100">
           <trigger-block />
+          <div
+            v-for="(command, index) in commands"
+            :key="index"
+            style="margin-top: -0.6rem"
+          >
+            <block-item
+              v-if="['SET', 'FOR', 'END'].includes(command)"
+              :command-type="command"
+              @delete="commands.splice(index, 1)"
+            />
+            <block-conditionals
+              v-else
+              :command-type="command"
+              @delete="commands.splice(index, 1)"
+            />
+          </div>
+          <div style="width: 7rem" class="mt-1">
+            <button
+              style="background-color: rgba(0, 0, 0, 0); border-style: none"
+              @click="menu = true"
+            >
+              <img
+                src="../../assets/plus.svg"
+                alt=""
+                style="width: 1.8rem; height: 1.8rem"
+              />
+            </button>
+          </div>
         </div>
-        <div class="col-4 px-0">
-          <block-menu />
+        <div class="col-4 px-0" v-if="menu">
+          <block-menu @close="menu = false" @chosen="addNewBlock" />
         </div>
       </div>
     </div>
@@ -17,9 +45,20 @@
 </template>
 <script setup lang="ts">
 import BlockMenu from "./BlockMenu.vue";
-import BlockItem from "./BlockItem.vue";
-import TriggerBlock from "./TriggerBlock.vue";
-import BlockConditionals from "./BlockConditionals.vue";
+import BlockItem from "./blocks/BlockItem.vue";
+import TriggerBlock from "./blocks/TriggerBlock.vue";
+import BlockConditionals from "./blocks/BlockConditionals.vue";
+import { ref } from "vue";
+import { CommandType } from "@/modules/schedules/types";
+
+const menu = ref<boolean>(false);
+
+const commands = ref<CommandType[]>([]);
+const blocks = ref<(typeof BlockItem)[]>();
+
+const addNewBlock = (commandType: CommandType) => {
+  commands.value.push(commandType);
+};
 </script>
 <style>
 .main {
@@ -44,5 +83,9 @@ import BlockConditionals from "./BlockConditionals.vue";
 
 body {
   color: white;
+}
+
+.block {
+  margin-bottom: -2rem;
 }
 </style>

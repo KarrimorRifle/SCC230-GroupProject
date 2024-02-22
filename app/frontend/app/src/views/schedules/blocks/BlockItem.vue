@@ -31,6 +31,21 @@
     :style="{ width: width }"
   >
     <div class="card-body p-2">
+      <button
+        class="p-0"
+        :class="{ disabled: display }"
+        style="
+          color: rgb(213, 29, 29);
+          position: absolute;
+          right: 0.2rem;
+          top: -0.8rem;
+          background-color: rgba(0, 0, 0, 0);
+          border-style: none;
+        "
+        @click="$emit('delete')"
+      >
+        x
+      </button>
       <div
         class="row d-flex"
         :class="{

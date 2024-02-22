@@ -35,7 +35,7 @@
                   v-model="item.value1"
                 />
                 <button
-                  class="btn btn-outline-secondary text-light btn-sm"
+                  class="btn btn-outline-none text-light btn-sm"
                   :class="{ disabled: display }"
                   type="button"
                   data-bs-toggle="dropdown"
@@ -151,7 +151,7 @@
                       v-if="conditions.conditions.length > 1"
                     >
                       <img
-                        src="../../assets/delete-svgrepo-com.svg"
+                        src="@/assets/delete-svgrepo-com.svg"
                         alt="delete icon"
                         style="max-width: 1.5rem"
                       />
@@ -173,7 +173,7 @@
                   :class="{ disabled: display }"
                 >
                   <img
-                    src="../../assets/delete-svgrepo-com.svg"
+                    src="@/assets/delete-svgrepo-com.svg"
                     alt="delete icon"
                     style="width: 1.2rem"
                   />

@@ -30,6 +30,21 @@
     style="border-color: white"
     :style="{ width: '28rem' }"
   >
+    <button
+      class="p-0"
+      :class="{ disabled: display }"
+      style="
+        color: rgb(213, 29, 29);
+        position: absolute;
+        right: 0.2rem;
+        top: -0.8rem;
+        background-color: rgba(0, 0, 0, 0);
+        border-style: none;
+      "
+      @click="$emit('delete')"
+    >
+      x
+    </button>
     <div class="card-body p-2">
       <div class="row d-flex justify-content-center">
         <div
@@ -175,7 +190,7 @@
                       v-if="conditions.conditions.length > 1"
                     >
                       <img
-                        src="../../assets/delete-svgrepo-com.svg"
+                        src="@/assets/delete-svgrepo-com.svg"
                         alt="delete icon"
                         style="max-width: 1.5rem"
                       />
@@ -197,7 +212,7 @@
                   :class="{ disabled: display }"
                 >
                   <img
-                    src="../../assets/delete-svgrepo-com.svg"
+                    src="@/assets/delete-svgrepo-com.svg"
                     alt="delete icon"
                     style="width: 1.2rem"
                   />
