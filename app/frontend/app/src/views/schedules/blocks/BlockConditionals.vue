@@ -253,19 +253,6 @@
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
   </div>
-  <div class="d-flex nub justify-content-center" id="add-item">
-    <button
-      class="d-flex align-content-center justify-content-center mt-1"
-      style="background-color: rgba(0, 0, 0, 0); border-style: none"
-      v-if="lastBlock"
-    >
-      <img
-        src="@/assets/plus.svg"
-        style="width: 1.3rem; height: 1.3rem"
-        alt="plus"
-      />
-    </button>
-  </div>
 </template>
 <script setup lang="ts">
 import { CommandType } from "@/modules/schedules/types";
@@ -302,7 +289,6 @@ const getCodeContent = (): string[] | boolean => {
 
 const props = defineProps<{
   trigger?: boolean;
-  lastBlock?: boolean;
   display?: boolean;
   commandType: CommandType;
   elseAvailable?: boolean;
