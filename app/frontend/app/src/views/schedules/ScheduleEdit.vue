@@ -81,24 +81,24 @@ const elseAvailable = computed(() => {
 
   for (let i = 0; i < commands.value.length; i++) {
     let item = commands.value[i];
-    if (item === "IF" || item === "WHILE") {
+    if (item === "IF" || item === "WHILE" || item === "FOR") {
       stack.push(item);
       lastSignificantBlock = item;
     } else if (item === "END") {
       if (stack.length === 0) {
-        return false; // There's an 'END' without a corresponding 'IF' or 'WHILE'
+        return false; // There's an 'END' without a corresponding 'IF', 'WHILE' or 'FOR'
       }
       stack.pop();
       lastSignificantBlock = item;
     } else if (item === "ELSE") {
       if (lastSignificantBlock !== "END" || stack.length === 0) {
-        return false; // There's an 'ELSE' without a corresponding ended 'IF' or 'WHILE' in the same nested level
+        return false; // There's an 'ELSE' without a corresponding ended 'IF', 'WHILE' or 'FOR' in the same nested level
       }
       lastSignificantBlock = item;
     }
   }
 
-  // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an unclosed 'IF' or 'WHILE' in the same nested level
+  // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an unclosed 'IF', 'WHILE' or 'FOR' in the same nested level
   return (
     lastSignificantBlock === "END" &&
     (stack.length > 0 || commands.value[commands.value.length - 1] === "END")
