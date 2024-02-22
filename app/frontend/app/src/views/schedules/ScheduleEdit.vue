@@ -16,6 +16,8 @@
               v-if="['SET', 'FOR', 'END', 'WAIT'].includes(command)"
               :command-type="command"
               @delete="commands.splice(index, 1)"
+              :devices="validDevices"
+              :schedule-vars="variables"
             />
             <block-conditionals
               v-else

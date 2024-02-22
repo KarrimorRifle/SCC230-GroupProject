@@ -56,7 +56,7 @@
         <div
           class="px-0 d-flex align-items-start justify-content-center"
           :class="{
-            'col-1': commandType == 'SET',
+            'col-2': commandType == 'SET',
             'col-4': commandType == 'END',
             'col-5': ['FOR', 'WAIT'].includes(commandType),
           }"
@@ -79,7 +79,6 @@
         <div class="col-9 px-0" v-else-if="commandType != 'END'">
           <div class="input-group" v-if="display">
             <button class="input-group-text">------------</button>
-            <button class="input-group-text">------------</button>
             <div class="input-group-text">=</div>
             <div
               class="input-group-text"
@@ -87,20 +86,55 @@
               style="width: 5rem"
             ></div>
           </div>
-          <div
-            class="input-group"
-            v-else
-            v-for="(item, index) in setValue"
-            :key="'SET' + index"
-          >
-            <button class="input-group-text dropdown-toggle border-light">
-              ------------
+          <div class="input-group" v-else>
+            <button
+              class="input-group-text dropdown-toggle border-light"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ setValue.displayVariable }}
             </button>
-            <button class="input-group-text dropdown-toggle border-light">
-              ------------
-            </button>
+            <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
+              <template v-for="(device, index) in devices" :key="device.id">
+                <li class="mt-2">
+                  <b>{{ index + 1 }}: {{ device.name }}</b>
+                </li>
+                <li class="pt-0 pb-1 px-1">
+                  <hr class="dropdown-divider m-0" />
+                </li>
+                <li v-for="key in Object.keys(device.data)" :key="key">
+                  <button
+                    class="dropdown-item"
+                    @click="
+                      setValue.variable = device.id + '.' + key;
+                      setValue.displayVariable = index + 1 + ': ' + key;
+                    "
+                  >
+                    {{ key }}
+                  </button>
+                </li>
+              </template>
+              <li class="mt-2">
+                <b>Schedule Vars</b>
+              </li>
+              <li class="pt-0 pb-1 px-1">
+                <hr class="dropdown-divider m-0" />
+              </li>
+              <li v-for="(variable, index) in scheduleVars" :key="index">
+                <button
+                  class="dropdown-item"
+                  @click="
+                    setValue.variable = 'var.' + variable;
+                    setValue.displayVariable = 'SCH: ' + variable;
+                  "
+                >
+                  {{ variable }}
+                </button>
+              </li>
+            </ul>
             <div class="input-group-text">=</div>
-            <div
+            <!-- <div
               class="input-group-text border-light"
               v-if="
                 item.device != undefined &&
@@ -111,27 +145,14 @@
                 class="form-check-input mt-0 border-primary"
                 type="checkbox"
               />
-            </div>
+            </div> -->
             <input
               class="input-group-text border-light"
               type="number"
               style="width: 5rem"
               placeholder="00"
-              v-else
             />
           </div>
-        </div>
-        <div
-          class="col-auto justify-content-end px-0"
-          v-if="!['FOR', 'END', 'WAIT'].includes(commandType)"
-        >
-          <button
-            class="btn btn-outline-success btn-sm text-light"
-            :class="{ disabled: display }"
-            style="font-size: 80%"
-          >
-            +
-          </button>
         </div>
       </div>
     </div>
@@ -168,28 +189,20 @@ import { defineProps, ref, defineExpose, computed } from "vue";
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
 const forValue = ref<number>(2);
 
-//stuff to do set
+type setActions = "=" | "+=" | "-=" | "/=" | "*=";
 interface deviceSetValue {
-  device?: Device;
-  variable?: string;
-  value?: number | boolean;
+  displayVariable: string;
+  variable: string;
+  action: setActions;
+  value: number | boolean;
 }
 
-const availableDevices = ref<Device[]>([]);
-
-// const dummyData: deviceSetValue = {
-//   device: {
-//     id: "fhvdssf-ajfa=-fanif",
-//     name: "BIG ENERGY",
-//     isActive: true,
-//     data: {
-//       temperature: 50,
-//       on: true,
-//     },
-//   },
-// };
-
-const setValue = ref<deviceSetValue[]>([{}]);
+const setValue = ref<deviceSetValue>({
+  displayVariable: "exampleVariable",
+  variable: "",
+  action: "=",
+  value: 2,
+});
 
 const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
@@ -206,7 +219,7 @@ const width = computed(() => {
   if (props.commandType == "END") return "7rem";
   else if (props.commandType == "FOR" || props.commandType == "WAIT")
     return "12rem";
-  else return "28rem";
+  else return "23rem";
 });
 
 const props = defineProps<{
@@ -215,6 +228,7 @@ const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
   devices?: Device[];
+  scheduleVars?: string[];
   endSelectable?: boolean;
 }>();
 
