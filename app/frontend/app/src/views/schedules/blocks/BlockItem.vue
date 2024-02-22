@@ -93,7 +93,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {{ setValue.displayVariable }}
+              {{ setValue.DVariable }}
             </button>
             <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
               <template v-for="(device, index) in devices" :key="device.id">
@@ -108,8 +108,10 @@
                     class="dropdown-item"
                     @click="
                       setValue.variable = device.id + '.' + key;
-                      setValue.displayVariable = index + 1 + ': ' + key;
+                      setValue.DVariable = index + 1 + ': ' + key;
                       setValue.type = device.data[key];
+                      setValue.varChosen = false;
+                      setValue.value = device.data[key] == 'NUMBER' ? 0 : false;
                     "
                   >
                     {{ key }}
@@ -131,8 +133,11 @@
                     class="dropdown-item"
                     @click="
                       setValue.variable = 'var.' + variable;
-                      setValue.displayVariable = 'SCH: ' + variable;
+                      setValue.DVariable = 'SCH: ' + variable;
                       setValue.type = scheduleVars[variable];
+                      setValue.varChosen = false;
+                      setValue.value =
+                        scheduleVars[variable] == 'NUMBER' ? 0 : false;
                     "
                   >
                     {{ variable }}
@@ -161,17 +166,23 @@
                 </button>
               </li>
             </ul>
+            <div
+              v-if="setValue.varChosen"
+              class="input-group-text border-light"
+            >
+              {{ setValue.DValue }}
+            </div>
             <input
               class="input-group-text border-light"
               type="number"
               style="width: 5rem"
               placeholder="00"
               :v-model="setValue.value"
-              v-if="setValue.type == 'NUMBER'"
+              v-else-if="setValue.type == 'NUMBER'"
             />
             <div
               class="input-group-text border-light"
-              v-if="setValue.type == 'BOOLEAN'"
+              v-else-if="setValue.type == 'BOOLEAN'"
             >
               <input
                 class="form-check-input mt-0 border-primary"
@@ -187,6 +198,87 @@
             >
               <span class="visually-hidden">Toggle Dropdown</span>
             </button>
+            <ul class="dropdown-menu dropdown-menu-dark px-2 pt-0">
+              <li class="mt-2">
+                <b>Custom</b>
+              </li>
+              <li class="pt-0 pb-1 px-1">
+                <hr class="dropdown-divider m-0" />
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  @click="setValue.varChosen = false"
+                  :class="{
+                    'disabled text-secondary': setValue.type != 'NUMBER',
+                  }"
+                >
+                  Number
+                </button>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  @click="setValue.varChosen = false"
+                  :class="{
+                    'disabled text-secondary': setValue.type != 'BOOLEAN',
+                  }"
+                >
+                  Boolean
+                </button>
+              </li>
+              <template v-for="(device, index) in devices" :key="device.id">
+                <li class="mt-2">
+                  <b>{{ index + 1 }}: {{ device.name }}</b>
+                </li>
+                <li class="pt-0 pb-1 px-1">
+                  <hr class="dropdown-divider m-0" />
+                </li>
+                <li v-for="key in Object.keys(device.data)" :key="key">
+                  <button
+                    class="dropdown-item"
+                    @click="
+                      setValue.value = device.id + '.' + key;
+                      setValue.DValue = index + 1 + ': ' + key;
+                      setValue.varChosen = true;
+                    "
+                    :class="{
+                      'disabled text-secondary':
+                        setValue.type != device.data[key],
+                    }"
+                  >
+                    {{ key }}
+                  </button>
+                </li>
+              </template>
+              <template v-if="scheduleVars">
+                <li class="mt-2">
+                  <b>Schedule Vars</b>
+                </li>
+                <li class="pt-0 pb-1 px-1">
+                  <hr class="dropdown-divider m-0" />
+                </li>
+                <li
+                  v-for="(variable, index) in Object.keys(scheduleVars)"
+                  :key="index"
+                >
+                  <button
+                    class="dropdown-item"
+                    @click="
+                      setValue.value = 'var.' + variable;
+                      setValue.varChosen = true;
+                      setValue.DValue = 'SCH: ' + variable;
+                    "
+                    :class="{
+                      'disabled text-secondary':
+                        setValue.type != scheduleVars[variable],
+                    }"
+                  >
+                    {{ variable }}
+                  </button>
+                </li>
+              </template>
+            </ul>
           </div>
         </div>
       </div>
@@ -227,15 +319,17 @@ const forValue = ref<number>(2);
 type setActions = "=" | "+=" | "-=" | "/=" | "*=";
 const availableActions = ref<setActions[]>(["=", "+=", "-=", "/=", "*="]);
 interface deviceSetValue {
-  displayVariable: string;
-  type: "NUMBER" | "BOOLEAN" | "ANY";
+  type: "NUMBER" | "BOOLEAN";
+  varChosen?: boolean;
   variable: string;
+  DVariable: string;
   action: setActions;
-  value: number | boolean;
+  value: number | boolean | string;
+  DValue?: string | undefined;
 }
 
 const setValue = ref<deviceSetValue>({
-  displayVariable: "exampleVariable",
+  DVariable: "exampleVariable",
   variable: "",
   action: "=",
   value: 2,
