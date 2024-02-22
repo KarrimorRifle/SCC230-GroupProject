@@ -38,8 +38,8 @@ const logout = async () => {
 };
 
 let User = {
-  FirstName: "Dave",
-  Surname: "Jone",
+  FirstName: "David",
+  Surname: "Mellon",
 };
 </script>
 <script lang="ts">
