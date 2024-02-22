@@ -60,91 +60,94 @@
               :key="'condition' + index"
             >
               <div class="input-group">
-                <div
-                  v-if="display"
-                  class="input-group-text p-0"
-                  style="width: 5rem"
-                ></div>
-                <input
-                  v-else
-                  type="number"
-                  class="input-group-text border-light p-0"
-                  :class="{ disabled: display }"
-                  style="width: 5rem"
-                  v-model="item.value1"
-                />
-                <button
-                  class="btn btn-outline-secondary text-light btn-sm"
-                  :class="{ disabled: display }"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {{ item.compare }}
-                </button>
-                <ul class="dropdown-menu" style="min-width: 2.5rem">
-                  <li>
-                    <button
-                      @click="item.compare = '=='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "==" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '!='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "!=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '>='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ ">=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '<='"
-                      class="dropdown-item px-2"
-                    >
-                      {{ "<=" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '>'"
-                      class="dropdown-item px-2"
-                    >
-                      {{ ">" }}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      @click="item.compare = '<'"
-                      class="dropdown-item px-1"
-                    >
-                      {{ "<" }}
-                    </button>
-                  </li>
-                </ul>
-                <div
-                  v-if="display"
-                  class="input-group-text p-0"
-                  style="width: 5rem"
-                ></div>
-                <input
-                  v-else
-                  type="number"
-                  class="input-group-text border-light p-0"
-                  :class="{ disabled: display }"
-                  style="width: 5rem"
-                  v-model="item.value2"
-                />
+                <template v-if="display">
+                  <div class="input-group-text p-0" style="width: 5rem"></div>
+                  <button
+                    class="btn btn-outline-secondary text-light btn-sm"
+                    :class="{ disabled: display }"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ item.compare }}
+                  </button>
+                  <div class="input-group-text p-0" style="width: 5rem"></div>
+                </template>
+                <template v-else>
+                  <input
+                    type="number"
+                    class="input-group-text border-light p-0"
+                    :class="{ disabled: display }"
+                    style="width: 5rem"
+                    v-model="item.value1"
+                  />
+                  <button
+                    class="btn btn-outline-secondary text-light btn-sm"
+                    :class="{ disabled: display }"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ item.compare }}
+                  </button>
+                  <ul class="dropdown-menu" style="min-width: 2.5rem">
+                    <li>
+                      <button
+                        @click="item.compare = '=='"
+                        class="dropdown-item px-2"
+                      >
+                        {{ "==" }}
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        @click="item.compare = '!='"
+                        class="dropdown-item px-2"
+                      >
+                        {{ "!=" }}
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        @click="item.compare = '>='"
+                        class="dropdown-item px-2"
+                      >
+                        {{ ">=" }}
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        @click="item.compare = '<='"
+                        class="dropdown-item px-2"
+                      >
+                        {{ "<=" }}
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        @click="item.compare = '>'"
+                        class="dropdown-item px-2"
+                      >
+                        {{ ">" }}
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        @click="item.compare = '<'"
+                        class="dropdown-item px-1"
+                      >
+                        {{ "<" }}
+                      </button>
+                    </li>
+                  </ul>
+                  <input
+                    type="number"
+                    class="input-group-text border-light p-0"
+                    :class="{ disabled: display }"
+                    style="width: 5rem"
+                    v-model="item.value2"
+                  />
+                </template>
               </div>
               <div v-if="conditions.joining[index]" class="d-inline-block">
                 <button
@@ -259,7 +262,6 @@ import { CommandType } from "@/modules/schedules/types";
 import { defineProps, ref, defineExpose, computed } from "vue";
 
 type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
-// const compare = ref<CompareValue>("==");
 
 interface Condition {
   value1: number | undefined;
