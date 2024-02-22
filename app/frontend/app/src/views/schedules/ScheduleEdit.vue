@@ -75,35 +75,36 @@ const endAvailable = computed(() => {
   return conditionalsCount > endCount;
 });
 
-const elseAvailable = computed(() => {
-  let stack: CommandType[] = [];
-  let lastSignificantBlock: CommandType | null = null;
+//given up on algo
+// const elseAvailable = computed(() => {
+//   let stack: CommandType[] = [];
+//   let lastSignificantBlock: CommandType | null = null;
+//   let lastEndedBlock: CommandType | null = null;
 
-  for (let i = 0; i < commands.value.length; i++) {
-    let item = commands.value[i];
-    if (item === "IF" || item === "WHILE" || item === "FOR") {
-      stack.push(item);
-      lastSignificantBlock = item;
-    } else if (item === "END") {
-      if (stack.length === 0) {
-        return false; // There's an 'END' without a corresponding 'IF', 'WHILE' or 'FOR'
-      }
-      stack.pop();
-      lastSignificantBlock = item;
-    } else if (item === "ELSE") {
-      if (lastSignificantBlock !== "END" || stack.length === 0) {
-        return false; // There's an 'ELSE' without a corresponding ended 'IF', 'WHILE' or 'FOR' in the same nested level
-      }
-      lastSignificantBlock = item;
-    }
-  }
+//   for (let i = 0; i < commands.value.length; i++) {
+//     let item = commands.value[i];
+//     if (item === "IF" || item === "WHILE" || item === "FOR") {
+//       stack.push(item);
+//       lastSignificantBlock = item;
+//     } else if (item === "END") {
+//       if (stack.length === 0) {
+//         return false; // There's an 'END' without a corresponding 'IF', 'WHILE' or 'FOR'
+//       }
+//       lastEndedBlock = stack.pop();
+//       lastSignificantBlock = item;
+//     } else if (item === "ELSE") {
+//       if (lastSignificantBlock !== "END" || lastEndedBlock !== "IF") {
+//         return false; // There's an 'ELSE' without a corresponding ended 'IF' in the same nested level
+//       }
+//       lastSignificantBlock = item;
+//     }
+//   }
 
-  // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an unclosed 'IF', 'WHILE' or 'FOR' in the same nested level
-  return (
-    lastSignificantBlock === "END" &&
-    (stack.length > 0 || commands.value[commands.value.length - 1] === "END")
-  );
-});
+//   // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an ended 'IF' in the same nested level
+//   return lastSignificantBlock === "END" && lastEndedBlock === "IF";
+// });
+
+const elseAvailable = true;
 </script>
 <style>
 .main {
