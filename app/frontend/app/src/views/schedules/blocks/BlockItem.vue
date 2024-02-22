@@ -193,13 +193,12 @@ const setValue = ref<deviceSetValue[]>([{}]);
 
 const getCodeContent = (): string[] | boolean => {
   let strings: string[] = [];
-  switch(props.commandType){
+  switch (props.commandType) {
     case "FOR":
       return [forValue.value + ""];
     case "END":
       return [];
   }
-
 };
 
 const width = computed(() => {

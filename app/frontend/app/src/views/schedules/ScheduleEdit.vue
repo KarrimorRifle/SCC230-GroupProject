@@ -54,7 +54,7 @@ import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import BlockConditionals from "./blocks/BlockConditionals.vue";
 import { computed, ref } from "vue";
-import { CommandType } from "@/modules/schedules/types";
+import { CommandType, Device } from "@/modules/schedules/types";
 
 const menu = ref<boolean>(false);
 
@@ -105,6 +105,29 @@ const endAvailable = computed(() => {
 // });
 
 const elseAvailable = true;
+
+const validDevices = ref<Device[]>([
+  {
+    id: "nadandin",
+    name: "Device1",
+    isActive: true,
+    data: {
+      var1: "NUMBER",
+      var2: "NUMBER",
+      var3: "BOOLEAN",
+    }
+  },
+  {
+    id: "NANA",
+    name: "Device2",
+    isActive: true,
+    data: {
+      var1: "NUMBER",
+      var2: "BOOLEAN",
+      var3: "BOOLEAN",
+    }
+  }
+])
 </script>
 <style>
 .main {

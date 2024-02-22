@@ -27,5 +27,5 @@ export interface Device {
   id: string;
   name: string;
   isActive: boolean;
-  data: Record<string, "NUMBER" | "VALUE">; //string is variable name which is the key, value will be describing the type
+  data: Record<string, "NUMBER" | "BOOLEAN">; //string is variable name which is the key, value will be describing the type
 }
