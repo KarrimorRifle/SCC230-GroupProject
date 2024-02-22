@@ -16,6 +16,7 @@ export interface Schedule {
   ratings: number[]; //was just one value, but instead should be a computed value
   triggers: Trigger[];
   code: FunctionCode[];
+  customVars: string[];
 }
 
 export interface Trigger {

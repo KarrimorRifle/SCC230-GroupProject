@@ -115,7 +115,7 @@ const validDevices = ref<Device[]>([
       var1: "NUMBER",
       var2: "NUMBER",
       var3: "BOOLEAN",
-    }
+    },
   },
   {
     id: "NANA",
@@ -125,9 +125,11 @@ const validDevices = ref<Device[]>([
       var1: "NUMBER",
       var2: "BOOLEAN",
       var3: "BOOLEAN",
-    }
-  }
-])
+    },
+  },
+]);
+
+const variables = ref<string[]>(['test1','test2']); 
 </script>
 <style>
 .main {
