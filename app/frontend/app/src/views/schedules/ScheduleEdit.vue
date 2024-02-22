@@ -41,6 +41,7 @@
             @close="menu = false"
             @chosen="addNewBlock"
             :end-available="endAvailable"
+            :else-available="elseAvailable"
           />
         </div>
       </div>
@@ -72,6 +73,36 @@ const endAvailable = computed(() => {
     if (["WHILE", "IF", "ELSE", "FOR"].includes(item)) conditionalsCount++;
   });
   return conditionalsCount > endCount;
+});
+
+const elseAvailable = computed(() => {
+  let stack: CommandType[] = [];
+  let lastSignificantBlock: CommandType | null = null;
+
+  for (let i = 0; i < commands.value.length; i++) {
+    let item = commands.value[i];
+    if (item === "IF" || item === "WHILE") {
+      stack.push(item);
+      lastSignificantBlock = item;
+    } else if (item === "END") {
+      if (stack.length === 0) {
+        return false; // There's an 'END' without a corresponding 'IF' or 'WHILE'
+      }
+      stack.pop();
+      lastSignificantBlock = item;
+    } else if (item === "ELSE") {
+      if (lastSignificantBlock !== "END" || stack.length === 0) {
+        return false; // There's an 'ELSE' without a corresponding ended 'IF' or 'WHILE' in the same nested level
+      }
+      lastSignificantBlock = item;
+    }
+  }
+
+  // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an unclosed 'IF' or 'WHILE' in the same nested level
+  return (
+    lastSignificantBlock === "END" &&
+    (stack.length > 0 || commands.value[commands.value.length - 1] === "END")
+  );
 });
 </script>
 <style>

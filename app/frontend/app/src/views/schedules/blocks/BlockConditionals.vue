@@ -305,6 +305,7 @@ const props = defineProps<{
   lastBlock?: boolean;
   display?: boolean;
   commandType: CommandType;
+  elseAvailable?: boolean;
 }>();
 
 const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({

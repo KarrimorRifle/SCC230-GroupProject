@@ -8,9 +8,16 @@
       :key="index"
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
-      @click="$emit('chosen', command)"
+      @click="blockConditionalsSelect(command)"
+      :style="{
+        cursor: !elseAvailable && command == 'ELSE' ? 'default' : 'pointer',
+      }"
     >
-      <block-conditionals :command-type="command" :display="true" />
+      <block-conditionals
+        :command-type="command"
+        :display="true"
+        :else-available="elseAvailable"
+      />
     </button>
     <button
       v-for="(command, index) in other"
@@ -44,12 +51,19 @@ const other = ref<CommandType[]>(["SET", "FOR", "END"]);
 
 const props = defineProps<{
   endAvailable: boolean;
+  elseAvailable: boolean;
 }>();
 
 const emit = defineEmits(["chosen", "close"]);
 
 const blockItemSelect = (command: CommandType) => {
   if (props.endAvailable || command != "END") {
+    emit("chosen", command);
+  }
+};
+
+const blockConditionalsSelect = (command: CommandType) => {
+  if (props.elseAvailable || command != "ELSE") {
     emit("chosen", command);
   }
 };
