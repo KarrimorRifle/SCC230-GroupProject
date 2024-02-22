@@ -49,10 +49,11 @@ export const getScheduleByID = async (id: string): Promise<Schedule> => {
   return <Schedule>{
     id: "01",
     name: "name1",
+    AuthorID: "asd",
     isPublic: false,
     isActive: false,
     ratings: [],
-    triggers: [],
+    triggers: {},
     code: [],
   };
 };
