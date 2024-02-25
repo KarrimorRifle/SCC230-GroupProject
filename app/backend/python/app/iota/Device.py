@@ -8,6 +8,7 @@
 
 ##IMPORTS##
 from iota.Api import Api
+from server import app
 
 ##CLASS DEFINITION##
 class Device:
@@ -19,13 +20,13 @@ class Device:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, ipAddress:str, hubID:str, isActive:bool=False,
+    def __init__(self, id:str, name:str, deviceType:str, ipAddress:str, hubID:str, isActive:bool=False,
                  debug:bool=False):
         self.id = id
         self.name = name
         self.deviceType = deviceType
         self.ipAddress = ipAddress
-        self.hunID = hubID
+        self.hubID = hubID
         self.isActive = isActive
         self.debug = debug
     
@@ -41,5 +42,5 @@ def loadFromDatabase(id:str) -> Device:
     cursor.execute(query, (id,))
     device = cursor.fetchone()
 
-    return User(str(device['DeviceID']), device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
+    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
     pass
