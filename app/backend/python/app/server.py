@@ -18,6 +18,7 @@ app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
 app.register_blueprint(schedule)
+app.register_blueprint(device)
 CORS(app, supports_credentials=True)
 
 #running app
