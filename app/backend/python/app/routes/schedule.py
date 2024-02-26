@@ -133,7 +133,7 @@ def delete_schedule(account, cursor, connection, scheduleID):
 
     try:
         connection.commit()
-    except:
+    except Exception as e:
         connection.rollback()
         return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 

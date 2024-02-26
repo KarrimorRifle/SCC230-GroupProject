@@ -2,6 +2,7 @@ import unittest
 from server import app
 import iota.Device as Device
 import sys
+import json
 sys.path.append((sys.path[0])[:-6])
 
 class test_user(unittest.TestCase):
@@ -32,4 +33,4 @@ class test_user(unittest.TestCase):
         url = '/device/'
         url += data['DeviceID']
         response = self.client_server.delete(url)
-        self.assertEqual(response.status_code, 200,msg='{0}'.format(data))
+        self.assertEqual(response.status_code, 200)

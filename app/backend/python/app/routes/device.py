@@ -4,7 +4,7 @@ from iota import genRandomID
 device = Blueprint('device', __name__)
 
 # Function returns list of devices linked to hub
-def get_devices(hubID, cursor):
+def get_devices(cursor):
     hubID = request.json.get("HubID")
     query = ("SELECT DeviceID, DeviceName, DeviceType, IpAddress, HubID FROM devices "
                 "WHERE HubID = %s")
@@ -50,9 +50,9 @@ def get_device_detail(cursor, deviceID):
     
     return jsonify(details), 200
 
-Function deletes device of specified ID
-def delete_device(hubID, cursor, connection, deviceID):
-    query = ("SELECT DeviceID FROM devices "
+#Function deletes device of specified ID
+def delete_device(cursor, connection, deviceID):
+    query = ("SELECT * FROM devices "
                 "WHERE DeviceID = %s")
     cursor.execute(query, (deviceID,))
     checkExists = cursor.fetchone()
@@ -60,20 +60,20 @@ def delete_device(hubID, cursor, connection, deviceID):
     if checkExists is None:
         return({"error": "device not found"}), 404
     
-    query = ("SELECT TriggerID FROM triggers "
+    query = ("SELECT * FROM trigger_data "
                 "WHERE DeviceID = %s")
     cursor.execute(query, (deviceID,))
-    trigger = cursor.fetchone()
+    trigger = cursor.fetchall()
 
-    if trigger is not None:
+    if trigger != []:
         return({"error": "device in use"}), 409
 
-    queries = [("DELETE FROM devices WHERE DeviceID = %s" )]
+    query = ("DELETE FROM devices WHERE DeviceID = %s" )
     cursor.execute(query, (deviceID,))
 
     try:
         connection.commit()
-    except:
+    except Exception as e:
         connection.rollback()
         return(jsonify({"error":"Unable to delete device", "details":f"{e}"})), 500
 

@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from routes.accounts import accounts
 from routes.schedule import schedule
+from routes.device import device
 
 #db connection
 connection = mysql.connector.connect(
