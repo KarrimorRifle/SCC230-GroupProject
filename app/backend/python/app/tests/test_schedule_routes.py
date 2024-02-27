@@ -21,7 +21,7 @@ class TestScheduleRoutes(unittest.TestCase):
 
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('ScheduleID', response.data.decode('utf-8'))
+        self.assertIn(data['ScheduleID'], response.data.decode('utf-8'))
 
     def test_get_schedules_success(self):
         response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
