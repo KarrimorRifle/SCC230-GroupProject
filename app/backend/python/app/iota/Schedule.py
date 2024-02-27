@@ -246,7 +246,7 @@ def loadFromDatabase(id:str):
     details = cursor.fetchone()
 
     if details is None:
-        return 1
+        return None
 
     query = ("SELECT * FROM function_blocks "
              "WHERE ScheduleID = %s")
