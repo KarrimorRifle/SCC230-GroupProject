@@ -46,3 +46,17 @@ class TestHubRoutes(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('HubID', data)
         self.assertIn('HubName', data)
+
+    def test_update_hub_success(self):
+        response = self.client_server.post("/hub", json={'HubName': 'Test Hub1'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        url = '/hub/'
+        url += data['HubID']
+        response = self.client_server.put(url, json={'HubName': 'Test Hub2'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+
+        self.assertIn('HubID', data)
+        self.assertIn('HubName', data)
+        self.assertEqual(data['HubName'], 'Test Hub2')
