@@ -21,7 +21,7 @@ class TestHubRoutes(unittest.TestCase):
 
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('HubID', response.data.decode('utf-8'))
+        self.assertIn(data['HubID'], response.data.decode('utf-8'))
 
     def test_get_hubs_success(self):
         response = self.client_server.post("/hub", json={'HubName': 'Test Hub'})
@@ -57,7 +57,7 @@ class TestHubRoutes(unittest.TestCase):
         data = json.loads(response.data)
         url = '/hub/'
         url += data['HubID']
-        response = self.client_server.put(url, json={'HubName': 'Test Hub2'})
+        response = self.client_server.patch(url, json={'HubName': 'Test Hub2'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
 
