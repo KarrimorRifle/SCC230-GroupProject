@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response, Blueprint, current_app
+from flask import request, jsonify, Blueprint, current_app
 from .accounts import getAccount
 from iota import genRandomID
 
@@ -43,7 +43,7 @@ def create_hub(account, cursor, connection):
     cursor.execute(query)
     hubIDs = cursor.fetchall()
     thisID = genRandomID(ids=hubIDs, prefix='Hub')
-    query = ("INSERT INTO schedules (HubID, HubName) "
+    query = ("INSERT INTO hubs (HubID, HubName) "
                      "VALUES (%s,%s)")
     try:
         cursor.execute(query, (thisID, hubName,))
@@ -99,7 +99,7 @@ def update_hub(account, cursor, connection, hubID):
     query = ("UPDATE hubs SET HubName = %s WHERE HubID = %s")
     cursor.execute(query, (hubName, hubID,))
     connection.commit()
-    return jsonify(hubID), 200
+    return jsonify({'HubID': hubID, 'HubName': hubName}), 200
 
 @hub.route('/hub', methods=['GET', 'POST'])
 def hub_route():
