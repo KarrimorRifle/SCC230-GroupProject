@@ -6,17 +6,15 @@ hub = Blueprint('hub', __name__)
 
 # Function returns list of hubs linked to user who is logged in
 def get_hubs(account, cursor):
-    query = ("SELECT HubID FROM accounts_hubsRelation "
-                "WHERE AccountID = %s")
+    query = ("SELECT hubs.* FROM accounts_hubsRelation "
+             "JOIN hubs ON accounts_hubsRelation.HubID = hubs.HubID "
+             "WHERE AccountID = %s")
     
     cursor.execute(query, (account['AccountID'],))
     hubs = cursor.fetchall()
 
     hubList = []
     for hub in hubs:
-        query = ("SELECT * FROM hubs WHERE HubID = %s")
-        cursor.execute(query, (hub['HubID'],))
-        hub = cursor.fetchone()
         hubList.append({'HubID':hub['HubID'], 'HubName':hub['HubName']})
 
     return jsonify(hubList), 200
