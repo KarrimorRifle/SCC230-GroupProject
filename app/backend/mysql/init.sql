@@ -34,6 +34,9 @@ CREATE TABLE `accounts_hubsRelation`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",10);
+
 CREATE TABLE `devices`(
     `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
