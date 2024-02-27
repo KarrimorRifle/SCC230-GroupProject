@@ -33,7 +33,7 @@ class User:
         self.debug = debug
 
 # Function creates User object based on User data in DB
-def loadFromDatabase(id:str) -> User:
+def loadUserFromDatabase(id:str) -> User:
     cursor = app.config['cursor']
     query = ("SELECT * FROM accounts "
                 "WHERE AccountID = %s")
