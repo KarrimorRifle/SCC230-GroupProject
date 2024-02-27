@@ -27,7 +27,7 @@ def create_device(account, cursor, connection):
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
-        return({"error": "Forbidden access"}), 401
+        return({"error": "Forbidden access"}), 403
     
     query = ("SELECT DeviceID FROM devices")
     cursor.execute(query)
@@ -77,7 +77,7 @@ def delete_device(account, cursor, connection, deviceID):
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
-        return({"error": "Forbidden access"}), 401
+        return({"error": "Forbidden access"}), 403
     
     query = ("SELECT * FROM trigger_data "
                 "WHERE DeviceID = %s")
@@ -114,7 +114,7 @@ def update_device(account, cursor, connection, deviceID):
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
-        return({"error": "Forbidden access"}), 401
+        return({"error": "Forbidden access"}), 403
     
     updateParams = []
     values = []
