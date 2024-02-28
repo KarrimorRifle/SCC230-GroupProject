@@ -9,14 +9,10 @@
       class="mb-2 d-flex flex-column"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
       @click="blockConditionalsSelect(command)"
-      :style="{
-        cursor: !elseAvailable && command == 'ELSE' ? 'default' : 'pointer',
-      }"
     >
       <block-conditionals
         :command-type="command"
         :display="true"
-        :else-available="elseAvailable"
       />
     </button>
     <button
@@ -51,7 +47,6 @@ const other = ref<CommandType[]>(["SET", "FOR", "WAIT", "END"]);
 
 const props = defineProps<{
   endAvailable: boolean;
-  elseAvailable: boolean;
 }>();
 
 const emit = defineEmits(["chosen", "close"]);
