@@ -37,6 +37,12 @@
                   class="btn btn-info me-2 btn-sm"
                   >EDIT</a
                 >
+                <button
+                  class="btn btn-danger btn-sm me-2"
+                  @click="deleteSchedule(item.ScheduleID)"
+                >
+                  DELETE
+                </button>
                 <div
                   class="p-2"
                   :class="{
@@ -104,6 +110,13 @@ const createSchedule = async () => {
       withCredentials: true,
     }
   );
+  fetchData();
+};
+
+const deleteSchedule = async (ID: string) => {
+  await axios.delete(`http://localhost:5000/schedule/${ID}`, {
+    withCredentials: true,
+  });
   fetchData();
 };
 
