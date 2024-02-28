@@ -28,21 +28,7 @@
             <div
               class="card-title mb-0 text-start p-2 d-flex justify-content-between"
             >
-              <h4 class="me-2 ms-2 mb-0">
-                Name: <b>{{ item.ScheduleName }}</b>
-              </h4>
               <div class="d-flex">
-                <a
-                  :href="'/schedules/' + item.ScheduleID"
-                  class="btn btn-info me-2 btn-sm"
-                  >EDIT</a
-                >
-                <button
-                  class="btn btn-danger btn-sm me-2"
-                  @click="deleteSchedule(item.ScheduleID)"
-                >
-                  DELETE
-                </button>
                 <div
                   class="p-2"
                   :class="{
@@ -57,7 +43,23 @@
                     border-color: black;
                     border-style: solid;
                   "
-                />
+                ></div>
+                <h4 class="me-2 ms-2 mb-0">
+                  Name: <b>{{ item.ScheduleName }}</b>
+                </h4>
+              </div>
+              <div class="d-flex me-2">
+                <a
+                  :href="'/schedules/' + item.ScheduleID"
+                  class="btn btn-info me-2 btn-sm"
+                  >EDIT</a
+                >
+                <button
+                  class="btn btn-danger btn-sm"
+                  @click="deleteSchedule(item.ScheduleID)"
+                >
+                  DELETE
+                </button>
               </div>
             </div>
             <hr class="m-0" />
