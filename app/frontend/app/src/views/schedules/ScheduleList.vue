@@ -85,8 +85,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { Schedule, ListSchedule } from "@/modules/schedules/types";
-import { getSchedules } from "@/modules/schedules/functions";
+import { ListSchedule } from "@/modules/schedules/types";
 import axios from "axios";
 
 const schedules = ref<ListSchedule[]>();
