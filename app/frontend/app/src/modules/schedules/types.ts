@@ -27,6 +27,14 @@ export interface Schedule {
   customVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
 
+export interface ListSchedule {
+  IsActive: number;
+  IsPublic: number;
+  Rating: number;
+  ScheduleID: string;
+  ScheduleName: string
+}
+
 export interface Trigger {
   id: string;
   data: Record<string, string[]>; //deviceID: data
