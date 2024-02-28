@@ -29,8 +29,8 @@ class TestScheduleRoutes(unittest.TestCase):
         response = self.client_server.get('/schedule')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-
         self.assertIsInstance(data, list)
+        
         for entry in data:
             self.assertIn('ScheduleID', entry)
             self.assertIn('ScheduleName', entry)
