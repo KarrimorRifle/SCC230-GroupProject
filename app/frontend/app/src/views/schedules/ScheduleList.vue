@@ -28,7 +28,9 @@
             <div
               class="card-title mb-0 text-start p-2 d-flex justify-content-between"
             >
-              <h5 class="me-2">{{ item.ScheduleName }}</h5>
+              <h4 class="me-2 ms-2 mb-0">
+                Name: <b>{{ item.ScheduleName }}</b>
+              </h4>
               <div class="d-flex">
                 <a
                   :href="'/schedules/' + item.ScheduleID"
@@ -93,7 +95,7 @@ const createSchedule = async () => {
   await axios.post(
     "http://localhost:5000/schedule",
     {
-      ScheduleName: "test1",
+      ScheduleName: "Schedule " + (schedules.value?.length + 1),
       IsActive: 0,
       IsPublic: 0,
       Rating: 0,
