@@ -32,7 +32,7 @@ export interface ListSchedule {
   IsPublic: number;
   Rating: number;
   ScheduleID: string;
-  ScheduleName: string
+  ScheduleName: string;
 }
 
 export interface Trigger {

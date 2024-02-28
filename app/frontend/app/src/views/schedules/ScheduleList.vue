@@ -15,29 +15,31 @@
             />
             <button class="input-group-text bg-gray">SEARCH</button>
           </div>
-          <button class="btn btn-primary">CREATE</button>
+          <button class="btn btn-primary" @click="createSchedule()">
+            CREATE
+          </button>
         </div>
         <div class="px-3">
           <div
             v-for="item in schedules"
-            :key="item.id"
+            :key="item.ScheduleID"
             class="card mb-3 bg-gray"
           >
             <div
               class="card-title mb-0 text-start p-2 d-flex justify-content-between"
             >
-              <h5 class="me-2">{{ item.name }}</h5>
+              <h5 class="me-2">{{ item.ScheduleName }}</h5>
               <div class="d-flex">
                 <a
-                  :href="'/schedules/' + item.id"
+                  :href="'/schedules/' + item.ScheduleID"
                   class="btn btn-info me-2 btn-sm"
                   >EDIT</a
                 >
                 <div
                   class="p-2"
                   :class="{
-                    'bg-success': item.isActive,
-                    'bg-danger': !item.isActive,
+                    'bg-success': item.IsActive,
+                    'bg-danger': !item.IsActive,
                   }"
                   style="
                     width: 1rem;
@@ -51,7 +53,20 @@
               </div>
             </div>
             <hr class="m-0" />
-            <div class="card-body py-0">data</div>
+            <div class="card-body py-0 d-flex">
+              <div class="me-3">
+                <b>Rating: </b>
+                <b :style="{ color: ratingToColor(item.Rating) }">
+                  {{ item.Rating }} / 5
+                </b>
+              </div>
+              <div>
+                <b>Status: </b>
+                <b :style="{ color: item.IsPublic ? 'orange' : 'green' }">
+                  {{ item.IsPublic ? "Public" : "Private" }}
+                </b>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -60,14 +75,50 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { Schedule } from "@/modules/schedules/types";
+import { Schedule, ListSchedule } from "@/modules/schedules/types";
 import { getSchedules } from "@/modules/schedules/functions";
+import axios from "axios";
 
-const schedules = ref<Schedule[]>([]);
+const schedules = ref<ListSchedule[]>();
 
 const fetchData = async () => {
-  const data = await getSchedules();
-  schedules.value = data;
+  const data = await axios.get("http://localhost:5000/schedule", {
+    withCredentials: true,
+  });
+  schedules.value = data.data;
+  console.log(data);
+};
+
+const createSchedule = async () => {
+  await axios.post(
+    "http://localhost:5000/schedule",
+    {
+      ScheduleName: "test1",
+      IsActive: 0,
+      IsPublic: 0,
+      Rating: 0,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+  fetchData();
+};
+
+const ratingToColor = (rating: number) => {
+  let value = rating - 2.5;
+  let green = 255;
+  let red = 255;
+  if (value > 0) red -= (value / 2.5) * 255;
+  else green += (value / 2.5) * 255;
+
+  let redChr = Math.round(red).toString(16);
+  if (redChr.length < 2) redChr = 0 + redChr;
+
+  let greenChr = Math.round(green).toString(16);
+  if (greenChr.length < 2) greenChr = 0 + greenChr;
+
+  return "#" + redChr + greenChr + "00";
 };
 
 fetchData();
