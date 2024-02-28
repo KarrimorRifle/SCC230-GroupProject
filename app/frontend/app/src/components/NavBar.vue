@@ -36,6 +36,7 @@
           <li class="nav-item">
             <!-- add v-if="loggedIn" -->
             <a
+              v-if="loggedIn"
               class="nav-link text-light"
               href="/schedules"
               :class="{ active: route.path == '/schedules' }"
