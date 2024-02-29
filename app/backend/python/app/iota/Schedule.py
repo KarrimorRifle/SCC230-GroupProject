@@ -10,6 +10,7 @@
 from iota.Device import *
 import time
 import threading
+from server import app
 
 ##CONSTANTS##
 COMM_ELSE = "ELSE"
@@ -18,7 +19,6 @@ COMM_IF = "IF"
 COMM_SET = "SET"
 COMM_WAIT = "WAIT"
 COMM_WHILE = "WHILE"
-
 
 ##CLASS DEFINITIONS##
 class FunctionCode():
@@ -70,6 +70,7 @@ class Schedule:
         self.debug = debug
 
     ##PUBLIC METHODS##
+
     #Runs the code to completion, and resets the values needed
     def runCode(self):
         def runThread():
@@ -118,6 +119,8 @@ class Schedule:
             print(f"{self.code[index].commandType + ' ' + (' '.join(evalParams)):<60}({self.id})")
 
         #Checks the type of statement that is at code[index]
+13
+from iota.Device import Device
         match(self.code[index].commandType):
             #Code for a for loop
             case "FOR":
@@ -264,5 +267,57 @@ class Schedule:
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
 
-def loadScheduleFromDatabase():
-    pass
+#Function loads data from DB into Schedule Object
+def loadScheduleFromDatabase(id:str):
+    cursor = app.config['cursor']
+    query = ("SELECT * FROM schedules "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    details = cursor.fetchone()
+
+    if details is None:
+        return None
+
+    query = ("SELECT * FROM function_blocks "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    functionBlocks = cursor.fetchall()
+
+    code = []
+
+    query = ("SELECT Link, ParentID FROM function_block_links "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    linkedCommands = cursor.fetchall()
+    linkedCommands = [link for link in linkedCommands]
+
+    query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    params = cursor.fetchall()
+    params = [param for param in params]
+    params = sorted(params, key=lambda x: x['ListPos'])
+
+    links = []
+    paramVals = []
+    for block in functionBlocks:
+        if linkedCommands is None:
+            links = None
+        else:
+            for link in linkedCommands:
+                if link['ParentID'] == block['BlockID']:
+                    links.append(link['Link'])
+
+        if params is None:
+            paramVals = None
+        else:
+            for pUpdate Device.pyaram in params:
+                if param['FunctionBlockID'] == block['BlockID']:
+                    paramVals.append(param['Value'])
+
+        funcBlock = FunctionCode(block['CommandType'], block['Num'], links ,paramVals)
+        code.append(funcBlock)
+        links = []
+        paramVals = []
+        
+    return Schedule(id, details['ScheduleName'], details['IsPublic'], details['Rating'], code, details['IsActive'])
