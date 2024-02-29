@@ -26,7 +26,7 @@ class Trigger:
 
 
 # Function creates Trigger object based on Trigger data in DB
-def loadFromDatabase(id:str):
+def loadTriggerFromDatabase(id:str):
     cursor = app.config['cursor']
 
     query = ("SELECT TriggerID, ScheduleID FROM triggers "
