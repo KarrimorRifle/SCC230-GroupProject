@@ -25,5 +25,5 @@ def get_hub_users(account, cursor, HubID):
     userList = []
     for user in users:
         userList.append({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['LastName'], 'PermissionLevel': user['PermissionLevel']})
-    userList = sorted(userList, key=lambda x: x['Name'])
+    userList = sorted(userList, key=lambda x: (x['PermissionLevel'], x['Name']))
     return jsonify(userList), 200
