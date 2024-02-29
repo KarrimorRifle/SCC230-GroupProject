@@ -2,7 +2,7 @@
 #Desc:          File to hold the Hub Class and related Functions
 #               The Function of the Hub Class is to act as the bridge between Devices and their User 
 #
-#Last Update:   2024-1-27
+#Last Update:   2024-2-29
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -32,5 +32,5 @@ class Hub:
         self.schedules = schedules
         self.debug = debug
 
-def loadFromDatabase(id:str) -> Hub:
+def loadHubFromDatabase(id:str) -> Hub:
     pass

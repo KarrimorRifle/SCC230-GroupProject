@@ -2,7 +2,7 @@
 #Desc:          File to hold the Api Class and related Functions
 #               The Function of the Api Class is to define the method to communicate with IOT Devices
 #
-#Last Update:   2024-1-27
+#Last Update:   2024-2-29
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -33,5 +33,5 @@ class Api:
         self.reqType = reqType
         self.debug = debug
 
-def loadFromDatabase(id:str) -> Api:
+def loadApiFromDatabase(id:str) -> Api:
     pass
