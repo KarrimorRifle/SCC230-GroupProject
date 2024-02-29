@@ -65,7 +65,7 @@ def get_device_detail(account, cursor, deviceID):
     
     query = ("SELECT * FROM accounts_hubsRelation "
                 "WHERE AccountID = %s AND HubID = %s")
-    cursor.execute(query, (account['AccountID'], hubID,))
+    cursor.execute(query, (account['AccountID'], device['hubID'],))
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < viewPermLevel:
