@@ -192,9 +192,6 @@ class Schedule:
             index+=1
         return index
     
-
-
-    
     #Resets the number of times a piece of code has run for future schedules
     def __resetCounts(self):
         self.isRunning = False
@@ -203,31 +200,42 @@ class Schedule:
             self.code[i].hasRun = 0
 
     #Changes an instance of a value to an evaluable format
-    def __resolveVariable(self, variable:any) -> str:
+   #Changes an instance of a value to an evaluable format
+    def __resolveVariable(self, variable:str) -> str:
         variable = str(variable)
-        operators = ['<', '>', '<=', '>=', '==', '!=']
+        if(len(variable) == 0):
+            return '""'
 
-        if('.' in variable):
-            variable = variable.split('.')
-            #Checks if the variable passed in is a variable stored in the schedule
-            if(variable[0] == 'var'):
-                #checks if the variable already exists
-                if(variable[1] not in self.variables.keys()):
-                    self.variables.update({variable[1]:''})
-                return f'self.variables["{variable[1]}"]'
-            else:
-                #checks if the variable passed is a valid device variable  
-                for i in range(len(self.devices)):
-                    if(variable[0] == self.devices[i].name and variable[1] in self.devices[i].data.keys()):
-                        return f'self.devices[{i}].data["{variable[1]}"]'
+        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
+                     '+', '-', '=', '/', '*', '%' # assignment operators
+                     '+=' '-=', '/=', '*='] # self-assignment operators
         
         #checks if the variable is a number
         try:
-            _v = float(variable)
+            return float(variable)
         except:
-            if(variable not in operators):
-                return '"' + variable + '"'
-
+            if('.' in variable):
+                variable = variable.split('.')
+                #Checks if the variable passed in is a variable stored in the schedule
+                if(variable[0] == 'var'):
+                    #checks if the variable already exists
+                    if(variable[1] not in self.variables.keys()):
+                        self.variables.update({variable[1]:''})
+                    return f'self.variables["{variable[1]}"]'
+                else:
+                    #checks if the variable passed is a valid device variable  
+                    for i in range(len(self.devices)):
+                        if(variable[0] == self.devices[i].name and variable[1] in self.devices[i].data.keys()):
+                            return f'self.devices[{i}].data["{variable[1]}"]'
+        
+        #Checks if the variable is an operator
+        if(variable not in operators):
+            #Checks if the variable is already in quotations
+            if(variable[0] == '"' or variable[0] == "'"):
+                variable[0] = ""
+            if(variable[-1] == '"' or variable[-1] == "'"):
+                variable[-1] = "" 
+        #returns the string
         return str(variable)
 
     #Adds an error to a log in the database
