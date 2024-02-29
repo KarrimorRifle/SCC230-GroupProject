@@ -9,7 +9,7 @@ class test_hub(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_hub_loadfromdatabase(self):
-        test = Hub.loadFromDatabase("Hubk23098jwij123msd")
+        test = Hub.loadHubFromDatabase("Hubk23098jwij123msd")
 
         expected = Hub.Hub("Hubk23098jwij123msd", "Test Hub")
 
