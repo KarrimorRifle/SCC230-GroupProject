@@ -2,7 +2,8 @@ import mysql.connector
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from routes.accounts import accounts
-from routes.schedule import schedule
+from routes.schedule.schedule import schedule
+from routes.hub.hub import hub
 
 #db connection
 connection = mysql.connector.connect(
@@ -18,6 +19,7 @@ app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
 app.register_blueprint(schedule)
+app.register_blueprint(hub)
 CORS(app, supports_credentials=True)
 
 #running app

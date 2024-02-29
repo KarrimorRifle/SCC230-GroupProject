@@ -8,7 +8,8 @@
 
 ##IMPORTS##
 from iota.Schedule import Schedule
-from iota.User import User
+from iota.User import User, loadUserFromDatabase
+from server import app
 
 ##CLASS DEFINITION##
 class Hub:
@@ -37,4 +38,19 @@ class Hub:
         self.debug = debug
 
 def loadHubFromDatabase(id:str) -> Hub:
-    pass
+    cursor = app.config['cursor']
+    query = ("SELECT * FROM hubs WHERE HubID = %s")
+    cursor.execute(query, (id,))
+    hub = cursor.fetchone()
+
+    if hub is None:
+        return None
+    
+    query = ("SELECT AccountID, PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s")
+    cursor.execute(query, (id,))
+    users = cursor.fetchall()
+    userDict = {}
+    for user in users:
+        userDict[loadUserFromDatabase(user['AccountID'])] = user['PermissionLevel']
+
+    return Hub(id=hub['HubID'], name=hub['HubName'], users=userDict)

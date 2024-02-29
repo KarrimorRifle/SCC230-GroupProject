@@ -18,8 +18,10 @@ class TestScheduleRoutes(unittest.TestCase):
         data = json.loads(response.data)
         url = '/schedule/'
         url += data['ScheduleID']
+
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
+        self.assertIn(data['ScheduleID'], response.data.decode('utf-8'))
 
     def test_get_schedules_success(self):
         response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
@@ -27,6 +29,8 @@ class TestScheduleRoutes(unittest.TestCase):
         response = self.client_server.get('/schedule')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
+        self.assertIsInstance(data, list)
+        
         for entry in data:
             self.assertIn('ScheduleID', entry)
             self.assertIn('ScheduleName', entry)
