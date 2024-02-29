@@ -11,6 +11,7 @@ def get_schedules(account, cursor):
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
+    schedules = sorted(schedules, key=lambda x: x['ScheduleID'])
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES

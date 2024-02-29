@@ -2,8 +2,8 @@ import mysql.connector
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from routes.accounts import accounts
-from app.backend.python.app.routes.schedule.schedule import schedule
-from app.backend.python.app.routes.hub.hub import hub
+from routes.schedule.schedule import schedule
+from routes.hub.hub import hub
 
 #db connection
 connection = mysql.connector.connect(
