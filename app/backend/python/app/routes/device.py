@@ -4,10 +4,20 @@ from iota import genRandomID
 
 device = Blueprint('device', __name__)
 editPermLevel = 3
+viewPermLevel = 1
 
 # Function returns list of devices linked to hub
 def get_devices(account, cursor):
     hubID = request.json.get("HubID")
+    
+    query = ("SELECT * FROM accounts_hubsRelation "
+                "WHERE AccountID = %s AND HubID = %s")
+    cursor.execute(query, (account['AccountID'], hubID,))
+    checkPerm = cursor.fetchone()
+
+    if checkPerm is None or checkPerm['PermissionLevel'] < viewPermLevel:
+        return({"error": "Forbidden access"}), 403
+    
     query = ("SELECT DeviceID, DeviceName, DeviceType FROM devices "
                 "WHERE HubID = %s")
     
@@ -51,7 +61,15 @@ def get_device_detail(account, cursor, deviceID):
     device = cursor.fetchone()
 
     if device is None:
-        return 404
+        return({"error": "device not found"}), 404
+    
+    query = ("SELECT * FROM accounts_hubsRelation "
+                "WHERE AccountID = %s AND HubID = %s")
+    cursor.execute(query, (account['AccountID'], hubID,))
+    checkPerm = cursor.fetchone()
+
+    if checkPerm is None or checkPerm['PermissionLevel'] < viewPermLevel:
+        return({"error": "Forbidden access"}), 403
 
     details = {'DeviceID': device['DeviceID'],
                'DeviceName': device['DeviceName'],
