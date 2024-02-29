@@ -78,14 +78,15 @@ class Schedule:
 
     #Searches the schedule to find all instances of Devices being accessed
     def findDevices(self) -> list[Device]:
-        #Find all the devices that the schedule uses. 
-        return []
-
-    #Initialises all the device
-    def initDevices(self) -> dict[Device, bool]:
-        #Checks if all the devices connected to the schedule can be accessed
-        #Calls the functions to initiate connections. 
-        pass
+        devices = []
+        for i in range(len(self.code)):
+            for j in range(len(self.code[i].params)):
+                var = self.__resolveVariable(self.code[i].params[j])
+                var.split('.')
+                newDevice = Device.loadFromDatabase(var[0])
+                if(newDevice != None):
+                    devices.append(newDevice)
+        return devices
         
     ##PRIVATE METHODS##
     #Translates the schedule to actual code
