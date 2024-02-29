@@ -7,7 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Api import Api
 
 ##CLASS DEFINITION##
 class Device:
@@ -19,11 +18,10 @@ class Device:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, api:Api=None, isActive:bool=False,
+    def __init__(self, id:str, name:str,  isActive:bool=False,
                  debug:bool=False, data:dict[str,any]={}):
         self.id = id
         self.name = name
-        self.api = api
         self.isActive = isActive
         self.debug = debug
         self.data = data
