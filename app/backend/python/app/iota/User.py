@@ -26,10 +26,12 @@ class User:
     def __init__(self, id:str, username:str, password:str, email:str,
                  allowEmails:bool=True, debug:bool=False):
         self.id = id
-        self.username=username
-        self.password=password
-        self.email=email
+        self.username = username
+        self.password = password
+        
+        self.email = email
         self.allowEmails = allowEmails
+        
         self.debug = debug
 
 # Function creates User object based on User data in DB

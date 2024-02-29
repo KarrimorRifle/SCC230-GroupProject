@@ -26,10 +26,14 @@ class Hub:
                  users:dict[User, int]={}, schedules: list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
+
         self.address = address
+        
         self.logs = logs
+        
         self.users=users
         self.schedules = schedules
+        
         self.debug = debug
 
 def loadHubFromDatabase(id:str) -> Hub:

@@ -55,7 +55,7 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
-                 code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
+                 code:list[FunctionCode] = [], isActive:bool=True, debug:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
@@ -89,7 +89,7 @@ class Schedule:
             self.isRunning = False
           
         #Check if the code is already running
-        if(not(self.isRunning)):
+        if(not(self.isRunning) and self.isActive):
             # Start a new thread to execute the code
             thread = threading.Thread(target=runThread)
             thread.start()

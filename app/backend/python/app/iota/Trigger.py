@@ -15,13 +15,19 @@ class Trigger:
     #id         Holds the id to store the Trigger in the database
     #data       Holds the data that is needed to set off the trigger
     #schedule   Holds the schedule that is activated when the trigger goes off
+    #isActive   Checks if the Trigger should currenty be checked
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, ScheduleID:str, data:dict[str, list[str]],  debug:bool=False):
+    def __init__(self, id:str, ScheduleID:str, data:dict[str, list[str]],
+                 isActive:bool=True, debug:bool=False):
         self.id = id
-        self.data = data
         self.ScheduleID = ScheduleID
+
+        self.data = data
+        
+        self.isActive = isActive
+
         self.debug = debug
 
 
