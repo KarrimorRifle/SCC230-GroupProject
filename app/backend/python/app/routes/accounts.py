@@ -165,6 +165,6 @@ def getAccount():
                 "WHERE SessionID = %s")
     try:
         cursor.fetchall()
-        
-    cursor.execute(query, (sessionID,))
-    return cursor.fetchone()
+    finally:
+        cursor.execute(query, (sessionID,))
+        return cursor.fetchone()
