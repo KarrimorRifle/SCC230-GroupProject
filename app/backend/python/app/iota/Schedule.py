@@ -20,6 +20,7 @@ COMM_SET = "SET"
 COMM_WAIT = "WAIT"
 COMM_WHILE = "WHILE"
 
+
 ##CLASS DEFINITIONS##
 class FunctionCode():
     ##VALUES##
@@ -70,7 +71,6 @@ class Schedule:
         self.debug = debug
 
     ##PUBLIC METHODS##
-
     #Runs the code to completion, and resets the values needed
     def runCode(self):
         def runThread():
@@ -119,8 +119,6 @@ class Schedule:
             print(f"{self.code[index].commandType + ' ' + (' '.join(evalParams)):<60}({self.id})")
 
         #Checks the type of statement that is at code[index]
-13
-from iota.Device import Device
         match(self.code[index].commandType):
             #Code for a for loop
             case "FOR":
@@ -267,8 +265,7 @@ from iota.Device import Device
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
 
-#Function loads data from DB into Schedule Object
-def loadScheduleFromDatabase(id:str):
+def loadScheduleFromDatabase():
     cursor = app.config['cursor']
     query = ("SELECT * FROM schedules "
              "WHERE ScheduleID = %s")
@@ -311,7 +308,7 @@ def loadScheduleFromDatabase(id:str):
         if params is None:
             paramVals = None
         else:
-            for pUpdate Device.pyaram in params:
+            for param in params:
                 if param['FunctionBlockID'] == block['BlockID']:
                     paramVals.append(param['Value'])
 
