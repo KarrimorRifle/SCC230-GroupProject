@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint, current_app
-from .accounts import getAccount
+from ..accounts import getAccount
 from iota import genRandomID
 
 hub = Blueprint('hub', __name__)

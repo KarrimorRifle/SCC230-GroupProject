@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response, Blueprint, current_app
-from .accounts import getAccount
+from ..accounts import getAccount
 from iota import genRandomID
 
 schedule = Blueprint('schedule', __name__)
