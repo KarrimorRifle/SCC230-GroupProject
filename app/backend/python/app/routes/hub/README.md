@@ -1,7 +1,10 @@
 # Hub Routes
-## Refer back to iota classes as well for more information.
+###### Refer back to iota classes as well for more information.
 
-## Classes *for frontend to worry about by backend
+#### [Hub User Doc](./user/README.md)
+
+## Classes
+###### *for frontend to worry about by backend
 
 ### Hub
 

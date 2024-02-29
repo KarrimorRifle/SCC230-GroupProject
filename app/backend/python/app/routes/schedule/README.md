@@ -1,7 +1,8 @@
 # Schedule Routes
-## Refer back to iota classes as well for more information.
+###### Refer back to iota classes as well for more information.
 
-## Classes *for frontend to worry about by backend
+## Classes
+###### *for frontend to worry about by backend
 
 ### Trigger
 
