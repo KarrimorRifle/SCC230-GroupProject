@@ -7,6 +7,7 @@ from json import loads
 class test_accounts(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
+        self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
 
     def test_accounts_creation_valid(self):
         response = self.client_server.post('/accounts', json={"FirstName": "test", "Surname": "one", "Email" : "testone@test.com", "Password" : "pass1"})
