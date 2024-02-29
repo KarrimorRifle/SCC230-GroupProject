@@ -2,20 +2,24 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-2-11
+#Last Update:   2024-2-29
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Device import Device
+from iota.Device import *
+import time
+import threading
 from server import app
 
 ##CONSTANTS##
-COMM_ELSE = "OTHERWISE"
+COMM_ELSE = "ELSE"
 COMM_FOR = "FOR"
 COMM_IF = "IF"
 COMM_SET = "SET"
+COMM_WAIT = "WAIT"
 COMM_WHILE = "WHILE"
+
 
 ##CLASS DEFINITIONS##
 class FunctionCode():
@@ -51,49 +55,61 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
-                 code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
+                 code:list[FunctionCode] = [], isActive:bool=True, debug:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
         if(isPublic):
             self.rating = rating
+
         self.isActive = isActive
+        self.isRunning = False
         self.code = code
-        
+    
+        self.variables ={}
         self.devices = self.findDevices()
-        self.variables = {}
         self.debug = debug
 
     ##PUBLIC METHODS##
-
     #Runs the code to completion, and resets the values needed
     def runCode(self):
-        i=0
-        while i<len(self.code):
-            #try:
-                i=self.__translateSchedule(i)
-            #except Exception as e:
-            #    self.__addToErrorLog(e)
-            #    break
-        self.__resetCounts()
-        self.variables = {}
+        def runThread():
+            self.isRunning = True
+            i = 0
+            while i < len(self.code):
+                try:
+                    i = self.__translateSchedule(i)
+                except Exception as e:
+                    if(self.debug):
+                        print(e)
+                    self.__addToErrorLog(e)
+                    break
+            self.__resetCounts()
+            self.variables = {}
+            self.isRunning = False
+          
+        #Check if the code is already running
+        if(not(self.isRunning) and self.isActive):
+            # Start a new thread to execute the code
+            thread = threading.Thread(target=runThread)
+            thread.start()
 
     #Searches the schedule to find all instances of Devices being accessed
     def findDevices(self) -> list[Device]:
-        #Find all the devices that the schedule uses. 
-        return []
-
-    #Initialises all the device
-    def initDevices(self) -> dict[Device, bool]:
-        #Checks if all the devices connected to the schedule can be accessed
-        #Calls the functions to initiate connections. 
-        pass
+        devices = []
+        for i in range(len(self.code)):
+            for j in range(len(self.code[i].params)):
+                var = self.__resolveVariable(self.code[i].params[j])
+                if(type(var)==str):
+                    var.split('.')
+                    newDevice = loadDeviceFromDatabase(var[0])
+                    if(newDevice != None):
+                        devices.append(newDevice)
+        return devices
         
     ##PRIVATE METHODS##
     #Translates the schedule to actual code
     def __translateSchedule(self, index:int=0) -> int:
-        self.isRunning=True
-
         #evaluates all the parameters
         evalParams = []
         for i in range(len(self.code[index].params)):
@@ -139,11 +155,11 @@ class Schedule:
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for an else/else if statement
-            case "OTHERWISE":
+            case "ELSE":
                 #Value to check if all conditions for the else statement to be run are met
                 allConditions=True
 
-                #Checks if the if statement is correct, if the OTHERWISE statement is equal to an elif statement
+                #Checks if the if statement is correct, if the ELSE statement is equal to an elif statement
                 if(len(evalParams) != 0):
                     if(not(eval(f"{' '.join(evalParams)}"))):
                         allConditions=False
@@ -157,7 +173,7 @@ class Schedule:
                     self.code[index].hasRun+=1
                     self.__runConditional(index)
                 elif(self.debug):
-                    print(f"{'OTHERWISE CONDITIONS NOT MET':<60}({self.id})")
+                    print(f"{'ELSE CONDITIONS NOT MET':<60}({self.id})")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -166,12 +182,15 @@ class Schedule:
                 if(self.debug):
                     #print response from set statement
                     pass
-                exec(f"{evalParams[0]}={evalParams[1]}")
+                exec(f"{' '.join(evalParams)}")
 
                 #set a value of param 1 to param 2 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
-            
+            case "WAIT":
+                #Code to make the current thread sleep
+                time.sleep(evalParams[0])
+                return index+1
             #Default case to ignore End or invalid statements
             case _:
                 return index+1
@@ -194,9 +213,6 @@ class Schedule:
             index+=1
         return index
     
-
-
-    
     #Resets the number of times a piece of code has run for future schedules
     def __resetCounts(self):
         self.isRunning = False
@@ -205,31 +221,43 @@ class Schedule:
             self.code[i].hasRun = 0
 
     #Changes an instance of a value to an evaluable format
-    def __resolveVariable(self, variable:any) -> str:
+   #Changes an instance of a value to an evaluable format
+    def __resolveVariable(self, variable:str) -> str:
         variable = str(variable)
-        operators = ['<', '>', '<=', '>=', '==', '!=']
+        if(len(variable) == 0):
+            return '""'
 
-        if('.' in variable):
-            variable = variable.split('.')
-            #Checks if the variable passed in is a variable stored in the schedule
-            if(variable[0] == 'var'):
-                #checks if the variable already exists
-                if(variable[1] not in self.variables.keys()):
-                    self.variables.update({variable[1]:''})
-                return f'self.variables["{variable[1]}"]'
-            else:
-                #checks if the variable passed is a valid device variable  
-                for i in range(len(self.devices)):
-                    if(variable[0] == self.devices[i].name and variable[1] in self.devices[i].data.keys()):
-                        return f'self.devices[{i}].data["{variable[1]}"]'
+        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
+                     '+', '-', '=', '/', '*', '%' # assignment operators
+                     '+=' '-=', '/=', '*='] # self-assignment operators
         
         #checks if the variable is a number
         try:
             _v = float(variable)
+            return variable
         except:
-            if(variable not in operators):
-                return '"' + variable + '"'
-
+            if('.' in variable):
+                sVariable = variable.split('.')
+                #Checks if the variable passed in is a variable stored in the schedule
+                if(sVariable[0] == 'var'):
+                    #checks if the variable already exists
+                    if(sVariable[1] not in self.variables.keys()):
+                        self.variables.update({sVariable[1]:''})
+                    return f'self.variables["{sVariable[1]}"]'
+                else:
+                    #checks if the variable passed is a valid device variable  
+                    for i in range(len(self.devices)):
+                        if(sVariable[0] == self.devices[i].name and sVariable[1] in self.devices[i].data.keys()):
+                            return f'self.devices[{i}].data["{sVariable[1]}"]'
+        
+        #Checks if the variable is an operator
+        if(variable not in operators):
+            #Checks if the variable is already in quotations
+            if(variable[0] == '"' or variable[0] == "'"):
+                variable[0] = ""
+            if(variable[-1] == '"' or variable[-1] == "'"):
+                variable[-1] = "" 
+        #returns the string
         return str(variable)
 
     #Adds an error to a log in the database
@@ -237,8 +265,7 @@ class Schedule:
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
 
-#Function loads data from DB into Schedule Object
-def loadFromDatabase(id:str):
+def loadScheduleFromDatabase(id:str) -> Schedule:
     cursor = app.config['cursor']
     query = ("SELECT * FROM schedules "
              "WHERE ScheduleID = %s")

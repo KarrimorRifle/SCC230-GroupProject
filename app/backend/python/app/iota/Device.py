@@ -2,12 +2,11 @@
 #Desc:          File to hold the Device Class and related Functions
 #               The Function of the Device Class is to hold information about IOT Devices
 #
-#Last Update:   2024-1-27
+#Last Update:   2024-2-29
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Api import Api
 
 ##CLASS DEFINITION##
 class Device:
@@ -19,18 +18,20 @@ class Device:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, api:Api=None, isActive:bool=False,
-                 debug:bool=False, data:dict[str,any]={}):
+    def __init__(self, id:str, name:str, isActive:bool=False,
+                 data:dict[str,any]={}, debug:bool=False):
         self.id = id
         self.name = name
-        self.api = api
+
         self.isActive = isActive
-        self.debug = debug
+        
         self.data = data
-    
+
+        self.debug = debug
+        
     #Updates the Data
     def updateData(self) -> dict[str, any]:
         pass
 
-def loadFromDatabase(id:str) -> Device:
+def loadDeviceFromDatabase(id:str) -> Device:
     pass

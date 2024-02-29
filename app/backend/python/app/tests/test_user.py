@@ -9,7 +9,7 @@ class test_user(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_user_loadfromdatabase(self):
-        test = User.loadFromDatabase("Accojk42VvlqdeBpOBc")
+        test = User.loadUserFromDatabase("Accojk42VvlqdeBpOBc")
 
         expected = User.User("Accojk42VvlqdeBpOBc", "Jhon", None, "jhondoe@gmail.com")
 

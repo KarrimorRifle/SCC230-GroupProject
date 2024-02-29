@@ -9,7 +9,7 @@ class test_user(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_schedule_loadfromdatabase(self):
-        test = Schedule.loadFromDatabase("Schk129jd2i23kd34jf")
+        test = Schedule.loadScheduleFromDatabase("Schk129jd2i23kd34jf")
 
         expected = Schedule.Schedule(id="Schk129jd2i23kd34jf", name="Test Schedule", isPublic=False, rating=0, code=[], isActive=False, debug=False)
 
