@@ -166,6 +166,7 @@ def getAccount():
     try:
         cursor.fetchall()
     except:
+        
     finally:
         cursor.execute(query, (sessionID,))
         return cursor.fetchone()
