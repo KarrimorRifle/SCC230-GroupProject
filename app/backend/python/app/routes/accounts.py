@@ -163,7 +163,8 @@ def getAccount():
     sessionID = request.cookies.get('session_id')
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
-    
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+        
     cursor.execute(query, (sessionID,))
     return cursor.fetchone()
