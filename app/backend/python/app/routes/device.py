@@ -3,8 +3,8 @@ from .accounts import getAccount
 from iota import genRandomID
 
 device = Blueprint('device', __name__)
-editPermLevel = 3
-viewPermLevel = 1
+EditPermLevel = 3
+ViewPermLevel = 1
 
 # Function returns list of devices linked to hub
 def get_devices(account, cursor):
