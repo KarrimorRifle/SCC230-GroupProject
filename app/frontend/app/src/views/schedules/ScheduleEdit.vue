@@ -58,6 +58,8 @@ import TriggerBlock from "./blocks/TriggerBlock.vue";
 import BlockConditionals from "./blocks/BlockConditionals.vue";
 import { computed, ref } from "vue";
 import { CommandType, Device } from "@/modules/schedules/types";
+import router from "@/router";
+import axios from "axios";
 
 const menu = ref<boolean>(false);
 
@@ -105,6 +107,17 @@ const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
   test1: "BOOLEAN",
   test2: "NUMBER",
 });
+
+let scheduleID = router.currentRoute.value.params.id;
+// // add fetching of schedule
+// const fetchSchedule = async () => {
+//   let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
+//     withCredentials: true,
+//   });
+//   console.log(data);
+// };
+
+// fetchSchedule();
 </script>
 <style>
 .main {
