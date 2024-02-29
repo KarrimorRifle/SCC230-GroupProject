@@ -265,7 +265,7 @@ class Schedule:
         #Email the user to let them know a schedule failed, with the reasons behind it.
         pass
 
-def loadScheduleFromDatabase(str:id) -> Schedule:
+def loadScheduleFromDatabase(id:str) -> Schedule:
     cursor = app.config['cursor']
     query = ("SELECT * FROM schedules "
              "WHERE ScheduleID = %s")
