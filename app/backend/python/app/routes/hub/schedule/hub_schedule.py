@@ -41,3 +41,35 @@ def get_one_hub_schedule(account, cursor, hubID, scheduleID):
         return jsonify({'error': 'Schedule not in Hub'}), 403
     
     return jsonify(schedule_details), 200
+
+@hub_schedule.route('/hub/<hubID>/schedule', methods=['GET'])
+def hub_schedule_routes(hubID):
+    account = getAccount()
+    if account is None:
+        return jsonify({"error": "Session ID is invalid"}), 401
+    
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
+    if request.method == 'GET':
+        return get_hub_schedules(account, cursor, hubID)
+
+@hub_schedule.route('/hub/<hubID>/schedule/<scheduleID>', methods=['GET'])
+def single_hub_schedule_routes(hubID, scheduleID):
+    account = getAccount()
+    if account is None:
+        return jsonify({"error": "Session ID is invalid"}), 401
+    
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
+    if request.method == 'GET':
+        return get_one_hub_schedule(account, cursor, hubID, scheduleID)

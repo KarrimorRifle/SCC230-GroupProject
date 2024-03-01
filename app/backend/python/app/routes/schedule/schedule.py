@@ -305,7 +305,10 @@ def scheduleResponse():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_schedules(account, cursor)
@@ -325,7 +328,10 @@ def scheduleDetails(scheduleID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_schedule_detail(account, cursor, scheduleID)
