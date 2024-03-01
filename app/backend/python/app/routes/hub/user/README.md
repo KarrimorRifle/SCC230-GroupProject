@@ -1,7 +1,9 @@
 # Hub User Routes
 ###### Refer back to iota classes as well for more information.
-
+<br><br>
+### LINK TO RELATED DOCS
 #### [Hub Doc](../README.md)
+<br><br>
 
 ## Routes
 
@@ -15,6 +17,7 @@
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### GET: 
 
@@ -27,6 +30,7 @@ Current User must be part of hub.
 -	(string)AccountID – Unique ID to identify specified user
 -	(string)Name – Full Name of user
 -   (int)PermissionLevel - Permission level granted to user
+<br>
 
 #### POST:
 
@@ -38,6 +42,7 @@ Force add a user to a hub, ONLY USE FOR TESTING PURPOSES.
 ##### Return Values:
 -	(string)AccountID – Unique ID to identify specified user
 -   (int)PermissionLevel - Permission level granted to user
+<br>
 
 #### DELETE:
 
@@ -47,6 +52,7 @@ Leave hub.
 
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
+<br><br><br>
 
 ### '/hub/[HubID]/user/[AccountID]'
 
@@ -58,6 +64,7 @@ Leave hub.
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### GET: 
 
@@ -70,6 +77,7 @@ Current User must be part of hub.
 -	(string)AccountID – Unique ID to identify specified user
 -	(string)Name – Full Name of user
 -   (int)PermissionLevel - Permission level granted to user
+<br>
 
 #### PATCH: 
 
@@ -85,6 +93,7 @@ Current User must have higher permission level.
 -	(string)AccountID – Unique ID to identify specified user
 -	(string)Name – Full Name of user
 -   (int)PermissionLevel - Permission level granted to user
+<br>
 
 #### DELETE: 
 
@@ -98,6 +107,7 @@ Current User must have higher permission level.
 ##### Return Values:
 -	(string)AccountID – Unique ID to identify specified user
 -	(string)HubID - Unique ID to identify specified hub
+<br><br><br>
 
 ### '/hub/[HubID]/invite'
 
@@ -107,6 +117,7 @@ Current User must have higher permission level.
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### POST: 
 
@@ -119,6 +130,7 @@ Current user must be permission level 4 or higher
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)Token - invite token to allow other users to join hub
     -   This token expires in 1 day
+<br><br><br>
 
 ### '/hub/invite/[Token]'
 
@@ -128,6 +140,7 @@ Current user must be permission level 4 or higher
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### POST: 
 
@@ -139,3 +152,8 @@ Joining users will by default be permission level 1.
 
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
+<br><br><br><br>
+
+
+### LINKS TO RELATED DOCS <br>
+#### [Hub Doc](../README.md)
