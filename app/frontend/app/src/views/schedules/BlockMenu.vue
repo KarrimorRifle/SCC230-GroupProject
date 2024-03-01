@@ -4,57 +4,49 @@
       <b>ADD BLOCK</b>
     </h3>
     <button
-      v-for="(command, index) in conditionals"
+      v-for="(command, index) in commands"
       :key="index"
       class="mb-2 d-flex flex-column"
+      :class="{ disabled: command == 'END' && !endAvailable }"
+      :style="{
+        cursor: command == 'END' && !endAvailable ? 'default' : 'pointer',
+      }"
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
       @click="blockConditionalsSelect(command)"
     >
-      <block-conditionals :command-type="command" :display="true" />
-    </button>
-    <button
-      v-for="(command, index) in other"
-      :key="index"
-      class="mb-2 d-flex flex-column"
-      style="background-color: rgba(0, 0, 0, 0); border-style: none"
-      @click="blockItemSelect(command)"
-      :style="{
-        cursor: !endAvailable && command == 'END' ? 'default' : 'pointer',
-      }"
-    >
-      <block-item
+      <function-block
         :command-type="command"
-        :display="true"
         :end-selectable="endAvailable"
+        :display="true"
       />
     </button>
     <button class="btn btn-danger mt-5" @click="$emit('close')">CLOSE</button>
   </div>
 </template>
 <script setup lang="ts">
-import BlockConditionals from "./blocks/BlockConditionals.vue";
-import BlockItem from "./blocks/BlockItem.vue";
+import FunctionBlock from "./blocks/FunctionBlock.vue";
 import { ref, defineProps, defineEmits } from "vue";
 import { CommandType } from "@/modules/schedules/types";
-
-const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
-
-const other = ref<CommandType[]>(["SET", "FOR", "WAIT", "END"]);
 
 const props = defineProps<{
   endAvailable: boolean;
 }>();
 
-const emit = defineEmits(["chosen", "close"]);
+const commands = ref<CommandType[]>([
+  "WHILE",
+  "IF",
+  "ELSE",
+  "SET",
+  "FOR",
+  "WAIT",
+  "END",
+]);
 
-const blockItemSelect = (command: CommandType) => {
-  if (props.endAvailable || command != "END") {
-    emit("chosen", command);
-  }
+const blockConditionalsSelect = (command: CommandType) => {
+  if (props.endAvailable || command != "END") emit("chosen", command);
 };
 
-const blockConditionalsSelect = (command: CommandType) =>
-  emit("chosen", command);
+const emit = defineEmits(["chosen", "close"]);
 </script>
 <style>
 #editor {

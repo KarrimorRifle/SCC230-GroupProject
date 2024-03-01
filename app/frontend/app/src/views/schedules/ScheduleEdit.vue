@@ -12,15 +12,7 @@
             :key="index"
             style="margin-top: -0.6rem"
           >
-            <block-item
-              v-if="['SET', 'FOR', 'END', 'WAIT'].includes(command)"
-              :command-type="command"
-              @delete="commands.splice(index, 1)"
-              :devices="validDevices"
-              :schedule-vars="variables"
-            />
-            <block-conditionals
-              v-else
+            <function-block
               :command-type="command"
               @delete="commands.splice(index, 1)"
               :devices="validDevices"
@@ -53,9 +45,8 @@
 </template>
 <script setup lang="ts">
 import BlockMenu from "./BlockMenu.vue";
-import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
-import BlockConditionals from "./blocks/BlockConditionals.vue";
+import FunctionBlock from "./blocks/FunctionBlock.vue";
 import { computed, ref } from "vue";
 import { CommandType, Device, FunctionCode } from "@/modules/schedules/types";
 import router from "@/router";
@@ -64,7 +55,7 @@ import axios from "axios";
 const menu = ref<boolean>(false);
 
 const commands = ref<CommandType[]>([]);
-const blocks = ref<(typeof BlockItem)[]>();
+const blocks = ref<(typeof FunctionBlock)[]>();
 
 const addNewBlock = (commandType: CommandType) => {
   commands.value.push(commandType);
