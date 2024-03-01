@@ -14,7 +14,10 @@ def get_hub_schedules(account, cursor, hubID):
     if permissionLevel == 0:
         return jsonify({'error': 'User does not have permission to view schedules'}), 403
     
-    query = ("SELECT ScheduleID, ScheduleName, IsActive, accounts.FirstName, accounts.Surname, PermissionLevel FROM schedules JOIN accounts ON schedules.AuthorID = accounts.AccountID JOIN accounts_hubsRelations ON schedules.AuthorID = accounts_hubsRelations.AccountID WHERE schedules.HubID = %s")
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, accounts.FirstName, accounts.Surname, PermissionLevel FROM schedules "
+             "JOIN accounts ON schedules.AuthorID = accounts.AccountID "
+             "JOIN accounts_hubsRelations ON schedules.AuthorID = accounts_hubsRelations.AccountID "
+             "WHERE schedules.HubID = %s")
     cursor.execute(query, (hubID,))
     schedules = cursor.fetchall()
     schedules = [{'ScheduleID': schedule['ScheduleID'], 'ScheduleName': schedule['ScheduleName'], 'IsActive': schedule['IsActive'], 'Author': schedule['FirstName']+" "+schedule['Surname'], 'PermissionLevel': schedule['PermissionLevel']} for schedule in schedules]
