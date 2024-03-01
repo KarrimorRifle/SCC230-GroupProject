@@ -96,6 +96,7 @@ def get_schedule_detail(account, cursor, scheduleID):
     details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
                'ScheduleName': schedule['ScheduleName'],
+               'HubID': schedule['HubID'],
                'IsActive': schedule['IsActive'],
                'IsPublic': schedule['IsPublic'],
                'Rating': schedule['Rating'],

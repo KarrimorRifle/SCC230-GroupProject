@@ -1,6 +1,7 @@
 from flask import request, jsonify, Blueprint, current_app
 from ...accounts import getAccount
 from iota import genRandomID
+from ...schedule.schedule import get_schedule_detail
 
 hub_schedule = Blueprint('hub_schedule', __name__)
 
@@ -23,3 +24,20 @@ def get_hub_schedules(account, cursor, hubID):
     schedules = [{'ScheduleID': schedule['ScheduleID'], 'ScheduleName': schedule['ScheduleName'], 'IsActive': schedule['IsActive'], 'Author': schedule['FirstName']+" "+schedule['Surname'], 'PermissionLevel': schedule['PermissionLevel']} for schedule in schedules]
     schedules = sorted(schedules, x=lambda x: (x['PermissionLevel'], x['Author'], x['ScheduleName']))
     return jsonify(schedules), 200
+
+def get_one_hub_schedule(account, cursor, hubID, scheduleID):
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelations WHERE AccountID = %s AND HubID = %s")
+    cursor.execute(query, (account['AccountID'], hubID))
+    permissionLevel = cursor.fetchone()['PermissionLevel']
+    if not permissionLevel:
+        return jsonify({'error': 'User not in Hub'}), 401
+    
+    if permissionLevel == 0:
+        return jsonify({'error': 'User does not have permission to view schedules'}), 403
+    
+    schedule_details = get_schedule_detail(account, cursor, scheduleID)
+
+    if schedule_details['HubID'] != hubID:
+        return jsonify({'error': 'Schedule not in Hub'}), 403
+    
+    return jsonify(schedule_details), 200
