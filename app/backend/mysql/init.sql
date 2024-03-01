@@ -45,7 +45,6 @@ CREATE TABLE `hub_inviteTokens`(
 INSERT INTO hub_inviteTokens(`HubID`, `Token`, `Expiry`)
 VALUES ("Hubk23098jwij123msd", "testToken", 2147483647);
 
-
 CREATE TABLE `devices`(
     `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
