@@ -6,6 +6,7 @@
 <br><br>
 ## Classes
 ###### *for frontend to worry about by backend
+<br>
 
 ### Hub
 
@@ -16,6 +17,7 @@ Structure shows variables and values for frontend to be familiar with.
 #### Structure:
 -	(string)HubID – Unique ID to identify specified Hub
 -	(string)HubName – Name of Hub
+<br>
 
 ### Hub_User
 
