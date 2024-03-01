@@ -29,6 +29,7 @@ Structure shows variables and values for frontend to be familiar with.
     -   5: Owner rights (Can edit/delete hub)
 
  <br><br><br><br>
+
 ## Routes
 
 ### ‘/hub/[HubID]/user’

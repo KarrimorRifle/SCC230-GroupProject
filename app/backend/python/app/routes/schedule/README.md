@@ -32,6 +32,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
@@ -119,6 +120,7 @@ Lists all values associated with schedule belonging to current user specified by
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
