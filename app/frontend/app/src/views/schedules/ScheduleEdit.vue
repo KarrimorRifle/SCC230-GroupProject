@@ -57,7 +57,7 @@ import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import BlockConditionals from "./blocks/BlockConditionals.vue";
 import { computed, ref } from "vue";
-import { CommandType, Device } from "@/modules/schedules/types";
+import { CommandType, Device, FunctionCode } from "@/modules/schedules/types";
 import router from "@/router";
 import axios from "axios";
 
@@ -114,8 +114,13 @@ const fetchSchedule = async () => {
   let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
     withCredentials: true,
   });
+  functionCode.value = data.data.Code;
   console.log(data);
+  console.log(functionCode.value);
 };
+
+//reworking code blocks
+const functionCode = ref<FunctionCode[]>();
 
 fetchSchedule();
 </script>
