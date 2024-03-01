@@ -5,6 +5,7 @@ from routes.accounts import accounts
 from routes.schedule.schedule import schedule
 from routes.hub.hub import hub
 from routes.hub.schedule.hub_schedule import hub_schedule
+from routes.hub.user.hub_user import hub_user
 
 #db connection
 connection = mysql.connector.connect(
@@ -22,6 +23,7 @@ app.register_blueprint(accounts)
 app.register_blueprint(schedule)
 app.register_blueprint(hub)
 app.register_blueprint(hub_schedule)
+app.register_blueprint(hub_user)
 CORS(app, supports_credentials=True)
 
 #running app

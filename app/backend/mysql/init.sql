@@ -34,6 +34,17 @@ CREATE TABLE `accounts_hubsRelation`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
+CREATE TABLE `hub_inviteTokens`(
+    `TokenID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `HubID` VARCHAR(100) NOT NULL,
+    `Token` VARCHAR(50) NOT NULL,
+    `Expiry` INT NOT NULL,
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
+);
+
+INSERT INTO hub_inviteTokens(`HubID`, `Token`, `Expiry`)
+VALUES ("Hubk23098jwij123msd", "testToken", 2147483647);
+
 CREATE TABLE `devices`(
     `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,

@@ -1,7 +1,9 @@
 # Schedule Routes
-## Refer back to iota classes as well for more information.
-
-## Classes *for frontend to worry about by backend
+###### Refer back to iota classes as well for more information.
+<br><br>
+## Classes
+###### *for frontend to worry about by backend
+<br>
 
 ### Trigger
 
@@ -13,6 +15,7 @@ No need for frontend to deal with TriggerIDs as triggers are directly connected 
 -	(dict)Trigger – {DeviceID: data}
     -	DeviceID(Key) – Valid ID of a connected device
     -	Data(Value) – Array of string values (Refer to iota class docs for details on format and structure)
+<br>
 
 ### Schedule
 
@@ -29,6 +32,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+<br>
 
 ### Function Block
 
@@ -42,7 +46,8 @@ Individual function blocks within a schedule are treated as dictionaries.
 -	(int)Number - Position of function block in code
 -	(int[])LinkedCommands - List of positions of blocks linked to current block
 -	(string[])Params - List of values used as parameters in the function block
- 
+ <br><br><br><br>
+ 
 ## Routes
 
 ### ‘/schedule’
@@ -54,6 +59,7 @@ Individual function blocks within a schedule are treated as dictionaries.
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### GET: 
 
@@ -68,6 +74,7 @@ Lists ID, Name and Status of all schedules created by current user.
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, should be NULL if IsPublic is 0 and was never 1
 
+<br>
 
 #### POST: 
 
@@ -82,7 +89,8 @@ Creates a new empty schedule under ID of current user.
 ##### Return Values:
 -	(string)ScheduleID – Unique ID to identify new schedule
 
- 
+ <br><br><br>
+ 
 ### ‘/schedule/[ScheduleID]’
 
 #### Methods: 
@@ -94,6 +102,7 @@ Creates a new empty schedule under ID of current user.
 -	User Logged In
     -	Session ID Cookie set
 -	[ScheduleID] is a valid ID of a schedule belonging to current user
+<br>
 
 #### GET: 
 
@@ -126,6 +135,8 @@ Lists all values associated with schedule belonging to current user specified by
 -	Dictionary with DeviceIDs and data
 -	Trigger dictionary structure:
     -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
+<br>
+
 #### DELETE: 
 
 Deletes schedule specified by ID given in url.
@@ -135,6 +146,7 @@ Deletes schedule specified by ID given in url.
 ##### Return Values:
 -	(string)ScheduleID – Unique ID of deleted schedule
  
+<br>
 
 #### PATCH: 
 
