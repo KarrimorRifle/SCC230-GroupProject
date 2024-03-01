@@ -25,7 +25,7 @@ def get_hub_users(account, cursor, hubID):
 
     userList = []
     for user in users:
-        userList.append({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['LastName'], 'PermissionLevel': user['PermissionLevel']})
+        userList.append({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['Surname'], 'PermissionLevel': user['PermissionLevel']})
     userList = sorted(userList, key=lambda x: (x['PermissionLevel'], x['Name']))
     return jsonify(userList), 200
 
@@ -57,12 +57,18 @@ def manage_hub_user(account, cursor, connection, hubID, accountID):
 
     if hub['PermissionLevel'] < 4:
         return jsonify({'error': 'User does not have permission to manage users in hub'}), 403
+    
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
+    cursor.execute(query, (hubID, accountID))
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
 
     permissionLevel = request.json.get('PermissionLevel')
     if permissionLevel < 0 or permissionLevel > 5:
         return jsonify({'error': 'Invalid permission level'}), 400
     
-    if permissionLevel < hub['PermissionLevel']:
+    if permissionLevel > hub['PermissionLevel']:
         return jsonify({'error': 'User cannot set permission level higher than their own'}), 403
 
     query = ("UPDATE accounts_hubsRelation SET PermissionLevel = %s WHERE HubID = %s AND AccountID = %s")
@@ -93,7 +99,7 @@ def get_one_hub_user(account, cursor, hubID, accountID):
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
-    return jsonify({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['LastName'], 'PermissionLevel': user['PermissionLevel']}), 200
+    return jsonify({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['Surname'], 'PermissionLevel': user['PermissionLevel']}), 200
 
 def create_invite_token(account, cursor, connection, hubID):
     query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
@@ -144,8 +150,30 @@ def clear_expired_tokens(cursor, connection):
         connection.commit()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+def force_add_to_hub(cursor, connection, hubID):
+    accountID = request.json.get('AccountID')
+    permmissionLevel = request.json.get('PermissionLevel')
+    query = ("INSERT INTO accounts_hubsRelation (AccountID, HubID, PermissionLevel) VALUES (%s,%s,%s)")
+    try:
+        cursor.execute(query, (accountID, hubID, permmissionLevel))
+        connection.commit()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    return jsonify({'AccountID': accountID, 'PermissionLevel': permmissionLevel}), 200
+    
+def leave_hub(cursor, connection, account, hubID):
+    query = ("DELETE FROM accounts_hubsRelation WHERE AccountID = %s AND HubID = %s")
+    try:
+        cursor.execute(query, (account['AccountID'], hubID))
+        connection.commit()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    return jsonify({'HubID': hubID}), 200
 
-@hub_user.route('/hub/<hubID>/user', methods=['GET'])
+@hub_user.route('/hub/<hubID>/user', methods=['GET', 'POST', 'DELETE'])
 def hub_get_users_route(hubID):
     account = getAccount()
     if account is None:
@@ -154,10 +182,12 @@ def hub_get_users_route(hubID):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
     clear_expired_tokens(cursor, connection)
-    retVal = get_hub_users(account, cursor, hubID)
-    connection.close()
-    cursor.close()
-    return retVal
+    if request.method == 'GET':
+        return get_hub_users(account, cursor, hubID)
+    elif request.method == 'POST':
+        return force_add_to_hub(cursor, connection, hubID)
+    else:
+        return leave_hub(cursor, connection, account, hubID)
 
 @hub_user.route('/hub/<hubID>/user/<accountID>', methods=['DELETE', 'PATCH', 'GET'])
 def hub_user_route(hubID, accountID):
@@ -169,14 +199,11 @@ def hub_user_route(hubID, accountID):
     connection = current_app.config['connection']
     clear_expired_tokens(cursor, connection)
     if request.method == 'DELETE':
-        retVal = remove_hub_user(account, cursor, hubID, accountID)
+        return remove_hub_user(account, cursor, hubID, accountID)
     elif request.method == 'PATCH':
-        retVal = manage_hub_user(account, cursor, connection, hubID, accountID)
-    elif request.method == 'GET':
-        retVal = get_one_hub_user(account, cursor, hubID, accountID)
-    connection.close()
-    cursor.close()
-    return retVal
+        return manage_hub_user(account, cursor, connection, hubID, accountID)
+    else:
+        return get_one_hub_user(account, cursor, hubID, accountID)
 
 @hub_user.route('/hub/<hubID>/invite', methods=['POST'])
 def hub_invite_route(hubID):
@@ -187,10 +214,7 @@ def hub_invite_route(hubID):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
     clear_expired_tokens(cursor, connection)
-    retVal = create_invite_token(account, cursor, connection, hubID)
-    connection.close()
-    cursor.close()
-    return retVal
+    return create_invite_token(account, cursor, connection, hubID)
 
 @hub_user.route('/hub/invite/<token>', methods=['POST'])
 def join_hub_route(token):
@@ -201,7 +225,4 @@ def join_hub_route(token):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
     clear_expired_tokens(cursor, connection)
-    retVal = accept_hub_invite(account, cursor, connection, token)
-    connection.close()
-    cursor.close()
-    return retVal
+    return accept_hub_invite(account, cursor, connection, token)
