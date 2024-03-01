@@ -1,6 +1,11 @@
 # Schedule Routes
 ###### Refer back to iota classes as well for more information.
 <br><br>
+
+### LINK TO RELATED DOCS
+#### [Schedule Doc](../hub/schedule/README.md)
+<br><br>
+
 ## Classes
 ###### *for frontend to worry about by backend
 <br>
@@ -178,3 +183,7 @@ Updates specified schedule data based on passed parameters.
 
 ##### Return Values:
 -	(string)ScheduleID – Unique ID to identify specified schedule
+<br><br><br><br>
+
+### LINK TO RELATED DOCS
+#### [Hub Doc](../hub/schedule/README.md)
