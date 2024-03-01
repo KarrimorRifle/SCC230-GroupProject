@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response, Blueprint, current_app
-from .accounts import getAccount
+from ...accounts import getAccount
 from iota import genRandomID
 
 device = Blueprint('device', __name__)
@@ -15,7 +15,7 @@ def get_devices(account, cursor):
     cursor.execute(query, (account['AccountID'], hubID,))
     checkPerm = cursor.fetchone()
 
-    if checkPerm is None or checkPerm['PermissionLevel'] < viewPermLevel:
+    if checkPerm is None or checkPerm['PermissionLevel'] < ViewPermLevel:
         return({"error": "Forbidden access"}), 403
     
     query = ("SELECT DeviceID, DeviceName, DeviceType FROM devices "
@@ -36,7 +36,7 @@ def create_device(account, cursor, connection):
     cursor.execute(query, (account['AccountID'], hubID,))
     checkPerm = cursor.fetchone()
 
-    if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
+    if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
     query = ("SELECT DeviceID FROM devices")
@@ -68,7 +68,7 @@ def get_device_detail(account, cursor, deviceID):
     cursor.execute(query, (account['AccountID'], device['HubID'],))
     checkPerm = cursor.fetchone()
 
-    if checkPerm is None or checkPerm['PermissionLevel'] < viewPermLevel:
+    if checkPerm is None or checkPerm['PermissionLevel'] < ViewPermLevel:
         return({"error": "Forbidden access"}), 403
 
     details = {'DeviceID': device['DeviceID'],
@@ -94,7 +94,7 @@ def delete_device(account, cursor, connection, deviceID):
     cursor.execute(query, (account['AccountID'], checkExists['HubID'],))
     checkPerm = cursor.fetchone()
 
-    if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
+    if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
     query = ("SELECT * FROM trigger_data "
@@ -131,7 +131,7 @@ def update_device(account, cursor, connection, deviceID):
     cursor.execute(query, (account['AccountID'], checkExists['HubID'],))
     checkPerm = cursor.fetchone()
 
-    if checkPerm is None or checkPerm['PermissionLevel'] < editPermLevel:
+    if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
     updateParams = []

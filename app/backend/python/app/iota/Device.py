@@ -7,7 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from iota.Api import Api
 from server import app
 
 ##CLASS DEFINITION##
