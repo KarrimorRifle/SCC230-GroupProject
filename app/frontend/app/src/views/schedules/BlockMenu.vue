@@ -53,11 +53,8 @@ const blockItemSelect = (command: CommandType) => {
   }
 };
 
-const blockConditionalsSelect = (command: CommandType) => {
-  if (props.elseAvailable || command != "ELSE") {
-    emit("chosen", command);
-  }
-};
+const blockConditionalsSelect = (command: CommandType) =>
+  emit("chosen", command);
 </script>
 <style>
 #editor {
