@@ -9,10 +9,10 @@ export type CommandType =
 
 //functions of either of these types aren't required on front end hence unimplemented
 export interface FunctionCode {
-  commandType: CommandType;
-  number: number;
-  linkedCommands?: number[];
-  params?: string[];
+  CommandType: CommandType;
+  Number: number;
+  LinkedCommands?: number[];
+  Params?: string[];
 }
 
 export interface Schedule {

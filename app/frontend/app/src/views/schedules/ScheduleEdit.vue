@@ -109,15 +109,15 @@ const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
 });
 
 let scheduleID = router.currentRoute.value.params.id;
-// // add fetching of schedule
-// const fetchSchedule = async () => {
-//   let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
-//     withCredentials: true,
-//   });
-//   console.log(data);
-// };
+// add fetching of schedule
+const fetchSchedule = async () => {
+  let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
+    withCredentials: true,
+  });
+  console.log(data);
+};
 
-// fetchSchedule();
+fetchSchedule();
 </script>
 <style>
 .main {
