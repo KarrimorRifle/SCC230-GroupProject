@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response, Blueprint, current_app
-from .accounts import getAccount
+from ..accounts import getAccount
 from iota import genRandomID
 
 schedule = Blueprint('schedule', __name__)
@@ -11,6 +11,7 @@ def get_schedules(account, cursor):
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
+    schedules = sorted(schedules, key=lambda x: x['ScheduleID'])
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES

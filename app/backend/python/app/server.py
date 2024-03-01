@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from routes.accounts import accounts
 from routes.schedule import schedule
+from routes.hub.hub import hub
 from routes.device import device
 
 #db connection
@@ -19,6 +20,7 @@ app.config['cursor'] = cursor
 app.config['connection'] = connection
 app.register_blueprint(accounts)
 app.register_blueprint(schedule)
+app.register_blueprint(hub)
 app.register_blueprint(device)
 CORS(app, supports_credentials=True)
 
