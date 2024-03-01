@@ -107,5 +107,6 @@ Updates specified hub data based on passed parameters if user has perms.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 
-\\
+\
+\
 #### [Hub User Doc](./user/README.md)
