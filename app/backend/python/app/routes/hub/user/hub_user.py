@@ -38,6 +38,14 @@ def remove_hub_user(account, cursor, hubID, accountID):
 
     if hub['PermissionLevel'] < 4:
         return jsonify({'error': 'User does not have permission to remove users from hub'}), 403
+    
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
+    cursor.execute(query, (hubID, accountID))
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    if hub['PermissionLevel'] < user['PermissionLevel']:
+        return jsonify({'error': 'User does not have permission to manage users with higher permission levels'}), 403
 
     query = ("DELETE FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
     try:
@@ -67,6 +75,9 @@ def manage_hub_user(account, cursor, connection, hubID, accountID):
     permissionLevel = request.json.get('PermissionLevel')
     if permissionLevel < 0 or permissionLevel > 5:
         return jsonify({'error': 'Invalid permission level'}), 400
+    
+    if hub['PermissionLevel'] < user['PermissionLevel']:
+        return jsonify({'error': 'User does not have permission to manage users with higher permission levels'}), 403
     
     if permissionLevel > hub['PermissionLevel']:
         return jsonify({'error': 'User cannot set permission level higher than their own'}), 403
