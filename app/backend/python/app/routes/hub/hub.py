@@ -79,7 +79,7 @@ def delete_hub(account, cursor, connection, hubID):
     query = ("DELETE FROM hubs WHERE HubID = %s")
     cursor.execute(query, (hubID,))
     connection.commit()
-    return jsonify(hubID), 200
+    return jsonify({'HubID':hubID}), 200
 
 # Function updates hub name (only name can be updated in hubs)
 def update_hub(account, cursor, connection, hubID):

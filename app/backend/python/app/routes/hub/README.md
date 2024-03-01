@@ -1,7 +1,12 @@
 # Hub Routes
-## Refer back to iota classes as well for more information.
-
-## Classes *for frontend to worry about by backend
+###### Refer back to iota classes as well for more information.
+<br><br>
+### LINK TO RELATED DOCS
+#### [Hub User Doc](./user/README.md)
+<br><br>
+## Classes
+###### *for frontend to worry about by backend
+<br>
 
 ### Hub
 
@@ -12,6 +17,7 @@ Structure shows variables and values for frontend to be familiar with.
 #### Structure:
 -	(string)HubID – Unique ID to identify specified Hub
 -	(string)HubName – Name of Hub
+<br>
 
 ### Hub_User
 
@@ -30,7 +36,8 @@ Structure shows variables and values for frontend to be familiar with.
     -   3: Edit/Create/Delete rights
     -   4: Admin rights (adding/removing/managing users of lower perm)
     -   5: Owner rights (Can edit/delete hub)
- 
+
+ <br><br><br><br>
 ## Routes
 
 ### ‘/hub’
@@ -42,6 +49,7 @@ Structure shows variables and values for frontend to be familiar with.
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### GET: 
 
@@ -52,6 +60,7 @@ Lists ID, Name of all hubs current user is in.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+<br>
 
 #### POST:
 
@@ -63,6 +72,7 @@ Creates new hub under ID of current user.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+<br><br><br>
 
 ### ‘/hub/[HubID]’
 
@@ -74,6 +84,7 @@ Creates new hub under ID of current user.
 #### Prerequisites: 
 -	User Logged In
     -	Session ID Cookie set
+<br>
 
 #### GET: 
 
@@ -84,6 +95,7 @@ Lists ID, Name of specified hub current user is in.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+<br>
 
 #### DELETE:
 
@@ -93,6 +105,7 @@ Delete hub under ID of current user if has perms.
 
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
+<br>
 
 #### PATCH: 
 
@@ -102,4 +115,8 @@ Updates specified hub data based on passed parameters if user has perms.
 -	(string)HubName – Name of hub
 
 ##### Return Values:
--	(string)HubID – Unique ID to identify specified hub
+-	(string)HubID – Unique ID to identify specified hub  <br><br><br><br>
+
+
+### LINKS TO RELATED DOCS <br>
+#### [Hub User Doc](./user/README.md)
