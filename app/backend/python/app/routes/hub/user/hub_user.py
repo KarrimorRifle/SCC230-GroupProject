@@ -1,6 +1,7 @@
 from flask import request, jsonify, Blueprint, current_app
 from ...accounts import getAccount
 from iota import genRandomID
+import time
 
 hub_user = Blueprint('hub_user', __name__)
 
@@ -47,7 +48,7 @@ def remove_hub_user(account, cursor, hubID, accountID):
 
     return jsonify({'HubID': hubID, 'AccountID': accountID}), 200
 
-def manage_hub_user(account, cursor, hubID, accountID):
+def manage_hub_user(account, cursor, connection, hubID, accountID):
     query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
     cursor.execute(query, (hubID, account['AccountID']))
     hub = cursor.fetchone()
@@ -67,7 +68,7 @@ def manage_hub_user(account, cursor, hubID, accountID):
     query = ("UPDATE accounts_hubsRelation SET PermissionLevel = %s WHERE HubID = %s AND AccountID = %s")
     try:
         cursor.execute(query, (permissionLevel, hubID, accountID))
-        current_app.config['connection'].commit()
+        connection.commit()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -94,7 +95,7 @@ def get_one_hub_user(account, cursor, hubID, accountID):
 
     return jsonify({'AccountID': user['AccountID'], 'Name': user['FirstName'] + " " + user['LastName'], 'PermissionLevel': user['PermissionLevel']}), 200
 
-def create_invite_token(account, cursor, hubID):
+def create_invite_token(account, cursor, connection, hubID):
     query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
     cursor.execute(query, (hubID, account['AccountID']))
     hub = cursor.fetchone()
@@ -109,13 +110,98 @@ def create_invite_token(account, cursor, hubID):
     tokens = cursor.fetchall()
     tokens = [token['Token'] for token in tokens]
 
-    # ADD TOKEN EXPIRATION DATE AND IMPLEMENT
     token = genRandomID(40, tokens, 'Inv')
-    query = ("INSERT INTO hub_inviteTokens (HubID, Token) VALUES (%s, %s)")
+    query = ("INSERT INTO hub_inviteTokens (HubID, Token, Expiry) VALUES (%s, %s, %s)")
+    expiry = int(time.time() + 86400)
     try:
-        cursor.execute(query, (hubID, token))
-        current_app.config['connection'].commit()
+        cursor.execute(query, (hubID, token, expiry))
+        connection.commit()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     return jsonify({'HubID': hubID, 'Token': token}), 200
+
+def accept_hub_invite(account, cursor, connection, token):
+    query = ("SELECT HubID FROM hub_inviteTokens WHERE Token = %s")
+    cursor.execute(query, (token,))
+    hub = cursor.fetchone()
+    if not hub:
+        return jsonify({'error': 'Token not found'}), 404
+
+    query = ("INSERT INTO accounts_hubsRelation (AccountID, HubID, PermissionLevel) VALUES (%s,%s,%s)")
+    try:
+        cursor.execute(query, (account['AccountID'], hub['HubID'], 1))
+        connection.commit()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'HubID': hub['HubID']}), 200
+
+def clear_expired_tokens(cursor, connection):
+    query = ("DELETE FROM hub_inviteTokens WHERE Expiry < %s")
+    try:
+        cursor.execute(query, (int(time.time()),))
+        connection.commit()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@hub_user.route('/hub/<hubID>/user', methods=['GET'])
+def hub_get_users_route(hubID):
+    account = getAccount()
+    if account is None:
+        return jsonify({'error': 'Session ID is invalid'}), 401
+
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    clear_expired_tokens(cursor, connection)
+    retVal = get_hub_users(account, cursor, hubID)
+    connection.close()
+    cursor.close()
+    return retVal
+
+@hub_user.route('/hub/<hubID>/user/<accountID>', methods=['DELETE', 'PATCH', 'GET'])
+def hub_user_route(hubID, accountID):
+    account = getAccount()
+    if account is None:
+        return jsonify({'error': 'Session ID is invalid'}), 401
+
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    clear_expired_tokens(cursor, connection)
+    if request.method == 'DELETE':
+        retVal = remove_hub_user(account, cursor, hubID, accountID)
+    elif request.method == 'PATCH':
+        retVal = manage_hub_user(account, cursor, connection, hubID, accountID)
+    elif request.method == 'GET':
+        retVal = get_one_hub_user(account, cursor, hubID, accountID)
+    connection.close()
+    cursor.close()
+    return retVal
+
+@hub_user.route('/hub/<hubID>/invite', methods=['POST'])
+def hub_invite_route(hubID):
+    account = getAccount()
+    if account is None:
+        return jsonify({'error': 'Session ID is invalid'}), 401
+
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    clear_expired_tokens(cursor, connection)
+    retVal = create_invite_token(account, cursor, connection, hubID)
+    connection.close()
+    cursor.close()
+    return retVal
+
+@hub_user.route('/hub/invite/<token>', methods=['POST'])
+def join_hub_route(token):
+    account = getAccount()
+    if account is None:
+        return jsonify({'error': 'Session ID is invalid'}), 401
+
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    clear_expired_tokens(cursor, connection)
+    retVal = accept_hub_invite(account, cursor, connection, token)
+    connection.close()
+    cursor.close()
+    return retVal
