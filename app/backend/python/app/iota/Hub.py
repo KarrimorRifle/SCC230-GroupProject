@@ -51,6 +51,6 @@ def loadHubFromDatabase(id:str) -> Hub:
     users = cursor.fetchall()
     userDict = {}
     for user in users:
-        userDict[loadUserFromDatabase(user['AccountID'])] = user['PermissionLevel']
+        userDict[user['AccountID']] = user['PermissionLevel']
 
     return Hub(id=hub['HubID'], name=hub['HubName'], users=userDict)
