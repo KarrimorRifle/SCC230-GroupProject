@@ -7,8 +7,8 @@ EditPermLevel = 3
 ViewPermLevel = 1
 
 # Function returns list of devices linked to hub
-def get_devices(account, cursor):
-    hubID = request.json.get("HubID")
+def get_devices(account, cursor, HubID):
+    hubID = HubID
     
     query = ("SELECT * FROM accounts_hubsRelation "
                 "WHERE AccountID = %s AND HubID = %s")
@@ -25,11 +25,11 @@ def get_devices(account, cursor):
     devices = cursor.fetchall()
     return jsonify(devices), 200
 
-def create_device(account, cursor, connection):
+def create_device(account, cursor, connection, HubID):
     deviceName = request.json.get("DeviceName")
     deviceType = request.json.get("DeviceType")
     ipAddress = request.json.get("IpAddress")
-    hubID = request.json.get("HubID")
+    hubID = HubID
 
     query = ("SELECT * FROM accounts_hubsRelation "
                 "WHERE AccountID = %s AND HubID = %s")
@@ -157,8 +157,8 @@ def update_device(account, cursor, connection, deviceID):
              
     return get_device_detail(account, cursor, deviceID)
 
-@device.route("/device" , methods=['POST', 'GET'])
-def deviceResponse():
+@device.route("/device/<string:hubID>" , methods=['POST', 'GET'])
+def deviceResponse(hubID):
     #Get current user info
     account = getAccount()
     if account is None:
@@ -168,15 +168,15 @@ def deviceResponse():
     connection = current_app.config['connection']
 
     if request.method == 'GET':
-        return get_devices(account, cursor)
+        return get_devices(account, cursor, hubID)
     elif request.method == 'POST':
-        return create_device(account, cursor, connection)
+        return create_device(account, cursor, connection, hubID)
 
     cursor.close()
     connection.close()
 
-@device.route("/device/<string:deviceID>" , methods=['PATCH', 'DELETE', 'GET'])
-def deviceDetails(deviceID):
+@device.route("/device/<string:hubID>/<string:deviceID>" , methods=['PATCH', 'DELETE', 'GET'])
+def deviceDetails(hubID,deviceID):
     #Get current user info
     account = getAccount()
     if account is None:
