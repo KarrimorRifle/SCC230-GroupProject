@@ -10,10 +10,7 @@
       style="background-color: rgba(0, 0, 0, 0); border-style: none"
       @click="blockConditionalsSelect(command)"
     >
-      <block-conditionals
-        :command-type="command"
-        :display="true"
-      />
+      <block-conditionals :command-type="command" :display="true" />
     </button>
     <button
       v-for="(command, index) in other"
@@ -37,7 +34,6 @@
 <script setup lang="ts">
 import BlockConditionals from "./blocks/BlockConditionals.vue";
 import BlockItem from "./blocks/BlockItem.vue";
-import TriggerBlock from "./blocks/TriggerBlock.vue";
 import { ref, defineProps, defineEmits } from "vue";
 import { CommandType } from "@/modules/schedules/types";
 
