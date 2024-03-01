@@ -119,7 +119,10 @@ def login():
     password = password.encode("utf-8")
     
     query = f"SELECT * FROM accounts WHERE Email = %s"
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
     cursor.execute(query, (email,))
     account = cursor.fetchone()
     if account is None:
@@ -163,7 +166,10 @@ def getAccount():
     sessionID = request.cookies.get('session_id')
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
-    
-    cursor.fetchall()
-    cursor.execute(query, (sessionID,))
-    return cursor.fetchone()
+    try:
+        cursor.fetchall()
+    except:
+        pass
+    finally:
+        cursor.execute(query, (sessionID,))
+        return cursor.fetchone()
