@@ -4,7 +4,29 @@
 ### LINK TO RELATED DOCS
 #### [Hub Doc](../README.md)
 <br><br>
+## Classes
+###### *for frontend to worry about by backend
+<br>
 
+### Hub_User
+
+Hub member model as handled by backend for database storing. The data in DB is processed slightly differently when handed to iota manager to create and use as a schedule class object. 
+
+Structure shows variables and values for frontend to be familiar with.
+
+#### Structure:
+-	(string)HubID – Unique ID to identify specified Hub
+-	(string)AccountID – Unique ID to identify specified Account
+-   (int)PermissionLevel - integer suggesting perms of user (0-5)
+    -   increasing perm levels have rights of all previous levels
+    -   0: No rights
+    -   1: View rights
+    -   2: Activation/Deactivation rights
+    -   3: Edit/Create/Delete rights
+    -   4: Admin rights (adding/removing/managing users of lower perm)
+    -   5: Owner rights (Can edit/delete hub)
+
+ <br><br><br><br>
 ## Routes
 
 ### ‘/hub/[HubID]/user’
