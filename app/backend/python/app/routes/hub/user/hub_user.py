@@ -36,7 +36,7 @@ def remove_hub_user(account, cursor, hubID, accountID):
     if not hub:
         return jsonify({'error': 'User not part of hub'}), 401
 
-    if hub['PermissionLevel'] < 4:
+    if hub['PermissionLevel'] <= 4:
         return jsonify({'error': 'User does not have permission to remove users from hub'}), 403
     
     query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE HubID = %s AND AccountID = %s")
