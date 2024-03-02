@@ -263,20 +263,20 @@ def update_schedule(account, cursor, connection, scheduleID):
 
     commandTypes = ['FOR', 'WHILE', 'IF', 'ELSE', 'SET', 'WAIT', 'END']
     for funcBlock in newCode:
-        if funcBlock['CommandType'] not in commandTypes:
+        if funcBlock.get('CommandType') not in commandTypes:
             return (jsonify({'error':'Invalid argument CommandType must be FOR, WHILE, IF, ELSE, SET; Returning empty Code.'})), 400
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
         blockIDs.append(blockID)
 
         queries[0] += ("(%s,%s,%s,%s),")
-        values[0] += (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,)
+        values[0] += (blockID, funcBlock.get('CommandType'), funcBlock.get('Number'), scheduleID,)
 
-        for link in funcBlock['LinkedCommands']:
+        for link in funcBlock.get('LinkedCommands'):
             queries[1] += ("(%s,%s,%s),")
             values[1] += (blockID, link, scheduleID,)
 
         pos = 0
-        for param in funcBlock['Params']:
+        for param in funcBlock.get('Params'):
             queries[2] += ("(%s,%s,%s,%s),")
             values[2] += (param, blockID, scheduleID, pos,)
             pos += 1
