@@ -55,11 +55,17 @@ import router from "@/router";
 import axios from "axios";
 
 const menu = ref<boolean>(true);
-const functionCode = ref<FunctionCode[]>();
+const functionCode = ref<FunctionCode[]>([]);
 const commands = ref<CommandType[]>([]);
+const nextNum = ref<number>(0);
 
 const addNewBlock = (commandType: CommandType) => {
   commands.value.push(commandType);
+  functionCode.value.push({
+    CommandType: commandType,
+    Number: nextNum.value,
+    Params: [],
+  });
 };
 
 const endAvailable = computed(() => {
