@@ -225,7 +225,7 @@
               class="btn btn-success btn-sm text-light"
               :class="{ disabled: display }"
               @click="
-                if (filteredCode.length > 1) code.push('AND', '', '==', '0');
+                if (filteredCode.length > 0) code.push('AND', '', '==', '0');
                 else code.push('', '==', '0');
               "
               style="font-size: 80%"
