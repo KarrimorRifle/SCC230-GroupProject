@@ -9,7 +9,7 @@
     <button
       v-for="(command, index) in commands"
       :key="index"
-      class="mb-2 d-flex flex-column"
+      class="mb-2 d-flex flex-column p-0"
       :class="{ disabled: command == 'END' && !endAvailable }"
       :style="{
         cursor: command == 'END' && !endAvailable ? 'default' : 'pointer',

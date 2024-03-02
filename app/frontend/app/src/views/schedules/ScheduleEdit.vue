@@ -86,7 +86,7 @@
             </button>
           </div>
         </div>
-        <div class="col-4 px-0" v-if="menu">
+        <div class="col-xl-4 col-lg-6 col-12 px-0" v-if="menu">
           <block-menu
             @close="
               menu = false;
