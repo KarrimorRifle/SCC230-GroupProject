@@ -1,7 +1,10 @@
 <template>
   <div id="editor" class="main p-3 d-flex">
-    <h3 class="ps-2 py-2 mb-4 bg-secondary rounded">
-      <b>ADD BLOCK</b>
+    <h3
+      class="ps-2 py-2 mb-4 rounded"
+      :class="{ 'bg-success': mode == 'ADD', 'bg-warning': mode == 'CHANGE' }"
+    >
+      <b>{{ mode }} BLOCK</b>
     </h3>
     <button
       v-for="(command, index) in commands"
@@ -30,6 +33,7 @@ import { CommandType } from "@/modules/schedules/types";
 
 const props = defineProps<{
   endAvailable: boolean;
+  mode: "ADD" | "CHANGE";
 }>();
 
 const commands = ref<CommandType[]>([

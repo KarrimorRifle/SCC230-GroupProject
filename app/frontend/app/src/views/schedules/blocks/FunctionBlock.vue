@@ -32,6 +32,14 @@
     >
       x
     </button>
+    <button
+      class="p-0 invis-bg"
+      id="CHANGE"
+      v-if="!display"
+      @click="$emit('change')"
+    >
+      ...
+    </button>
     <div class="card-body p-2">
       <div class="row d-flex justify-content-center">
         <div
@@ -226,7 +234,7 @@
             v-if="conditionals.includes(commandType)"
           >
             <button
-              class="btn btn-success btn-sm text-light"
+              class="btn btn-success btn-sm text-light mt-1"
               :class="{ disabled: display }"
               @click="
                 if (filteredCode.length > 0) code.push('AND', '', '==', '0');
@@ -272,9 +280,10 @@ const props = defineProps<{
   devices?: Device[];
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   endSelectable?: boolean;
+  highlight?: boolean;
 }>();
 
-const emit = defineEmits(["update:modelValue", "delete"]);
+const emit = defineEmits(["update:modelValue", "delete", "change"]);
 
 const list = computed(() => {
   if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
@@ -339,6 +348,7 @@ const parseVar = (variable: string) => {
 };
 
 const borderColor = computed(() => {
+  if (props.highlight) return "orange";
   if (props.endSelectable || props.commandType != "END" || !props.display)
     return "white";
   return "gray";
@@ -377,6 +387,14 @@ defineExpose({
   color: rgb(213, 29, 29);
   position: absolute;
   right: 0.2rem;
+  top: -0.8rem;
+  border-style: none;
+}
+
+#CHANGE {
+  color: rgb(192, 192, 192);
+  position: absolute;
+  right: 1rem;
   top: -0.8rem;
   border-style: none;
 }

@@ -62,12 +62,21 @@
               v-model="functionBlock.Params"
               :devices="validDevices"
               :schedule-vars="variables"
+              :highlight="focusedBlock == index"
+              @change="
+                mode = 'CHANGE';
+                focusedBlock = index;
+              "
             />
           </div>
           <div style="width: 7rem" class="mt-1">
             <button
               style="background-color: rgba(0, 0, 0, 0); border-style: none"
-              @click="menu = true"
+              @click="
+                menu = true;
+                mode = 'ADD';
+                focusedBlock = -1;
+              "
             >
               <img
                 src="../../assets/plus.svg"
@@ -79,8 +88,13 @@
         </div>
         <div class="col-4 px-0" v-if="menu">
           <block-menu
-            @close="menu = false"
+            @close="
+              menu = false;
+              focusedBlock = -1;
+              mode = 'ADD';
+            "
             @chosen="addNewBlock"
+            :mode="mode"
             :end-available="endAvailable"
           />
         </div>
@@ -106,6 +120,8 @@ import axios from "axios";
 const menu = ref<boolean>(true);
 const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
+const focusedBlock = ref<number>(-1);
+const mode = ref<"CHANGE" | "ADD">("ADD");
 
 const addNewBlock = (commandType: CommandType) => {
   let codeBlock: FunctionCode = {
@@ -127,8 +143,12 @@ const addNewBlock = (commandType: CommandType) => {
       codeBlock.Params = ["3"];
       break;
   }
-  schedule.value?.Code.push(codeBlock);
-  nextNum.value++;
+  if (mode.value == "ADD") {
+    schedule.value?.Code.push(codeBlock);
+    nextNum.value++;
+  } else if (mode.value == "CHANGE" && schedule.value) {
+    schedule.value.Code[focusedBlock.value] = codeBlock;
+  }
 };
 
 const endAvailable = computed(() => {
