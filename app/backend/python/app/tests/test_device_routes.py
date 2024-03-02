@@ -9,23 +9,23 @@ class test_user(unittest.TestCase):
 
 
     def test_create_device(self):
-        response = self.client_server.post("/device/Hubk23098jwij123msd", json={'DeviceName': "Test Device 2", 'DeviceType':"Test", 'IpAddress':"1.1.1.2", 'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceName': "Test Device 2", 'DeviceType':"Test", 'IpAddress':"1.1.1.2", 'HubID':"Hubk23098jwij123msd"})
         #self.assertEqual(response.status_code, 200)
         self.assertIn('DeviceID', response.data.decode('utf-8'))
 
     def test_delete_device(self):
-        response = self.client_server.post("/device/Hubk23098jwij123msd", json={'DeviceName': "Test Device 3", 'DeviceType':"Test", 'IpAddress':"1.1.1.3", 'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceName': "Test Device 3", 'DeviceType':"Test", 'IpAddress':"1.1.1.3", 'HubID':"Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        url = '/device/Hubk23098jwij123msd/'
+        url = '/hub/Hubk23098jwij123msd/device/'
         url += data['DeviceID']
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
         
     def test_get_devices_success(self):
-        response = self.client_server.post("/device/Hubk23098jwij123msd", json={'DeviceName': "Test Device 3", 'DeviceType':"Test", 'IpAddress':"1.1.1.3", 'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceName': "Test Device 3", 'DeviceType':"Test", 'IpAddress':"1.1.1.3", 'HubID':"Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
-        response = self.client_server.get('/device/Hubk23098jwij123msd', json={'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.get('/hub/Hubk23098jwij123msd/device', json={'HubID':"Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         for entry in data:
@@ -34,10 +34,10 @@ class test_user(unittest.TestCase):
             self.assertIn('DeviceType', entry)
 
     def test_get_device_details_success(self):
-        response = self.client_server.post("/device/Hubk23098jwij123msd", json={'DeviceName': "Test Device 4", 'DeviceType':"Test", 'IpAddress':"1.1.1.4", 'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceName': "Test Device 4", 'DeviceType':"Test", 'IpAddress':"1.1.1.4", 'HubID':"Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        url = '/device/Hubk23098jwij123msd/'
+        url = '/hub/Hubk23098jwij123msd/device/'
         url += data['DeviceID']
         response = self.client_server.get(url)
 
@@ -54,10 +54,10 @@ class test_user(unittest.TestCase):
             'DeviceName': "Test Device 5 updated",
         }
 
-        response = self.client_server.post("/device/Hubk23098jwij123msd", json={'DeviceName': "Test Device 5", 'DeviceType':"Test", 'IpAddress':"1.1.1.5", 'HubID':"Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceName': "Test Device 5", 'DeviceType':"Test", 'IpAddress':"1.1.1.5", 'HubID':"Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
-        url = '/device/Hubk23098jwij123msd/'
+        url = '/hub/Hubk23098jwij123msd/device/'
         id = data['DeviceID']
         url += id
         response = self.client_server.patch(url, json=payload)

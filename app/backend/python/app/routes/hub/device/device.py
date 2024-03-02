@@ -37,7 +37,7 @@ def create_device(account, cursor, connection, HubID):
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
-        return({"error": "Forbidden access"}), 403
+        return({"error": "Forbidden access"+HubID}), 403
     
     query = ("SELECT DeviceID FROM devices")
     cursor.execute(query)
@@ -157,7 +157,7 @@ def update_device(account, cursor, connection, deviceID):
              
     return get_device_detail(account, cursor, deviceID)
 
-@device.route("/device/<string:hubID>" , methods=['POST', 'GET'])
+@device.route("/hub/<string:hubID>/device" , methods=['POST', 'GET'])
 def deviceResponse(hubID):
     #Get current user info
     account = getAccount()
@@ -175,7 +175,7 @@ def deviceResponse(hubID):
     cursor.close()
     connection.close()
 
-@device.route("/device/<string:hubID>/<string:deviceID>" , methods=['PATCH', 'DELETE', 'GET'])
+@device.route("/hub/<string:hubID>/device/<string:deviceID>" , methods=['PATCH', 'DELETE', 'GET'])
 def deviceDetails(hubID,deviceID):
     #Get current user info
     account = getAccount()
