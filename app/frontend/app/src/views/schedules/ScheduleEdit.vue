@@ -8,13 +8,13 @@
         <div class="col p-3" style="max-height: 100%">
           <trigger-block />
           <div
-            v-for="(functionBlock, index) in functionCode"
+            v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
             style="margin-top: -0.6rem"
           >
             <function-block
               :command-type="functionBlock.CommandType"
-              @delete="functionCode.splice(index, 1)"
+              @delete="schedule?.Code.splice(index, 1)"
               v-model="functionBlock.Params"
               :devices="validDevices"
               :schedule-vars="variables"
@@ -40,7 +40,7 @@
             :end-available="endAvailable"
           />
         </div>
-        <button @click="console.log(functionCode)">hi</button>
+        <button @click="console.log(schedule?.Code)">hi</button>
       </div>
     </div>
   </div>
@@ -50,12 +50,17 @@ import BlockMenu from "./BlockMenu.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import FunctionBlock from "./blocks/FunctionBlock.vue";
 import { computed, ref } from "vue";
-import { CommandType, Device, FunctionCode } from "@/modules/schedules/types";
+import {
+  CommandType,
+  Device,
+  FunctionCode,
+  Schedule,
+} from "@/modules/schedules/types";
 import router from "@/router";
 import axios from "axios";
 
 const menu = ref<boolean>(true);
-const functionCode = ref<FunctionCode[]>([]);
+const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
 
 const addNewBlock = (commandType: CommandType) => {
@@ -77,14 +82,14 @@ const addNewBlock = (commandType: CommandType) => {
       codeBlock.Params = ["3"];
       break;
   }
-  functionCode.value.push(codeBlock);
+  schedule.value?.Code.push(codeBlock);
   nextNum.value++;
 };
 
 const endAvailable = computed(() => {
   let conditionalsCount = 0;
   let endCount = 0;
-  functionCode.value.forEach((item) => {
+  schedule.value?.Code.forEach((item) => {
     if (item.CommandType == "END") endCount++;
     else if (["WHILE", "IF", "ELSE", "FOR"].includes(item.CommandType))
       conditionalsCount++;
@@ -121,18 +126,16 @@ const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
 });
 
 let scheduleID = router.currentRoute.value.params.id;
-// add fetching of schedule
 const fetchSchedule = async () => {
   let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
     withCredentials: true,
   });
-  functionCode.value = data.data.Code;
-  nextNum.value = functionCode.value[functionCode.value.length - 1].Number + 1;
+  schedule.value = data.data;
+  if (schedule.value)
+    nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
   console.log(data);
-  console.log(functionCode.value);
+  console.log(schedule.value?.Code);
 };
-
-//reworking code blocks
 
 fetchSchedule();
 </script>

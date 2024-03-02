@@ -16,15 +16,15 @@ export interface FunctionCode {
 }
 
 export interface Schedule {
-  id: string;
-  name: string;
+  ScheduleID: string;
+  ScheduleName: string;
   AuthorID: string;
-  isPublic: boolean;
-  isActive: boolean;
-  ratings: number[]; //was just one value, but instead should be a computed value
-  triggers: Record<string, string[]>;
-  code: FunctionCode[];
-  customVars?: Record<string, "NUMBER" | "BOOLEAN">;
+  IsPublic: boolean;
+  IsActive: boolean;
+  Rating: number; //was just one value, but instead should be a computed value
+  Trigger: Record<string, string[]>;
+  Code: FunctionCode[];
+  CustomVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
 
 export interface ListSchedule {
