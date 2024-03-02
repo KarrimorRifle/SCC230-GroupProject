@@ -95,7 +95,7 @@
                     "
                   />
                   <button
-                    class="input-group-text invis-bg"
+                    class="input-group-text invis-bg border-light"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
@@ -135,9 +135,13 @@
                   </div>
                   <button
                     type="button"
-                    class="input-group-text border-light dropdown-toggle dropdown-toggle-split"
+                    class="input-group-text dropdown-toggle dropdown-toggle-split"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    :class="{
+                      disabled: !getVarType(item[0]),
+                      'border-light': getVarType(item[0]),
+                    }"
                   >
                     <span class="visually-hidden">Toggle Dropdown</span>
                   </button>
