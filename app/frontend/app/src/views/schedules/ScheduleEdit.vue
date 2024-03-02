@@ -53,9 +53,8 @@ import router from "@/router";
 import axios from "axios";
 
 const menu = ref<boolean>(false);
-
+const functionCode = ref<FunctionCode[]>();
 const commands = ref<CommandType[]>([]);
-const blocks = ref<(typeof FunctionBlock)[]>();
 
 const addNewBlock = (commandType: CommandType) => {
   commands.value.push(commandType);
@@ -111,7 +110,6 @@ const fetchSchedule = async () => {
 };
 
 //reworking code blocks
-const functionCode = ref<FunctionCode[]>();
 
 fetchSchedule();
 </script>

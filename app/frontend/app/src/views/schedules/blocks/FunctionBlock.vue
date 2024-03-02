@@ -71,8 +71,8 @@
               <div
                 class="d-flex mb-1"
                 v-else
-                v-for="(item, index) in conditions.conditions"
-                :key="'condition' + index"
+                v-for="(item, index) in filteredCode"
+                :key="'condition' + index + item[1]"
               >
                 <div class="input-group">
                   <button
@@ -81,7 +81,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    {{ item.DValue1 ?? item.value1 ?? "-------" }}
+                    {{ item[0] ? parseVar(item[0]) : "-------" }}
                   </button>
                   <variable-list-options
                     :devices="devices"
@@ -92,31 +92,31 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    {{ item.compare }}
+                    {{ item[1] }}
                   </button>
                   <variable-list-options :custom-list="list" />
                   <div
-                    v-if="item.varChosen"
+                    v-if="parseVar(item[2])"
                     class="input-group-text border-light"
                   >
-                    {{ item.DValue2 ?? item.value2 }}
+                    {{ parseVar(item[2]) }}
                   </div>
                   <input
                     class="input-group-text border-light"
                     type="number"
                     style="width: 5rem"
                     placeholder="00"
-                    :v-model="item.value2"
-                    v-else-if="item.type == 'NUMBER'"
+                    v-model.number="code[index * 4 + 2]"
+                    v-else-if="getVarType(item[0]) == 'NUMBER'"
                   />
                   <div
                     class="input-group-text border-light"
-                    v-else-if="item.type == 'BOOLEAN'"
+                    v-else-if="getVarType(item[0]) == 'BOOLEAN'"
                   >
                     <input
                       class="form-check-input mt-0 border-primary"
                       type="checkbox"
-                      :v-model="item.value2"
+                      v-model="code[index * 4 + 2]"
                     />
                   </div>
                   <button
@@ -134,7 +134,7 @@
                   />
                 </div>
                 <template v-if="conditionals.includes(commandType)">
-                  <div v-if="conditions.joining[index]" class="d-inline-block">
+                  <!-- <div v-if="conditions.joining[index]" class="d-inline-block">
                     <button
                       class="btn btn-outline-info text-light btn-sm mb-1"
                       type="button"
@@ -185,8 +185,8 @@
                         </button>
                       </li>
                     </ul>
-                  </div>
-                  <div
+                  </div> -->
+                  <!-- <div
                     v-else-if="
                       conditions.conditions.length > 1 || commandType == 'ELSE'
                     "
@@ -205,7 +205,7 @@
                         style="width: 1.2rem"
                       />
                     </button>
-                  </div>
+                  </div> -->
                 </template>
               </div>
             </div>
@@ -217,8 +217,8 @@
             <button
               class="btn btn-success btn-sm text-light"
               :class="{ disabled: display }"
+              @click="console.log(code)"
               style="font-size: 80%"
-              @click="addCondition"
             >
               +
             </button>
@@ -241,30 +241,72 @@
 </template>
 <script setup lang="ts">
 import { CommandType, Device } from "@/modules/schedules/types";
-import { defineProps, ref, defineExpose, computed } from "vue";
+import {
+  defineProps,
+  ref,
+  defineExpose,
+  computed,
+  defineModel,
+  callWithAsyncErrorHandling,
+} from "vue";
 import VariableListOptions from "./VariableListOptions.vue";
 
+const model = defineModel();
 const props = defineProps<{
   display?: boolean;
   commandType: CommandType;
   devices?: Device[];
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   endSelectable?: boolean;
+  initialCode?: string[];
 }>();
 
 const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
+const code = ref<string[]>([
+  "var.test2",
+  "<=",
+  "10",
+  "AND",
+  "var.test1",
+  "==",
+  "true",
+]);
 
-type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
-type Joining = "AND" | "OR";
-interface Condition {
-  value1: string | undefined;
-  DValue1?: string;
-  type: "NUMBER" | "BOOLEAN";
-  compare: CompareValue;
-  value2: number | string | boolean | undefined;
-  DValue2?: string;
-  varChosen: boolean;
-}
+const filteredCode = computed(() => {
+  let remainingArray = code.value;
+  let splitArrays = [];
+  while (remainingArray.length > 0) {
+    splitArrays.push(remainingArray.slice(0, 4));
+    remainingArray = remainingArray.slice(4);
+  }
+  return splitArrays;
+});
+
+const getVarType = (variable: string) => {
+  let varArray = variable.split(".");
+  if (varArray[0] == "var" && props.scheduleVars)
+    return props.scheduleVars[varArray[1]];
+  else {
+    let device = props.devices?.find((device) => device.id == varArray[0]);
+    if (device) return device.data[varArray[1]];
+  }
+  return undefined;
+};
+
+const parseVar = (variable: string) => {
+  let varArray: string[];
+  try {
+    varArray = variable.split(".");
+  } catch {
+    return undefined;
+  }
+  if (varArray[0] == "var" && props.scheduleVars) return "SCH: " + varArray[1];
+  else {
+    let index = props.devices?.findIndex((device) => device.id == varArray[0]);
+    if (index) return index + 1 + varArray[1];
+  }
+  return undefined;
+};
 
 const borderColor = computed(() => {
   if (props.endSelectable || props.commandType != "END" || !props.display)
@@ -286,56 +328,71 @@ const width = computed(() => {
   }
 });
 
-const getCodeContent = (): string[] | boolean => {
-  let strings: string[] = [];
-  try {
-    conditions.value.conditions.forEach((item, index) => {
-      if (item.value1 == undefined || item.value2 == undefined)
-        throw new Error("INVALID");
-      strings.push(item.value1 + "");
-      strings.push(item.compare);
-      strings.push(item.value2 + "");
-      if (conditions.value.joining[index])
-        strings.push(conditions.value.joining[index]);
-    });
-  } catch {
-    return false;
-  }
-  return strings;
-};
-
-const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
-  conditions:
-    props.commandType != "ELSE"
-      ? [
-          {
-            value1: undefined,
-            compare: "==",
-            value2: undefined,
-            type: "NUMBER",
-            varChosen: false,
-          },
-        ]
-      : [],
-  joining: [],
-});
-
-const addCondition = () => {
-  conditions.value.conditions.push({
-    value1: undefined,
-    compare: "==",
-    value2: undefined,
-    type: "NUMBER",
-    varChosen: false,
-  });
-  if (conditions.value.conditions.length > 1)
-    conditions.value.joining.push("AND");
-};
-
 const list = computed(() => {
   if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
   return ["=", "+=", "-=", "/=", "*="];
 });
+
+const getCode = () => {
+  if (props.initialCode) code.value = props.initialCode;
+};
+getCode();
+
+// const getCodeContent = (): string[] | boolean => {
+//   let strings: string[] = [];
+//   try {
+//     conditions.value.conditions.forEach((item, index) => {
+//       if (item.value1 == undefined || item.value2 == undefined)
+//         throw new Error("INVALID");
+//       strings.push(item.value1 + "");
+//       strings.push(item.compare);
+//       strings.push(item.value2 + "");
+//       if (conditions.value.joining[index])
+//         strings.push(conditions.value.joining[index]);
+//     });
+//   } catch {
+//     return false;
+//   }
+//   return strings;
+// };
+
+// type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
+// type Joining = "AND" | "OR";
+// interface Condition {
+//   value1: string | undefined;
+//   type: "NUMBER" | "BOOLEAN";
+//   compare: CompareValue;
+//   value2: number | string | boolean | undefined;
+//   varChosen: boolean;
+// }
+
+// const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
+//   conditions:
+//     props.commandType != "ELSE"
+//       ? [
+//           {
+//             value1: undefined,
+//             compare: "==",
+//             value2: undefined,
+//             type: "NUMBER",
+//             varChosen: false,
+//           },
+//         ]
+//       : [],
+//   joining: [],
+// });
+
+// const addCondition = () => {
+//   conditions.value.conditions.push({
+//     value1: undefined,
+//     compare: "==",
+//     value2: undefined,
+//     type: "NUMBER",
+//     varChosen: false,
+//   });
+//   if (conditions.value.conditions.length > 1)
+//     conditions.value.joining.push("AND");
+// };
 
 defineExpose<{
   getCodeContent: string[] | boolean;
