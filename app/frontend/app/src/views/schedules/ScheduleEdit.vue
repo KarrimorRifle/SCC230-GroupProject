@@ -38,7 +38,9 @@
           </div>
         </div>
         <div>
-          <button class="btn btn-success btn-sm me-2">SAVE</button>
+          <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
+            SAVE
+          </button>
           <button class="btn btn-danger btn-sm" @click="deleteSchedule">
             DELETE
           </button>
@@ -110,6 +112,7 @@ const addNewBlock = (commandType: CommandType) => {
     CommandType: commandType,
     Number: nextNum.value,
     Params: [],
+    LinkedCommands: [],
   };
   switch (commandType) {
     case "IF":
@@ -190,6 +193,28 @@ const deleteSchedule = async () => {
     console.log(e);
   }
   router.push("/schedules");
+};
+
+const saveSchedule = async () => {
+  let tempSchedule = schedule.value;
+  if (tempSchedule == undefined) return;
+  tempSchedule.Code = tempSchedule.Code.map((item) => {
+    let block = item;
+    block.Params = item.Params?.map((item) => item + "");
+    return block;
+  });
+  try {
+    console.log(tempSchedule);
+    await axios.patch(
+      `http://localhost:5000/schedule/${scheduleID}`,
+      tempSchedule,
+      {
+        withCredentials: true,
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
 };
 </script>
 <style>
