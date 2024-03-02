@@ -131,6 +131,7 @@
                     :devices="devices"
                     :schedule-vars="scheduleVars"
                     :custom="true"
+                    v-if="getVarType(item[0])"
                   />
                 </div>
                 <template
@@ -206,7 +207,7 @@
             <button
               class="btn btn-success btn-sm text-light"
               :class="{ disabled: display }"
-              @click="console.log(code)"
+              @click="code.push('AND', '', '==', '0')"
               style="font-size: 80%"
             >
               +
