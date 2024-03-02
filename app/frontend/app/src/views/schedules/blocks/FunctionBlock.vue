@@ -260,16 +260,13 @@ const props = defineProps<{
   initialCode?: string[];
 }>();
 
+const list = computed(() => {
+  if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
+  return ["=", "+=", "-=", "/=", "*="];
+});
+
 const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
-const code = ref<string[]>([
-  "var.test2",
-  "<=",
-  "10",
-  "OR",
-  "var.test1",
-  "==",
-  "true",
-]);
+const code = ref<string[]>(["", list.value[0], ""]);
 
 const filteredCode = computed(() => {
   let remainingArray = code.value;
@@ -334,74 +331,13 @@ const width = computed(() => {
   }
 });
 
-const list = computed(() => {
-  if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
-  return ["=", "+=", "-=", "/=", "*="];
-});
-
 const getCode = () => {
   if (props.initialCode) code.value = props.initialCode;
 };
 getCode();
 
-// const getCodeContent = (): string[] | boolean => {
-//   let strings: string[] = [];
-//   try {
-//     conditions.value.conditions.forEach((item, index) => {
-//       if (item.value1 == undefined || item.value2 == undefined)
-//         throw new Error("INVALID");
-//       strings.push(item.value1 + "");
-//       strings.push(item.compare);
-//       strings.push(item.value2 + "");
-//       if (conditions.value.joining[index])
-//         strings.push(conditions.value.joining[index]);
-//     });
-//   } catch {
-//     return false;
-//   }
-//   return strings;
-// };
-
-// type CompareValue = "==" | "!=" | ">=" | "<=" | ">" | "<";
-// type Joining = "AND" | "OR";
-// interface Condition {
-//   value1: string | undefined;
-//   type: "NUMBER" | "BOOLEAN";
-//   compare: CompareValue;
-//   value2: number | string | boolean | undefined;
-//   varChosen: boolean;
-// }
-
-// const conditions = ref<{ conditions: Condition[]; joining: Joining[] }>({
-//   conditions:
-//     props.commandType != "ELSE"
-//       ? [
-//           {
-//             value1: undefined,
-//             compare: "==",
-//             value2: undefined,
-//             type: "NUMBER",
-//             varChosen: false,
-//           },
-//         ]
-//       : [],
-//   joining: [],
-// });
-
-// const addCondition = () => {
-//   conditions.value.conditions.push({
-//     value1: undefined,
-//     compare: "==",
-//     value2: undefined,
-//     type: "NUMBER",
-//     varChosen: false,
-//   });
-//   if (conditions.value.conditions.length > 1)
-//     conditions.value.joining.push("AND");
-// };
-
 defineExpose<{
-  getCodeContent: string[] | boolean;
+  code: string[];
 }>();
 </script>
 <style>
