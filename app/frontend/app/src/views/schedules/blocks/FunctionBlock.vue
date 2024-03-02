@@ -133,8 +133,10 @@
                     :custom="true"
                   />
                 </div>
-                <template v-if="conditionals.includes(commandType)">
-                  <!-- <div v-if="conditions.joining[index]" class="d-inline-block">
+                <template
+                  v-if="filteredCode.length > 1 || commandType == 'ELSE'"
+                >
+                  <div v-if="item[3]" class="d-inline-block">
                     <button
                       class="btn btn-outline-info text-light btn-sm mb-1"
                       type="button"
@@ -142,7 +144,7 @@
                       aria-expanded="false"
                       style="font-size: 80%"
                     >
-                      {{ conditions.joining[index] }}
+                      {{ item[3] }}
                     </button>
                     <ul
                       class="dropdown-menu pb-0"
@@ -150,32 +152,26 @@
                     >
                       <li>
                         <button
-                          @click="conditions.joining[index] = 'AND'"
                           class="dropdown-item px-2"
+                          @click="code[index * 4 + 3] = 'AND'"
                         >
                           AND
                         </button>
                       </li>
                       <li>
                         <button
-                          @click="conditions.joining[index] = 'OR'"
                           class="dropdown-item px-2"
+                          @click="code[index * 4 + 3] = 'OR'"
                         >
                           OR
                         </button>
                       </li>
-                      <div
-                        class="dropdown-divider mb-0"
-                        v-if="conditions.conditions.length > 1"
-                      ></div>
+                      <div class="dropdown-divider mb-0"></div>
                       <li>
                         <button
                           class="dropdown-item text-danger px-0 d-flex justify-content-center py-2"
-                          @click="
-                            conditions.joining.splice(index, 1);
-                            conditions.conditions.splice(index, 1);
-                          "
-                          v-if="conditions.conditions.length > 1"
+                          @click="code.splice(index * 4, 4)"
+                          v-if="filteredCode.length > 1"
                         >
                           <img
                             src="@/assets/delete-svgrepo-com.svg"
@@ -185,18 +181,11 @@
                         </button>
                       </li>
                     </ul>
-                  </div> -->
-                  <!-- <div
-                    v-else-if="
-                      conditions.conditions.length > 1 || commandType == 'ELSE'
-                    "
-                  >
+                  </div>
+                  <div v-else>
                     <button
                       class="btn btn-sm btn-outline-danger px-2 me-2"
-                      @click="
-                        conditions.joining.splice(index - 1, 1);
-                        conditions.conditions.splice(index, 1);
-                      "
+                      @click="code.splice(index * 4 - 1, 4)"
                       :class="{ disabled: display }"
                     >
                       <img
@@ -205,7 +194,7 @@
                         style="width: 1.2rem"
                       />
                     </button>
-                  </div> -->
+                  </div>
                 </template>
               </div>
             </div>
@@ -241,14 +230,7 @@
 </template>
 <script setup lang="ts">
 import { CommandType, Device } from "@/modules/schedules/types";
-import {
-  defineProps,
-  ref,
-  defineExpose,
-  computed,
-  defineModel,
-  callWithAsyncErrorHandling,
-} from "vue";
+import { defineProps, ref, defineExpose, computed, defineModel } from "vue";
 import VariableListOptions from "./VariableListOptions.vue";
 
 const model = defineModel();
@@ -266,7 +248,7 @@ const code = ref<string[]>([
   "var.test2",
   "<=",
   "10",
-  "AND",
+  "OR",
   "var.test1",
   "==",
   "true",
