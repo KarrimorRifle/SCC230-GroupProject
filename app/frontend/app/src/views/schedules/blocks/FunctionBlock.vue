@@ -56,8 +56,9 @@
             ></div>
             <input
               v-else
-              class="input-group-text p-0 border-light"
+              class="input-group-text p-0"
               style="width: 5rem"
+              :style="{ 'border-color': borderColor }"
               placeholder="00"
               v-model.number="code[0]"
             />
@@ -85,7 +86,8 @@
               >
                 <div class="input-group">
                   <button
-                    class="input-group-text dropdown-toggle border-light"
+                    class="input-group-text dropdown-toggle"
+                    :style="{ 'border-color': borderColor }"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -103,7 +105,8 @@
                     "
                   />
                   <button
-                    class="input-group-text invis-bg border-light"
+                    class="input-group-text invis-bg"
+                    :style="{ 'border-color': borderColor }"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
@@ -119,12 +122,14 @@
                   />
                   <div
                     v-if="parseVar(item[2])"
-                    class="input-group-text border-light"
+                    class="input-group-text"
+                    :style="{ 'border-color': borderColor }"
                   >
                     {{ parseVar(item[2]) }}
                   </div>
                   <input
-                    class="input-group-text border-light"
+                    class="input-group-text"
+                    :style="{ 'border-color': borderColor }"
                     type="number"
                     style="width: 5rem"
                     placeholder="00"
@@ -132,7 +137,8 @@
                     v-else-if="getVarType(item[0]) == 'NUMBER'"
                   />
                   <div
-                    class="input-group-text border-light"
+                    class="input-group-text"
+                    :style="{ 'border-color': borderColor }"
                     v-else-if="getVarType(item[0]) == 'BOOLEAN'"
                   >
                     <input
@@ -148,7 +154,11 @@
                     aria-expanded="false"
                     :class="{
                       disabled: !getVarType(item[0]),
-                      'border-light': getVarType(item[0]),
+                    }"
+                    :style="{
+                      'border-color': getVarType(item[0])
+                        ? borderColor
+                        : 'gray',
                     }"
                   >
                     <span class="visually-hidden">Toggle Dropdown</span>
