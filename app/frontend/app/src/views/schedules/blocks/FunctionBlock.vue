@@ -86,6 +86,12 @@
                   <variable-list-options
                     :devices="devices"
                     :schedule-vars="scheduleVars"
+                    @chosen="
+                      (value) => {
+                        code[index * 4] = value;
+                        setVarType(getVarType(item[0]), index);
+                      }
+                    "
                   />
                   <button
                     class="input-group-text invis-bg"
@@ -94,7 +100,14 @@
                   >
                     {{ item[1] }}
                   </button>
-                  <variable-list-options :custom-list="list" />
+                  <variable-list-options
+                    :custom-list="list"
+                    @option="
+                      (item) => {
+                        code[index * 4 + 1] = item;
+                      }
+                    "
+                  />
                   <div
                     v-if="parseVar(item[2])"
                     class="input-group-text border-light"
@@ -131,7 +144,10 @@
                     :devices="devices"
                     :schedule-vars="scheduleVars"
                     :custom="true"
+                    :type="getVarType(item[0])"
                     v-if="getVarType(item[0])"
+                    @chosen="(value) => (code[index * 4 + 2] = value)"
+                    @custom="(type) => setVarType(type, index)"
                   />
                 </div>
                 <template
@@ -267,13 +283,19 @@ const filteredCode = computed(() => {
 
 const getVarType = (variable: string) => {
   let varArray = variable.split(".");
+  let type;
   if (varArray[0] == "var" && props.scheduleVars)
-    return props.scheduleVars[varArray[1]];
+    type = props.scheduleVars[varArray[1]];
   else {
     let device = props.devices?.find((device) => device.id == varArray[0]);
-    if (device) return device.data[varArray[1]];
+    if (device) type = device.data[varArray[1]];
   }
-  return undefined;
+  return type;
+};
+
+const setVarType = (type: "NUMBER" | "BOOLEAN" | undefined, index: number) => {
+  if (type == "NUMBER") code.value[index * 4 + 2] = "0";
+  if (type == "BOOLEAN") code.value[index * 4 + 2] = "false";
 };
 
 const parseVar = (variable: string) => {
@@ -286,7 +308,8 @@ const parseVar = (variable: string) => {
   if (varArray[0] == "var" && props.scheduleVars) return "SCH: " + varArray[1];
   else {
     let index = props.devices?.findIndex((device) => device.id == varArray[0]);
-    if (index) return index + 1 + varArray[1];
+    if (index != undefined && varArray[1])
+      return index + 1 + ": " + varArray[1];
   }
   return undefined;
 };

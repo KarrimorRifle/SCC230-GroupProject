@@ -16,27 +16,13 @@
       <li class="pt-0 pb-1 px-1">
         <hr class="dropdown-divider m-0" />
       </li>
-      <li>
-        <button class="dropdown-item">
-          <!-- @click="
-            item.varChosen = false;
-            item.value2 = 0;
-          "
-          :class="{
-            'disabled text-secondary': item.type != 'NUMBER',
-          }" -->
+      <li v-if="type == 'NUMBER'">
+        <button class="dropdown-item" @click="$emit('custom', 'NUMBER')">
           Number
         </button>
       </li>
-      <li>
-        <button class="dropdown-item">
-          <!-- @click="
-            item.varChosen = false;
-            item.value2 = false;
-          "
-          :class="{
-            'disabled text-secondary': item.type != 'BOOLEAN',
-          }" -->
+      <li v-if="type == 'BOOLEAN'">
+        <button class="dropdown-item" @click="$emit('custom', 'BOOLEAN')">
           Boolean
         </button>
       </li>
@@ -48,15 +34,17 @@
       <li class="pt-0 pb-1 px-1">
         <hr class="dropdown-divider m-0" />
       </li>
-      <li v-for="key in Object.keys(device.data)" :key="key">
-        <button class="dropdown-item">
-          <!-- @click="
-            item.value1 = device.id + '.' + key;
-            item.DValue1 = index + 1 + ': ' + key;
-            item.type = device.data[key];
-            item.varChosen = false;
-            item.value2 = device.data[key] == 'NUMBER' ? 0 : false;
-          " -->
+      <li
+        v-for="key in Object.keys(device.data).filter(
+          (key) =>
+            type == undefined || getVarType(device.id + '.' + key) == type
+        )"
+        :key="key"
+      >
+        <button
+          class="dropdown-item"
+          @click="$emit('chosen', device.id + '.' + key)"
+        >
           {{ key }}
         </button>
       </li>
@@ -68,15 +56,17 @@
       <li class="pt-0 pb-1 px-1">
         <hr class="dropdown-divider m-0" />
       </li>
-      <li v-for="(variable, index) in Object.keys(scheduleVars)" :key="index">
-        <button class="dropdown-item">
-          <!-- @click="
-            item.value1 = 'var.' + variable;
-            item.DValue1 = 'SCH: ' + variable;
-            item.type = scheduleVars[variable];
-            item.varChosen = false;
-            item.value2 = scheduleVars[variable] == 'NUMBER' ? 0 : false;
-          " -->
+      <li
+        v-for="(variable, index) in Object.keys(scheduleVars).filter(
+          (variable) =>
+            type == undefined || getVarType('var.' + variable) == type
+        )"
+        :key="index"
+      >
+        <button
+          class="dropdown-item"
+          @click="$emit('chosen', 'var.' + variable)"
+        >
           {{ variable }}
         </button>
       </li>
@@ -84,7 +74,7 @@
   </ul>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, defineExpose, computed } from "vue";
+import { defineProps, defineEmits } from "vue";
 import { Device } from "@/modules/schedules/types";
 
 const props = defineProps<{
@@ -92,5 +82,24 @@ const props = defineProps<{
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   custom?: boolean;
   customList?: string[];
+  type?: "NUMBER" | "BOOLEAN";
+}>();
+
+const getVarType = (variable: string, index?: number) => {
+  let varArray = variable.split(".");
+  let type;
+  if (varArray[0] == "var" && props.scheduleVars)
+    type = props.scheduleVars[varArray[1]];
+  else {
+    let device = props.devices?.find((device) => device.id == varArray[0]);
+    if (device) type = device.data[varArray[1]];
+  }
+  return type;
+};
+
+const emit = defineEmits<{
+  (e: "custom", item: "NUMBER" | "BOOLEAN"): void;
+  (e: "chosen", value: string): void;
+  (e: "option", item: string): void;
 }>();
 </script>
