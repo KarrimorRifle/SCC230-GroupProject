@@ -14,7 +14,7 @@
           >
             <function-block
               :command-type="functionBlock.CommandType"
-              @delete="commands.splice(index, 1)"
+              @delete="functionCode.splice(index, 1)"
               v-model="functionBlock.Params"
               :devices="validDevices"
               :schedule-vars="variables"
@@ -56,24 +56,38 @@ import axios from "axios";
 
 const menu = ref<boolean>(true);
 const functionCode = ref<FunctionCode[]>([]);
-const commands = ref<CommandType[]>([]);
 const nextNum = ref<number>(0);
 
 const addNewBlock = (commandType: CommandType) => {
-  commands.value.push(commandType);
-  functionCode.value.push({
+  let codeBlock: FunctionCode = {
     CommandType: commandType,
     Number: nextNum.value,
     Params: [],
-  });
+  };
+  switch (commandType) {
+    case "IF":
+    case "WHILE":
+      codeBlock.Params = ["", "==", "0"];
+      break;
+    case "SET":
+      codeBlock.Params = ["", "=", "0"];
+      break;
+    case "FOR":
+    case "WAIT":
+      codeBlock.Params = ["3"];
+      break;
+  }
+  functionCode.value.push(codeBlock);
+  nextNum.value++;
 };
 
 const endAvailable = computed(() => {
   let conditionalsCount = 0;
   let endCount = 0;
-  commands.value.forEach((item) => {
-    if (item == "END") endCount++;
-    if (["WHILE", "IF", "ELSE", "FOR"].includes(item)) conditionalsCount++;
+  functionCode.value.forEach((item) => {
+    if (item.CommandType == "END") endCount++;
+    else if (["WHILE", "IF", "ELSE", "FOR"].includes(item.CommandType))
+      conditionalsCount++;
   });
   return conditionalsCount > endCount;
 });
@@ -113,6 +127,7 @@ const fetchSchedule = async () => {
     withCredentials: true,
   });
   functionCode.value = data.data.Code;
+  nextNum.value = functionCode.value[functionCode.value.length - 1].Number + 1;
   console.log(data);
   console.log(functionCode.value);
 };
