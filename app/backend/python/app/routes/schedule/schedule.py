@@ -260,7 +260,7 @@ def update_schedule(account, cursor, connection, scheduleID):
                  "VALUES "),
                 ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID, ListPos) "
                  "VALUES ")]
-    values = [(), (), ()]
+    values = [(),(),()]
 
     commandTypes = ['FOR', 'WHILE', 'IF', 'ELSE', 'SET', 'WAIT', 'END']
     for funcBlock in newCode:
@@ -282,11 +282,9 @@ def update_schedule(account, cursor, connection, scheduleID):
             values[2] += (param, blockID, scheduleID, pos,)
             pos += 1
 
-    i = 0
-    for query in queries:
-        query = query[:-1]
-        cursor.execute(query, values[i])
-        i+=1
+    for i in range(3):
+        queries[i] = queries[i][:-1]
+        cursor.execute(queries[i], values[i])
 
     try:
         connection.commit()
