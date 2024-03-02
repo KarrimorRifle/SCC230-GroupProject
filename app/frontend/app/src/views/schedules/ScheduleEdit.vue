@@ -2,7 +2,7 @@
   <div class="main mx-0 d-flex">
     <div class="header" v-if="schedule">
       <h2>Edit Schedule</h2>
-      <div class="input-group">
+      <div class="input-group mb-1">
         <div class="input-group-text"><b>Name:</b></div>
         <input
           class="form-control"
@@ -10,30 +10,36 @@
           v-model="schedule.ScheduleName"
         />
       </div>
-      <div class="d-flex">
-        <div class="input-group me-2" style="width: 8rem">
-          <div class="input-group-text">Public?</div>
-          <div class="input-group-text">
-            <input
-              type="checkbox"
-              v-model.number="schedule.IsPublic"
-              :true-value="1"
-              :false-value="0"
-              class="form-check-input mt-0"
-            />
+      <div class="d-flex justify-content-between">
+        <div class="d-flex">
+          <div class="input-group me-2" style="width: 8rem">
+            <div class="input-group-text">Public?</div>
+            <div class="input-group-text">
+              <input
+                type="checkbox"
+                v-model.number="schedule.IsPublic"
+                :true-value="1"
+                :false-value="0"
+                class="form-check-input mt-0"
+              />
+            </div>
+          </div>
+          <div class="input-group" style="width: 8rem">
+            <div class="input-group-text">Active?</div>
+            <div class="input-group-text">
+              <input
+                type="checkbox"
+                v-model.number="schedule.IsActive"
+                :true-value="1"
+                :false-value="0"
+                class="form-check-input mt-0"
+              />
+            </div>
           </div>
         </div>
-        <div class="input-group" style="width: 8rem">
-          <div class="input-group-text">Active?</div>
-          <div class="input-group-text">
-            <input
-              type="checkbox"
-              v-model.number="schedule.IsActive"
-              :true-value="1"
-              :false-value="0"
-              class="form-check-input mt-0"
-            />
-          </div>
+        <div>
+          <button class="btn btn-success btn-sm me-2">SAVE</button>
+          <button class="btn btn-danger btn-sm">DELETE</button>
         </div>
       </div>
     </div>

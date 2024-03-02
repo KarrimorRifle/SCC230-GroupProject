@@ -274,7 +274,7 @@ const props = defineProps<{
   endSelectable?: boolean;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "delete"]);
 
 const list = computed(() => {
   if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
