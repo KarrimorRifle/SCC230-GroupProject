@@ -1,7 +1,41 @@
 <template>
   <div class="main mx-0 d-flex">
-    <div class="header">
-      <h2>Name of the schedule</h2>
+    <div class="header" v-if="schedule">
+      <h2>Edit Schedule</h2>
+      <div class="input-group">
+        <div class="input-group-text"><b>Name:</b></div>
+        <input
+          class="form-control"
+          type="text"
+          v-model="schedule.ScheduleName"
+        />
+      </div>
+      <div class="d-flex">
+        <div class="input-group me-2" style="width: 8rem">
+          <div class="input-group-text">Public?</div>
+          <div class="input-group-text">
+            <input
+              type="checkbox"
+              v-model.number="schedule.IsPublic"
+              :true-value="1"
+              :false-value="0"
+              class="form-check-input mt-0"
+            />
+          </div>
+        </div>
+        <div class="input-group" style="width: 8rem">
+          <div class="input-group-text">Active?</div>
+          <div class="input-group-text">
+            <input
+              type="checkbox"
+              v-model.number="schedule.IsActive"
+              :true-value="1"
+              :false-value="0"
+              class="form-check-input mt-0"
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="container-fluid mx-0 px-0">
       <div class="row mx-0">
@@ -40,7 +74,7 @@
             :end-available="endAvailable"
           />
         </div>
-        <button @click="console.log(schedule?.Code)">hi</button>
+        <button @click="console.log(schedule)">hi</button>
       </div>
     </div>
   </div>
@@ -149,7 +183,7 @@ fetchSchedule();
 
 .header {
   background-color: rgb(58, 64, 81);
-  min-height: 4rem;
+  min-height: 8rem;
 }
 
 .container-fluid {
