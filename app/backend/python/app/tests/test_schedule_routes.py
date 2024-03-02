@@ -69,7 +69,7 @@ class TestScheduleRoutes(unittest.TestCase):
                 'CommandType': 'ELSE',
                 'Number': 2,
                 'LinkedCommands': [],
-                'Params': ['7', '==', '7'],
+                'Params': [],
             },
             {
                 'CommandType': 'WHILE',
