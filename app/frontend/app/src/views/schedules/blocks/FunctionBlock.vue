@@ -51,6 +51,7 @@
               class="input-group-text p-0 border-light"
               style="width: 5rem"
               placeholder="00"
+              v-model.number="code[0]"
             />
           </div>
           <div v-else class="col-9 px-0">
