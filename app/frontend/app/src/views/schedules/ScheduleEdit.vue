@@ -39,7 +39,9 @@
         </div>
         <div>
           <button class="btn btn-success btn-sm me-2">SAVE</button>
-          <button class="btn btn-danger btn-sm">DELETE</button>
+          <button class="btn btn-danger btn-sm" @click="deleteSchedule">
+            DELETE
+          </button>
         </div>
       </div>
     </div>
@@ -171,13 +173,24 @@ const fetchSchedule = async () => {
     withCredentials: true,
   });
   schedule.value = data.data;
-  if (schedule.value)
-    nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
   console.log(data);
   console.log(schedule.value?.Code);
+  if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
+    nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
 };
 
 fetchSchedule();
+
+const deleteSchedule = async () => {
+  try {
+    await axios.delete(`http://localhost:5000/schedule/${scheduleID}`, {
+      withCredentials: true,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  router.push("/schedules");
+};
 </script>
 <style>
 .main {
