@@ -8,13 +8,14 @@
         <div class="col p-3" style="max-height: 100%">
           <trigger-block />
           <div
-            v-for="(command, index) in commands"
+            v-for="(functionBlock, index) in functionCode"
             :key="index"
             style="margin-top: -0.6rem"
           >
             <function-block
-              :command-type="command"
+              :command-type="functionBlock.CommandType"
               @delete="commands.splice(index, 1)"
+              v-model="functionBlock.Params"
               :devices="validDevices"
               :schedule-vars="variables"
             />
@@ -39,6 +40,7 @@
             :end-available="endAvailable"
           />
         </div>
+        <button @click="console.log(functionCode)">hi</button>
       </div>
     </div>
   </div>
@@ -52,7 +54,7 @@ import { CommandType, Device, FunctionCode } from "@/modules/schedules/types";
 import router from "@/router";
 import axios from "axios";
 
-const menu = ref<boolean>(false);
+const menu = ref<boolean>(true);
 const functionCode = ref<FunctionCode[]>();
 const commands = ref<CommandType[]>([]);
 

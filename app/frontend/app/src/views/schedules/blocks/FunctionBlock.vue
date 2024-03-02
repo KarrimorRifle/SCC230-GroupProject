@@ -247,18 +247,26 @@
 </template>
 <script setup lang="ts">
 import { CommandType, Device } from "@/modules/schedules/types";
-import { defineProps, ref, defineExpose, computed, defineModel } from "vue";
+import {
+  defineProps,
+  ref,
+  defineExpose,
+  computed,
+  watchEffect,
+  defineEmits,
+} from "vue";
 import VariableListOptions from "./VariableListOptions.vue";
 
-const model = defineModel();
 const props = defineProps<{
+  modelValue?: string[];
   display?: boolean;
   commandType: CommandType;
   devices?: Device[];
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   endSelectable?: boolean;
-  initialCode?: string[];
 }>();
+
+const emit = defineEmits(["update:modelValue"]);
 
 const list = computed(() => {
   if (props.commandType != "SET") return ["==", "!=", ">=", "<=", ">", "<"];
@@ -266,7 +274,18 @@ const list = computed(() => {
 });
 
 const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
-const code = ref<string[]>(["", list.value[0], ""]);
+const code = ref<string[]>(props.modelValue || ["", list.value[0], ""]);
+
+watchEffect(() => {
+  if (props.modelValue) {
+    code.value = props.modelValue;
+  }
+});
+
+const updateCode = (index: number, newValue: string) => {
+  code.value[index] = newValue;
+  emit("update:modelValue", code.value);
+};
 
 const filteredCode = computed(() => {
   let remainingArray = code.value;
@@ -331,14 +350,15 @@ const width = computed(() => {
   }
 });
 
-const getCode = () => {
-  if (props.initialCode) code.value = props.initialCode;
-};
-getCode();
+// const getCode = () => {
+//   if (props.initialCode) code.value = props.initialCode;
+// };
+// getCode();
 
-defineExpose<{
-  code: string[];
-}>();
+defineExpose({
+  code,
+  updateCode,
+});
 </script>
 <style>
 .dropdown-menu {
