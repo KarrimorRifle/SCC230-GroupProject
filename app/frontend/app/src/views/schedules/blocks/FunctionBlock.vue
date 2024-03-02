@@ -224,7 +224,10 @@
             <button
               class="btn btn-success btn-sm text-light"
               :class="{ disabled: display }"
-              @click="code.push('AND', '', '==', '0')"
+              @click="
+                if (filteredCode.length > 1) code.push('AND', '', '==', '0');
+                else code.push('', '==', '0');
+              "
               style="font-size: 80%"
             >
               +
