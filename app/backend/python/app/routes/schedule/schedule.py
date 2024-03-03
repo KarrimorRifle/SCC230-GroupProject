@@ -11,7 +11,7 @@ def get_schedules(account, cursor):
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
-    schedules = sorted(schedules, key=lambda x: x['ScheduleID'])
+    schedules = sorted(schedules, key=lambda x: x['ScheduleName'])
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
@@ -93,6 +93,8 @@ def get_schedule_detail(account, cursor, scheduleID):
         links = []
         paramVals = []
 
+    code = sorted(code, key=lambda x: x['Number'])
+
     details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
                'ScheduleName': schedule['ScheduleName'],
@@ -123,11 +125,11 @@ def delete_schedule(account, cursor, connection, scheduleID):
         query = ("DELETE FROM trigger_data WHERE TriggerID = %s")
         cursor.execute(query, (trigger['TriggerID'],))
 
-    queries = [("DELETE FROM schedules WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+    queries = [("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
-               ("DELETE FROM triggers WHERE ScheduleID = %s" )]
+               ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
+               ("DELETE FROM triggers WHERE ScheduleID = %s" ),
+               ("DELETE FROM schedules WHERE ScheduleID = %s" )]
 
     for query in queries:
         cursor.execute(query, (scheduleID,))
@@ -235,9 +237,9 @@ def update_schedule(account, cursor, connection, scheduleID):
     if newCode == []:
         return get_schedule_detail(account, cursor, scheduleID)
 
-    queries = [("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_links WHERE ScheduleID = %s" )]
+    queries = [("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_blocks WHERE ScheduleID = %s" )]
 
     for query in queries:
         cursor.execute(query, (scheduleID,))
@@ -260,9 +262,11 @@ def update_schedule(account, cursor, connection, scheduleID):
                 ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID, ListPos) "
                  "VALUES ")]
     values = [(), (), ()]
+    run = [0,0,0]
 
     commandTypes = ['FOR', 'WHILE', 'IF', 'ELSE', 'SET', 'WAIT', 'END']
     for funcBlock in newCode:
+        run[0] += 1
         if funcBlock.get('CommandType') not in commandTypes:
             return (jsonify({'error':'Invalid argument CommandType must be FOR, WHILE, IF, ELSE, SET; Returning empty Code.'})), 400
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
@@ -272,24 +276,27 @@ def update_schedule(account, cursor, connection, scheduleID):
         values[0] += (blockID, funcBlock.get('CommandType'), funcBlock.get('Number'), scheduleID,)
 
         for link in funcBlock.get('LinkedCommands'):
+            run[1] += 1
             queries[1] += ("(%s,%s,%s),")
             values[1] += (blockID, link, scheduleID,)
 
         pos = 0
         for param in funcBlock.get('Params'):
+            run[2] += 1
             queries[2] += ("(%s,%s,%s,%s),")
             values[2] += (param, blockID, scheduleID, pos,)
             pos += 1
 
     for i in range(3):
+        if run[i] == 0:
+            continue
         queries[i] = queries[i][:-1]
-        cursor.execute(queries[i], values[i])
-
-    try:
-        connection.commit()
-    except Exception as e:
-        connection.rollback()
-        return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
+        try:
+            cursor.execute(queries[i], values[i])
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
             
     return get_schedule_detail(account, cursor, scheduleID)
 
