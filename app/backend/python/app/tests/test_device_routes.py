@@ -5,7 +5,7 @@ import json
 class test_user(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
-        self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        self.client_server.post("/login", json={"Email": "janedoe@gmail.com", "Password": "JaneDoe123."})
 
 
     def test_create_device(self):
