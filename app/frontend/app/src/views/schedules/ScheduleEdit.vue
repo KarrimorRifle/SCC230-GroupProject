@@ -255,7 +255,8 @@ const saveSchedule = async () => {
   background-color: rgb(58, 64, 81);
   position: sticky;
   min-height: 5.8rem;
-  top: 3.8rem;
+  top: 3.7rem;
+  z-index: 1;
 }
 
 @media (max-width: 992px) {
@@ -284,5 +285,6 @@ body {
   max-height: 83.5vh !important;
   overflow: scroll;
   overflow-x: hidden;
+  z-index: 0;
 }
 </style>
