@@ -1,5 +1,5 @@
 <template>
-  <div id="editor" class="main p-3 d-flex">
+  <div id="editor" class="main p-3 d-flex editor-side-bar">
     <h3
       class="ps-2 py-2 mb-4 rounded"
       :class="{ 'bg-success': mode == 'ADD', 'bg-warning': mode == 'CHANGE' }"
@@ -56,5 +56,10 @@ const emit = defineEmits(["chosen", "close"]);
 #editor {
   background-color: rgb(81, 90, 113);
   height: 100%;
+}
+
+.editor-side-bar {
+  position: sticky !important;
+  top: 11.8rem;
 }
 </style>
