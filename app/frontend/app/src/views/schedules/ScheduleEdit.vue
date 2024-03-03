@@ -2,7 +2,7 @@
   <div class="main mx-0">
     <div class="header" v-if="schedule">
       <h2>Edit Schedule</h2>
-      <div class="container">
+      <div class="container-fluid">
         <div class="row">
           <div class="col-12 col-xl-8 col-lg-7 px-0">
             <div class="input-group mb-1 px-2">
@@ -42,6 +42,12 @@
               </div>
             </div>
             <div class="me-3">
+              <button
+                class="btn btn-secondary btn-sm me-2"
+                @click="$router.push('/schedules')"
+              >
+                LIST
+              </button>
               <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
                 SAVE
               </button>
