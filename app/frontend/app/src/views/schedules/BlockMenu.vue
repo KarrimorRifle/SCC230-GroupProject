@@ -60,6 +60,6 @@ const emit = defineEmits(["chosen", "close"]);
 
 .editor-side-bar {
   position: sticky !important;
-  top: 11.8rem;
+  top: 15.8rem;
 }
 </style>

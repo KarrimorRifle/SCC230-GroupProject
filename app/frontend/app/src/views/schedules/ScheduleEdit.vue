@@ -2,58 +2,60 @@
   <div class="main mx-0">
     <div class="header" v-if="schedule">
       <h2>Edit Schedule</h2>
-      <div class="row">
-        <div class="col-12 col-xl-8 col-lg-7">
-          <div class="input-group mb-1 px-2">
-            <div class="input-group-text"><b>Name:</b></div>
-            <input
-              class="form-control"
-              type="text"
-              v-model="schedule.ScheduleName"
-            />
-          </div>
-        </div>
-        <div class="d-flex justify-content-between px-2 col">
-          <div class="d-flex">
-            <div class="input-group me-2" style="width: 8rem">
-              <div class="input-group-text">Public?</div>
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  v-model.number="schedule.IsPublic"
-                  :true-value="1"
-                  :false-value="0"
-                  class="form-check-input mt-0"
-                />
-              </div>
-            </div>
-            <div class="input-group" style="width: 8rem">
-              <div class="input-group-text">Active?</div>
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  v-model.number="schedule.IsActive"
-                  :true-value="1"
-                  :false-value="0"
-                  class="form-check-input mt-0"
-                />
-              </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-xl-8 col-lg-7 px-0">
+            <div class="input-group mb-1 px-2">
+              <div class="input-group-text"><b>Name:</b></div>
+              <input
+                class="form-control"
+                type="text"
+                v-model="schedule.ScheduleName"
+              />
             </div>
           </div>
-          <div>
-            <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
-              SAVE
-            </button>
-            <button class="btn btn-danger btn-sm" @click="deleteSchedule">
-              DELETE
-            </button>
+          <div class="d-flex justify-content-between col px-0">
+            <div class="d-flex">
+              <div class="input-group me-2" style="width: 8rem">
+                <div class="input-group-text">Public?</div>
+                <div class="input-group-text">
+                  <input
+                    type="checkbox"
+                    v-model.number="schedule.IsPublic"
+                    :true-value="1"
+                    :false-value="0"
+                    class="form-check-input mt-0"
+                  />
+                </div>
+              </div>
+              <div class="input-group" style="width: 8rem">
+                <div class="input-group-text">Active?</div>
+                <div class="input-group-text">
+                  <input
+                    type="checkbox"
+                    v-model.number="schedule.IsActive"
+                    :true-value="1"
+                    :false-value="0"
+                    class="form-check-input mt-0"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="me-3">
+              <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
+                SAVE
+              </button>
+              <button class="btn btn-danger btn-sm" @click="deleteSchedule">
+                DELETE
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="container-fluid mx-0 px-0">
-      <div class="row mx-0">
-        <div class="col p-3" style="max-height: 100%">
+    <div class="container-fluid mx-0 px-0 d-flex flex-column">
+      <div id="alkdas" class="row mx-0">
+        <div class="col p-3 scrollable21" style="max-height: 100%">
           <trigger-block />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
@@ -90,7 +92,7 @@
             </button>
           </div>
         </div>
-        <div class="editor-side-bar col-xl-4 col-lg-6 col-12 px-0" v-if="menu">
+        <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
           <block-menu
             @close="
               menu = false;
@@ -102,7 +104,6 @@
             :end-available="endAvailable"
           />
         </div>
-        <button @click="console.log(schedule)">hi</button>
       </div>
     </div>
   </div>
@@ -243,25 +244,32 @@ const saveSchedule = async () => {
 </script>
 <style>
 .main {
-  height: 100%;
   width: 100%;
   background-color: rgb(45, 50, 64);
   flex-direction: column;
+  display: flex;
+  flex-grow: 1;
 }
 
 .header {
   background-color: rgb(58, 64, 81);
-  min-height: 8rem;
   position: sticky;
+  min-height: 5.8rem;
   top: 3.8rem;
 }
 
-.container-fluid {
-  height: 100%;
+@media (max-width: 992px) {
+  .header {
+    min-height: 8rem;
+  }
 }
 
-.row {
-  height: 100%;
+div.header + div.container-fluid {
+  flex-grow: 1;
+}
+
+#alkdas {
+  flex-grow: 1;
 }
 
 body {
@@ -270,5 +278,11 @@ body {
 
 .block {
   margin-bottom: -2rem;
+}
+
+.scrollable21 {
+  max-height: 83.5vh !important;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 </style>
