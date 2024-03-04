@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response, Blueprint, current_app
+from flask import request, jsonify, Blueprint, current_app
 from ..accounts import getAccount
 from iota import genRandomID
 
@@ -16,8 +16,15 @@ def get_schedules(account, cursor):
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
-def create_schedule(account, cursor, connection):
-    scheduleName = request.json.get("ScheduleName")
+def create_schedule(account, cursor, connection, schedule):
+    scheduleName = schedule.get('ScheduleName')
+    scheduleAuthor = schedule.get('AuthorID')
+    if scheduleAuthor is None:
+        scheduleAuthor = account['AccountID']
+
+    if scheduleName is None:
+        return jsonify({"error": "ScheduleName is required"}), 400
+
     query = ("SELECT ScheduleID FROM schedules")
     cursor.execute(query)
     scheduleIDs = cursor.fetchall()
@@ -25,7 +32,7 @@ def create_schedule(account, cursor, connection):
     query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID) "
                      "VALUES (%s,%s,%s)")
     try:
-        cursor.execute(query, (thisID, scheduleName, account['AccountID'],))
+        cursor.execute(query, (thisID, scheduleName, scheduleAuthor,))
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -33,13 +40,18 @@ def create_schedule(account, cursor, connection):
 
     return jsonify({'ScheduleID':thisID}), 200
 
-def get_schedule_detail(account, cursor, scheduleID):
-    query = ("SELECT * FROM schedules "
+def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
+    query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
+    checkID = cursor.fetchone()
+
+    query = ("SELECT * FROM schedules "
+                "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
     schedule = cursor.fetchone()
 
-    if schedule is None:
+    if checkID is None and hubCall is False:
         return 401
 
     query = ("SELECT * FROM function_blocks "
@@ -109,13 +121,13 @@ def get_schedule_detail(account, cursor, scheduleID):
     return jsonify(details), 200
 
 # Function deletes schedule of specified ID as long as user is the author
-def delete_schedule(account, cursor, connection, scheduleID):
+def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
-    if checkID is None:
+    if checkID is None and hubCall is False:
         return({"error": "Forbidden access"}), 401
     
     query = ("SELECT TriggerID FROM triggers "
@@ -145,13 +157,13 @@ def delete_schedule(account, cursor, connection, scheduleID):
     return jsonify(scheduleID), 200
 
 # Function updates schedule of specified ID if user is author and based on input params
-def update_schedule(account, cursor, connection, scheduleID):
+def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
-    if checkID is None:
+    if checkID is None and hubCall is False:
         return({"error": "Forbidden access"}), 401
     
     updateParams = []
@@ -159,14 +171,14 @@ def update_schedule(account, cursor, connection, scheduleID):
     newCode = None
     newTriggers = None
     isActive = None
-    for key, value in request.json.items():
+    for key, value in schedule.items():
         if key == "Code":
             newCode = value
             continue
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "":
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID":
             continue
         if key == "IsActive":
             isActive = value
@@ -340,7 +352,7 @@ def scheduleResponse():
     if request.method == 'GET':
         return get_schedules(account, cursor)
     elif request.method == 'POST':
-        return create_schedule(account, cursor, connection)
+        return create_schedule(account, cursor, connection, request.json)
 
     cursor.close()
     connection.close()
@@ -365,7 +377,7 @@ def scheduleDetails(scheduleID):
     elif request.method == 'DELETE':
         return delete_schedule(account, cursor, connection, scheduleID)
     elif request.method == 'PATCH':
-        return update_schedule(account, cursor, connection, scheduleID)
+        return update_schedule(account, cursor, connection, scheduleID, request.json)
 
     cursor.close()
     connection.close()
