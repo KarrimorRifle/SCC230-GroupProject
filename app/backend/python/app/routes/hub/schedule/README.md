@@ -109,6 +109,13 @@ Current User must be part of hub with view access.
     -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 <br>
 
+TO DO:
+GET schedules - done
+add schedules
+delete schedules
+update schedules
+create schedules
+
 <br><br><br><br>
 
 ### LINK TO RELATED DOCS
