@@ -62,15 +62,17 @@ CREATE TABLE `schedules`(
     `ScheduleName` VARCHAR(255) NOT NULL,
     `AuthorID` varchar(100) NOT NULL,
     `HubID` varchar(100),
-    `IsActive` TINYINT UNSIGNED NOT NULL,
-    `IsPublic` TINYINT UNSIGNED NOT NULL,
-    `Rating` TINYINT UNSIGNED,
+    `IsActive` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `IsPublic` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `Rating` TINYINT UNSIGNED DEFAULT 0,
+    `NumRated` INT UNSIGNED DEFAULT 0,
+    `IsDraft` TINYINT UNSIGNED NOT NULL DEFAULT 1,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
 );
 
-INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`,`Rating`)
-Values("Schk129jd2i23kd34jf","Test Schedule","Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",0,0,0);
+INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`)
+Values("Schk129jd2i23kd34jf","Test Schedule","Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",0,0);
 
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
