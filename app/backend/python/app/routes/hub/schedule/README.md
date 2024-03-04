@@ -114,7 +114,7 @@ GET schedules - done
 add schedules - done
 delete schedules - done
 update schedules - done
-create schedules
+create schedules - done
 
 <br><br><br><br>
 

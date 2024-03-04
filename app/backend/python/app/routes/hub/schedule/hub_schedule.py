@@ -96,6 +96,23 @@ def update_hub_schedule(account, cursor, connection, hubID, scheduleID):
 
     return update_schedule(account, cursor, connection, scheduleID, request.json, True)
 
+def create_hub_schedule(account, cursor, connection, hubID):
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelations WHERE AccountID = %s AND HubID = %s")
+    cursor.execute(query, (account['AccountID'], hubID))
+    permissionLevel = cursor.fetchone()['PermissionLevel']
+    if not permissionLevel:
+        return jsonify({'error': 'User not in Hub'}), 401
+    
+    if permissionLevel < 3:
+        return jsonify({'error': 'User does not have permission to create schedules'}), 403
+    
+    newID = create_schedule(account, cursor, connection, request.json, True).get('ScheduleID')
+
+    query = ("UPDATE schedules SET HubID = %s WHERE ScheduleID = %s")
+    cursor.execute(query, (hubID, newID))
+
+    return jsonify({'ScheduleID': newID}), 200
+
 @hub_schedule.route('/hub/<hubID>/schedule', methods=['GET'])
 def hub_schedule_routes(hubID):
     account = getAccount()
