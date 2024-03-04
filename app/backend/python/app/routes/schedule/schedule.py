@@ -157,7 +157,7 @@ def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
         connection.rollback()
         return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 
-    return jsonify(scheduleID), 200
+    return jsonify({'ScheduleID': scheduleID}), 200
 
 # Function updates schedule of specified ID if user is author and based on input params
 def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=False):
