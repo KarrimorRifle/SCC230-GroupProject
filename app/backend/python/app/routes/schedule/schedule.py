@@ -51,6 +51,9 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     cursor.execute(query, (scheduleID,))
     schedule = cursor.fetchone()
 
+    if schedule is None:
+        return jsonify({"error": "Schedule not found"}), 404
+
     if checkID is None and hubCall is False:
         return 401
 
@@ -150,7 +153,7 @@ def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
 
     try:
         connection.commit()
-    except:
+    except Exception as e:
         connection.rollback()
         return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 
@@ -178,7 +181,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID":
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID":
             continue
         if key == "IsActive":
             isActive = value
