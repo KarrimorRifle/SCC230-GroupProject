@@ -113,7 +113,7 @@ TO DO:
 GET schedules - done
 add schedules - done
 delete schedules - done
-update schedules
+update schedules - done
 create schedules
 
 <br><br><br><br>
