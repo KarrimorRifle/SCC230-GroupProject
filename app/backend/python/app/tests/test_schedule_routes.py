@@ -8,12 +8,12 @@ class TestScheduleRoutes(unittest.TestCase):
         self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
 
     def test_create_schedule_success(self):
-        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule1', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule1'})
         self.assertEqual(response.status_code, 200)
         self.assertIn('ScheduleID', response.data.decode('utf-8'))
 
     def test_delete_schedule_success(self):
-        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
@@ -24,7 +24,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn(data['ScheduleID'], response.data.decode('utf-8'))
 
     def test_get_schedules_success(self):
-        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2'})
         self.assertEqual(response.status_code, 200)
         response = self.client_server.get('/schedule')
         self.assertEqual(response.status_code, 200)
@@ -35,11 +35,12 @@ class TestScheduleRoutes(unittest.TestCase):
             self.assertIn('ScheduleID', entry)
             self.assertIn('ScheduleName', entry)
             self.assertIn('IsActive', entry)
+            self.assertIn('IsDraft', entry)
             self.assertIn('IsPublic', entry)
             self.assertIn('Rating', entry)
 
     def test_get_schedule_details_success(self):
-        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule2'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
@@ -51,6 +52,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
         self.assertIn('IsActive', data)
+        self.assertIn('IsDraft', data)
         self.assertIn('IsPublic', data)
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
@@ -88,11 +90,13 @@ class TestScheduleRoutes(unittest.TestCase):
         payload = {
             'ScheduleName': newName,
             'IsPublic': 1,
+            'IsDraft': 0,
+            'IsActive': 1,
             'Code': code,
             'Trigger': trigger,
         }
 
-        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3', 'IsActive': 0, 'IsPublic': 0, 'Rating': 0})
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/schedule/'
@@ -105,6 +109,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
         self.assertIn('IsActive', data)
+        self.assertIn('IsDraft', data)
         self.assertIn('IsPublic', data)
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
@@ -115,3 +120,19 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn(code[0], data['Code'])
         self.assertIn(code[1], data['Code'])
         self.assertIn(code[2], data['Code'])
+
+    def test_update_schedule_failure(self):
+        payload = {
+            'IsDraft': 1,
+            'IsActive': 1,
+        }
+
+        response = self.client_server.post("/schedule", json={'ScheduleName': 'Test Schedule3'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        url = '/schedule/'
+        id = data['ScheduleID']
+        url += id
+        response = self.client_server.patch(url, json=payload)
+
+        self.assertEqual(response.status_code, 400)
