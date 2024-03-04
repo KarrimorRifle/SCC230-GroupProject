@@ -22,8 +22,7 @@ def get_hub_schedules(account, cursor, hubID):
              "JOIN accounts_hubsRelation ON schedules.AuthorID = accounts_hubsRelation.AccountID "
              "WHERE schedules.HubID = %s")
     cursor.execute(query, (hubID,))
-    schedules = cursor.fetchall()
-    schedules = [{'ScheduleID': schedule['ScheduleID'], 'ScheduleName': schedule['ScheduleName'], 'IsActive': schedule['IsActive'], 'IsDraft': schedule['IsDraft'], 'Author': schedule['FirstName']+" "+schedule['Surname'], 'PermissionLevel': schedule['PermissionLevel']} for schedule in schedules]
+    schedules = [{'ScheduleID': schedule['ScheduleID'], 'ScheduleName': schedule['ScheduleName'], 'IsActive': schedule['IsActive'], 'IsDraft': schedule['IsDraft'], 'Author': schedule['FirstName']+" "+schedule['Surname'], 'PermissionLevel': schedule['PermissionLevel']} for schedule in cursor.fetchall()]
     schedules = sorted(schedules, key=lambda x: (x['PermissionLevel'], x['Author'], x['ScheduleName']))
 
     return jsonify(schedules), 200
