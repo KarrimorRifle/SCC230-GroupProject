@@ -71,6 +71,11 @@ def remove_hub_schedule(account, cursor, connection, hubID, scheduleID):
     
     if permissionLevel < 3:
         return jsonify({'error': 'User does not have permission to remove schedules'}), 403
+    
+    query = ("SELECT ScheduleID FROM schedules WHERE HubID = %s AND ScheduleID = %s")
+    cursor.execute(query, (hubID, scheduleID))
+    if not cursor.fetchone():
+        return jsonify({'error': 'Schedule not in Hub'}), 403
 
     return delete_schedule(account, cursor, connection, scheduleID, True)
 
