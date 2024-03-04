@@ -28,6 +28,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+-	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
@@ -71,6 +72,7 @@ Lists ID, Name and Status of all schedules created by current user.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+-	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, should be NULL if IsPublic is 0 and was never 1
 
@@ -82,9 +84,6 @@ Creates a new empty schedule under ID of current user.
 
 ##### Required Parameters:
 -	(string)ScheduleName – Name of schedule
--	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
--	(int)Rating – Rating given by other users, NULL if IsPublic is 0
 
 ##### Return Values:
 -	(string)ScheduleID – Unique ID to identify new schedule
@@ -115,6 +114,7 @@ Lists all values associated with schedule belonging to current user specified by
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+-	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
@@ -155,8 +155,8 @@ Updates specified schedule data based on passed parameters.
 ##### Optional Parameters:
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+-	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
--	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
 -	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data
 
