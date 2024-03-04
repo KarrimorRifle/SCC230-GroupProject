@@ -25,16 +25,13 @@ import { deleteCookie } from "@/modules/common/functions";
 import { ref } from "vue";
 import { getAccount } from "@/modules/common/functions";
 
-const getName = async function () {
-  const accountData = ref();
+const name = ref<string>();
 
-  accountData.value = await getAccount();
-  return accountData.value.FirstName + " " + accountData.value.Surname;
+const getName = async () => {
+  let accountData;
+  accountData= await getAccount();
+  name.value = accountData.value.FirstName + " " + accountData.value.Surname;
 };
-const name = ref("");
-getName().then(function (value) {
-  name.value = value;
-});
 
 const logout = async () => {
   let data;
