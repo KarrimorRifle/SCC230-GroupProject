@@ -25,6 +25,7 @@ def get_hub_schedules(account, cursor, hubID):
     schedules = cursor.fetchall()
     schedules = [{'ScheduleID': schedule['ScheduleID'], 'ScheduleName': schedule['ScheduleName'], 'IsActive': schedule['IsActive'], 'IsDraft': schedule['IsDraft'], 'Author': schedule['FirstName']+" "+schedule['Surname'], 'PermissionLevel': schedule['PermissionLevel']} for schedule in schedules]
     schedules = sorted(schedules, key=lambda x: (x['PermissionLevel'], x['Author'], x['ScheduleName']))
+
     return jsonify(schedules), 200
 
 def get_one_hub_schedule(account, cursor, hubID, scheduleID):
