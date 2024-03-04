@@ -1,36 +1,94 @@
 <template>
-  <div class="main mx-0 d-flex">
-    <div class="header">
-      <h2>Name of the schedule</h2>
+  <div class="main mx-0">
+    <div class="header" v-if="schedule">
+      <h2>Edit Schedule</h2>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-xl-8 col-lg-7 px-0">
+            <div class="input-group mb-1 px-2">
+              <div class="input-group-text"><b>Name:</b></div>
+              <input
+                class="form-control"
+                type="text"
+                v-model="schedule.ScheduleName"
+              />
+            </div>
+          </div>
+          <div class="d-flex justify-content-between col px-0">
+            <div class="d-flex">
+              <div class="input-group me-2" style="width: 8rem">
+                <div class="input-group-text">Public?</div>
+                <div class="input-group-text">
+                  <input
+                    type="checkbox"
+                    v-model.number="schedule.IsPublic"
+                    :true-value="1"
+                    :false-value="0"
+                    class="form-check-input mt-0"
+                  />
+                </div>
+              </div>
+              <div class="input-group" style="width: 8rem">
+                <div class="input-group-text">Active?</div>
+                <div class="input-group-text">
+                  <input
+                    type="checkbox"
+                    v-model.number="schedule.IsActive"
+                    :true-value="1"
+                    :false-value="0"
+                    class="form-check-input mt-0"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="me-3">
+              <button
+                class="btn btn-secondary btn-sm me-2"
+                @click="$router.push('/schedules')"
+              >
+                LIST
+              </button>
+              <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
+                SAVE
+              </button>
+              <button class="btn btn-danger btn-sm" @click="deleteSchedule">
+                DELETE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="container-fluid mx-0 px-0">
-      <div class="row mx-0">
-        <div class="col p-3" style="max-height: 100%">
+    <div class="container-fluid mx-0 px-0 d-flex flex-column">
+      <div id="alkdas" class="row mx-0">
+        <div class="col p-3 scrollable21" style="max-height: 100%">
           <trigger-block />
           <div
-            v-for="(command, index) in commands"
+            v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
             style="margin-top: -0.6rem"
           >
-            <block-item
-              v-if="['SET', 'FOR', 'END', 'WAIT'].includes(command)"
-              :command-type="command"
-              @delete="commands.splice(index, 1)"
+            <function-block
+              :command-type="functionBlock.CommandType"
+              @delete="schedule?.Code.splice(index, 1)"
+              v-model="functionBlock.Params"
               :devices="validDevices"
               :schedule-vars="variables"
-            />
-            <block-conditionals
-              v-else
-              :command-type="command"
-              @delete="commands.splice(index, 1)"
-              :devices="validDevices"
-              :schedule-vars="variables"
+              :highlight="focusedBlock == index"
+              @change="
+                mode = 'CHANGE';
+                focusedBlock = index;
+              "
             />
           </div>
           <div style="width: 7rem" class="mt-1">
             <button
               style="background-color: rgba(0, 0, 0, 0); border-style: none"
-              @click="menu = true"
+              @click="
+                menu = true;
+                mode = 'ADD';
+                focusedBlock = -1;
+              "
             >
               <img
                 src="../../assets/plus.svg"
@@ -40,12 +98,16 @@
             </button>
           </div>
         </div>
-        <div class="col-4 px-0" v-if="menu">
+        <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
           <block-menu
-            @close="menu = false"
+            @close="
+              menu = false;
+              focusedBlock = -1;
+              mode = 'ADD';
+            "
             @chosen="addNewBlock"
+            :mode="mode"
             :end-available="endAvailable"
-            :else-available="elseAvailable"
           />
         </div>
       </div>
@@ -54,61 +116,62 @@
 </template>
 <script setup lang="ts">
 import BlockMenu from "./BlockMenu.vue";
-import BlockItem from "./blocks/BlockItem.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
-import BlockConditionals from "./blocks/BlockConditionals.vue";
+import FunctionBlock from "./blocks/FunctionBlock.vue";
 import { computed, ref } from "vue";
-import { CommandType, Device } from "@/modules/schedules/types";
+import {
+  CommandType,
+  Device,
+  FunctionCode,
+  Schedule,
+} from "@/modules/schedules/types";
+import router from "@/router";
+import axios from "axios";
 
-const menu = ref<boolean>(false);
-
-const commands = ref<CommandType[]>([]);
-const blocks = ref<(typeof BlockItem)[]>();
+const menu = ref<boolean>(true);
+const schedule = ref<Schedule>();
+const nextNum = ref<number>(0);
+const focusedBlock = ref<number>(-1);
+const mode = ref<"CHANGE" | "ADD">("ADD");
 
 const addNewBlock = (commandType: CommandType) => {
-  commands.value.push(commandType);
+  let codeBlock: FunctionCode = {
+    CommandType: commandType,
+    Number: nextNum.value,
+    Params: [],
+    LinkedCommands: [],
+  };
+  switch (commandType) {
+    case "IF":
+    case "WHILE":
+      codeBlock.Params = ["", "==", "0"];
+      break;
+    case "SET":
+      codeBlock.Params = ["", "=", "0"];
+      break;
+    case "FOR":
+    case "WAIT":
+      codeBlock.Params = ["3"];
+      break;
+  }
+  if (mode.value == "ADD") {
+    schedule.value?.Code.push(codeBlock);
+    nextNum.value++;
+  } else if (mode.value == "CHANGE" && schedule.value) {
+    schedule.value.Code[focusedBlock.value] = codeBlock;
+  }
 };
 
 const endAvailable = computed(() => {
   let conditionalsCount = 0;
   let endCount = 0;
-  commands.value.forEach((item) => {
-    if (item == "END") endCount++;
-    if (["WHILE", "IF", "ELSE", "FOR"].includes(item)) conditionalsCount++;
+  schedule.value?.Code.forEach((item) => {
+    if (item.CommandType == "END") endCount++;
+    else if (["WHILE", "IF", "ELSE", "FOR"].includes(item.CommandType))
+      conditionalsCount++;
   });
   return conditionalsCount > endCount;
 });
-
-//given up on algo
-// const elseAvailable = computed(() => {
-//   let stack: CommandType[] = [];
-//   let lastSignificantBlock: CommandType | null = null;
-//   let lastEndedBlock: CommandType | null = null;
-
-//   for (let i = 0; i < commands.value.length; i++) {
-//     let item = commands.value[i];
-//     if (item === "IF" || item === "WHILE" || item === "FOR") {
-//       stack.push(item);
-//       lastSignificantBlock = item;
-//     } else if (item === "END") {
-//       if (stack.length === 0) {
-//         return false; // There's an 'END' without a corresponding 'IF', 'WHILE' or 'FOR'
-//       }
-//       lastEndedBlock = stack.pop();
-//       lastSignificantBlock = item;
-//     } else if (item === "ELSE") {
-//       if (lastSignificantBlock !== "END" || lastEndedBlock !== "IF") {
-//         return false; // There's an 'ELSE' without a corresponding ended 'IF' in the same nested level
-//       }
-//       lastSignificantBlock = item;
-//     }
-//   }
-
-//   // An 'ELSE' block is valid only if the last significant block was an 'END' and there is an ended 'IF' in the same nested level
-//   return lastSignificantBlock === "END" && lastEndedBlock === "IF";
-// });
-
-const elseAvailable = true;
 
 const validDevices = ref<Device[]>([
   {
@@ -137,26 +200,83 @@ const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
   test1: "BOOLEAN",
   test2: "NUMBER",
 });
+
+let scheduleID = router.currentRoute.value.params.id;
+const fetchSchedule = async () => {
+  let data = await axios.get(`http://localhost:5000/schedule/${scheduleID}`, {
+    withCredentials: true,
+  });
+  schedule.value = data.data;
+  console.log(data);
+  console.log(schedule.value?.Code);
+  if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
+    nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
+};
+
+fetchSchedule();
+
+const deleteSchedule = async () => {
+  try {
+    await axios.delete(`http://localhost:5000/schedule/${scheduleID}`, {
+      withCredentials: true,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  router.push("/schedules");
+};
+
+const saveSchedule = async () => {
+  let tempSchedule = schedule.value;
+  if (tempSchedule == undefined) return;
+  tempSchedule.Code = tempSchedule.Code.map((item) => {
+    let block = item;
+    block.Params = item.Params?.map((item) => item + "");
+    return block;
+  });
+  try {
+    console.log(tempSchedule);
+    await axios.patch(
+      `http://localhost:5000/schedule/${scheduleID}`,
+      tempSchedule,
+      {
+        withCredentials: true,
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 <style>
 .main {
-  height: 100%;
   width: 100%;
   background-color: rgb(45, 50, 64);
   flex-direction: column;
+  display: flex;
+  flex-grow: 1;
 }
 
 .header {
   background-color: rgb(58, 64, 81);
-  min-height: 4rem;
+  position: sticky;
+  min-height: 5.8rem;
+  top: 3.7rem;
+  z-index: 1;
 }
 
-.container-fluid {
-  height: 100%;
+@media (max-width: 992px) {
+  .header {
+    min-height: 8rem;
+  }
 }
 
-.row {
-  height: 100%;
+div.header + div.container-fluid {
+  flex-grow: 1;
+}
+
+#alkdas {
+  flex-grow: 1;
 }
 
 body {
@@ -165,5 +285,12 @@ body {
 
 .block {
   margin-bottom: -2rem;
+}
+
+.scrollable21 {
+  max-height: 83.5vh !important;
+  overflow: scroll;
+  overflow-x: hidden;
+  z-index: 0;
 }
 </style>
