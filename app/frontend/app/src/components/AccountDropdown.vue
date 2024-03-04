@@ -46,6 +46,8 @@ const logout = async () => {
     console.log(data);
   }
 };
+
+getName();
 </script>
 <script lang="ts">
 import { defineComponent } from "vue";
