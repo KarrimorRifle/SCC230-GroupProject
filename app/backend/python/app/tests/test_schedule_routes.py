@@ -47,8 +47,8 @@ class TestScheduleRoutes(unittest.TestCase):
         url += data['ScheduleID']
         response = self.client_server.get(url)
 
-        data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
         self.assertIn('IsActive', data)
@@ -104,8 +104,8 @@ class TestScheduleRoutes(unittest.TestCase):
         url += id
         response = self.client_server.patch(url, json=payload)
 
-        data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
         self.assertIn('IsActive', data)
