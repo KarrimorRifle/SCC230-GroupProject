@@ -18,7 +18,7 @@ Structure shows variables and values for frontend to be familiar with.
 
 ## Routes
 
-### ‘/hub/[HubID]/device
+### ‘/hub/[HubID]/device'
 
 #### Methods: 
 -	GET
