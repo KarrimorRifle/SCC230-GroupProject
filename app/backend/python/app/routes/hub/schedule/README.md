@@ -111,7 +111,7 @@ Current User must be part of hub with view access.
 
 TO DO:
 GET schedules - done
-add schedules
+add schedules - done
 delete schedules
 update schedules
 create schedules
