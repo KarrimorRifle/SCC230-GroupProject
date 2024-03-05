@@ -12,7 +12,7 @@ def get_schedules(account, cursor):
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
     schedules = [schedule for schedule in schedules]
-    schedules = sorted(schedules, key=lambda x: x['ScheduleName'])
+    schedules = sorted(schedules, key=lambda x: (-x['IsActive'], x['ScheduleName']))
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
