@@ -32,7 +32,7 @@ def create_schedule(account, cursor, connection, schedule):
     query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID) "
                      "VALUES (%s,%s,%s)")
     try:
-        cursor.execute(query, (thisID, scheduleName, scheduleAuthor,))
+        cursor.execute(query, (thisID, scheduleName, scheduleAuthor))
         connection.commit()
     except Exception as e:
         connection.rollback()
