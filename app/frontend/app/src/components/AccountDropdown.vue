@@ -29,8 +29,8 @@ const name = ref<string>();
 
 const getName = async () => {
   let accountData;
-  accountData= await getAccount();
-  name.value = accountData.value.FirstName + " " + accountData.value.Surname;
+  accountData = await getAccount();
+  name.value = accountData.FirstName + " " + accountData.Surname;
 };
 
 const logout = async () => {
