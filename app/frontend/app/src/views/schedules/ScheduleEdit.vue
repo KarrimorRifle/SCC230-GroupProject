@@ -324,6 +324,9 @@ const saveSchedule = async () => {
   } catch (e) {
     console.log(e);
   }
+
+  showNotification.value = true;
+  errorMSG.value = "Schedule saved successfully!";
 };
 
 const toggleDraft = () => {
