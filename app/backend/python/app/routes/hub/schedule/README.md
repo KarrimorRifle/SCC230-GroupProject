@@ -46,7 +46,7 @@ Structure shows variables and values for frontend to be familiar with.
 #### GET: 
 
 Lists ID, Name, Active status, Full name of author and auther's permission levels for all schedules in hub.
-Current User must be part of hub and have permission level > 1.
+Current User must be part of hub and have permission level > 0.
 
 ##### Required Parameters:
 
@@ -61,7 +61,7 @@ Current User must be part of hub and have permission level > 1.
 #### POST: 
 
 Create new empty schedule template and assign it to specified hub.
-Current User must be part of hub and have permission level > 1.
+Current User must be part of hub and have permission level > 2.
 
 ##### Required Parameters:
 -   (string)ScheduleName - Name of Schedule
@@ -112,6 +112,7 @@ Current User must be part of hub and have permission level > 1.
 Lists full details of specified schedule in hub.
 See [schedule doc](.../schedule/README.md) if required.
 Current User must be part of hub with view access.
+PermissionLevel > 0.
 
 ##### Required Parameters:
 
@@ -145,9 +146,10 @@ Current User must be part of hub with view access.
 
 #### POST: 
 
-Lists full details of specified schedule in hub.
+Add to hub and Lists full details of specified schedule.
 See [schedule doc](.../schedule/README.md) if required.
 Current User must be part of hub with view access.
+PermissionLevel > 2.
 
 ##### Required Parameters:
 
@@ -181,9 +183,10 @@ Current User must be part of hub with view access.
 
 #### DELETE: 
 
-Lists full details of specified schedule in hub.
+Remove specified schedule in hub.
 See [schedule doc](.../schedule/README.md) if required.
 Current User must be part of hub with view access.
+PermissionLevel > 2.
 
 ##### Required Parameters:
 
@@ -193,9 +196,10 @@ Current User must be part of hub with view access.
 
 #### PATCH: 
 
-Lists full details of specified schedule in hub.
+Update and Lists full details of specified schedule in hub.
 See [schedule doc](.../schedule/README.md) if required.
 Current User must be part of hub with view access.
+PermissionLevel > 2.
 
 ##### Optional Parameters:
 -	(string)ScheduleName – Name of schedule
