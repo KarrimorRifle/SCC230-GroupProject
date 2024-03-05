@@ -74,6 +74,9 @@ CREATE TABLE `schedules`(
 INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`)
 Values("Schk129jd2i23kd34jf","Test Schedule","Accojk42VvlqdeBpOBc","Hubk23098jwij123msd",0,0);
 
+INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`)
+Values("Schk129jd2i23kd34jf","Test Schedule","Acc89kaE64Aize3NX2j","Hubk23098jwij123msd",0,1);
+
 CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
