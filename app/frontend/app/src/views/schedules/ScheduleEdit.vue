@@ -111,6 +111,7 @@
               :schedule-vars="variables"
               :highlight="focusedBlock == index"
               @change="
+                menu = true;
                 mode = 'CHANGE';
                 focusedBlock = index;
               "
@@ -163,7 +164,7 @@
       >
         x
       </button>
-      All conditionals must be closed with an 'END' block
+      {{ errorMSG }}
     </div>
   </transition>
 </template>
@@ -187,6 +188,7 @@ const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
 const mode = ref<"CHANGE" | "ADD">("ADD");
 const showNotification = ref(false);
+const errorMSG = ref<string>("");
 
 const addNewBlock = (commandType: CommandType) => {
   let codeBlock: FunctionCode = {
@@ -212,6 +214,7 @@ const addNewBlock = (commandType: CommandType) => {
     schedule.value?.Code.push(codeBlock);
     nextNum.value++;
   } else if (mode.value == "CHANGE" && schedule.value) {
+    codeBlock.Number = schedule.value.Code[focusedBlock.value].Number;
     schedule.value.Code[focusedBlock.value] = codeBlock;
   }
 };
@@ -281,6 +284,7 @@ const deleteSchedule = async () => {
 };
 
 const saveSchedule = async () => {
+  //stringify params
   let tempSchedule = schedule.value;
   if (tempSchedule == undefined) return;
   tempSchedule.Code = tempSchedule.Code.map((item) => {
@@ -288,6 +292,22 @@ const saveSchedule = async () => {
     block.Params = item.Params?.map((item) => item + "");
     return block;
   });
+
+  let lastIf = -1;
+  try {
+    tempSchedule.Code.forEach((item, index) => {
+      if (item.CommandType == "IF") lastIf = index;
+      if (item.CommandType == "ELSE")
+        if (tempSchedule && lastIf != -1)
+          tempSchedule.Code[index].LinkedCommands?.push(index);
+        else throw new Error();
+    });
+  } catch (e) {
+    showNotification.value = true;
+    errorMSG.value = "NOT SAVED: 'IF' block must occur before 'ELSE'";
+    return;
+  }
+
   try {
     console.log(tempSchedule);
     await axios.patch(
@@ -307,8 +327,10 @@ const toggleDraft = () => {
     schedule.value.IsDraft = true;
     schedule.value.IsActive = false;
   } else {
-    if (endAvailable.value) showNotification.value = true;
-    else if (schedule.value) schedule.value.IsDraft = false;
+    if (endAvailable.value) {
+      showNotification.value = true;
+      errorMSG.value = "All conditionals must be closed with an 'END' block";
+    } else if (schedule.value) schedule.value.IsDraft = false;
   }
 };
 </script>
