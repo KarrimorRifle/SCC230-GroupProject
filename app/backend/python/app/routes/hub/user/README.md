@@ -1,9 +1,11 @@
 # Hub User Routes
 ###### Refer back to iota classes as well for more information.
 <br><br>
+
 ### LINK TO RELATED DOCS
 #### [Hub Doc](../README.md)
 <br><br>
+
 ## Classes
 ###### *for frontend to worry about by backend
 <br>
@@ -27,6 +29,7 @@ Structure shows variables and values for frontend to be familiar with.
     -   5: Owner rights (Can edit/delete hub)
 
  <br><br><br><br>
+
 ## Routes
 
 ### ‘/hub/[HubID]/user’
