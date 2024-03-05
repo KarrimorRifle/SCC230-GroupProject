@@ -3,7 +3,8 @@
 <br><br>
 
 ### LINK TO RELATED DOCS
-#### [Schedule Doc](../hub/schedule/README.md)
+#### [Hub Schedule Doc](../hub/schedule/README.md)
+#### [Public Schedule Doc](./public_schedule/README.md)
 <br><br>
 
 ## Classes
@@ -188,4 +189,5 @@ Updates specified schedule data based on passed parameters.
 <br><br><br><br>
 
 ### LINK TO RELATED DOCS
-#### [Hub Doc](../hub/schedule/README.md)
+#### [Hub Schedule Doc](../hub/schedule/README.md)
+#### [Public Schedule Doc](./public_schedule/README.md)
