@@ -296,11 +296,15 @@ const saveSchedule = async () => {
   let lastIf = -1;
   try {
     tempSchedule.Code.forEach((item, index) => {
-      if (item.CommandType == "IF") lastIf = index;
-      if (item.CommandType == "ELSE")
-        if (tempSchedule && lastIf != -1)
-          tempSchedule.Code[index].LinkedCommands?.push(index);
-        else throw new Error();
+      if (item.CommandType == "IF" && tempSchedule) {
+        lastIf = item.Number;
+        tempSchedule.Code[index].LinkedCommands = [];
+      }
+      if (item.CommandType == "ELSE" && tempSchedule)
+        if (lastIf != -1) {
+          console.log(tempSchedule.Code[lastIf].LinkedCommands);
+          tempSchedule.Code[lastIf].LinkedCommands?.push(index);
+        } else throw new Error();
     });
   } catch (e) {
     showNotification.value = true;
@@ -330,7 +334,29 @@ const toggleDraft = () => {
     if (endAvailable.value) {
       showNotification.value = true;
       errorMSG.value = "All conditionals must be closed with an 'END' block";
-    } else if (schedule.value) schedule.value.IsDraft = false;
+    } else if (schedule.value) {
+      let tempSchedule = schedule.value;
+      if (!tempSchedule) return;
+      try {
+        let lastIf = -1;
+        tempSchedule.Code.forEach((item, index) => {
+          if (item.CommandType == "IF" && tempSchedule) {
+            lastIf = item.Number;
+            tempSchedule.Code[index].LinkedCommands = [];
+          }
+          if (item.CommandType == "ELSE" && tempSchedule)
+            if (lastIf != -1) {
+              console.log(tempSchedule.Code[lastIf].LinkedCommands);
+              tempSchedule.Code[lastIf].LinkedCommands?.push(index);
+            } else throw new Error();
+        });
+      } catch (e) {
+        showNotification.value = true;
+        errorMSG.value = "'IF' block must occur before 'ELSE'";
+        return;
+      }
+      schedule.value.IsDraft = false;
+    }
   }
 };
 </script>
