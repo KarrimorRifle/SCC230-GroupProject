@@ -1,10 +1,31 @@
 <template>
   <div class="main mx-0">
-    <div class="header" v-if="schedule">
-      <h2>Edit Schedule</h2>
+    <div
+      class="header"
+      v-if="schedule"
+      :class="{ 'draft-color': schedule.IsDraft }"
+    >
+      <h2>
+        Edit Schedule
+        <div
+          v-if="schedule.IsDraft"
+          class="px-2 py-1 bg-warning"
+          style="
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            border-radius: 2rem;
+            color: black;
+            position: relative;
+            top: -0.5rem;
+          "
+        >
+          DRAFT
+        </div>
+      </h2>
       <div class="container-fluid">
         <div class="row">
-          <div class="col-12 col-xl-8 col-lg-7 px-0">
+          <div class="col-12 col-xl-6 col-lg-5 px-0">
             <div class="input-group mb-1 px-2">
               <div class="input-group-text"><b>Name:</b></div>
               <input
@@ -28,7 +49,11 @@
                   />
                 </div>
               </div>
-              <div class="input-group" style="width: 8rem">
+              <div
+                class="input-group"
+                v-if="!schedule.IsDraft"
+                style="width: 8rem"
+              >
                 <div class="input-group-text">Active?</div>
                 <div class="input-group-text">
                   <input
@@ -47,6 +72,16 @@
                 @click="$router.push('/schedules')"
               >
                 LIST
+              </button>
+              <button
+                class="btn btn-sm me-2"
+                @click="toggleDraft()"
+                :class="{
+                  'btn-warning': !schedule.IsDraft,
+                  'btn-secondary': schedule.IsDraft,
+                }"
+              >
+                {{ schedule.IsDraft ? "UNDRAFT" : "DRAFT" }}
               </button>
               <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
                 SAVE
@@ -113,6 +148,24 @@
       </div>
     </div>
   </div>
+  <transition name="slide">
+    <div v-if="showNotification" class="notification">
+      <button
+        style="
+          position: absolute;
+          top: -0.3rem;
+          right: -0.1rem;
+          background-color: rgba(0, 0, 0, 0);
+          border-style: none;
+          color: #000000;
+        "
+        @click="showNotification = false"
+      >
+        x
+      </button>
+      All conditionals must be closed with an 'END' block
+    </div>
+  </transition>
 </template>
 <script setup lang="ts">
 import BlockMenu from "./BlockMenu.vue";
@@ -133,6 +186,7 @@ const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
 const mode = ref<"CHANGE" | "ADD">("ADD");
+const showNotification = ref(false);
 
 const addNewBlock = (commandType: CommandType) => {
   let codeBlock: FunctionCode = {
@@ -247,6 +301,16 @@ const saveSchedule = async () => {
     console.log(e);
   }
 };
+
+const toggleDraft = () => {
+  if (!schedule.value?.IsDraft && schedule.value) {
+    schedule.value.IsDraft = true;
+    schedule.value.IsActive = false;
+  } else {
+    if (endAvailable.value) showNotification.value = true;
+    else if (schedule.value) schedule.value.IsDraft = false;
+  }
+};
 </script>
 <style>
 .main {
@@ -255,6 +319,18 @@ const saveSchedule = async () => {
   flex-direction: column;
   display: flex;
   flex-grow: 1;
+}
+
+.notification {
+  z-index: 3;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 20px;
+  background-color: #9cdcff;
+  color: #000000;
+  border: 1px solid #2e2ab8;
+  border-radius: 5px;
 }
 
 .header {
@@ -292,5 +368,12 @@ body {
   overflow: scroll;
   overflow-x: hidden;
   z-index: 0;
+}
+
+.draft-color {
+  color: rgb(226, 163, 5);
+  border-color: rgb(198, 146, 14);
+  border-style: solid;
+  border-width: 2px;
 }
 </style>

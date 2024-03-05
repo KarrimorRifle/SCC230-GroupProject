@@ -21,6 +21,7 @@ export interface Schedule {
   AuthorID: string;
   IsPublic: boolean;
   IsActive: boolean;
+  IsDraft: boolean;
   Rating: number; //was just one value, but instead should be a computed value
   Trigger: Record<string, string[]>;
   Code: FunctionCode[];
