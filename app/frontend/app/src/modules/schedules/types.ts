@@ -31,6 +31,7 @@ export interface Schedule {
 export interface ListSchedule {
   IsActive: number;
   IsPublic: number;
+  IsDraft: number;
   Rating: number;
   ScheduleID: string;
   ScheduleName: string;

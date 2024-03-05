@@ -24,6 +24,7 @@
             v-for="item in schedules"
             :key="item.ScheduleID"
             class="card mb-3 bg-gray"
+            :class="{ 'border-draft': item.IsDraft }"
           >
             <div
               class="card-title mb-0 text-start p-2 d-flex justify-content-between"
@@ -46,6 +47,22 @@
                 ></div>
                 <h4 class="me-2 ms-2 mb-0">
                   Name: <b>{{ item.ScheduleName }}</b>
+                  <div
+                    v-if="item.IsDraft"
+                    class="px-2 py-1 bg-warning"
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 700;
+                      display: inline-block;
+                      border-radius: 2rem;
+                      color: black;
+                      position: relative;
+                      top: -0.3rem;
+                      left: 0.4rem;
+                    "
+                  >
+                    DRAFT
+                  </div>
                 </h4>
               </div>
               <div class="d-flex me-2">
@@ -159,5 +176,11 @@ fetchData();
   max-height: 82vh;
   overflow: scroll;
   overflow-x: hidden;
+}
+
+.border-draft {
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(166, 132, 38);
 }
 </style>
