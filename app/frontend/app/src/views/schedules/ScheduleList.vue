@@ -103,9 +103,6 @@ const createSchedule = async () => {
     "http://localhost:5000/schedule",
     {
       ScheduleName: "Schedule " + (schedules.value?.length + 1),
-      IsActive: 0,
-      IsPublic: 0,
-      Rating: 0,
     },
     {
       withCredentials: true,
