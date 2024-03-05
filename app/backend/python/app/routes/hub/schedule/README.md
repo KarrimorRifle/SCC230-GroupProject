@@ -148,7 +148,7 @@ PermissionLevel > 0.
 
 Add to hub and Lists full details of specified schedule.
 See [schedule doc](.../schedule/README.md) if required.
-Current User must be part of hub with view access.
+Current User must be part of hub with edit access.
 PermissionLevel > 2.
 
 ##### Required Parameters:
@@ -185,7 +185,7 @@ PermissionLevel > 2.
 
 Remove specified schedule in hub.
 See [schedule doc](.../schedule/README.md) if required.
-Current User must be part of hub with view access.
+Current User must be part of hub with edit access.
 PermissionLevel > 2.
 
 ##### Required Parameters:
@@ -198,13 +198,20 @@ PermissionLevel > 2.
 
 Update and Lists full details of specified schedule in hub.
 See [schedule doc](.../schedule/README.md) if required.
-Current User must be part of hub with view access.
+Current User must be part of hub with edit access.
 PermissionLevel > 2.
+
+Same route works for toggle active and draft status of schedule in hub.
+When used for this only IsActive and IsDraft params should be passed.
+Current user must be part of hub with toggle activation access.
+PermissionLevel > 1.
 
 ##### Optional Parameters:
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+    -   MUST BE THE ONLY Param PASSED EXCEPT IsDraft IF USER HAS ONLY TOGGLE ACTIVE ACCESS
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
+    -   MUST BE THE ONLY Param PASSED EXCEPT IsActive IF USER HAS ONLY TOGGLE ACTIVE ACCESS
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
 -	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data

@@ -89,8 +89,11 @@ def update_hub_schedule(account, cursor, connection, hubID, scheduleID):
     if not permissionLevel:
         return jsonify({'error': 'User not in Hub'}), 401
     
-    if permissionLevel < 3:
+    if permissionLevel < 3 and (any(key not in ['IsActive', 'IsDraft'] for key in request.json.keys())):
         return jsonify({'error': 'User does not have permission to update schedules'}), 403
+
+    if permissionLevel < 2:
+        return jsonify({'error': 'User does not have permission to change schedules active or draft status'}), 403
     
     query = ("SELECT ScheduleID FROM schedules WHERE HubID = %s AND ScheduleID = %s")
     cursor.execute(query, (hubID, scheduleID))
