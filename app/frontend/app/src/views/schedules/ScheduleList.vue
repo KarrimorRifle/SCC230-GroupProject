@@ -1,6 +1,6 @@
 <template>
   <div class="main-container d-flex">
-    <div class="main row bg-dark">
+    <div class="main row bg-dark" style="overflow: hidden">
       <div class="col-2 options bg-gray"></div>
       <div class="col-10 schedules px-0">
         <h2 class="text-start text-light underlined bg-dark px-3 py-2">
@@ -19,7 +19,7 @@
             CREATE
           </button>
         </div>
-        <div class="px-3">
+        <div class="px-3 scrollable-list21">
           <div
             v-for="item in schedules"
             :key="item.ScheduleID"
@@ -138,17 +138,26 @@ fetchData();
 </script>
 <style lang="scss">
 .main-container {
-  height: 100%;
+  flex-grow: 1;
   width: 100%;
   justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
-  height: 100%;
   width: 90%;
+  flex-grow: 1;
 }
 
 .bg-gray {
   background-color: rgb(35, 39, 49);
+}
+
+.scrollable-list21 {
+  max-height: 82vh;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 </style>
