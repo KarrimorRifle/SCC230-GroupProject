@@ -12,8 +12,8 @@
               type="text"
               class="form-control filter"
               placeholder="Search for schedule"
+              v-model="filterValue"
             />
-            <button class="input-group-text bg-gray">SEARCH</button>
           </div>
           <button class="btn btn-primary" @click="createSchedule()">
             CREATE
@@ -21,7 +21,7 @@
         </div>
         <div class="px-3 scrollable-list21">
           <div
-            v-for="item in schedules"
+            v-for="item in filteredSchedules"
             :key="item.ScheduleID"
             class="card mb-3 bg-gray"
             :class="{ 'border-draft': item.IsDraft }"
@@ -101,11 +101,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { ListSchedule } from "@/modules/schedules/types";
 import axios from "axios";
 
-const schedules = ref<ListSchedule[]>();
+const schedules = ref<ListSchedule[]>([]);
+const filterValue = ref<string>("");
+const filteredSchedules = computed(() =>
+  schedules.value.filter((item) =>
+    item.ScheduleName.toLowerCase().includes(filterValue.value.toLowerCase())
+  )
+);
 
 const fetchData = async () => {
   const data = await axios.get("http://localhost:5000/schedule", {
