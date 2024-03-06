@@ -61,6 +61,7 @@ CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
     `AuthorID` varchar(100) NOT NULL,
+    `CopyFrom` varchar(100),
     `HubID` varchar(100),
     `IsActive` TINYINT UNSIGNED NOT NULL DEFAULT 0,
     `IsPublic` TINYINT UNSIGNED NOT NULL DEFAULT 0,
@@ -68,7 +69,8 @@ CREATE TABLE `schedules`(
     `NumRated` INT UNSIGNED DEFAULT 0,
     `IsDraft` TINYINT UNSIGNED NOT NULL DEFAULT 1,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
-    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID)
+    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID),
+    FOREIGN KEY (CopyFrom) REFERENCES accounts(AccountID)
 );
 
 INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`)
