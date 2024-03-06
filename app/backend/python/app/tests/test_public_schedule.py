@@ -6,6 +6,12 @@ class TestPublicScheduleRoutes(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
         self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        
+        response = self.client_server.post("/hub", json={'HubName': 'Test Hub'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('HubID', data)
+        self.hubID = data['HubID']
 
     def test_get_public_schedules(self):
         response = self.client_server.get("/schedule/public")
@@ -51,7 +57,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('error', data)
     
     def test_save_public_schedule(self):
-        response = self.client_server.post('/schedule/public/Schk129jd2i23kd34af/hub/HubID')
+        response = self.client_server.post('/schedule/public/Schk129jd2i23kd34af')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
@@ -67,7 +73,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertEqual(data['AuthorID'], 'Accojk42VvlqdeBpOBc')
     
     def test_save_public_schedule_to_hub(self):
-        response = self.client_server.post('/schedule/public/Schk129jd2i23kd34af/hub/HubID')
+        response = self.client_server.post(f'/hub/{self.hubID}/schedule/public/Schk129jd2i23kd34af')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
@@ -80,4 +86,4 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('Code', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['IsPublic'], 0)
-        self.assertEqual(data['HubID'], 'HubID')
+        self.assertEqual(data['HubID'], self.hubID)
