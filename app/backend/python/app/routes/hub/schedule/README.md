@@ -24,7 +24,8 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)ScheduleName – Name of schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
@@ -55,6 +56,7 @@ Current User must be part of hub and have permission level > 0.
 -	(string)ScheduleName – Name of schedule
 -   (small int)IsActive - boolean to represent if schedule is set active (1 if active, 0 if not)
 -   (string)Author - Full name of author of schedule
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -   (int)PermissionLevel - Permission level granted to author of schedule
 <br>
 
@@ -71,7 +73,8 @@ Current User must be part of hub and have permission level > 2.
 -	(string)ScheduleName – Name of schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule - will be empty
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data - will be empty
@@ -122,7 +125,8 @@ PermissionLevel > 0.
 -	(string)ScheduleName – Name of schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
@@ -159,7 +163,8 @@ PermissionLevel > 2.
 -	(string)ScheduleName – Name of schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
@@ -212,7 +217,7 @@ PermissionLevel > 1.
     -   MUST BE THE ONLY Param PASSED EXCEPT IsDraft IF USER HAS ONLY TOGGLE ACTIVE ACCESS
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
     -   MUST BE THE ONLY Param PASSED EXCEPT IsActive IF USER HAS ONLY TOGGLE ACTIVE ACCESS
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
 -	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data
 
@@ -222,7 +227,8 @@ PermissionLevel > 1.
 -	(string)ScheduleName – Name of schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data

@@ -36,7 +36,8 @@ Structure shows variables and values for frontend to be familiar with.
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
@@ -80,7 +81,8 @@ Lists ID, Name and Status of all schedules created by current user.
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, should be NULL if IsPublic is 0 and was never 1
 
 <br>
@@ -123,7 +125,8 @@ Lists all values associated with schedule belonging to current user specified by
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
@@ -164,9 +167,21 @@ Updates specified schedule data based on passed parameters.
 -	(string)ScheduleName – Name of schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
--	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users (Does Nothing Yet)
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
 -	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data
+
+##### Return Values:
+-	(string)ScheduleID – Unique ID to identify specified schedule
+-	(string)AuthorID - Unique ID to identify user who created specified schedule
+-	(string)ScheduleName – Name of schedule
+-   (string)HubID - Unique ID of hub schedule is in
+-	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
+-	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
+-   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
+-	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
+-	(dict[])Code – List of function blocks that make up the code for specified schedule
+-	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -175,7 +190,7 @@ Updates specified schedule data based on passed parameters.
     -	CommandType – String referencing type of function block
         -	Valid Types: ‘FOR’, ‘WHILE’, ‘IF’, ‘ ELSE’, ‘SET’, ‘END’
     -	Number – Position of function block in code
-    -	LinkedCommands – List of positions of blocks linked to current block
+    -   LinkedCommands – List of positions of blocks linked to current block
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
 
@@ -183,9 +198,6 @@ Updates specified schedule data based on passed parameters.
 -	Dictionary with DeviceIDs and data
 -	Trigger dictionary structure:
     -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
-
-##### Return Values:
--	(string)ScheduleID – Unique ID to identify specified schedule
 <br><br><br><br>
 
 ### LINK TO RELATED DOCS
