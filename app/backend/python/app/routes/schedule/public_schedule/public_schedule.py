@@ -24,9 +24,13 @@ def save_public_schedule(account, cursor, connection, scheduleID):
     newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
     schedule['Trigger'] = None
 
-    query = ("UPDATE schedules SET IsPublic = 0, AuthorID = %s WHERE ScheduleID = %s")
+    copyFrom = schedule.get('CopyFrom')
+    if copyFrom is None:
+        copyFrom = scheduleID
+
+    query = ("UPDATE schedules SET IsPublic = 0, AuthorID = %s, CopyFrom = %s WHERE ScheduleID = %s")
     schedule['IsPublic'] = 0
-    cursor.execute(query, (account['AccountID'], newID))
+    cursor.execute(query, (account['AccountID'], copyFrom, newID))
     try:
         connection.commit()
     except:

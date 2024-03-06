@@ -112,6 +112,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
     details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
+               'CopyFrom': schedule['CopyFrom'],
                'ScheduleName': schedule['ScheduleName'],
                'HubID': schedule['HubID'],
                'IsActive': schedule['IsActive'],
@@ -181,7 +182,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID":
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID" or key == "CopyFrom":
             continue
         if key == "IsActive":
             isActive = value
