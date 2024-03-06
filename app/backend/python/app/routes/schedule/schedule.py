@@ -6,7 +6,7 @@ schedule = Blueprint('schedule', __name__)
 
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
-    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft FROM schedules "
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
