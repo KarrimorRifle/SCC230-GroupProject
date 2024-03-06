@@ -26,7 +26,7 @@ def save_public_schedule(account, cursor, connection, scheduleID):
 
     copyFrom = schedule.get('CopyFrom')
     if copyFrom is None:
-        copyFrom = scheduleID
+        copyFrom = schedule['AuthorID']
 
     query = ("UPDATE schedules SET IsPublic = 0, AuthorID = %s, CopyFrom = %s WHERE ScheduleID = %s")
     schedule['IsPublic'] = 0
@@ -91,7 +91,7 @@ def rate_public_schedule(account, cursor, connection, scheduleID):
 def get_public_schedules():
     cursor = current_app.config['cursor']
 
-    cursor.execute("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft FROM schedules WHERE IsPublic = 1")
+    cursor.execute("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules WHERE IsPublic = 1")
     schedules = [schedule for schedule in cursor.fetchall()]
     schedules = sorted(schedules, key=lambda x: (-x['Rating'], x['ScheduleName']), reverse=True)
     return jsonify(schedules), 200
