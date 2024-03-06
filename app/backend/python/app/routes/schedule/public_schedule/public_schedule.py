@@ -1,7 +1,7 @@
 from flask import request, jsonify, Blueprint, current_app
 from ...accounts import getAccount
 import json
-from schedule import get_schedule_detail, create_schedule, update_schedule
+from ..schedule import get_schedule_detail, create_schedule, update_schedule
 
 public_schedule = Blueprint('public_schedule', __name__)
 
@@ -19,13 +19,14 @@ def save_public_schedule(account, cursor, connection, scheduleID):
 
     schedule = json.loads(get_schedule_detail(account, cursor, scheduleID, True)[0].data)
     if schedule.get('error') is not None:
-        return jsonify({'error': 'Schedule not found'}), 404
+        return jsonify({'error': schedule['error']}), 404
 
     newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
     schedule['Trigger'] = None
 
     query = ("UPDATE schedules SET IsPublic = 0, AuthorID = %s WHERE ScheduleID = %s")
-    cursor.execute(query, (account['AccountID'], newID,))
+    schedule['IsPublic'] = 0
+    cursor.execute(query, (account['AccountID'], newID))
     try:
         connection.commit()
     except:
@@ -48,9 +49,14 @@ def save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID):
 def rate_public_schedule(account, cursor, connection, scheduleID):
     query = ("SELECT IsPublic, NumRated, Rating FROM schedules WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
-    isPublic = cursor.fetchone()['IsPublic']
-    numRated = cursor.fetchone()['NumRated']
-    rating = cursor.fetchone()['Rating']
+    schedule = cursor.fetchone()
+
+    if schedule is None:
+        return jsonify({'error': 'Schedule is not found'}), 404
+
+    isPublic = schedule['IsPublic']
+    numRated = schedule['NumRated']
+    rating = schedule['Rating']
 
     if isPublic == 0:
         return jsonify({'error': 'Schedule is not public'}), 403
@@ -100,10 +106,9 @@ def single_public_schedule_routes(scheduleID):
         return rate_public_schedule(account, cursor, connection, scheduleID)
     
 @public_schedule.route('/hub/<string:hubID>/schedule/public/<string:scheduleID>', methods=['POST'])
-def single_public_schedule_routes(hubID, scheduleID):
+def public_hub_schedule_routes(hubID, scheduleID):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
     account = getAccount()
 
-    if request.method == 'POST':
-        save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID)
+    return save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID)
