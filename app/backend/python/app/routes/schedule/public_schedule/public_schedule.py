@@ -1,6 +1,7 @@
 from flask import request, jsonify, Blueprint, current_app
 from ...accounts import getAccount
-from schedule import get_schedule_detail
+import json
+from schedule import get_schedule_detail, create_schedule, update_schedule
 
 public_schedule = Blueprint('public_schedule', __name__)
 
@@ -9,7 +10,72 @@ def get_one_public_schedule(account, cursor, scheduleID):
     return get_schedule_detail(account, cursor, scheduleID, True)
 
 def save_public_schedule(account, cursor, connection, scheduleID):
-    pass
+    query = ("SELECT IsPublic FROM schedules WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    isPublic = cursor.fetchone()['IsPublic']
+
+    if isPublic == 0:
+        return jsonify({'error': 'Schedule is not public'}), 403
+
+    schedule = json.loads(get_schedule_detail(account, cursor, scheduleID, True)[0].data)
+    if schedule.get('error') is not None:
+        return jsonify({'error': 'Schedule not found'}), 404
+
+    newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
+    schedule['Trigger'] = None
+
+    query = ("UPDATE schedules SET IsPublic = 0, AuthorID = %s WHERE ScheduleID = %s")
+    cursor.execute(query, (account['AccountID'], newID,))
+    try:
+        connection.commit()
+    except:
+        return jsonify({'error': 'Error updating schedule'}), 500
+
+    return update_schedule(account, cursor, connection, newID, schedule, True)
+
+def save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID):
+    newID = json.loads(save_public_schedule(account, cursor, connection, scheduleID)[0].data).get('ScheduleID')
+
+    query = ("UPDATE schedules SET HubID = %s WHERE ScheduleID = %s")
+    cursor.execute(query, (hubID, newID))
+    try:
+        connection.commit()
+    except:
+        return jsonify({'error': 'Error updating schedule'}), 500
+    
+    return get_schedule_detail(account, cursor, newID, True)
+
+def rate_public_schedule(account, cursor, connection, scheduleID):
+    query = ("SELECT IsPublic, NumRated, Rating FROM schedules WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    isPublic = cursor.fetchone()['IsPublic']
+    numRated = cursor.fetchone()['NumRated']
+    rating = cursor.fetchone()['Rating']
+
+    if isPublic == 0:
+        return jsonify({'error': 'Schedule is not public'}), 403
+
+    if account is None:
+        return jsonify({'error': 'User not logged in'}), 401
+    
+    newRating = request.json.get('Rating')
+    if newRating is None:
+        return jsonify({'error': 'No rating provided'}), 400
+    
+    if newRating < 0 or newRating > 5:
+        return jsonify({'error': 'Rating must be between 0 and 5'}), 400
+    
+    newRating = int(((rating * numRated) + newRating) / (numRated + 1))
+    numRated += 1
+
+    query = ("UPDATE schedules SET Rating = %s, NumRated = %s WHERE ScheduleID = %s")
+    cursor.execute(query, (newRating, numRated, scheduleID))
+    try:
+        connection.commit()
+    except:
+        return jsonify({'error': 'Error updating rating'}), 500
+    
+    return jsonify({'ScheduleID': scheduleID, 'Rating': newRating}), 200
 
 @public_schedule.route('/schedule/public', methods=['GET'])
 def get_public_schedules():
@@ -28,3 +94,16 @@ def single_public_schedule_routes(scheduleID):
 
     if request.method == 'GET':
         return get_one_public_schedule(account, cursor, scheduleID)
+    elif request.method == 'POST':
+        return save_public_schedule(account, cursor, connection, scheduleID)
+    elif request.method == 'PATCH':
+        return rate_public_schedule(account, cursor, connection, scheduleID)
+    
+@public_schedule.route('/hub/<string:hubID>/schedule/public/<string:scheduleID>', methods=['POST'])
+def single_public_schedule_routes(hubID, scheduleID):
+    cursor = current_app.config['cursor']
+    connection = current_app.config['connection']
+    account = getAccount()
+
+    if request.method == 'POST':
+        save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID)
