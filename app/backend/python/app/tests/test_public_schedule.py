@@ -20,3 +20,18 @@ class TestPublicScheduleRoutes(unittest.TestCase):
             self.assertIn('IsDraft', entry)
             self.assertIn('IsPublic', entry)
             self.assertIn('Rating', entry)
+
+    def test_get_one_public_schedule(self):
+        response = self.client_server.get('/schedule/public/Schk129jd2i23kd34af')
+
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('ScheduleID', data)
+        self.assertIn('ScheduleName', data)
+        self.assertIn('IsActive', data)
+        self.assertIn('IsDraft', data)
+        self.assertIn('IsPublic', data)
+        self.assertIn('Rating', data)
+        self.assertIn('AuthorID', data)
+        self.assertIn('Code', data)
+        self.assertIn('Trigger', data)
