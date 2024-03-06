@@ -181,7 +181,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID":
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID":
             continue
         if key == "IsActive":
             isActive = value
