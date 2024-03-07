@@ -34,6 +34,9 @@ CREATE TABLE `accounts_hubsRelation`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Acc89kaE64Aize3NX2j","Hubk23098jwij123msd",5);
+
 CREATE TABLE `hub_inviteTokens`(
     `TokenID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `HubID` VARCHAR(100) NOT NULL,
