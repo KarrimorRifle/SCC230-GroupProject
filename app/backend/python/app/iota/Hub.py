@@ -24,7 +24,7 @@ class Hub:
 
     ##CONSTRUCTOR##
     def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
-                 users:dict[User, int]={}, schedules: list[Schedule]=[], debug:bool=False):
+                 users:dict[string, int]={}, schedules: list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
 
