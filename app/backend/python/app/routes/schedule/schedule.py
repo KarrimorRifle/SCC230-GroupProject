@@ -6,13 +6,13 @@ schedule = Blueprint('schedule', __name__)
 
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
-    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft FROM schedules "
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
     schedules = [schedule for schedule in schedules]
-    schedules = sorted(schedules, key=lambda x: x['ScheduleName'])
+    schedules = sorted(schedules, key=lambda x: (-x['IsActive'], x['ScheduleName']))
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
@@ -112,6 +112,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
     details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
+               'CopyFrom': schedule['CopyFrom'],
                'ScheduleName': schedule['ScheduleName'],
                'HubID': schedule['HubID'],
                'IsActive': schedule['IsActive'],
@@ -181,7 +182,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID":
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID" or key == "CopyFrom":
             continue
         if key == "IsActive":
             isActive = value
