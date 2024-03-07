@@ -1,6 +1,6 @@
 <template>
   <div class="main-container d-flex">
-    <div class="main row bg-dark">
+    <div class="main row bg-dark" style="overflow: hidden">
       <div class="col-2 options bg-gray"></div>
       <div class="col-10 schedules px-0">
         <h2 class="text-start text-light underlined bg-dark px-3 py-2">
@@ -12,18 +12,19 @@
               type="text"
               class="form-control filter"
               placeholder="Search for schedule"
+              v-model="filterValue"
             />
-            <button class="input-group-text bg-gray">SEARCH</button>
           </div>
           <button class="btn btn-primary" @click="createSchedule()">
             CREATE
           </button>
         </div>
-        <div class="px-3">
+        <div class="px-3 scrollable-list21">
           <div
-            v-for="item in schedules"
+            v-for="item in filteredSchedules"
             :key="item.ScheduleID"
             class="card mb-3 bg-gray"
+            :class="{ 'border-draft': item.IsDraft }"
           >
             <div
               class="card-title mb-0 text-start p-2 d-flex justify-content-between"
@@ -46,6 +47,22 @@
                 ></div>
                 <h4 class="me-2 ms-2 mb-0">
                   Name: <b>{{ item.ScheduleName }}</b>
+                  <div
+                    v-if="item.IsDraft"
+                    class="px-2 py-1 bg-warning"
+                    style="
+                      font-size: 0.8rem;
+                      font-weight: 700;
+                      display: inline-block;
+                      border-radius: 2rem;
+                      color: black;
+                      position: relative;
+                      top: -0.3rem;
+                      left: 0.4rem;
+                    "
+                  >
+                    DRAFT
+                  </div>
                 </h4>
               </div>
               <div class="d-flex me-2">
@@ -84,11 +101,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { ListSchedule } from "@/modules/schedules/types";
 import axios from "axios";
 
-const schedules = ref<ListSchedule[]>();
+const schedules = ref<ListSchedule[]>([]);
+const filterValue = ref<string>("");
+const filteredSchedules = computed(() =>
+  schedules.value.filter((item) =>
+    item.ScheduleName.toLowerCase().includes(filterValue.value.toLowerCase())
+  )
+);
 
 const fetchData = async () => {
   const data = await axios.get("http://localhost:5000/schedule", {
@@ -103,9 +126,6 @@ const createSchedule = async () => {
     "http://localhost:5000/schedule",
     {
       ScheduleName: "Schedule " + (schedules.value?.length + 1),
-      IsActive: 0,
-      IsPublic: 0,
-      Rating: 0,
     },
     {
       withCredentials: true,
@@ -141,17 +161,32 @@ fetchData();
 </script>
 <style lang="scss">
 .main-container {
-  height: 100%;
+  flex-grow: 1;
   width: 100%;
   justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
-  height: 100%;
   width: 90%;
+  flex-grow: 1;
 }
 
 .bg-gray {
   background-color: rgb(35, 39, 49);
+}
+
+.scrollable-list21 {
+  max-height: 82vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.border-draft {
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(166, 132, 38);
 }
 </style>

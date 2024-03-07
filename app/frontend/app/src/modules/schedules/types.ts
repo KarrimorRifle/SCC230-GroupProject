@@ -9,27 +9,29 @@ export type CommandType =
 
 //functions of either of these types aren't required on front end hence unimplemented
 export interface FunctionCode {
-  commandType: CommandType;
-  number: number;
-  linkedCommands?: number[];
-  params?: string[];
+  CommandType: CommandType;
+  Number: number;
+  LinkedCommands?: number[];
+  Params?: string[];
 }
 
 export interface Schedule {
-  id: string;
-  name: string;
+  ScheduleID: string;
+  ScheduleName: string;
   AuthorID: string;
-  isPublic: boolean;
-  isActive: boolean;
-  ratings: number[]; //was just one value, but instead should be a computed value
-  triggers: Record<string, string[]>;
-  code: FunctionCode[];
-  customVars?: Record<string, "NUMBER" | "BOOLEAN">;
+  IsPublic: boolean;
+  IsActive: boolean;
+  IsDraft: boolean;
+  Rating: number; //was just one value, but instead should be a computed value
+  Trigger: Record<string, string[]>;
+  Code: FunctionCode[];
+  CustomVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
 
 export interface ListSchedule {
   IsActive: number;
   IsPublic: number;
+  IsDraft: number;
   Rating: number;
   ScheduleID: string;
   ScheduleName: string;

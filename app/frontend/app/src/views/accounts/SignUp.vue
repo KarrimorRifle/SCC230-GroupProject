@@ -83,6 +83,7 @@ const pass1Error = ref("");
 const pass2Error = ref("");
 
 const signup = async () => {
+  event.preventDefault();
   console.log(`email = ${email.value}`);
   console.log(`pass1 = ${pass1.value}`);
   console.log(`pass2 = ${pass2.value}`);
@@ -117,12 +118,16 @@ const signup = async () => {
     sur.value.charAt(0).toUpperCase() + sur.value.slice(1).toLocaleLowerCase();
 
   try {
-    await axios.post("http://localhost:5000/accounts", {
-      Email: email.value,
-      Password: pass1.value,
-      FirstName: first.value,
-      Surname: sur.value,
-    });
+    await axios.post(
+      "http://localhost:5000/accounts",
+      {
+        Email: email.value,
+        Password: pass1.value,
+        FirstName: first.value,
+        Surname: sur.value,
+      },
+      { withCredentials: true }
+    );
     router.push("/home");
   } catch (err: AxiosError) {
     error.value = err.response.data.error;

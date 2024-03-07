@@ -31,7 +31,7 @@ def accountsResonse():
             try:
                 cursor.execute(query, (genRandomID(ids=accountIDs,prefix="Acc"),request.json.get("FirstName"),request.json.get("Surname"),email,bcrypt.hashpw(request.json.get("Password").encode('utf-8'), bcrypt.gensalt()).decode('utf-8'), sessionID, sessionExpiry,))
                 connection.commit()
-                response.set_cookie('session_id',value=sessionID, max_age=24*60*60, samesite='None', secure=True)
+                response.set_cookie('session_id', sessionID, max_age=24*60*60)
                 return response
             except Exception as e:
                 connection.rollback()

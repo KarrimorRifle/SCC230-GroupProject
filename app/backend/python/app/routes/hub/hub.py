@@ -16,7 +16,7 @@ def get_hubs(account, cursor):
     hubList = []
     for hub in hubs:
         hubList.append({'HubID':hub['HubID'], 'HubName':hub['HubName']})
-    hubList = sorted(hubList, key=lambda x: x['HubID'])
+    hubList = sorted(hubList, key=lambda x: x['HubName'])
 
     return jsonify(hubList), 200
 

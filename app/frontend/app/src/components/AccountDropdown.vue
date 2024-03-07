@@ -1,10 +1,10 @@
 <template>
   <ul class="dropdown-menu dropdown-menu-end">
     <li class="px-3">
-      <b
-        >Hello,<br />
-        {{ User["FirstName"] + " " + User["Surname"] }}!</b
-      >
+      <b>
+        Hello,<br />
+        {{ name }}!
+      </b>
     </li>
     <hr class="m-0 mt-2" />
     <li>
@@ -22,6 +22,16 @@
 import router from "@/router";
 import axios from "axios";
 import { deleteCookie } from "@/modules/common/functions";
+import { ref } from "vue";
+import { getAccount } from "@/modules/common/functions";
+
+const name = ref<string>();
+
+const getName = async () => {
+  let accountData;
+  accountData = await getAccount();
+  name.value = accountData.FirstName + " " + accountData.Surname;
+};
 
 const logout = async () => {
   let data;
@@ -37,10 +47,7 @@ const logout = async () => {
   }
 };
 
-let User = {
-  FirstName: "David",
-  Surname: "Mellon",
-};
+getName();
 </script>
 <script lang="ts">
 import { defineComponent } from "vue";

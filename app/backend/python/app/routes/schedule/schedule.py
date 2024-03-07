@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response, Blueprint, current_app
+from flask import request, jsonify, Blueprint, current_app
 from ..accounts import getAccount
 from iota import genRandomID
 
@@ -6,26 +6,33 @@ schedule = Blueprint('schedule', __name__)
 
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
-    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating FROM schedules "
+    query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules "
                 "WHERE AuthorID = %s")
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
-    schedules = sorted(schedules, key=lambda x: x['ScheduleID'])
+    schedules = [schedule for schedule in schedules]
+    schedules = sorted(schedules, key=lambda x: (-x['IsActive'], x['ScheduleName']))
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
-def create_schedule(account, cursor, connection):
-    # ADD SCHEDULE ID CHANGES TO ENTER INTO DB BASED ON FUTURE CHANGES
-    scheduleName = request.json.get("ScheduleName")
+def create_schedule(account, cursor, connection, schedule):
+    scheduleName = schedule.get('ScheduleName')
+    scheduleAuthor = schedule.get('AuthorID')
+    if scheduleAuthor is None:
+        scheduleAuthor = account['AccountID']
+
+    if scheduleName is None:
+        return jsonify({"error": "ScheduleName is required"}), 400
+
     query = ("SELECT ScheduleID FROM schedules")
     cursor.execute(query)
     scheduleIDs = cursor.fetchall()
     thisID = genRandomID(ids=scheduleIDs, prefix='Sch')
-    query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID, IsActive, IsPublic, Rating) "
-                     "VALUES (%s,%s,%s,%s,%s,%s)")
+    query = ("INSERT INTO schedules (ScheduleID, ScheduleName, AuthorID) "
+                     "VALUES (%s,%s,%s)")
     try:
-        cursor.execute(query, (thisID, scheduleName, account['AccountID'], request.json.get("IsActive"), request.json.get("IsPublic"), request.json.get('Rating'),))
+        cursor.execute(query, (thisID, scheduleName, scheduleAuthor))
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -33,13 +40,21 @@ def create_schedule(account, cursor, connection):
 
     return jsonify({'ScheduleID':thisID}), 200
 
-def get_schedule_detail(account, cursor, scheduleID):
-    query = ("SELECT * FROM schedules "
+def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
+    query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
+    checkID = cursor.fetchone()
+
+    query = ("SELECT * FROM schedules "
+                "WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
     schedule = cursor.fetchone()
 
     if schedule is None:
+        return jsonify({"error": "Schedule not found"}), 404
+
+    if checkID is None and hubCall is False:
         return 401
 
     query = ("SELECT * FROM function_blocks "
@@ -93,11 +108,16 @@ def get_schedule_detail(account, cursor, scheduleID):
         links = []
         paramVals = []
 
+    code = sorted(code, key=lambda x: x['Number'])
+
     details = {'ScheduleID': schedule['ScheduleID'],
                'AuthorID': schedule['AuthorID'],
+               'CopyFrom': schedule['CopyFrom'],
                'ScheduleName': schedule['ScheduleName'],
+               'HubID': schedule['HubID'],
                'IsActive': schedule['IsActive'],
                'IsPublic': schedule['IsPublic'],
+               'IsDraft': schedule['IsDraft'],
                'Rating': schedule['Rating'],
                'Code': code,
                'Trigger': triggerDict}
@@ -105,13 +125,13 @@ def get_schedule_detail(account, cursor, scheduleID):
     return jsonify(details), 200
 
 # Function deletes schedule of specified ID as long as user is the author
-def delete_schedule(account, cursor, connection, scheduleID):
+def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
-    if checkID is None:
+    if checkID is None and hubCall is False:
         return({"error": "Forbidden access"}), 401
     
     query = ("SELECT TriggerID FROM triggers "
@@ -123,11 +143,11 @@ def delete_schedule(account, cursor, connection, scheduleID):
         query = ("DELETE FROM trigger_data WHERE TriggerID = %s")
         cursor.execute(query, (trigger['TriggerID'],))
 
-    queries = [("DELETE FROM schedules WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+    queries = [("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
                ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
-               ("DELETE FROM triggers WHERE ScheduleID = %s" )]
+               ("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
+               ("DELETE FROM triggers WHERE ScheduleID = %s" ),
+               ("DELETE FROM schedules WHERE ScheduleID = %s" )]
 
     for query in queries:
         cursor.execute(query, (scheduleID,))
@@ -138,32 +158,34 @@ def delete_schedule(account, cursor, connection, scheduleID):
         connection.rollback()
         return(jsonify({"error":"Unable to delete schedule", "details":f"{e}"})), 500
 
-    return jsonify(scheduleID), 200
+    return jsonify({'ScheduleID': scheduleID}), 200
 
 # Function updates schedule of specified ID if user is author and based on input params
-def update_schedule(account, cursor, connection, scheduleID):
+def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
     cursor.execute(query, (account['AccountID'], scheduleID,))
     checkID = cursor.fetchone()
 
-    if checkID is None:
+    if checkID is None and hubCall is False:
         return({"error": "Forbidden access"}), 401
     
     updateParams = []
     values = []
-    newCode = [dict]
-    newTriggers = {}
-    for key, value in request.json.items():
-        if not key[0].isupper():
-            continue
-        if value == "":
-            continue
+    newCode = None
+    newTriggers = None
+    isActive = None
+    for key, value in schedule.items():
         if key == "Code":
             newCode = value
             continue
         if key == "Trigger":
             newTriggers = value
+            continue
+        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID" or key == "CopyFrom":
+            continue
+        if key == "IsActive":
+            isActive = value
             continue
         updateParams.append(f"{key}=%s")
         values.append(value)
@@ -178,8 +200,27 @@ def update_schedule(account, cursor, connection, scheduleID):
     except Exception as e:
         connection.rollback()
         return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
+
+    query = ("SELECT IsDraft FROM schedules WHERE ScheduleID = %s")
+    cursor.execute(query, (scheduleID,))
+    draftStatus = cursor.fetchone()['IsDraft']
+
+    if draftStatus+isActive > 1:
+        return jsonify({"error" : "Draft Schedule cannot be active"}), 400
     
-    if newTriggers != {}:
+    if draftStatus == 1:
+        isActive = 0
+
+    if isActive is not None:
+        query = ("UPDATE schedules SET IsActive = %s WHERE ScheduleID = %s AND AuthorID = %s")
+        try:
+            cursor.execute(query, (isActive, scheduleID, account['AccountID'],))
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
+
+    if newTriggers is not None:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
         cursor.execute(query, (scheduleID,))
@@ -232,12 +273,12 @@ def update_schedule(account, cursor, connection, scheduleID):
             connection.rollback()
             return(jsonify({"error":"Unable to update schedule trigger data", "details":f"{e}"})), 500
 
-    if newCode == []:
+    if newCode is None:
         return get_schedule_detail(account, cursor, scheduleID)
 
-    queries = [("DELETE FROM function_blocks WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
-               ("DELETE FROM function_block_links WHERE ScheduleID = %s" )]
+    queries = [("DELETE FROM function_block_params WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_block_links WHERE ScheduleID = %s" ),
+               ("DELETE FROM function_blocks WHERE ScheduleID = %s" )]
 
     for query in queries:
         cursor.execute(query, (scheduleID,))
@@ -260,38 +301,41 @@ def update_schedule(account, cursor, connection, scheduleID):
                 ("INSERT INTO function_block_params (Value, FunctionBlockID, ScheduleID, ListPos) "
                  "VALUES ")]
     values = [(), (), ()]
+    run = [0,0,0]
 
     commandTypes = ['FOR', 'WHILE', 'IF', 'ELSE', 'SET', 'WAIT', 'END']
     for funcBlock in newCode:
-        if funcBlock['CommandType'] not in commandTypes:
+        run[0] += 1
+        if funcBlock.get('CommandType') not in commandTypes:
             return (jsonify({'error':'Invalid argument CommandType must be FOR, WHILE, IF, ELSE, SET; Returning empty Code.'})), 400
         blockID = genRandomID(ids=blockIDs, prefix='Fun')
         blockIDs.append(blockID)
 
         queries[0] += ("(%s,%s,%s,%s),")
-        values[0] += (blockID, funcBlock['CommandType'], funcBlock['Number'], scheduleID,)
+        values[0] += (blockID, funcBlock.get('CommandType'), funcBlock.get('Number'), scheduleID,)
 
-        for link in funcBlock['LinkedCommands']:
+        for link in funcBlock.get('LinkedCommands'):
+            run[1] += 1
             queries[1] += ("(%s,%s,%s),")
             values[1] += (blockID, link, scheduleID,)
 
         pos = 0
-        for param in funcBlock['Params']:
+        for param in funcBlock.get('Params'):
+            run[2] += 1
             queries[2] += ("(%s,%s,%s,%s),")
             values[2] += (param, blockID, scheduleID, pos,)
             pos += 1
 
-    i = 0
-    for query in queries:
-        query = query[:-1]
-        cursor.execute(query, values[i])
-        i+=1
-
-    try:
-        connection.commit()
-    except Exception as e:
-        connection.rollback()
-        return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
+    for i in range(3):
+        if run[i] == 0:
+            continue
+        queries[i] = queries[i][:-1]
+        try:
+            cursor.execute(queries[i], values[i])
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            return(jsonify({"error":"Unable to update schedule code", "details":f"{e}"})), 500
             
     return get_schedule_detail(account, cursor, scheduleID)
 
@@ -304,12 +348,15 @@ def scheduleResponse():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_schedules(account, cursor)
     elif request.method == 'POST':
-        return create_schedule(account, cursor, connection)
+        return create_schedule(account, cursor, connection, request.json)
 
     cursor.close()
     connection.close()
@@ -324,14 +371,17 @@ def scheduleDetails(scheduleID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_schedule_detail(account, cursor, scheduleID)
     elif request.method == 'DELETE':
         return delete_schedule(account, cursor, connection, scheduleID)
     elif request.method == 'PATCH':
-        return update_schedule(account, cursor, connection, scheduleID)
+        return update_schedule(account, cursor, connection, scheduleID, request.json)
 
     cursor.close()
     connection.close()
