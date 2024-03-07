@@ -24,7 +24,7 @@ class Hub:
 
     ##CONSTRUCTOR##
     def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
-                 users:dict[User, int]={}, schedules: list[Schedule]=[], debug:bool=False):
+                 users:dict[str, int]={}, schedules: list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
 
@@ -51,6 +51,6 @@ def loadHubFromDatabase(id:str) -> Hub:
     users = cursor.fetchall()
     userDict = {}
     for user in users:
-        userDict[loadUserFromDatabase(user['AccountID'])] = user['PermissionLevel']
+        userDict[user['AccountID']] = user['PermissionLevel']
 
     return Hub(id=hub['HubID'], name=hub['HubName'], users=userDict)

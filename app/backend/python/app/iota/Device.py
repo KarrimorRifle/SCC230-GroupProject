@@ -7,6 +7,7 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
+from server import app
 
 ##CLASS DEFINITION##
 class Device:
@@ -18,20 +19,27 @@ class Device:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, isActive:bool=False,
-                 data:dict[str,any]={}, debug:bool=False):
+    def __init__(self, id:str, name:str, deviceType:str, ipAddress:str, hubID:str, isActive:bool=False,
+                 debug:bool=False):
         self.id = id
         self.name = name
-
+        self.deviceType = deviceType
+        self.ipAddress = ipAddress
+        self.hubID = hubID
         self.isActive = isActive
-        
-        self.data = data
-
         self.debug = debug
-        
+    
     #Updates the Data
     def updateData(self) -> dict[str, any]:
         pass
 
-def loadDeviceFromDatabase(id:str) -> Device:
+def loadFromDatabase(id:str) -> Device:
+    cursor = app.config['cursor']
+    query = ("SELECT * FROM devices "
+                "WHERE DeviceID = %s")
+
+    cursor.execute(query, (id,))
+    device = cursor.fetchone()
+
+    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
     pass
