@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   pythonapp:
     build: ./python/
@@ -13,6 +14,7 @@ services:
       - custom_network
     depends_on:
       - mysql
+      - mosquitto
 
   tests:
     build: ./python/
@@ -21,7 +23,8 @@ services:
       - custom_network
     depends_on:
       - mysql
-  
+      - mosquitto
+
   mysql:
     image: mysql:latest
     environment:
@@ -35,6 +38,15 @@ services:
       - custom_network
     ports:
       - "3306:3306"
+    restart: unless-stopped
+
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    networks:
+      - custom_network
+    restart: unless-stopped
 
 volumes:
   mysql_data:
