@@ -41,7 +41,9 @@ services:
     restart: unless-stopped
 
   mosquitto:
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.0.18
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
     ports:
       - "1883:1883"
     networks:
