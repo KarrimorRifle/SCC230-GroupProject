@@ -78,7 +78,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
             triggerDict[data['DeviceID']] = data['Data']
 
     code = []
-    varDict = {}
+    VarDict = {}
 
     query = ("SELECT Link, ParentID FROM function_block_links "
              "WHERE ScheduleID = %s")
@@ -106,23 +106,23 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
         code.append(funcBlock)
         if(funcBlock['CommandType'] == "SET"):
             try:
-                if(funcBlock['Params'][0] in varDict):
+                if(funcBlock['Params'][0] in VarDict):
                     exec(f"{'var = ' + funcBlock['Params'][2]}")
-                    if(type(var) == str and varDict[funcBlock['Params'][0]] != "STRING"):
-                        varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
-                    if(type(var) == bool and varDict[funcBlock['Params'][0]] != "BOOLEAN"):
-                        varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+                    if(type(var) == str and VarDict[funcBlock['Params'][0]] != "STRING"):
+                        VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+                    if(type(var) == bool and VarDict[funcBlock['Params'][0]] != "BOOLEAN"):
+                        VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
                     else:
                         if(type(var) == bool or type(var) == str):
-                            varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+                            VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
                 else:
                     exec(f"{'var = ' + funcBlock['Params'][2]}")
                     if(type(var) == str):
-                        varDict.update({funcBlock['Params'][0],"STRING"})
+                        VarDict.update({funcBlock['Params'][0],"STRING"})
                     if(type(var) == bool):
-                        varDict.update({funcBlock['Params'][0],"BOOLEAN"})
+                        VarDict.update({funcBlock['Params'][0],"BOOLEAN"})
                     else:
-                        varDict.update({funcBlock['Params'][0],"NUMBER"})
+                        VarDict.update({funcBlock['Params'][0],"NUMBER"})
             except Exception as e:
                 #error handler here
                 pass
@@ -141,7 +141,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'IsDraft': schedule['IsDraft'],
                'Rating': schedule['Rating'],
                'Code': code,
-               'varDict': varDict,
+               'VarDict': VarDict,
                'Trigger': triggerDict}
     
     return jsonify(details), 200
