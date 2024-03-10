@@ -25,7 +25,7 @@ class Device:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, ip:str, key:str, version:float,
-                 company:str="Tuya", mappings:dict[str,str]={}, debug:bool=False):
+                 company:str="Tuya", debug:bool=False):
         self.id = id
         self.name = name
 
@@ -35,10 +35,7 @@ class Device:
 
         if(self.company == "Tuya"):
             self.version = version
-            if(mappings != {}):
-                self.mappings = mappings
-            else:
-                self.mappings = self.getMappings()
+            self.mappings = self.getMappings()
 
         self.data = self.updateData()
 
