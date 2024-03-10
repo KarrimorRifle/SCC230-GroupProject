@@ -1,4 +1,4 @@
-export interface hubsList {
-  HubID: string,
-  HubName: string,
+export interface HubsList {
+  HubID: string;
+  HubName: string;
 }
