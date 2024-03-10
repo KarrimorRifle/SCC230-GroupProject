@@ -126,7 +126,8 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                     else:
                         varDict.update({funcBlock['Params'][0],"NUMBER"})
             except Exception as e:
-                print("Oh shit")
+                #error handler here
+                pass
         links = []
         paramVals = []
 
