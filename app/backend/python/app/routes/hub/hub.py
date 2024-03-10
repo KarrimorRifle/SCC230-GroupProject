@@ -8,12 +8,10 @@ hub = Blueprint('hub', __name__)
 def get_hubs(account, cursor):
     query = ("SELECT accounts_hubsRelation.PermissionLevel, hubs.* FROM accounts_hubsRelation "
              "JOIN hubs ON accounts_hubsRelation.HubID = hubs.HubID "
-             "WHERE AccountID = %s AND accounts_hubsRelation.PermissionLevel > 0")
+             "WHERE AccountID = %s AND accounts_hubsRelation.PermissionLevel > 0 ORDER BY HubName")
     
     cursor.execute(query, (account['AccountID'],))
     hubs = cursor.fetchall()
-
-    hubs = sorted(hubs, key=lambda x: x['HubName'])
 
     return jsonify(hubs), 200
 
