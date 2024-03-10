@@ -13,7 +13,6 @@ def get_hubs(account, cursor):
              "FROM accounts_hubsRelation "
              "JOIN hubs ON accounts_hubsRelation.HubID = hubs.HubID "
              "WHERE AccountID = %s AND accounts_hubsRelation.PermissionLevel > 0 "
-             "GROUP BY accounts_hubsRelation.HubID "
              "ORDER BY HubName")
     
     cursor.execute(query, (account['AccountID'],))
