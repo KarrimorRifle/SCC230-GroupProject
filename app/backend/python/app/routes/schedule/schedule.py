@@ -106,7 +106,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
         funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
         code.append(funcBlock)
-        if(funcBlock.commandType == "SET"):
+        if(funcBlock['CommandType'] == "SET"):
             try:
                 if(funcBlock['Params'][0] in varDict):
                     exec(f"{'var = ' + funcBlock['Params'][2]}")
