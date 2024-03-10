@@ -37,6 +37,7 @@ class TestHubRoutes(unittest.TestCase):
             self.assertIn('HubID', entry)
             self.assertIn('HubName', entry)
             self.assertIn('PermissionLevel', entry)
+            self.assertIn('UserCount', entry)
             self.assertEqual(entry['PermissionLevel'], 5)
     
     def test_get_one_hub_success(self):
