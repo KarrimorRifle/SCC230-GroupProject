@@ -18,13 +18,13 @@
           <div class="hub-list-container px-3">
             <div
               v-for="hub in hubList"
-              class="text-light mb-2"
+              class="text-light mt-2 mb-1"
               :key="hub.HubID"
             >
               <div class="card">
                 <div class="row">
                   <div
-                    class="col-8 border-end ps-4 d-flex justify-content-start align-items-center"
+                    class="col-xl-8 col-lg-7 col-md-6 col-4 border-end ps-4 d-flex justify-content-start align-items-center"
                   >
                     <b>
                       {{
@@ -34,7 +34,7 @@
                       }}
                     </b>
                   </div>
-                  <div class="col-1 border-end">
+                  <div class="col-md-1 col-2 border-end mt-1">
                     <img
                       v-if="hub.PermissionLevel == 5"
                       src="@/assets/permissions/5.svg"
@@ -66,13 +66,28 @@
                       style="max-width: 2rem"
                     />
                   </div>
-                  <div class="col-3 py-1">
+                  <div class="col-xl-3 col-lg-4 col-md-5 col-6 py-1">
                     <a
-                      class="btn btn-sm btn-secondary"
+                      class="btn btn-sm btn-secondary me-2"
+                      v-if="hub.PermissionLevel == 5"
                       :href="`/hubs/${hub.HubID}`"
                     >
                       EDIT
                     </a>
+                    <button
+                      class="btn btn-sm btn-info me-2"
+                      @click="console.log('VIEWING')"
+                      v-if="hub.PermissionLevel >= 1"
+                    >
+                      VIEW
+                    </button>
+                    <button
+                      class="btn btn-sm btn-danger mt-sm-0 mt-2"
+                      @click="console.log('DELETING')"
+                      v-if="hub.PermissionLevel == 5"
+                    >
+                      DELETE
+                    </button>
                   </div>
                 </div>
               </div>
