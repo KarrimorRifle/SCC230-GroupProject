@@ -116,17 +116,19 @@ class Schedule:
         for i in range(len(self.code)):
                 evalParams.append(self.__resolveVariable(self.code[i].params[0]))
                 if(self.code[i].commandType == "SET"):
-                    if(self.varDict[evalParams[0][16:-2]] == "UNDEFINED"):
-                        exec(f"{'var = ' + evalParams[0]}")
-                        if(type(var) == str):
-                            self.varDict.update({evalParams[0][16:-2],"STRING"})
-                        if(type(var) == bool):
-                            self.varDict.update({evalParams[0][16:-2],"BOOLEAN"})
+                    try:
+                        if(self.varDict[evalParams[0][16:-2]] == "UNDEFINED"):
+                            exec(f"{'var = ' + evalParams[0]}")
+                            if(type(var) == str):
+                                self.varDict.update({evalParams[0][16:-2],"STRING"})
+                            if(type(var) == bool):
+                                self.varDict.update({evalParams[0][16:-2],"BOOLEAN"})
+                            else:
+                                self.varDict.update({evalParams[0][16:-2],"NUMBER"})
                         else:
-                            self.varDict.update({evalParams[0][16:-2],"NUMBER"})
-                    else:
-                        self.__addToErrorLog("Variable:"+evalParams[0][16:-2]+" type changed at runtime. Please check that all SET blocks are correct.")
-
+                            self.__addToErrorLog("Variable:"+evalParams[0][16:-2]+" type changed at runtime. Please check that all SET blocks are correct.")
+                    except Exception as e:
+                        self.__addToErrorLog(e)
     ##PRIVATE METHODS##
     #Translates the schedule to actual code
     def __translateSchedule(self, index:int=0) -> int:
