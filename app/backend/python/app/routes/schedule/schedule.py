@@ -7,12 +7,12 @@ schedule = Blueprint('schedule', __name__)
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
     query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules "
-                "WHERE AuthorID = %s")
+                "WHERE AuthorID = %s "
+                "ORDER BY IsActive DESC, ScheduleName")
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
-    schedules = [schedule for schedule in schedules]
-    schedules = sorted(schedules, key=lambda x: (-x['IsActive'], x['ScheduleName']))
+
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
@@ -86,11 +86,9 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     linkedCommands = [link for link in linkedCommands]
 
     query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
-             "WHERE ScheduleID = %s")
+             "WHERE ScheduleID = %s ORDER BY ListPos")
     cursor.execute(query, (scheduleID,))
     params = cursor.fetchall()
-    params = [param for param in params]
-    params = sorted(params, key=lambda x: x['ListPos'])
 
     links = []
     paramVals = []
