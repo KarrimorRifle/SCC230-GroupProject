@@ -22,10 +22,26 @@
               :key="hub.HubID"
             >
               <div class="card">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-8">{{ hub.HubName }}</div>
-                    <div class="col-4">HELLO</div>
+                <div class="row">
+                  <div
+                    class="col-8 border-end ps-4 d-flex justify-content-start align-items-center"
+                  >
+                    <b>
+                      {{
+                        hub.HubName.length > 25
+                          ? hub.HubName.slice(0, 24) + "..."
+                          : hub.HubName
+                      }}
+                    </b>
+                  </div>
+                  <div class="col-1 border-end">ICON</div>
+                  <div class="col-3 py-1">
+                    <a
+                      class="btn btn-sm btn-secondary"
+                      :href="`/hubs/${hub.HubID}`"
+                    >
+                      EDIT
+                    </a>
                   </div>
                 </div>
               </div>
