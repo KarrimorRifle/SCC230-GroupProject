@@ -6,7 +6,11 @@ hub = Blueprint('hub', __name__)
 
 # Function returns list of hubs linked to user who is logged in
 def get_hubs(account, cursor):
-    query = ("SELECT accounts_hubsRelation.PermissionLevel, hubs.* FROM accounts_hubsRelation "
+    query = ("SELECT accounts_hubsRelation.PermissionLevel, hubs.*, "
+             "(SELECT COUNT(AccountID) "
+             "FROM accounts_hubsRelation " 
+             "WHERE accounts_hubsRelation.HubID = hubs.HubID) AS UserCount "
+             "FROM accounts_hubsRelation "
              "JOIN hubs ON accounts_hubsRelation.HubID = hubs.HubID "
              "WHERE AccountID = %s AND accounts_hubsRelation.PermissionLevel > 0 "
              "ORDER BY HubName")
