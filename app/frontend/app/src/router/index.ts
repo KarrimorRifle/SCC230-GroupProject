@@ -43,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "schedules editor",
     component: () => import("../views/schedules/ScheduleEdit.vue"),
   },
+  {
+    path: "/hubs",
+    name: "schedules editor",
+    component: () => import("../views/hubs/HubsList.vue"),
+  },
 ];
 
 const router = createRouter({

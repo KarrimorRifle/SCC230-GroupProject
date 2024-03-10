@@ -34,7 +34,6 @@
             >
           </li>
           <li class="nav-item">
-            <!-- add v-if="loggedIn" -->
             <a
               v-if="loggedIn"
               class="nav-link text-light"
@@ -44,11 +43,20 @@
             >
           </li>
           <li class="nav-item">
+            <a
+              v-if="loggedIn"
+              class="nav-link text-light"
+              href="/hubs"
+              :class="{ active: route.path == '/hubs' }"
+              >Hubs</a
+            >
+          </li>
+          <!-- <li class="nav-item">
             <a class="nav-link text-light">Link</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light" aria-disabled="true">Disabled</a>
-          </li>
+          </li> -->
         </ul>
         <div v-if="!loggedIn" class="d-flex justify-content-center">
           <div class="nav-item me-3">
