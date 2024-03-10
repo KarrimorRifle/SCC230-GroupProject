@@ -41,6 +41,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['IsPublic'], 1)
 
@@ -70,6 +71,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['IsPublic'], 0)
         self.assertEqual(data['AuthorID'], 'Accojk42VvlqdeBpOBc')
@@ -87,6 +89,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['IsPublic'], 0)
         self.assertEqual(data['HubID'], self.hubID)
