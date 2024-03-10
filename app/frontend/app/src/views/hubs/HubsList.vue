@@ -7,9 +7,17 @@
           <hr class="mt-0" />
           <div class="container">
             <h4>Sort by</h4>
-            <div class="input-group">
-              <div class="input-group-text">privelage</div>
+            <div class="input-group mb-2">
+              <div class="input-group-text">Privelage</div>
               <select id="privilage" class="form-select" v-model="sortRank">
+                <option value="NONE" selected>NONE</option>
+                <option value="ASC">ASCENDING</option>
+                <option value="DESC">DESCENDING</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <div class="input-group-text">User Count</div>
+              <select id="privilage" class="form-select" v-model="sortCount">
                 <option value="NONE" selected>NONE</option>
                 <option value="ASC">ASCENDING</option>
                 <option value="DESC">DESCENDING</option>
@@ -132,6 +140,7 @@ const searchValue = ref<string>("");
 
 //sorting menu
 const sortRank = ref<"NONE" | "ASC" | "DESC">("NONE");
+const sortCount = ref<"NONE" | "ASC" | "DESC">("NONE");
 
 const setup = async () => {
   let data = await axios.get("http://localhost:5000/hub", {
@@ -140,87 +149,17 @@ const setup = async () => {
 
   console.log(data.data);
   hubList.value = data.data;
-  // hubList.value = [
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 5,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 4,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 3,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 2,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 1,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 5,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 4,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 3,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 2,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 1,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 5,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 4,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 3,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 2,
-  //   },
-  //   {
-  //     HubID: "1",
-  //     HubName: "OMGAND",
-  //     PermissionLevel: 1,
-  //   },
-  // ];
 };
 
 const filteredHubs = computed(() => {
   let filter = hubList.value;
+
+  if (sortCount.value != "NONE")
+    filter.sort((hub1, hub2) =>
+      sortCount.value == "ASC"
+        ? hub1.UserCount - hub2.UserCount
+        : hub2.UserCount - hub1.UserCount
+    );
 
   if (sortRank.value != "NONE")
     filter.sort((hub1, hub2) =>
