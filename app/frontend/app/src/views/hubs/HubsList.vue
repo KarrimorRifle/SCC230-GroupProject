@@ -10,7 +10,8 @@
               <input
                 type="text"
                 class="form-control filter"
-                placeholder="Search for schedule"
+                placeholder="Search for Hub"
+                v-model="searchValue"
               />
             </div>
             <button class="btn btn-outline-primary border-2 text-light">
@@ -19,7 +20,7 @@
           </div>
           <div class="hub-list-container px-3">
             <div
-              v-for="hub in hubList"
+              v-for="hub in filteredHubs"
               class="text-light mt-2 mb-1"
               :key="hub.HubID"
             >
@@ -108,11 +109,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axios from "axios";
 import { HubsList } from "@/modules/hubs/types";
 
 const hubList = ref<HubsList[]>([]);
+const searchValue = ref<string>("");
 
 const setup = async () => {
   let data = await axios.get("http://localhost:5000/hub", {
@@ -120,85 +122,90 @@ const setup = async () => {
   });
 
   console.log(data.data);
-  // hubList.value = data.data;
-  hubList.value = [
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 5,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 4,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 3,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 2,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 1,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 5,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 4,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 3,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 2,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 1,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 5,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 4,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 3,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 2,
-    },
-    {
-      HubID: "1",
-      HubName: "OMGAND",
-      PermissionLevel: 1,
-    },
-  ];
+  hubList.value = data.data;
+  // hubList.value = [
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 5,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 4,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 3,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 2,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 1,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 5,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 4,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 3,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 2,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 1,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 5,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 4,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 3,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 2,
+  //   },
+  //   {
+  //     HubID: "1",
+  //     HubName: "OMGAND",
+  //     PermissionLevel: 1,
+  //   },
+  // ];
 };
+
+const filteredHubs = computed(() => {
+  let filter = hubList.value;
+  return filter.filter((hub) => hub.HubName.includes(searchValue.value));
+});
 
 setup();
 </script>
