@@ -78,6 +78,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
             triggerDict[data['DeviceID']] = data['Data']
 
     code = []
+    varDict = {}
 
     query = ("SELECT Link, ParentID FROM function_block_links "
              "WHERE ScheduleID = %s")
@@ -103,6 +104,8 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
         funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
         code.append(funcBlock)
+        if(funcBlock['CommandType'] == "SET"):
+            VarDictUpdate(funcBlock, varDict)
         links = []
         paramVals = []
 
@@ -118,9 +121,33 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'IsDraft': schedule['IsDraft'],
                'Rating': schedule['Rating'],
                'Code': code,
+               'VarDict': varDict,
                'Trigger': triggerDict}
     
     return jsonify(details), 200
+
+def VarDictUpdate(funcBlock, varDict):
+    try:
+        if(funcBlock['Params'][0] in varDict):
+            exec(f"{'var = ' + funcBlock['Params'][2]}")
+            if(type(var) == str and varDict[funcBlock['Params'][0]] != "STRING"):
+                varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+            if(type(var) == bool and varDict[funcBlock['Params'][0]] != "BOOLEAN"):
+                varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+            else:
+                if(type(var) == bool or type(var) == str):
+                    varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+        else:
+            exec(f"{'var = ' + funcBlock['Params'][2]}")
+            if(type(var) == str):
+                varDict.update({funcBlock['Params'][0],"STRING"})
+            if(type(var) == bool):
+                varDict.update({funcBlock['Params'][0],"BOOLEAN"})
+            else:
+                varDict.update({funcBlock['Params'][0],"NUMBER"})
+    except Exception as e:
+        #error handler here
+        pass
 
 # Function deletes schedule of specified ID as long as user is the author
 def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
@@ -180,7 +207,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID" or key == "CopyFrom":
+        if not key[0].isupper() or(key in ["Rating","NumRated","ScheduleID","HubID","AuthorID","CopyFrom","HubID","VarDict"]) or value == "":
             continue
         if key == "IsActive":
             isActive = value
