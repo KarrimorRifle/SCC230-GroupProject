@@ -15,6 +15,8 @@ def get_hubs(account, cursor):
 
     hubList = []
     for hub in hubs:
+        if hub['PermissionLevel'] == 0:
+            continue
         hubList.append({'HubID':hub['HubID'], 'HubName':hub['HubName'], 'PermissionLevel':hub['PermissionLevel']})
     hubList = sorted(hubList, key=lambda x: x['HubName'])
 
@@ -31,6 +33,9 @@ def get_one_hub(account, cursor, hubID):
         return jsonify({"error": "Hub not found"}), 404
     
     permLevel = hub['PermissionLevel']
+
+    if permLevel < 1:
+        return jsonify({"error": "Permission denied"}), 403
 
     query = ("SELECT * FROM hubs WHERE HubID = %s")
     cursor.execute(query, (hubID,))
