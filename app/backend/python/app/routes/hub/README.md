@@ -60,6 +60,7 @@ Lists ID, Name of all hubs current user is in.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+-   (int)UserCount - Num of Users in hub
 -   (int)PermissionLevel - Permission level of the current user
 <br>
 
