@@ -57,6 +57,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
     
     def test_update_schedule_success(self):
@@ -114,6 +115,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual({}, data['Trigger'])
         self.assertEqual(data['ScheduleName'], newName)

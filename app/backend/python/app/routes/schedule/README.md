@@ -182,6 +182,7 @@ Updates specified schedule data based on passed parameters.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
+-   (dict)VarDict - Dictionary with key of variable names and value of type contained
 -	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
 
 ##### Structure of Code:

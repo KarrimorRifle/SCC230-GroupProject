@@ -121,7 +121,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'IsDraft': schedule['IsDraft'],
                'Rating': schedule['Rating'],
                'Code': code,
-               'varDict': varDict,
+               'VarDict': varDict,
                'Trigger': triggerDict}
     
     return jsonify(details), 200
@@ -207,7 +207,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         if key == "Trigger":
             newTriggers = value
             continue
-        if not key[0].isupper() or key == "Rating" or key == "NumRated" or value == "" or key == "ScheduleID" or key == "HubID" or key == "AuthorID" or key == "CopyFrom":
+        if not key[0].isupper() or(key in ["Rating","NumRated","ScheduleID","HubID","AuthorID","CopyFrom","HubID","VarDict"]) or value == "":
             continue
         if key == "IsActive":
             isActive = value
