@@ -13,7 +13,9 @@
                 placeholder="Search for schedule"
               />
             </div>
-            <button class="btn btn-primary">CREATE</button>
+            <button class="btn btn-outline-primary border-2 text-light">
+              CREATE
+            </button>
           </div>
           <div class="hub-list-container px-3">
             <div
@@ -21,20 +23,15 @@
               class="text-light mt-2 mb-1"
               :key="hub.HubID"
             >
-              <div class="card">
+              <div class="card border-0 hub-card">
                 <div class="row">
                   <div
-                    class="col-xl-8 col-lg-7 col-md-6 col-4 border-end ps-4 d-flex justify-content-start align-items-center"
+                    class="col-md-1 col-2 ps-4"
+                    :class="{
+                      'my-1': hub.PermissionLevel != 5,
+                      'mt-2': hub.PermissionLevel == 5,
+                    }"
                   >
-                    <b>
-                      {{
-                        hub.HubName.length > 25
-                          ? hub.HubName.slice(0, 24) + "..."
-                          : hub.HubName
-                      }}
-                    </b>
-                  </div>
-                  <div class="col-md-1 col-2 border-end mt-1">
                     <img
                       v-if="hub.PermissionLevel == 5"
                       src="@/assets/permissions/5.svg"
@@ -66,25 +63,36 @@
                       style="max-width: 2rem"
                     />
                   </div>
-                  <div class="col-xl-3 col-lg-4 col-md-5 col-6 py-1">
+                  <div
+                    class="col ps-3 d-flex border-start justify-content-start align-items-center"
+                  >
                     <a
-                      class="btn btn-sm btn-secondary me-2"
-                      v-if="hub.PermissionLevel == 5"
+                      :href="`/hubs/${hub.HubID}`"
+                      style="text-decoration: none"
+                      class="text-light"
+                    >
+                      <b>
+                        {{
+                          hub.HubName.length > 25
+                            ? hub.HubName.slice(0, 24) + "..."
+                            : hub.HubName
+                        }}
+                      </b>
+                    </a>
+                  </div>
+                  <div
+                    class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-5 ps-2 py-2 border-start d-flex"
+                    v-if="hub.PermissionLevel == 5"
+                  >
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2 text-light border-2"
                       :href="`/hubs/${hub.HubID}`"
                     >
                       EDIT
-                    </a>
-                    <button
-                      class="btn btn-sm btn-info me-2"
-                      @click="console.log('VIEWING')"
-                      v-if="hub.PermissionLevel >= 1"
-                    >
-                      VIEW
                     </button>
                     <button
-                      class="btn btn-sm btn-danger mt-sm-0 mt-2"
+                      class="btn btn-sm btn-outline-danger mt-sm-0 mt-2 text-light border-2"
                       @click="console.log('DELETING')"
-                      v-if="hub.PermissionLevel == 5"
                     >
                       DELETE
                     </button>
@@ -112,7 +120,84 @@ const setup = async () => {
   });
 
   console.log(data.data);
-  hubList.value = data.data;
+  // hubList.value = data.data;
+  hubList.value = [
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 5,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 4,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 3,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 2,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 1,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 5,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 4,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 3,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 2,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 1,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 5,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 4,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 3,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 2,
+    },
+    {
+      HubID: "1",
+      HubName: "OMGAND",
+      PermissionLevel: 1,
+    },
+  ];
 };
 
 setup();
@@ -122,7 +207,7 @@ setup();
 .main-hub-list-viewer {
   display: flex;
   flex-grow: 1;
-  background-color: rgb(53, 63, 98);
+  background-color: rgb(32, 38, 62);
   min-height: 0;
 }
 
@@ -143,5 +228,9 @@ setup();
 div {
   min-height: 0;
   max-height: 100%;
+}
+
+.hub-card {
+  background-color: rgb(36, 42, 66);
 }
 </style>
