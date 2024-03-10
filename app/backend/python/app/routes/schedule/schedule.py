@@ -105,27 +105,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
         funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
         code.append(funcBlock)
         if(funcBlock['CommandType'] == "SET"):
-            try:
-                if(funcBlock['Params'][0] in VarDict):
-                    exec(f"{'var = ' + funcBlock['Params'][2]}")
-                    if(type(var) == str and VarDict[funcBlock['Params'][0]] != "STRING"):
-                        VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
-                    if(type(var) == bool and VarDict[funcBlock['Params'][0]] != "BOOLEAN"):
-                        VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
-                    else:
-                        if(type(var) == bool or type(var) == str):
-                            VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
-                else:
-                    exec(f"{'var = ' + funcBlock['Params'][2]}")
-                    if(type(var) == str):
-                        VarDict.update({funcBlock['Params'][0],"STRING"})
-                    if(type(var) == bool):
-                        VarDict.update({funcBlock['Params'][0],"BOOLEAN"})
-                    else:
-                        VarDict.update({funcBlock['Params'][0],"NUMBER"})
-            except Exception as e:
-                #error handler here
-                pass
+            checkVarType(funcBlock, VarDict)
         links = []
         paramVals = []
 
@@ -145,6 +125,30 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'Trigger': triggerDict}
     
     return jsonify(details), 200
+
+#check variable type that is SET and adds it to VarDict
+def checkVarType(funcBlock, VarDict):
+    try:
+        if(funcBlock['Params'][0] in VarDict):
+            exec(f"{'var = ' + funcBlock['Params'][2]}")
+            if(type(var) == str and VarDict[funcBlock['Params'][0]] != "STRING"):
+                VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+            if(type(var) == bool and VarDict[funcBlock['Params'][0]] != "BOOLEAN"):
+                VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+            else:
+                if(type(var) == bool or type(var) == str):
+                    VarDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+        else:
+            exec(f"{'var = ' + funcBlock['Params'][2]}")
+            if(type(var) == str):
+                VarDict.update({funcBlock['Params'][0],"STRING"})
+            if(type(var) == bool):
+                VarDict.update({funcBlock['Params'][0],"BOOLEAN"})
+            else:
+                VarDict.update({funcBlock['Params'][0],"NUMBER"})
+    except Exception as e:
+        #error handler here
+        pass
 
 # Function deletes schedule of specified ID as long as user is the author
 def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
