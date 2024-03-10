@@ -179,11 +179,12 @@ class Schedule:
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for a set statement
             case "SET":
-                if(self.debug):
-                    #print response from set statement
-                    pass
                 exec(f"{' '.join(evalParams)}")
 
+                #Checks if there are any changes to devices
+                for i in range(len(self.devices)):
+                    self.devices[i].sendAllData(_devices[i].data)
+                
                 #set a value of param 1 to param 2 (requires prereq devices working)
                 self.code[index].hasRun+=1
                 return index+1
