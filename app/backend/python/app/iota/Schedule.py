@@ -49,7 +49,6 @@ class Schedule:
     #code       Holds the untranslated code for a schedule
     #devices    Holds the devices linked to the schedule
     #variables  Holds the variables used throughout the code
-    #varDict    Holds all used variables and it's type 
     #isRunning  Checks if the schedule is currently running
     #isActive   Checks if the schedule is currently able to run
     #debug      Enables print statements for debugging purpose
@@ -68,10 +67,8 @@ class Schedule:
         self.code = code
     
         self.variables ={}
-        self.varDict = {}
         self.devices = self.findDevices()
         self.debug = debug
-        self.getVars()
 
     ##PUBLIC METHODS##
     #Runs the code to completion, and resets the values needed
@@ -109,26 +106,7 @@ class Schedule:
                     if(newDevice != None):
                         devices.append(newDevice)
         return devices
-    
-    #gets the type for each variable in the program
-    def getVars(self):
-        evalParams = []
-        for i in range(len(self.code)):
-                evalParams.append(self.__resolveVariable(self.code[i].params[0]))
-                if(self.code[i].commandType == "SET"):
-                    try:
-                        if(self.varDict[evalParams[0][16:-2]] == "UNDEFINED"):
-                            exec(f"{'var = ' + evalParams[0]}")
-                            if(type(var) == str):
-                                self.varDict.update({evalParams[0][16:-2],"STRING"})
-                            if(type(var) == bool):
-                                self.varDict.update({evalParams[0][16:-2],"BOOLEAN"})
-                            else:
-                                self.varDict.update({evalParams[0][16:-2],"NUMBER"})
-                        else:
-                            self.__addToErrorLog("Variable:"+evalParams[0][16:-2]+" type changed at runtime. Please check that all SET blocks are correct.")
-                    except Exception as e:
-                        self.__addToErrorLog(e)
+        
     ##PRIVATE METHODS##
     #Translates the schedule to actual code
     def __translateSchedule(self, index:int=0) -> int:
@@ -265,7 +243,6 @@ class Schedule:
                     #checks if the variable already exists
                     if(sVariable[1] not in self.variables.keys()):
                         self.variables.update({sVariable[1]:''})
-                        self.varDict.update({sVariable[1]:"UNDEFINED"})
                     return f'self.variables["{sVariable[1]}"]'
                 else:
                     #checks if the variable passed is a valid device variable  
