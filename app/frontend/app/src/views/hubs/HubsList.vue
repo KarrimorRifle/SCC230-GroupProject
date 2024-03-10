@@ -34,7 +34,38 @@
                       }}
                     </b>
                   </div>
-                  <div class="col-1 border-end">ICON</div>
+                  <div class="col-1 border-end">
+                    <img
+                      v-if="hub.PermissionLevel == 5"
+                      src="@/assets/permissions/5.svg"
+                      alt=""
+                      style="max-width: 2rem"
+                    />
+                    <img
+                      v-else-if="hub.PermissionLevel == 4"
+                      src="@/assets/permissions/4.svg"
+                      alt=""
+                      style="max-width: 2rem"
+                    />
+                    <img
+                      v-else-if="hub.PermissionLevel == 3"
+                      src="@/assets/permissions/3.svg"
+                      alt=""
+                      style="max-width: 2rem"
+                    />
+                    <img
+                      v-else-if="hub.PermissionLevel == 2"
+                      src="@/assets/permissions/2.svg"
+                      alt=""
+                      style="max-width: 2rem"
+                    />
+                    <img
+                      v-else-if="hub.PermissionLevel == 1"
+                      src="@/assets/permissions/1.svg"
+                      alt=""
+                      style="max-width: 2rem"
+                    />
+                  </div>
                   <div class="col-3 py-1">
                     <a
                       class="btn btn-sm btn-secondary"
@@ -65,6 +96,7 @@ const setup = async () => {
     withCredentials: true,
   });
 
+  console.log(data.data);
   hubList.value = data.data;
 };
 
