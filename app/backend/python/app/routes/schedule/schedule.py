@@ -7,12 +7,12 @@ schedule = Blueprint('schedule', __name__)
 # Function returns list of schedules linked to user who is logged in
 def get_schedules(account, cursor):
     query = ("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules "
-                "WHERE AuthorID = %s")
+                "WHERE AuthorID = %s "
+                "ORDER BY IsActive DESC, ScheduleName")
     
     cursor.execute(query, (account['AccountID'],))
     schedules = cursor.fetchall()
-    schedules = [schedule for schedule in schedules]
-    schedules = sorted(schedules, key=lambda x: (-x['IsActive'], x['ScheduleName']))
+
     return jsonify(schedules), 200
 
 #TO BE UPDATED BASED ON DATABASE ID CHANGES
@@ -87,11 +87,9 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     linkedCommands = [link for link in linkedCommands]
 
     query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
-             "WHERE ScheduleID = %s")
+             "WHERE ScheduleID = %s ORDER BY ListPos")
     cursor.execute(query, (scheduleID,))
     params = cursor.fetchall()
-    params = [param for param in params]
-    params = sorted(params, key=lambda x: x['ListPos'])
 
     links = []
     paramVals = []
@@ -225,9 +223,11 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         connection.rollback()
         return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    query = ("SELECT IsDraft FROM schedules WHERE ScheduleID = %s")
+    query = ("SELECT IsDraft, HubID FROM schedules WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
-    draftStatus = cursor.fetchone()['IsDraft']
+    sched = cursor.fetchone()
+    draftStatus = sched['IsDraft']
+    hubID = sched['HubID']
 
     if draftStatus+isActive > 1:
         return jsonify({"error" : "Draft Schedule cannot be active"}), 400
@@ -244,7 +244,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    if newTriggers is not None:
+    if newTriggers is not None and hubID is not None:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
         cursor.execute(query, (scheduleID,))

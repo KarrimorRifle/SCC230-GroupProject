@@ -158,7 +158,7 @@ def logout():
     except Exception as e:
         connection.rollback()
         return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
-    return
+    return 200
         
 def getAccount():
     cursor = current_app.config['cursor']

@@ -60,6 +60,7 @@ Lists ID, Name of all hubs current user is in.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+-   (int)PermissionLevel - Permission level of the current user
 <br>
 
 #### POST:
@@ -95,6 +96,7 @@ Lists ID, Name of specified hub current user is in.
 ##### Return Values:
 -	(string)HubID – Unique ID to identify specified hub
 -	(string)HubName – Name of hub
+-   (int)PermissionLevel - Permission level of the current user
 <br>
 
 #### DELETE:
@@ -115,7 +117,11 @@ Updates specified hub data based on passed parameters if user has perms.
 -	(string)HubName – Name of hub
 
 ##### Return Values:
--	(string)HubID – Unique ID to identify specified hub  <br><br><br><br>
+-	(string)HubID – Unique ID to identify specified hub
+-	(string)HubName – Name of hub
+-   (int)PermissionLevel - Permission level of the current user
+
+<br><br><br><br>
 
 
 ### LINKS TO RELATED DOCS <br>
