@@ -2,7 +2,21 @@
   <div class="main-hub-list-viewer mx-xl-5">
     <div class="container-fluid">
       <div class="row hub-list-row">
-        <div class="col-3">yo</div>
+        <div class="col-3 text-light">
+          <h3 class="my-3">FILTERS</h3>
+          <hr class="mt-0" />
+          <div class="container">
+            <h4>Sort by</h4>
+            <div class="input-group">
+              <div class="input-group-text">privelage</div>
+              <select id="privilage" class="form-select" v-model="sortRank">
+                <option value="NONE" selected>NONE</option>
+                <option value="ASC">ASCENDING</option>
+                <option value="DESC">DESCENDING</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="col bg-dark d-flex flex-column">
           <h3 class="px-3 text-light mt-2" style="text-align: start">HUBS</h3>
           <div class="d-flex justify-content-start pb-3 border-bottom">
@@ -116,6 +130,9 @@ import { HubsList } from "@/modules/hubs/types";
 const hubList = ref<HubsList[]>([]);
 const searchValue = ref<string>("");
 
+//sorting menu
+const sortRank = ref<"NONE" | "ASC" | "DESC">("NONE");
+
 const setup = async () => {
   let data = await axios.get("http://localhost:5000/hub", {
     withCredentials: true,
@@ -204,6 +221,14 @@ const setup = async () => {
 
 const filteredHubs = computed(() => {
   let filter = hubList.value;
+
+  if (sortRank.value != "NONE")
+    filter.sort((hub1, hub2) =>
+      sortRank.value == "ASC"
+        ? hub1.PermissionLevel - hub2.PermissionLevel
+        : hub2.PermissionLevel - hub1.PermissionLevel
+    );
+
   return filter.filter((hub) => hub.HubName.includes(searchValue.value));
 });
 
