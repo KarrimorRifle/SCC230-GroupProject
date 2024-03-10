@@ -201,9 +201,11 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
         connection.rollback()
         return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    query = ("SELECT IsDraft FROM schedules WHERE ScheduleID = %s")
+    query = ("SELECT IsDraft, HubID FROM schedules WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
-    draftStatus = cursor.fetchone()['IsDraft']
+    sched = cursor.fetchone()
+    draftStatus = sched['IsDraft']
+    hubID = sched['HubID']
 
     if draftStatus+isActive > 1:
         return jsonify({"error" : "Draft Schedule cannot be active"}), 400
@@ -220,7 +222,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    if newTriggers is not None:
+    if newTriggers is not None and hubID is not None:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
         cursor.execute(query, (scheduleID,))

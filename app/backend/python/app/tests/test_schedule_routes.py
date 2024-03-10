@@ -115,6 +115,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
         self.assertIn('Trigger', data)
+        self.assertEqual({}, data['Trigger'])
         self.assertEqual(data['ScheduleName'], newName)
         self.assertEqual(data['IsPublic'], 1)
         self.assertIn(code[0], data['Code'])

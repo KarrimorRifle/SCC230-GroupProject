@@ -36,6 +36,8 @@ class TestHubRoutes(unittest.TestCase):
         for entry in data:
             self.assertIn('HubID', entry)
             self.assertIn('HubName', entry)
+            self.assertIn('PermissionLevel', entry)
+            self.assertEqual(entry['PermissionLevel'], 5)
     
     def test_get_one_hub_success(self):
         response = self.client_server.post("/hub", json={'HubName': 'Test Hub3'})
@@ -49,7 +51,9 @@ class TestHubRoutes(unittest.TestCase):
 
         self.assertIn('HubID', data)
         self.assertIn('HubName', data)
+        self.assertIn('PermissionLevel', data)
         self.assertEqual(data['HubName'], 'Test Hub3')
+        self.assertEqual(data['PermissionLevel'], 5)
 
     def test_update_hub_success(self):
         response = self.client_server.post("/hub", json={'HubName': 'Test Hub1'})
@@ -63,4 +67,6 @@ class TestHubRoutes(unittest.TestCase):
 
         self.assertIn('HubID', data)
         self.assertIn('HubName', data)
+        self.assertIn('PermissionLevel', data)
         self.assertEqual(data['HubName'], 'Test Hub2')
+        self.assertEqual(data['PermissionLevel'], 5)
