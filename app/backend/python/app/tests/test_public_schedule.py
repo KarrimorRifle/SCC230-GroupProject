@@ -5,7 +5,7 @@ from server import app
 class TestPublicScheduleRoutes(unittest.TestCase):
     def setUp(self):
         self.client_server = app.test_client()
-        self.client_server.post("/login", json={"Email": "jhondoe@gmail.com", "Password": "JhonDoe123."})
+        self.client_server.post("/login", json={"Email": "janedoe@gmail.com", "Password": "JaneDoe123."})
         
         response = self.client_server.post("/hub", json={'HubName': 'Test Hub'})
         self.assertEqual(response.status_code, 200)
@@ -74,7 +74,7 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['IsPublic'], 0)
-        self.assertEqual(data['AuthorID'], 'Accojk42VvlqdeBpOBc')
+        self.assertEqual(data['AuthorID'], 'Acc89kaE64Aize3NX2j')
     
     def test_save_public_schedule_to_hub(self):
         response = self.client_server.post(f'/hub/{self.hubID}/schedule/public/Schk129jd2i23kd34af')
