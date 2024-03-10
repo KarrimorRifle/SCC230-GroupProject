@@ -6,7 +6,7 @@ hub = Blueprint('hub', __name__)
 
 # Function returns list of hubs linked to user who is logged in
 def get_hubs(account, cursor):
-    query = ("SELECT hubs.* FROM accounts_hubsRelation "
+    query = ("SELECT accounts_hubsRelation.PermissionLevel, hubs.* FROM accounts_hubsRelation "
              "JOIN hubs ON accounts_hubsRelation.HubID = hubs.HubID "
              "WHERE AccountID = %s")
     
@@ -15,7 +15,7 @@ def get_hubs(account, cursor):
 
     hubList = []
     for hub in hubs:
-        hubList.append({'HubID':hub['HubID'], 'HubName':hub['HubName']})
+        hubList.append({'HubID':hub['HubID'], 'HubName':hub['HubName'], 'PermissionLevel':hub['PermissionLevel']})
     hubList = sorted(hubList, key=lambda x: x['HubName'])
 
     return jsonify(hubList), 200
@@ -29,11 +29,13 @@ def get_one_hub(account, cursor, hubID):
 
     if hub is None:
         return jsonify({"error": "Hub not found"}), 404
+    
+    permLevel = hub['PermissionLevel']
 
     query = ("SELECT * FROM hubs WHERE HubID = %s")
     cursor.execute(query, (hubID,))
     hub = cursor.fetchone()
-    return jsonify({'HubID':hub['HubID'], 'HubName':hub['HubName']}), 200
+    return jsonify({'HubID':hub['HubID'], 'HubName':hub['HubName'], 'PermissionLevel': permLevel}), 200
 
 # Function creates new hub and links it to user who is logged in
 def create_hub(account, cursor, connection):
@@ -92,13 +94,15 @@ def update_hub(account, cursor, connection, hubID):
     if hub is None:
         return jsonify({"error": "Hub not found"}), 404
     
-    if hub['PermissionLevel'] < 5:
+    permLevel = hub['PermissionLevel']
+    
+    if permLevel < 5:
         return jsonify({"error": "Permission denied"}), 403
 
     query = ("UPDATE hubs SET HubName = %s WHERE HubID = %s")
     cursor.execute(query, (hubName, hubID,))
     connection.commit()
-    return jsonify({'HubID': hubID, 'HubName': hubName}), 200
+    return jsonify({'HubID': hubID, 'HubName': hubName, 'PermissionLevel': permLevel}), 200
 
 @hub.route('/hub', methods=['GET', 'POST'])
 def hub_route():
