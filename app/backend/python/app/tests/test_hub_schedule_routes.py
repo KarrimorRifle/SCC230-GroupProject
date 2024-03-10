@@ -33,6 +33,7 @@ class TestHubRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['HubID'], self.hubID)
         self.assertNotEqual(og_scheduleID, data['ScheduleID'])
@@ -60,6 +61,7 @@ class TestHubRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertNotEqual(og_scheduleID, data['ScheduleID'])
         self.assertEqual(data['HubID'], self.hubID)
@@ -85,6 +87,7 @@ class TestHubRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
         self.assertEqual(data['HubID'], self.hubID)
 
@@ -122,6 +125,7 @@ class TestHubRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
 
     def test_get_one_hub_schedule_failure(self):
@@ -180,4 +184,5 @@ class TestHubRoutes(unittest.TestCase):
         self.assertIn('Rating', data)
         self.assertIn('AuthorID', data)
         self.assertIn('Code', data)
+        self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
