@@ -10,6 +10,7 @@ class test_user(unittest.TestCase):
 
     def test_create_device(self):
         response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 1", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
+        print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('DeviceID', response.data.decode('utf-8'))
 
