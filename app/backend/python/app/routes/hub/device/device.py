@@ -34,7 +34,7 @@ def create_device(account, cursor, connection, hubID):
     if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"+hubID}), 403
     
-    thisID = str(request.json.get('DeviceID'))
+    thisID = request.json.get('DeviceID')
 
     query = ("INSERT INTO devices (DeviceID, `Key`, DeviceName, Company, Version, IpAddress, HubID) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)")
@@ -82,8 +82,8 @@ def delete_device(account, cursor, connection, deviceID, hubID):
     cursor.execute(query, (deviceID,))
     trigger = cursor.fetchall()
 
-    if trigger is not None:
-        return({"error": "device in use"}), 409
+    if len(trigger) > 0:
+        return({"error": f"device in use at {trigger}"}), 409
 
     query = ("DELETE FROM devices WHERE DeviceID = %s" )
     cursor.execute(query, (deviceID,))
