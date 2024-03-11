@@ -53,7 +53,7 @@ CREATE TABLE `devices`(
     `DeviceName` VARCHAR(255) NOT NULL,
     `Key` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
-    `Version` DECIMAL(5, 2),
+    `Version` FLOAT,
     `Company` VARCHAR(255) NOT NULL DEFAULT "Tuya",
     `HubID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
