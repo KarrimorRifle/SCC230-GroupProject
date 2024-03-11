@@ -3,7 +3,6 @@ import bcrypt
 import uuid
 from datetime import datetime, timedelta
 from iota import genRandomID
-from schedule.schedule import delete_schedule, get_schedules
 
 accounts = Blueprint('accounts', __name__)
 
@@ -86,19 +85,6 @@ def accountsResonse():
             return jsonify({"error": "Session ID is invalid"}), 401
         
         if (not request.json.get("Password") is None) and bcrypt.checkpw(request.json.get('Password').encode('utf-8'), account['Password'].encode('utf-8')):
-            queries = [("DELETE FROM function_block_params WHERE AuthorID = %s" ),
-                       ("DELETE FROM function_block_links WHERE AuthorID = %s" ),
-                       ("DELETE FROM function_blocks WHERE AuthorID = %s" ),
-                       ("DELETE FROM triggers WHERE AuthorID = %s" ),
-                       ("DELETE FROM schedules WHERE AuthorID = %s" )]
-            for query in queries:
-                try:
-                    cursor.execute(query, (account['AccountID'],))
-                    connection.commit()
-                except Exception as e:
-                    connection.rollback()
-                    return jsonify({"error": str(e)}), 500
-            
             query = ("DELETE FROM accounts WHERE SessionID = %s AND AccountID = %s" )
             try:
                 cursor.execute(query, (account['SessionID'], account['AccountID']))
