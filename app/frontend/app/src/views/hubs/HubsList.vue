@@ -95,7 +95,10 @@
                 v-model="searchValue"
               />
             </div>
-            <button class="btn btn-outline-primary border-2 text-light">
+            <button
+              class="btn btn-outline-primary border-2 text-light"
+              @click="makeHub()"
+            >
               CREATE
             </button>
           </div>
@@ -183,7 +186,7 @@
                     </button>
                     <button
                       class="btn btn-sm btn-outline-danger text-light border-2"
-                      @click="console.log('DELETING')"
+                      @click="deleteHub(hub.HubID)"
                     >
                       DELETE
                     </button>
@@ -238,6 +241,26 @@ const filteredHubs = computed(() => {
 
   return filter.filter((hub) => hub.HubName.includes(searchValue.value));
 });
+
+const makeHub = async () => {
+  await axios.post(
+    "http://localhost:5000/hub",
+    {
+      HubName: `HUB ${hubList.value.length}`,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+  setup();
+};
+
+const deleteHub = async (id: string) => {
+  await axios.delete(`http://localhost:5000/hub/${id}`, {
+    withCredentials: true,
+  });
+  setup();
+};
 
 setup();
 </script>
