@@ -36,7 +36,7 @@ def create_device(account, cursor, connection, hubID):
     
     thisID = str(request.json.get('DeviceID'))
 
-    query = ("INSERT INTO devices (DeviceID, Key, DeviceName, Company, Version, IpAddress, HubID) "
+    query = ("INSERT INTO devices (DeviceID, `Key`, DeviceName, Company, Version, IpAddress, HubID) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)")
     try:
         cursor.execute(query, (thisID, request.json.get('Key'), request.json.get('DeviceName'), request.json.get('Company'), request.json.get('Version'), request.json.get('IpAddress'), hubID,))
