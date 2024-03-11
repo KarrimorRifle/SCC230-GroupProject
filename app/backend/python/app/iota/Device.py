@@ -2,8 +2,8 @@
 #Desc:          File to hold the Device Class and related Functions
 #               The Function of the Device Class is to hold information about IOT Devices
 #
-#Last Update:   2024-3-10
-#Updated By:    Kian Tomkins
+#Last Update:   2024-3-11
+#Updated By:    Aditya Khan
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
