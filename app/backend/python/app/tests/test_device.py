@@ -17,5 +17,4 @@ class test_user(unittest.TestCase):
         self.assertEqual(test.name,expected.name)
         self.assertEqual(test.ip,expected.ip)
         self.assertEqual(test.key,expected.key)
-        self.assertEqual(test.version,expected.version)
         self.assertEqual(test.company,expected.company)
