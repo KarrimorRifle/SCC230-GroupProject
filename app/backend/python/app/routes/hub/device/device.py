@@ -67,21 +67,14 @@ def get_device_detail(account, cursor, deviceID, hubID):
     return jsonify(device), 200
 
 #Function deletes device of specified ID
-def delete_device(account, cursor, connection, deviceID):
+def delete_device(account, cursor, connection, deviceID, hubID):
     query = ("SELECT * FROM devices "
-                "WHERE DeviceID = %s")
-    cursor.execute(query, (deviceID,))
+                "JOIN accounts_hubsRelation ON devices.HubID = accounts_hubsRelation.HubID "
+                "WHERE devices.DeviceID = %s AND devices.HubID = %s AND accounts_hubsRelation.AccountID = %s")
+    cursor.execute(query, (deviceID, hubID, account['AccountID'],))
     checkExists = cursor.fetchone()
 
-    if checkExists is None:
-        return({"error": "device not found"}), 404
-    
-    query = ("SELECT * FROM accounts_hubsRelation "
-                "WHERE AccountID = %s AND HubID = %s")
-    cursor.execute(query, (account['AccountID'], checkExists['HubID'],))
-    checkPerm = cursor.fetchone()
-
-    if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
+    if checkExists is None or checkExists['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
     query = ("SELECT * FROM trigger_data "
@@ -89,7 +82,7 @@ def delete_device(account, cursor, connection, deviceID):
     cursor.execute(query, (deviceID,))
     trigger = cursor.fetchall()
 
-    if trigger != []:
+    if trigger is not None:
         return({"error": "device in use"}), 409
 
     query = ("DELETE FROM devices WHERE DeviceID = %s" )
@@ -104,21 +97,14 @@ def delete_device(account, cursor, connection, deviceID):
     return jsonify(deviceID), 200
 
 # Function updates device of specified ID based on input params
-def update_device(account, cursor, connection, deviceID):
+def update_device(account, cursor, connection, deviceID, hubID):
     query = ("SELECT * FROM devices "
-                "WHERE DeviceID = %s")
-    cursor.execute(query, (deviceID,))
+                "JOIN accounts_hubsRelation ON devices.HubID = accounts_hubsRelation.HubID "
+                "WHERE devices.DeviceID = %s AND devices.HubID = %s AND accounts_hubsRelation.AccountID = %s")
+    cursor.execute(query, (deviceID, hubID, account['AccountID'],))
     checkExists = cursor.fetchone()
 
-    if checkExists is None:
-        return({"error": "device not found"}), 404
-    
-    query = ("SELECT * FROM accounts_hubsRelation "
-                "WHERE AccountID = %s AND HubID = %s")
-    cursor.execute(query, (account['AccountID'], checkExists['HubID'],))
-    checkPerm = cursor.fetchone()
-
-    if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
+    if checkExists is None or checkExists['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
     updateParams = []
@@ -175,9 +161,9 @@ def deviceDetails(hubID,deviceID):
     if request.method == 'GET':
         return get_device_detail(account, cursor, deviceID, hubID)
     elif request.method == 'DELETE':
-        return delete_device(account, cursor, connection, deviceID)
+        return delete_device(account, cursor, connection, deviceID, hubID)
     elif request.method == 'PATCH':
-        return update_device(account, cursor, connection, deviceID)
+        return update_device(account, cursor, connection, deviceID, hubID)
 
     cursor.close()
     connection.close()
