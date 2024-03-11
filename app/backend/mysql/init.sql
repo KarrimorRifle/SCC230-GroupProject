@@ -30,8 +30,8 @@ CREATE TABLE `accounts_hubsRelation`(
     `HubID` varchar(100) NOT NULL,
     `PermissionLevel` INT NOT NULL,
     CONSTRAINT UserHubRelation PRIMARY KEY (AccountID, HubID),
-    FOREIGN KEY (AccountID) REFERENCES accounts(AccountID),
-    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
+    FOREIGN KEY (AccountID) REFERENCES accounts(AccountID) ON DELETE CASCADE,
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
 INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
@@ -42,7 +42,7 @@ CREATE TABLE `hub_inviteTokens`(
     `HubID` VARCHAR(100) NOT NULL,
     `Token` VARCHAR(50) NOT NULL,
     `Expiry` INT NOT NULL,
-    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
 INSERT INTO hub_inviteTokens(`HubID`, `Token`, `Expiry`)
@@ -54,7 +54,7 @@ CREATE TABLE `devices`(
     `DeviceType` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
     `HubID` varchar(100) NOT NULL,
-    FOREIGN KEY (HubID) REFERENCES hubs(HubID)
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
 INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
@@ -72,7 +72,7 @@ CREATE TABLE `schedules`(
     `NumRated` INT UNSIGNED DEFAULT 0,
     `IsDraft` TINYINT UNSIGNED NOT NULL DEFAULT 1,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID),
-    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID),
+    FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID) ON DELETE CASCADE,
     FOREIGN KEY (CopyFrom) REFERENCES accounts(AccountID)
 );
 
@@ -86,7 +86,7 @@ CREATE TABLE `triggers`(
     `TriggerID` VARCHAR(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     PRIMARY KEY (TriggerID, ScheduleID),
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID) ON DELETE CASCADE
 );
 
 INSERT INTO triggers(`TriggerID`,`ScheduleID`)
@@ -98,8 +98,8 @@ CREATE TABLE `trigger_data`(
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
     `ListPos` INT UNSIGNED NOT NULL,
-    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID),
-    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID)
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE,
+    FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID) ON DELETE CASCADE
 );
 
 ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
@@ -112,7 +112,7 @@ CREATE TABLE `function_blocks`(
     `CommandType` VARCHAR(20) NOT NULL,
     `Num` INT NOT NULL, 
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID) ON DELETE CASCADE
     -- `num` referenced as foreign key, must be unique.
 );
 
@@ -122,8 +122,8 @@ CREATE TABLE `function_block_params`(
     `FunctionBlockID` varchar(100) NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
     `ListPos` INT UNSIGNED NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID),
-    FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID) ON DELETE CASCADE,
+    FOREIGN KEY (FunctionBlockID) REFERENCES function_blocks(BlockID) ON DELETE CASCADE
 );
 
 ALTER TABLE function_block_params MODIFY ListPos INT DEFAULT 0;
@@ -133,8 +133,8 @@ CREATE TABLE `function_block_links`(
     `ParentID` varchar(100) NOT NULL,
     `Link` INT NOT NULL,
     `ScheduleID` varchar(100) NOT NULL,
-    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID), 
-    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID)
+    FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID) ON DELETE CASCADE, 
+    FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID) ON DELETE CASCADE
 );
 
 -- To reset DB delete the container and start up again
