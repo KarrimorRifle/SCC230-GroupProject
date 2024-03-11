@@ -156,7 +156,7 @@ class TestHubRoutes(unittest.TestCase):
 
         val1 = ['Var', '==', '5']
         val2 = ['Var2', '==', '8']
-        trigger = {'Dev4t3rgd34df423gfs': val1, 'Dev4t3rgd34df423gfs': val2}
+        trigger = {'Dev4t3rgd34df423gfsaeft': val1, 'Dev4t3rgd34df423gfsaeft': val2}
 
         newName = 'New Name Schedule'
 
