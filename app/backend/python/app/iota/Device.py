@@ -73,7 +73,7 @@ class Device:
                 for key in newVals.keys():
                     self.data[self.mappings[key]] = newVals[key]
             case _:
-                addToErrorLog(f"Invalid Company \"{self.deviceType}\"")
+                addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
 
     #Checks the current data against an external data, and sends any differences
