@@ -18,6 +18,7 @@ import "bootstrap";
         rgb(3, 132, 212) 0%,
         rgb(7, 44, 103) 100%
       );
+      min-height: 0;
     "
   >
     <nav-bar />

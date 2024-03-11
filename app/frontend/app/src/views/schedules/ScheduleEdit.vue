@@ -1,5 +1,5 @@
 <template>
-  <div class="main mx-0">
+  <div class="main mx-0" :key="'fnasfb'">
     <div
       class="header"
       v-if="schedule"

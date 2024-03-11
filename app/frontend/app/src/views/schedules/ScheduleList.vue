@@ -1,6 +1,10 @@
 <template>
   <div class="main-container d-flex">
-    <div class="main row bg-dark" style="overflow: hidden">
+    <div
+      class="main row bg-dark"
+      v-if="forceRenderList"
+      style="overflow: hidden"
+    >
       <div class="col-2 options bg-gray"></div>
       <div class="col-10 schedules px-0">
         <h2 class="text-start text-light underlined bg-dark px-3 py-2">
@@ -158,6 +162,15 @@ const ratingToColor = (rating: number) => {
 };
 
 fetchData();
+const sleepNow = (delay: number) =>
+  new Promise((resolve) => setTimeout(resolve, delay));
+const forceRenderList = ref<boolean>(true);
+const rerender = async () => {
+  forceRenderList.value = false;
+  await sleepNow(100);
+  forceRenderList.value = true;
+};
+rerender();
 </script>
 <style lang="scss">
 .main-container {
