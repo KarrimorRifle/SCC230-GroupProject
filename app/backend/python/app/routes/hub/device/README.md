@@ -12,8 +12,10 @@ Structure shows variables and values for frontend to be familiar with.
 #### Structure:
 -	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
 -	(string)IpAddress – IP Address of Device
+-	(string)Key – Device Key
+-   (float)Version - Version Num of Device
+-   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
 
 ## Routes
@@ -30,7 +32,7 @@ Structure shows variables and values for frontend to be familiar with.
 
 #### GET: 
 
-Lists ID, Name, Type of all devices that are linked to the hub with the given 'HubID'
+Lists ID, Name, Company of all devices that are linked to the hub with the given 'HubID'
 
 ##### Required Parameters:
 
@@ -38,7 +40,7 @@ Lists ID, Name, Type of all devices that are linked to the hub with the given 'H
 List of dict objects contaning:
 -	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
+-	(string)Company – Company Device Belongs to
 
 #### POST:
 
@@ -65,7 +67,7 @@ Creates new device in the database.
 
 #### GET: 
 
-Lists ID, Name, Type, IP address, hub ID of specified device
+Lists all values of specified device
 
 ##### Required Parameters:
 
@@ -73,8 +75,10 @@ Lists ID, Name, Type, IP address, hub ID of specified device
 dict object containing:
 -	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
 -	(string)IpAddress – IP Address of Device
+-	(string)Key – Device Key
+-   (float)Version - Version Num of Device
+-   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
 
 #### DELETE:
@@ -91,15 +95,19 @@ Delete hub under ID of current user if has perms.
 Updates specified device data based on passed parameters if user has perms.
 
 ##### Optional Parameters:
+-	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
 -	(string)IpAddress – IP Address of Device
--	(string)HubID – ID of the Hub the device is linked to
+-	(string)Key – Device Key
+-   (float)Version - Version Num of Device
+-   (string)Company - Company Device Belongs to
 
 ##### Return Values:
 dict object containing updated values of:
 -	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
 -	(string)IpAddress – IP Address of Device
+-	(string)Key – Device Key
+-   (float)Version - Version Num of Device
+-   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to

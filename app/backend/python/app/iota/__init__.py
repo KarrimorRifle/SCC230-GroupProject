@@ -24,3 +24,5 @@ def genRandomID(length:int=16, ids:list[str]=[], prefix:str="", suffix:str="") -
         return(genRandomID(length, ids, prefix, suffix))
     return(randID)
 
+def addToErrorLog(exception:str):
+    pass
