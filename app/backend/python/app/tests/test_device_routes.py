@@ -21,6 +21,7 @@ class test_user(unittest.TestCase):
         url += data['DeviceID']
         response = self.client_server.delete(url)
         self.assertEqual(response.status_code, 200)
+        self.assertIn('DeviceID', response.data.decode('utf-8'))
         
     def test_get_devices_success(self):
         response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9finknaksw3", 'DeviceName': "Test Device 3", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.3", 'HubID': "Hubk23098jwij123msd"})
