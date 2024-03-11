@@ -34,14 +34,19 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
+    path: "/schedules/:id",
+    name: "schedules editor",
+    component: () => import("../views/schedules/ScheduleEdit.vue"),
+  },
+  {
     path: "/schedules",
     name: "schedules",
     component: () => import("../views/schedules/ScheduleList.vue"),
   },
   {
-    path: "/schedules/:id",
-    name: "schedules editor",
-    component: () => import("../views/schedules/ScheduleEdit.vue"),
+    path: "/hubs",
+    name: "hubs",
+    component: () => import("../views/hubs/HubsList.vue"),
   },
 ];
 
