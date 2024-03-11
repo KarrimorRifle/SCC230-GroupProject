@@ -99,15 +99,13 @@ CREATE TABLE `trigger_data`(
     `DeviceID` varchar(100) NOT NULL,
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
-    `ListPos` INT UNSIGNED NOT NULL,
+    `ListPos` INT UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE,
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID) ON DELETE CASCADE
 );
 
-ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
-
 INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
-Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "4",2);
+Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "4",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
