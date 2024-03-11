@@ -9,13 +9,12 @@ class test_user(unittest.TestCase):
         self.client_server = app.test_client()
 
     def test_device_loadfromdatabase(self):
-        test = Device.loadFromDatabase("Dev4t3rgd34df423gfs")
+        test = Device.loadDeviceFromDatabase("Dev4t3rgd34df423gfsaeft")
 
-        expected = Device.Device("Dev4t3rgd34df423gfs","Test Device","Test Device","1.1.1.1","Hubk23098jwij123msd")
+        expected = Device.Device(id="Dev4t3rgd34df423gfsaeft", name="Test Device", ip="192.168.0.1", key="12345678", version=1.0, company="NotTuya")
 
         self.assertEqual(test.id,expected.id)
         self.assertEqual(test.name,expected.name)
-        self.assertEqual(test.deviceType,expected.deviceType)
-        self.assertEqual(test.ipAddress,expected.ipAddress)
-        self.assertEqual(test.hubID,expected.hubID)
-        self.assertEqual(test.debug,expected.debug)
+        self.assertEqual(test.ip,expected.ip)
+        self.assertEqual(test.key,expected.key)
+        self.assertEqual(test.company,expected.company)

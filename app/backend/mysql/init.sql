@@ -51,14 +51,16 @@ VALUES ("Hubk23098jwij123msd", "testToken", 2147483647);
 CREATE TABLE `devices`(
     `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
-    `DeviceType` VARCHAR(255) NOT NULL,
+    `Key` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
+    `Version` FLOAT,
+    `Company` VARCHAR(255) NOT NULL DEFAULT "Tuya",
     `HubID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
-INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
-Values("Dev4t3rgd34df423gfs","Test Device","Test Device","1.1.1.1","Hubk23098jwij123msd");
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("Dev4t3rgd34df423gfsaeft","Test Device","12345678","192.168.0.1",1.0,"NotTuya","Hubk23098jwij123msd");
 
 CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
@@ -97,15 +99,13 @@ CREATE TABLE `trigger_data`(
     `DeviceID` varchar(100) NOT NULL,
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
-    `ListPos` INT UNSIGNED NOT NULL,
+    `ListPos` INT UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE,
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID) ON DELETE CASCADE
 );
 
-ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
-
 INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
-Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "4",2);
+Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "4",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,

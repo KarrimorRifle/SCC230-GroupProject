@@ -8,9 +8,9 @@
 
 ##IMPORTS##
 from iota.Device import *
+from iota import addToErrorLog
 import time
 import threading
-from server import app
 
 ##CONSTANTS##
 COMM_ELSE = "ELSE"
@@ -55,7 +55,7 @@ class Schedule:
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
-                 code:list[FunctionCode] = [], isActive:bool=True, debug:bool=False):
+                 code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
         self.id = id
         self.name = name
         self.isPublic = isPublic
@@ -82,14 +82,14 @@ class Schedule:
                 except Exception as e:
                     if(self.debug):
                         print(e)
-                    self.__addToErrorLog(e)
+                    addToErrorLog(e)
                     break
             self.__resetCounts()
             self.variables = {}
             self.isRunning = False
           
         #Check if the code is already running
-        if(not(self.isRunning) and self.isActive):
+        if(not(self.isRunning)):
             # Start a new thread to execute the code
             thread = threading.Thread(target=runThread)
             thread.start()
@@ -179,12 +179,16 @@ class Schedule:
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for a set statement
             case "SET":
+                _devices = self.devices
                 if(self.debug):
                     #print response from set statement
                     pass
                 exec(f"{' '.join(evalParams)}")
 
-                #set a value of param 1 to param 2 (requires prereq devices working)
+                #Checks if there are any changes
+                for i in range(len(self.devices)):
+                    self.devices[i].sendAllData(_devices[i].data)
+                                
                 self.code[index].hasRun+=1
                 return index+1
             case "WAIT":
@@ -260,10 +264,6 @@ class Schedule:
         #returns the string
         return str(variable)
 
-    #Adds an error to a log in the database
-    def __addToErrorLog(self, exception:str):
-        #Email the user to let them know a schedule failed, with the reasons behind it.
-        pass
 
 def loadScheduleFromDatabase(id:str) -> Schedule:
     cursor = app.config['cursor']
