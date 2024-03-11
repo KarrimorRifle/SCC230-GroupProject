@@ -8,24 +8,34 @@
           <div class="container">
             <h4>Sort by</h4>
             <div class="input-group mb-2">
-              <div class="input-group-text">Privelage</div>
+              <div class="input-group-text">
+                <img
+                  src="@/assets/permissions/lvl.svg"
+                  style="max-width: 1.5rem"
+                />
+              </div>
               <select id="privilage" class="form-select" v-model="sortRank">
                 <option value="NONE" selected>NONE</option>
-                <option value="ASC">ASCENDING</option>
-                <option value="DESC">DESCENDING</option>
+                <option value="ASC">ASC</option>
+                <option value="DESC">DESC</option>
               </select>
             </div>
             <div class="input-group">
-              <div class="input-group-text">User Count</div>
+              <div class="input-group-text">
+                <img src="@/assets/user.svg" style="max-width: 1.5rem" />
+              </div>
               <select id="privilage" class="form-select" v-model="sortCount">
                 <option value="NONE" selected>NONE</option>
-                <option value="ASC">ASCENDING</option>
-                <option value="DESC">DESCENDING</option>
+                <option value="ASC">ASC</option>
+                <option value="DESC">DESC</option>
               </select>
             </div>
           </div>
           <hr />
-          <h4>Ranks</h4>
+          <h4>
+            <img src="@/assets/permissions/lvl.svg" style="max-width: 1.5rem" />
+            Permission Level
+          </h4>
           <table id="ranks">
             <tr>
               <td>
