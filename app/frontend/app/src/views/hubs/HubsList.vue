@@ -24,6 +24,55 @@
               </select>
             </div>
           </div>
+          <hr />
+          <h4>Ranks</h4>
+          <table id="ranks">
+            <tr>
+              <td>
+                <img
+                  src="@/assets/permissions/5.svg"
+                  style="max-width: 1.5rem"
+                />
+              </td>
+              <td>Owner</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="@/assets/permissions/4.svg"
+                  style="max-width: 1.5rem"
+                />
+              </td>
+              <td>Admin</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="@/assets/permissions/3.svg"
+                  style="max-width: 1.5rem"
+                />
+              </td>
+              <td>Scheduler</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="@/assets/permissions/2.svg"
+                  style="max-width: 1.5rem"
+                />
+              </td>
+              <td>Enabler</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="@/assets/permissions/1.svg"
+                  style="max-width: 1.5rem"
+                />
+              </td>
+              <td>Viewer</td>
+            </tr>
+          </table>
         </div>
         <div class="col bg-dark d-flex flex-column">
           <h3 class="px-3 text-light mt-2" style="text-align: start">HUBS</h3>
@@ -203,5 +252,27 @@ div {
 
 .hub-card {
   background-color: rgb(36, 42, 66);
+}
+
+#ranks td:nth-child(1) {
+  width: 30%;
+  text-align: start;
+  padding-left: 1rem;
+}
+
+#ranks tr {
+  border-bottom: 1px;
+  border-style: solid;
+  height: 2rem;
+  width: 100%;
+}
+
+#ranks {
+  width: 100%;
+}
+
+#ranks td:nth-child(2) {
+  width: 70%;
+  text-align: start;
 }
 </style>
