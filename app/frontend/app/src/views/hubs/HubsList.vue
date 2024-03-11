@@ -194,6 +194,10 @@
                 </div>
               </div>
             </div>
+            <div class="text-muted mt-4" v-if="hubList.length == 0">
+              Uh Oh! Looks like there is nothing here!<br />
+              If this is unexpected please contact IOTA support at +44 69696969
+            </div>
           </div>
         </div>
       </div>
