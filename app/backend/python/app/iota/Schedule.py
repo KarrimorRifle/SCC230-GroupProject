@@ -265,5 +265,56 @@ class Schedule:
         return str(variable)
 
 
-def loadScheduleFromDatabase():
-    pass
+def loadScheduleFromDatabase(id:str) -> Schedule:
+    cursor = app.config['cursor']
+    query = ("SELECT * FROM schedules "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    details = cursor.fetchone()
+
+    if details is None:
+        return None
+
+    query = ("SELECT * FROM function_blocks "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    functionBlocks = cursor.fetchall()
+
+    code = []
+
+    query = ("SELECT Link, ParentID FROM function_block_links "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    linkedCommands = cursor.fetchall()
+    linkedCommands = [link for link in linkedCommands]
+
+    query = ("SELECT Value, FunctionBlockID, ListPos FROM function_block_params "
+             "WHERE ScheduleID = %s")
+    cursor.execute(query, (id,))
+    params = cursor.fetchall()
+    params = [param for param in params]
+    params = sorted(params, key=lambda x: x['ListPos'])
+
+    links = []
+    paramVals = []
+    for block in functionBlocks:
+        if linkedCommands is None:
+            links = None
+        else:
+            for link in linkedCommands:
+                if link['ParentID'] == block['BlockID']:
+                    links.append(link['Link'])
+
+        if params is None:
+            paramVals = None
+        else:
+            for param in params:
+                if param['FunctionBlockID'] == block['BlockID']:
+                    paramVals.append(param['Value'])
+
+        funcBlock = FunctionCode(block['CommandType'], block['Num'], links ,paramVals)
+        code.append(funcBlock)
+        links = []
+        paramVals = []
+        
+    return Schedule(id, details['ScheduleName'], details['IsPublic'], details['Rating'], code, details['IsActive'])
