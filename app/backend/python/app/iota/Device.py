@@ -108,4 +108,4 @@ def loadDeviceFromDatabase(id:str) -> Device:
     cursor.execute(query, (id,))
     device = cursor.fetchone()
 
-    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
+    return Device(id=device['DeviceID'], name=device['DeviceName'], key=device['Key'], ip=device['IpAddress'], version=float(device['Version']), company=device['Company'])
