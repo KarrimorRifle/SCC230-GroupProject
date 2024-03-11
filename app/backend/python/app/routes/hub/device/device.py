@@ -114,7 +114,7 @@ def update_device(account, cursor, connection, deviceID, hubID):
             continue
         if value == "":
             continue
-        updateParams.append(f"{key}=%s")
+        updateParams.append(f"`{key}`=%s")
         values.append(value)
     updateParams = ', '.join(updateParams)
 
@@ -128,7 +128,7 @@ def update_device(account, cursor, connection, deviceID, hubID):
         connection.rollback()
         return jsonify({"error" : "Device couldn't be updated", "details":f"{e}"}), 500
              
-    return get_device_detail(account, cursor, deviceID)
+    return get_device_detail(account, cursor, deviceID, hubID)
 
 @device.route("/hub/<string:hubID>/device" , methods=['POST', 'GET'])
 def deviceResponse(hubID):
