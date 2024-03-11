@@ -79,8 +79,6 @@ def delete_hub(account, cursor, connection, hubID):
     if hub['PermissionLevel'] < 5:
         return jsonify({"error": "Permission denied"}), 403
 
-    query = ("DELETE FROM accounts_hubsRelation WHERE HubID = %s")
-    cursor.execute(query, (hubID,))
     query = ("DELETE FROM hubs WHERE HubID = %s")
     cursor.execute(query, (hubID,))
     connection.commit()
