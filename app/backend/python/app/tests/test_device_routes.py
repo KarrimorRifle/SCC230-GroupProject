@@ -58,8 +58,7 @@ class test_user(unittest.TestCase):
             'Version': 2.0,
         }
 
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 5", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.5", 'HubID': "Hubk23098jwij123msd"})
-        print(response.data)
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9vgvsnaksw3", 'DeviceName': "Test Device 5", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.5", 'HubID': "Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/hub/Hubk23098jwij123msd/device/'
