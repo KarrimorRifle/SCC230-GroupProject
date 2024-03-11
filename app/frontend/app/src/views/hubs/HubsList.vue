@@ -98,7 +98,7 @@
               <div class="card border-0 hub-card">
                 <div class="row">
                   <div
-                    class="col-1 border-end ps-4 d-flex justify-content-center align-items-center"
+                    class="col-1 d-md-flex d-none border-end ps-4 justify-content-center align-items-center"
                     style="font-size: 1.3rem"
                   >
                     <div class="me-2">
@@ -162,17 +162,17 @@
                     </a>
                   </div>
                   <div
-                    class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-5 ps-2 py-2 border-start d-flex"
+                    class="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-4 ps-2 py-2 border-start d-flex"
                     v-if="hub.PermissionLevel == 5"
                   >
                     <button
-                      class="btn btn-sm btn-outline-secondary me-2 text-light border-2"
+                      class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
                       :href="`/hubs/${hub.HubID}`"
                     >
                       EDIT
                     </button>
                     <button
-                      class="btn btn-sm btn-outline-danger mt-sm-0 mt-2 text-light border-2"
+                      class="btn btn-sm btn-outline-danger text-light border-2"
                       @click="console.log('DELETING')"
                     >
                       DELETE
