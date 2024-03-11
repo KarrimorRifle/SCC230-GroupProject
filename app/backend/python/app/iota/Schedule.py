@@ -230,10 +230,6 @@ class Schedule:
         variable = str(variable)
         if(len(variable) == 0):
             return '""'
-
-        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
-                     '+', '-', '=', '/', '*', '%' # assignment operators
-                     '+=' '-=', '/=', '*='] # self-assignment operators
         
         #checks if the variable is a number
         try:
@@ -254,6 +250,11 @@ class Schedule:
                         if(sVariable[0] == self.devices[i].name and sVariable[1] in self.devices[i].data.keys()):
                             return f'self.devices[{i}].data["{sVariable[1]}"]'
         
+        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
+                     '+', '-', '=', '/', '*', '%', # assignment operators
+                     '+=' '-=', '/=', '*=', # self-assignment operators
+                     'True', 'False'] # boolean values
+
         #Checks if the variable is an operator
         if(variable not in operators):
             #Checks if the variable is already in quotations
