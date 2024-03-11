@@ -52,7 +52,6 @@
                   type="number"
                   style="width: 5rem"
                   placeholder="00"
-                  v-model.number="code[index * 4 + 2]"
                   v-else-if="getVarType(item[0]) == 'NUMBER'"
                 />
                 <div
@@ -156,11 +155,11 @@
 import { CommandType, Device } from "@/modules/schedules/types";
 import { defineProps, ref, defineExpose, computed } from "vue";
 
-const code = ref([["1", "3", "2"]]);
+const code = ref(["1", "3", "2"]);
 const borderColor = ref<string>("white");
 
 const props = defineProps<{
-  commandType: CommandType;
+  modelValue?: Record<string, string>;
   devices?: Device[];
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }>();
