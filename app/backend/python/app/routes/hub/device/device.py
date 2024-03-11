@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response, Blueprint, current_app
+from flask import request, jsonify, Blueprint, current_app
 from ...accounts import getAccount
 from iota import genRandomID
 
@@ -18,35 +18,28 @@ def get_devices(account, cursor, HubID):
     if checkPerm is None or checkPerm['PermissionLevel'] < ViewPermLevel:
         return({"error": "Forbidden access"}), 403
     
-    query = ("SELECT DeviceID, DeviceName, DeviceType FROM devices "
-                "WHERE HubID = %s")
-    
+    query = ("SELECT DeviceID, DeviceName, Company FROM devices "
+                "WHERE HubID = %s ORDER BY DeviceName ASC")
+
     cursor.execute(query, (hubID,))
     devices = cursor.fetchall()
     return jsonify(devices), 200
 
-def create_device(account, cursor, connection, HubID):
-    deviceName = request.json.get("DeviceName")
-    deviceType = request.json.get("DeviceType")
-    ipAddress = request.json.get("IpAddress")
-    hubID = HubID
-
+def create_device(account, cursor, connection, hubID):
     query = ("SELECT * FROM accounts_hubsRelation "
                 "WHERE AccountID = %s AND HubID = %s")
     cursor.execute(query, (account['AccountID'], hubID,))
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
-        return({"error": "Forbidden access"+HubID}), 403
+        return({"error": "Forbidden access"+hubID}), 403
     
-    query = ("SELECT DeviceID FROM devices")
-    cursor.execute(query)
-    deviceIDs = cursor.fetchall()
-    thisID = genRandomID(ids=deviceIDs, prefix='Dev')
-    query = ("INSERT INTO devices (DeviceID, DeviceName, DeviceType, IpAddress, HubID) "
-                     "VALUES (%s,%s,%s,%s,%s)")
+    thisID = request.json.get('DeviceID')
+
+    query = ("INSERT INTO devices (DeviceID, Key, DeviceName, Company, Version, IpAddress, HubID) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)")
     try:
-        cursor.execute(query, (thisID, deviceName, deviceType, ipAddress, hubID,))
+        cursor.execute(query, (thisID, request.json.get('Key'), request.json.get('DeviceName'), request.json.get('Company'), request.json.get('Version'), request.json.get('IpAddress'), hubID,))
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -54,30 +47,24 @@ def create_device(account, cursor, connection, HubID):
 
     return jsonify({'DeviceID':thisID}), 200
 
-def get_device_detail(account, cursor, deviceID):
-    query = ("SELECT * FROM devices "
-                "WHERE DeviceID = %s")
-    cursor.execute(query, (deviceID,))
-    device = cursor.fetchone()
-
-    if device is None:
-        return({"error": "device not found"}), 404
-    
+def get_device_detail(account, cursor, deviceID, hubID):
     query = ("SELECT * FROM accounts_hubsRelation "
                 "WHERE AccountID = %s AND HubID = %s")
-    cursor.execute(query, (account['AccountID'], device['HubID'],))
+    cursor.execute(query, (account['AccountID'], hubID,))
     checkPerm = cursor.fetchone()
 
     if checkPerm is None or checkPerm['PermissionLevel'] < ViewPermLevel:
         return({"error": "Forbidden access"}), 403
 
-    details = {'DeviceID': device['DeviceID'],
-               'DeviceName': device['DeviceName'],
-               'DeviceType': device['DeviceType'],
-               'IpAddress': device['IpAddress'],
-               'HubID': device['HubID']}
+    query = ("SELECT * FROM devices "
+                "WHERE DeviceID = %s AND HubID = %s")
+    cursor.execute(query, (deviceID, hubID,))
+    device = cursor.fetchone()
+
+    if device is None:
+        return({"error": "device not found"}), 404
     
-    return jsonify(details), 200
+    return jsonify(device), 200
 
 #Function deletes device of specified ID
 def delete_device(account, cursor, connection, deviceID):
@@ -186,7 +173,7 @@ def deviceDetails(hubID,deviceID):
     connection = current_app.config['connection']
 
     if request.method == 'GET':
-        return get_device_detail(account, cursor, deviceID)
+        return get_device_detail(account, cursor, deviceID, hubID)
     elif request.method == 'DELETE':
         return delete_device(account, cursor, connection, deviceID)
     elif request.method == 'PATCH':
