@@ -34,7 +34,7 @@ def create_device(account, cursor, connection, hubID):
     if checkPerm is None or checkPerm['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"+hubID}), 403
     
-    thisID = request.json.get('DeviceID')
+    thisID = str(request.json.get('DeviceID'))
 
     query = ("INSERT INTO devices (DeviceID, Key, DeviceName, Company, Version, IpAddress, HubID) "
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)")
