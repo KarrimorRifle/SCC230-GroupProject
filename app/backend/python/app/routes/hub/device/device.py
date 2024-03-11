@@ -94,7 +94,7 @@ def delete_device(account, cursor, connection, deviceID, hubID):
         connection.rollback()
         return(jsonify({"error":"Unable to delete device", "details":f"{e}"})), 500
 
-    return jsonify(deviceID), 200
+    return jsonify({'DeviceID': deviceID}), 200
 
 # Function updates device of specified ID based on input params
 def update_device(account, cursor, connection, deviceID, hubID):
