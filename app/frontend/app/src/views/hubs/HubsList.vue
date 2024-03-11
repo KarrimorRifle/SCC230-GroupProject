@@ -98,7 +98,16 @@
               <div class="card border-0 hub-card">
                 <div class="row">
                   <div
-                    class="col-md-1 col-2 ps-4"
+                    class="col-1 border-end ps-4 d-flex justify-content-center align-items-center"
+                    style="font-size: 1.3rem"
+                  >
+                    <div class="me-2">
+                      {{ hub.UserCount }}
+                    </div>
+                    <img src="@/assets/user.svg" style="max-width: 1.2rem" />
+                  </div>
+                  <div
+                    class="col-md-1 col-2"
                     :class="{
                       'my-1': hub.PermissionLevel != 5,
                       'mt-2': hub.PermissionLevel == 5,
