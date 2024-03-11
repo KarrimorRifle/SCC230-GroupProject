@@ -11,7 +11,7 @@ class test_user(unittest.TestCase):
     def test_device_loadfromdatabase(self):
         test = Device.loadDeviceFromDatabase("Dev4t3rgd34df423gfsaeft")
 
-        expected = Device.Device(id="Dev4t3rgd34df423gfsaeft", name="TestDevice", ip="192.168.0.1", key="12345678", version=1.0, company="NotTuya")
+        expected = Device.Device(id="Dev4t3rgd34df423gfsaeft", name="Test Device", ip="192.168.0.1", key="12345678", version=1.0, company="NotTuya")
 
         self.assertEqual(test.id,expected.id)
         self.assertEqual(test.name,expected.name)
