@@ -71,9 +71,9 @@ CREATE TABLE `schedules`(
     `Rating` TINYINT UNSIGNED DEFAULT 0,
     `NumRated` INT UNSIGNED DEFAULT 0,
     `IsDraft` TINYINT UNSIGNED NOT NULL DEFAULT 1,
-    FOREIGN KEY (HubID) REFERENCES hubs(HubID),
+    FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE,
     FOREIGN KEY (AuthorID) REFERENCES accounts(AccountID) ON DELETE CASCADE,
-    FOREIGN KEY (CopyFrom) REFERENCES accounts(AccountID)
+    FOREIGN KEY (CopyFrom) REFERENCES accounts(AccountID) ON DELETE SET NULL
 );
 
 INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`,`IsActive`,`IsPublic`)
