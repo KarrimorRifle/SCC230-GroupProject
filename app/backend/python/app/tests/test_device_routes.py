@@ -9,13 +9,12 @@ class test_user(unittest.TestCase):
 
 
     def test_create_device(self):
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 1", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
-        print(response.data)
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 1", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.1", 'HubID': "Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         self.assertIn('DeviceID', response.data.decode('utf-8'))
 
     def test_delete_device(self):
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnvdsw3", 'DeviceName': "Test Device 2", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnvdsw3", 'DeviceName': "Test Device 2", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.2", 'HubID': "Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/hub/Hubk23098jwij123msd/device/'
@@ -24,7 +23,7 @@ class test_user(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
     def test_get_devices_success(self):
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9finknaksw3", 'DeviceName': "Test Device 3", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9finknaksw3", 'DeviceName': "Test Device 3", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.3", 'HubID': "Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         response = self.client_server.get('/hub/Hubk23098jwij123msd/device')
         self.assertEqual(response.status_code, 200)
@@ -32,10 +31,10 @@ class test_user(unittest.TestCase):
         for entry in data:
             self.assertIn('DeviceID', entry)
             self.assertIn('DeviceName', entry)
-            self.assertIn('DeviceType', entry)
+            self.assertIn('Company', entry)
 
     def test_get_device_details_success(self):
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n312kue9fiisnaksw3", 'DeviceName': "Test Device 4", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n312kue9fiisnaksw3", 'DeviceName': "Test Device 4", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.4", 'HubID': "Hubk23098jwij123msd"})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/hub/Hubk23098jwij123msd/device/'
@@ -52,14 +51,15 @@ class test_user(unittest.TestCase):
         self.assertIn('HubID', data)
         self.assertIn('Company', data)
     
-    def test_update_schedule_success(self):
+    def test_update_device_success(self):
         payload = {
             'DeviceName': "Test Device 5 updated",
             'Key': '000111232',
             'Version': 2.0,
         }
 
-        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 5", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.0", 'HubID': "Hubk23098jwij123msd"})
+        response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n3kmdue9fiisnaksw3", 'DeviceName': "Test Device 5", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.5", 'HubID': "Hubk23098jwij123msd"})
+        print(response.data)
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         url = '/hub/Hubk23098jwij123msd/device/'
