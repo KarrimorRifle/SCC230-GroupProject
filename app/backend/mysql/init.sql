@@ -51,14 +51,16 @@ VALUES ("Hubk23098jwij123msd", "testToken", 2147483647);
 CREATE TABLE `devices`(
     `DeviceID` varchar(100) NOT NULL PRIMARY KEY,
     `DeviceName` VARCHAR(255) NOT NULL,
-    `DeviceType` VARCHAR(255) NOT NULL,
+    `Key` VARCHAR(255) NOT NULL,
     `IpAddress` VARCHAR(255) NOT NULL UNIQUE,
+    `Version` DECIMAL(5, 2),
+    `Company` VARCHAR(255) NOT NULL DEFAULT "Tuya",
     `HubID` varchar(100) NOT NULL,
     FOREIGN KEY (HubID) REFERENCES hubs(HubID)
 );
 
-INSERT INTO devices(`DeviceID`,`DeviceName`,`DeviceType`,`IpAddress`,`HubID`)
-Values("Dev4t3rgd34df423gfs","Test Device","Test Device","1.1.1.1","Hubk23098jwij123msd");
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("Dev4t3rgd34df423gfsaeft","Test Device","12345678","192.168.0.1",1.0,"NotTuya","Hubk23098jwij123msd");
 
 CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
