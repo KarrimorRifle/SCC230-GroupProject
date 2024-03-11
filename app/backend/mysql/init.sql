@@ -107,7 +107,7 @@ CREATE TABLE `trigger_data`(
 ALTER TABLE trigger_data MODIFY ListPos INT DEFAULT 0;
 
 INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
-Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "4",2);
+Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfs", "4",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,
