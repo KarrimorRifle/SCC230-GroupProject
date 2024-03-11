@@ -110,7 +110,7 @@ def update_device(account, cursor, connection, deviceID, hubID):
     updateParams = []
     values = []
     for key, value in request.json.items():
-        if not key[0].isupper():
+        if not key[0].isupper() or key == "HubID":
             continue
         if value == "":
             continue
