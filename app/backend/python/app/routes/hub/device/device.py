@@ -23,7 +23,22 @@ def get_devices(account, cursor, HubID):
 
     cursor.execute(query, (hubID,))
     devices = cursor.fetchall()
+
+    devices = [{k: v for k, v in device.items()} for device in devices]
+    for device in devices:
+        device['Vars'] = get_device_vars(cursor, device['DeviceID'])
+
     return jsonify(devices), 200
+
+def get_device_vars(cursor, deviceID):
+    query = ("SELECT * FROM device_vars "
+                "WHERE DeviceID = %s")
+    cursor.execute(query, (deviceID,))
+    vars = cursor.fetchall()
+    deviceVars = {}
+    for var in vars:
+        deviceVars[var['VarName']] = var['VarType']
+    return deviceVars
 
 def create_device(account, cursor, connection, hubID):
     query = ("SELECT * FROM accounts_hubsRelation "
@@ -60,6 +75,8 @@ def get_device_detail(account, cursor, deviceID, hubID):
                 "WHERE DeviceID = %s AND HubID = %s")
     cursor.execute(query, (deviceID, hubID,))
     device = cursor.fetchone()
+    device = {k: v for k, v in device.items()}
+    device['Vars'] = get_device_vars(cursor, deviceID)
 
     if device is None:
         return({"error": "device not found"}), 404
@@ -76,14 +93,6 @@ def delete_device(account, cursor, connection, deviceID, hubID):
 
     if checkExists is None or checkExists['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
-    
-    query = ("SELECT * FROM trigger_data "
-                "WHERE DeviceID = %s")
-    cursor.execute(query, (deviceID,))
-    trigger = cursor.fetchall()
-
-    if len(trigger) > 0:
-        return({"error": f"device in use at {trigger}"}), 409
 
     query = ("DELETE FROM devices WHERE DeviceID = %s" )
     cursor.execute(query, (deviceID,))
