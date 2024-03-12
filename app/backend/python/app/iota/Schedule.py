@@ -74,7 +74,14 @@ class Schedule:
     #Runs the code to completion, and resets the values needed
     def runCode(self):
         def runThread():
+            #Prevents the code from being run multiple times
             self.isRunning = True
+
+            #Updates the data in all the devices that the trigger uses 
+            for device in self.devices:
+                device.updateData()
+
+            #Runs the user Defined Code
             i = 0
             while i < len(self.code):
                 try:
