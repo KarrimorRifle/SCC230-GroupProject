@@ -5,7 +5,8 @@ export type CommandType =
   | "ELSE"
   | "SET"
   | "END"
-  | "WAIT";
+  | "WAIT"
+  | "TRIGGER";
 
 //functions of either of these types aren't required on front end hence unimplemented
 export interface FunctionCode {
@@ -23,7 +24,7 @@ export interface Schedule {
   IsActive: boolean;
   IsDraft: boolean;
   Rating: number; //was just one value, but instead should be a computed value
-  Trigger: Record<string, string[]>;
+  Trigger: string[];
   Code: FunctionCode[];
   CustomVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }
