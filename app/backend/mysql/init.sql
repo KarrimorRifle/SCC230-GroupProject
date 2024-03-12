@@ -59,6 +59,14 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
+CREATE TABLE `device_vars`(
+    `VarID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceID` varchar(100) NOT NULL,
+    `VarName` VARCHAR(255) NOT NULL,
+    `VarType` VARCHAR(255) NOT NULL,
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE
+);
+
 INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
 VALUES("Dev4t3rgd34df423gfsaeft","Test Device","12345678","192.168.0.1",1.0,"NotTuya","Hubk23098jwij123msd");
 
