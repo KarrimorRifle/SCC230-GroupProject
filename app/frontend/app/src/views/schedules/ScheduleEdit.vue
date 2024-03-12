@@ -7,6 +7,7 @@
     >
       <h2>
         Edit Schedule
+        <button @click="console.log(schedule.Trigger)">hi</button>
         <div
           v-if="schedule.IsDraft"
           class="px-2 py-1 bg-warning"
@@ -101,7 +102,11 @@
           v-if="schedule"
           style="max-height: 100%"
         >
-          <trigger-block v-model="schedule.Trigger" />
+          <trigger-block
+            v-model="schedule.Trigger"
+            :devices="validDevices"
+            :schedule-vars="variables"
+          />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
