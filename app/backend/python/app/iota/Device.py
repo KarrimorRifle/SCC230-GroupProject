@@ -38,7 +38,11 @@ class Device:
         if(self.company == "Tuya"):
             self.key = key
             self.version = version
-            self.mappings = self.getMappings()
+
+            self.typeMappings = {}
+            self.mappings = {}
+            self.getMappings()
+            
 
         self.data = {}
         self.updateData()
@@ -53,11 +57,13 @@ class Device:
         
         #Gets the Datapoints from the server
         dps = TUYASERVER.getdps(self.id)['result']['status']
-        mappings = {}
 
         #Adds the datapoints to the mappings
         for datapoint in dps:
-            mappings[datapoint['dp_id']] = str(datapoint['code'])
+            if(datapoint['type'] != 'Enum'):
+                self.mappings[datapoint['dp_id']] = datapoint['code']
+                self.typeMappings[datapoint['code']] = datapoint['type'].upper()
+        
 
     #Checks the current data against an external data, and sends any differences
     def changeData(self, data:dict):
@@ -112,4 +118,4 @@ def loadDeviceFromDatabase(id:str) -> Device:
     if(device == None):
         return None
 
-    return Device(id=device['DeviceID'], name=device['DeviceName'], key=device['Key'], ip=device['IpAddress'], company=device['Company'], version=device['Version'])
+    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
