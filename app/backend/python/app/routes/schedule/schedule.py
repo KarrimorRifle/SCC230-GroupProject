@@ -106,16 +106,15 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
         code.append(funcBlock)
         for i in range(2):
             for x in range(len(funcBlock['Params'])):
-                if('.' in funcBlock['Params'][x]):
-                    sVariable = funcBlock['Params'][x].split('.')
-                    if(sVariable[0] == 'var'):
-                        svalue = [""]
-                        if(funcBlock['CommandType'] == "SET"):
-                            if(x==0):
-                                svalue = funcBlock['Params'][2].split('.')
-                            else:
-                                svalue = funcBlock['Params'][0].split('.')
-                        VarDictUpdate(sVariable[1], svalue, varDict)
+                sVariable = funcBlock['Params'][x].split('.')
+                if(sVariable[0] == 'var'):
+                    svalue = [""]
+                    if(funcBlock['CommandType'] == "SET"):
+                        if(x==0):
+                            svalue = funcBlock['Params'][2].split('.')
+                        else:
+                            svalue = funcBlock['Params'][0].split('.')
+                    VarDictUpdate(sVariable[1], svalue, varDict)
         links = []
         paramVals = []
 
