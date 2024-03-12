@@ -3,9 +3,53 @@
     <button @click="console.log(modelValue)">hello</button>
     <h3>Variables</h3>
     <div v-if="Object.keys(modelValue).length > 0" class="variable-container">
-      <div v-for="(value, key, index) in modelValue" :key="key + index">
-        I am a variable
-      </div>
+      <table id="varTable" class="container-fluid">
+        <tr class="mb-3">
+          <th>Variable Name</th>
+          <th>Value Type</th>
+          <th></th>
+        </tr>
+        <tr v-for="(value, key, index) in modelValue" :key="key + index">
+          <td>{{ key }}</td>
+          <td class="input-group mb-2">
+            <button
+              class="btn dropdown-toggle container-fluid btn-secondary py-1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ value }}
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <button
+                  class="dropdown-item"
+                  @click="modelValue[key] = 'NUMBER'"
+                >
+                  NUMBER
+                </button>
+              </li>
+              <li>
+                <button
+                  class="dropdown-item"
+                  @click="modelValue[key] = 'BOOLEAN'"
+                >
+                  BOOLEAN
+                </button>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <button class="border-0 invis-bg">
+              <img
+                src="@/assets/delete-svgrepo-com.svg"
+                alt="DELETE"
+                class="px-1"
+                style="min-width: 1.5rem; max-width: 2rem"
+              />
+            </button>
+          </td>
+        </tr>
+      </table>
     </div>
     <div v-else class="variable-container text-muted">
       Uh oh! Nothings here...
@@ -31,6 +75,12 @@
                 ADD
               </button>
             </div>
+            <div
+              class="validity-feedback border border-2 border-danger rounded bg-secondary"
+              v-if="invalid"
+            >
+              Variable is invalid or already exists, pick another name
+            </div>
           </div>
           <div class="col-2">
             <button class="btn btn-danger">CLOSE</button>
@@ -45,6 +95,7 @@
 import { ref, defineProps, watchEffect } from "vue";
 
 const newVarName = ref<string>("");
+const invalid = ref<boolean>(false);
 
 const props = defineProps<{
   modelValue: Record<string, "NUMBER" | "BOOLEAN">;
@@ -61,8 +112,17 @@ const removeSpecialCharacters = (event: InputEvent) => {
 };
 
 const addNewVar = () => {
+  if (
+    newVarName.value == "" ||
+    Object.keys(modelValue.value).includes(newVarName.value)
+  ) {
+    invalid.value = true;
+    return;
+  }
+
   modelValue.value[newVarName.value] = "NUMBER";
   newVarName.value = "";
+  invalid.value = false;
 };
 </script>
 <style>
