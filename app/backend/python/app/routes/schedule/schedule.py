@@ -115,6 +115,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'AuthorID': schedule['AuthorID'],
                'CopyFrom': schedule['CopyFrom'],
                'ScheduleName': schedule['ScheduleName'],
+               'Description': schedule['Description'],
                'HubID': schedule['HubID'],
                'IsActive': schedule['IsActive'],
                'IsPublic': schedule['IsPublic'],
