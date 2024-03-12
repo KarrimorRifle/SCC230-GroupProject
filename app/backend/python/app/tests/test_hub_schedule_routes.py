@@ -142,7 +142,7 @@ class TestHubRoutes(unittest.TestCase):
                 'CommandType': 'IF',
                 'Number': 1,
                 'LinkedCommands': [2],
-                'Params': ['5', '>=', '4'],
+                'Params': ['var.unset', '>=', '4'],
             },
             {
                 'CommandType': 'ELSE',
@@ -194,4 +194,5 @@ class TestHubRoutes(unittest.TestCase):
         self.assertEqual(data['IsDraft'], 0)
         self.assertEqual(data['IsActive'], 1)
         self.assertEqual(data['Code'], code)
+        self.assertEqual(data['VarDict'], {"unset":"UNDEFINED"})
         self.assertEqual(data['Trigger'], trigger)
