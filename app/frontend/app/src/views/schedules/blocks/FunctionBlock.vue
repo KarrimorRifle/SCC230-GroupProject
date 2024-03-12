@@ -379,7 +379,7 @@ const width = computed(() => {
 });
 
 // const getCode = () => {
-//   if (props.initialCode) code.value = props.initialCode;
+//   console.log(props.modelValue);
 // };
 // getCode();
 

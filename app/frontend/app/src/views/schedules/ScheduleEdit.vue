@@ -96,8 +96,12 @@
     </div>
     <div class="container-fluid mx-0 px-0 d-flex flex-column">
       <div id="alkdas" class="row mx-0">
-        <div class="col p-3 scrollable21" style="max-height: 100%">
-          <trigger-block />
+        <div
+          class="col p-3 scrollable21"
+          v-if="schedule"
+          style="max-height: 100%"
+        >
+          <trigger-block v-model="schedule.Trigger" />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
@@ -264,8 +268,8 @@ const fetchSchedule = async () => {
     withCredentials: true,
   });
   schedule.value = data.data;
-  console.log(data);
-  console.log(schedule.value?.Code);
+  // console.log(data);
+  // console.log(schedule.value?.Code);
   if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
     nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
 };
@@ -302,7 +306,7 @@ const saveSchedule = async () => {
       }
       if (item.CommandType == "ELSE" && tempSchedule)
         if (lastIf != -1) {
-          console.log(tempSchedule.Code[lastIf].LinkedCommands);
+          // console.log(tempSchedule.Code[lastIf].LinkedCommands);
           tempSchedule.Code[lastIf].LinkedCommands?.push(index);
         } else throw new Error();
     });
@@ -313,7 +317,7 @@ const saveSchedule = async () => {
   }
 
   try {
-    console.log(tempSchedule);
+    // console.log(tempSchedule);
     await axios.patch(
       `http://localhost:5000/schedule/${scheduleID}`,
       tempSchedule,
@@ -349,7 +353,7 @@ const toggleDraft = () => {
           }
           if (item.CommandType == "ELSE" && tempSchedule)
             if (lastIf != -1) {
-              console.log(tempSchedule.Code[lastIf].LinkedCommands);
+              // console.log(tempSchedule.Code[lastIf].LinkedCommands);
               tempSchedule.Code[lastIf].LinkedCommands?.push(index);
             } else throw new Error();
         });

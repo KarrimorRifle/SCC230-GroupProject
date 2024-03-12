@@ -153,16 +153,28 @@
 </template>
 <script setup lang="ts">
 import { CommandType, Device } from "@/modules/schedules/types";
-import { defineProps, ref, defineExpose, computed } from "vue";
+import { defineProps, ref, defineExpose, computed, watchEffect } from "vue";
 
-const code = ref(["1", "3", "2"]);
+const code = ref<Record<string, string>>({});
 const borderColor = ref<string>("white");
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps<{
   modelValue?: Record<string, string>;
   devices?: Device[];
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
 }>();
+
+watchEffect(() => {
+  if (props.modelValue) {
+    code.value = props.modelValue;
+  }
+});
+
+const updateCode = (index: number, newValue: string) => {
+  code.value[index] = newValue;
+  emit("update:modelValue", code.value);
+};
 
 const parseVar = (variable: string) => {
   let varArray: string[];
@@ -199,9 +211,15 @@ const setVarType = (type: "NUMBER" | "BOOLEAN" | undefined, index: number) => {
 
 const trigger = ref(true);
 
-defineExpose<{
-  getCodeContent: string[] | boolean;
-}>();
+const getCode = () => {
+  console.log(props.modelValue);
+};
+getCode();
+
+defineExpose({
+  code,
+  updateCode,
+});
 </script>
 <style>
 .dropdown-menu {
