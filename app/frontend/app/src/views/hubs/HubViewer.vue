@@ -13,6 +13,7 @@
         </div>
         <div class="col-6">
           <input
+            v-if="permissionLevel == 5"
             type="text"
             class="form-control"
             id="hubName"
@@ -20,9 +21,17 @@
             placeholder="Hub Name"
             v-model="hubName"
           />
+          <a
+            v-if="permissionLevel != 5"
+            id="HubName"
+            class="px-3 text-light mt-2"
+            style="margin: 0; padding: 0"
+            >Hub Name Here
+          </a>
         </div>
         <div class="col-2">
           <button
+            v-if="permissionLevel == 5"
             class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
             @click="updateHub()"
           >
@@ -38,7 +47,8 @@
 import { ref, computed } from "vue";
 import axios from "axios";
 
-const hubName = ref<string>("");
+const hubName = ref();
+const permissionLevel = ref();
 
 const setup = async () => {
   let hubID = window.location.href.slice(-19);
@@ -48,6 +58,8 @@ const setup = async () => {
 
   console.log(data.data);
   hubName.value = data.data.HubName;
+  permissionLevel.value = data.data.PermissionLevel;
+  document.getElementById("HubName").innerHTML = hubName.value;
 };
 
 const updateHub = async () => {
