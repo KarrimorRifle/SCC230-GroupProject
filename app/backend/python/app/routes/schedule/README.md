@@ -21,6 +21,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -111,6 +112,7 @@ Lists all values associated with schedule belonging to current user specified by
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -149,6 +151,7 @@ Updates specified schedule data based on passed parameters.
 
 ##### Optional Parameters:
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
@@ -159,6 +162,7 @@ Updates specified schedule data based on passed parameters.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
