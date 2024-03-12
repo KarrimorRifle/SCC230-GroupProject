@@ -27,8 +27,9 @@ class Trigger:
         self.id = id
 
         self.devices = []
-        for i in range(len(data)):
-            self.data[i]=self.__resolveDatapoint(data[i])
+        self.data = []
+        for string in data:
+            self.data.append(self.__resolveDatapoint(string))
         
         self.ScheduleID = ScheduleID
         self.canRun = canRun
