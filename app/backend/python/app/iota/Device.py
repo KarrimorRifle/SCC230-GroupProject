@@ -51,7 +51,7 @@ class Device:
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
-    def getMappings(self) -> dict[str,str]:
+    def getMappings(self):
         #Configures the server to get the devices on the user's network
         TUYASERVER.apiDeviceID = self.id
         
