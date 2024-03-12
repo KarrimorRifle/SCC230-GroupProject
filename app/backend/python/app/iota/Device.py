@@ -95,15 +95,15 @@ class Device:
             #If it is a Tuya Device
             case "Tuya":
                 #Creates the Device
-                apiDevice = tuya.Device(self.id, self.ip, self.key, self.version)
+                apiDevice = tuya.Device(dev_id=self.id, address=self.ip, local_key=self.key, version=self.version)
 
                 #Updates The Data
-                apiDevice.updatedps(list(self.mappings.keys()))
+                apiDevice.updatedps(index=list(self.mappings.keys()), nowait=True)
                 newVals = apiDevice.status()['dps']
 
                 #Maps the data
                 for key in newVals.keys():
-                    self.data[self.mappings[key]] = newVals[key]
+                    self.data[key] = newVals[key]
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
@@ -114,15 +114,15 @@ class Device:
         match(self.company):
             #If it is a Tuya Device
             case "Tuya":
-                apiDevice = tuya.Device(self.id, self.ip, self.key, self.version)
+                apiDevice = tuya.Device(dev_id=self.id, address=self.ip, local_key=self.key, version=self.version)
                 #Gets the mapping
                 for mapping in self.mappings.keys():
                     if(self.mappings[mapping] == variable or mapping == variable):
-                        apiDevice.set_value(mapping, value, True)
+                        apiDevice.set_value(mapping, value, nowait=True)
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
-
+            
 #Loads a Device From the Database
 def loadDeviceFromDatabase(id:str) -> Device:
     cursor = app.config['cursor']
