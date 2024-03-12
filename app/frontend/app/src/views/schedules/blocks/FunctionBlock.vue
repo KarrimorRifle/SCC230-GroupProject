@@ -139,7 +139,9 @@
                     {{ item[1] }}
                   </button>
                   <variable-list-options
-                    :custom-list="list"
+                    :custom-list="
+                      getVarType(item[0]) == 'BOOLEAN' ? list.slice(0, 2) : list
+                    "
                     @option="
                       (item) => {
                         code[index * 4 + 1] = item;
