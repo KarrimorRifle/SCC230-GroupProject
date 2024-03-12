@@ -21,6 +21,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -96,6 +97,7 @@ Lists all values associated with public schedule specified by ID in url.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -128,6 +130,7 @@ Create duplicate of public schedule with current user as author and original aut
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -183,6 +186,7 @@ Create duplicate of public schedule and add it to specified hub with current use
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
