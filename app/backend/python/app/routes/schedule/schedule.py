@@ -104,8 +104,17 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
         funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
         code.append(funcBlock)
-        if(funcBlock['CommandType'] == "SET"):
-            VarDictUpdate(funcBlock, varDict)
+        for x in range(len(funcBlock['Params'])):
+            if('.' in funcBlock['Params'][x]):
+                sVariable = funcBlock['Params'][x].split('.')
+                if(sVariable[0] == 'var'):
+                    svalue = [""]
+                    if(funcBlock['CommandType'] == "SET"):
+                        if(x==0):
+                            svalue = funcBlock['Params'][2].split('.')
+                        else:
+                            svalue = funcBlock['Params'][0].split('.')
+                    VarDictUpdate(sVariable[1], svalue, varDict)
         links = []
         paramVals = []
 
@@ -127,25 +136,39 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     
     return jsonify(details), 200
 
-def VarDictUpdate(funcBlock, varDict):
+def VarDictUpdate(variable, svalue, varDict):
     try:
-        if(funcBlock['Params'][0] in varDict):
-            exec(f"{'var = ' + funcBlock['Params'][2]}")
-            if(type(var) == str and varDict[funcBlock['Params'][0]] != "STRING"):
-                varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
-            if(type(var) == bool and varDict[funcBlock['Params'][0]] != "BOOLEAN"):
-                varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+        if(variable in varDict):
+            if(svalue[0] == 'var' and svalue[1] in varDict):
+                if(varDict[svalue[1]] !=  varDict[variable]):
+                    varDict.update({variable,"INCONSISTENT"})
             else:
-                if(type(var) == bool or type(var) == str):
-                    varDict.update({funcBlock['Params'][0],"INCONSISTENT"})
+                if(svalue[0] == "" or svalue[1] not in varDict):
+                    varDict.update({variable,"UNDEFINED"})
+                else:
+                    exec(f"{'var = ' + svalue[0]}")
+                    if(type(var) == str and varDict[variable] != "STRING"):
+                        varDict.update({variable,"INCONSISTENT"})
+                    if(type(var) == bool and varDict[variable] != "BOOLEAN"):
+                        varDict.update({variable,"INCONSISTENT"})
+                    else:
+                        if(type(var) == bool or type(var) == str):
+                            varDict.update({variable,"INCONSISTENT"})
         else:
-            exec(f"{'var = ' + funcBlock['Params'][2]}")
-            if(type(var) == str):
-                varDict.update({funcBlock['Params'][0],"STRING"})
-            if(type(var) == bool):
-                varDict.update({funcBlock['Params'][0],"BOOLEAN"})
+            if(svalue[0] == 'var' and svalue[1] in varDict):
+                varDict.update({variable,varDict[svalue[1]]})
             else:
-                varDict.update({funcBlock['Params'][0],"NUMBER"})
+                if(svalue[0] == "" or svalue[1] not in varDict):
+                    varDict.update({variable,"UNDEFINED"})
+                else:
+                    value = svalue[0]
+                    exec(f"{'var = ' + value}")
+                    if(type(var) == str):
+                        varDict.update({variable,"STRING"})
+                    if(type(var) == bool):
+                        varDict.update({variable,"BOOLEAN"})
+                    else:
+                        varDict.update({variable,"NUMBER"})
     except Exception as e:
         #error handler here
         pass
