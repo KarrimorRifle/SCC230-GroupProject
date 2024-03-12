@@ -2,7 +2,7 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-2-29
+#Last Update:   2024-3-12
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 

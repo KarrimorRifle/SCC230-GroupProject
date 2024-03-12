@@ -2,7 +2,7 @@
 #Desc:          File to hold the Trigger Class and related Functions
 #               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
 #
-#Last Update:   2024-3-11
+#Last Update:   2024-3-12
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -76,7 +76,8 @@ class Trigger:
                                 return f'self.devices[{i}].data["{sDatapoint[1]}"]'
                     
         operators = ['<', '>', '<=', '>=', '==', '!=', # logical operators
-                     'True', 'False'] # boolean values
+                     'True', 'False', # boolean values
+                     'AND', 'OR'] # logical extensions
 
         #Checks if the datapoint is an operator
         if(datapoint not in operators):
@@ -136,7 +137,7 @@ def checkTriggers(ids:list[str]):
                 device.updateData()
 
             #Checks if the code should run
-            if(eval(trigger.data)):
+            if(eval(' '.join(trigger.data))):
                 if(Trigger.canRun):
                     schedule = loadScheduleFromDatabase(trigger.ScheduleID)
                     schedule.runCode()
