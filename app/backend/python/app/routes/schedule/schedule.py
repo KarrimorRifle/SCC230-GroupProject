@@ -104,17 +104,18 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
 
         funcBlock = {'CommandType': block["CommandType"], 'Number': block["Num"], 'LinkedCommands': links, 'Params': paramVals}
         code.append(funcBlock)
-        for x in range(len(funcBlock['Params'])):
-            if('.' in funcBlock['Params'][x]):
-                sVariable = funcBlock['Params'][x].split('.')
-                if(sVariable[0] == 'var'):
-                    svalue = [""]
-                    if(funcBlock['CommandType'] == "SET"):
-                        if(x==0):
-                            svalue = funcBlock['Params'][2].split('.')
-                        else:
-                            svalue = funcBlock['Params'][0].split('.')
-                    VarDictUpdate(sVariable[1], svalue, varDict)
+        for i in range(2):
+            for x in range(len(funcBlock['Params'])):
+                if('.' in funcBlock['Params'][x]):
+                    sVariable = funcBlock['Params'][x].split('.')
+                    if(sVariable[0] == 'var'):
+                        svalue = [""]
+                        if(funcBlock['CommandType'] == "SET"):
+                            if(x==0):
+                                svalue = funcBlock['Params'][2].split('.')
+                            else:
+                                svalue = funcBlock['Params'][0].split('.')
+                        VarDictUpdate(sVariable[1], svalue, varDict)
         links = []
         paramVals = []
 
@@ -141,7 +142,10 @@ def VarDictUpdate(variable, svalue, varDict):
         if(variable in varDict):
             if(svalue[0] == 'var' and svalue[1] in varDict):
                 if(varDict[svalue[1]] !=  varDict[variable]):
-                    varDict.update({variable,"INCONSISTENT"})
+                    if (varDict[variable] == "UNDEFINED"):
+                        varDict.update({variable,varDict[svalue[1]]})
+                    else:
+                        varDict.update({variable,"INCONSISTENT"})
             else:
                 if(svalue[0] == "" or svalue[1] not in varDict):
                     varDict.update({variable,"UNDEFINED"})
