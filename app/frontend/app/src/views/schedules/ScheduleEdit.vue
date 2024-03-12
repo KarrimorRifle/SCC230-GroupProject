@@ -69,9 +69,9 @@
             <div class="me-3">
               <button
                 class="btn btn-secondary btn-sm me-2"
-                @click="$router.push('/schedules')"
+                @click="mode = 'VARS'"
               >
-                LIST
+                VARS
               </button>
               <button
                 class="btn btn-sm me-2"
@@ -135,7 +135,9 @@
           </div>
         </div>
         <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
+          <variable-menu v-if="mode == 'VARS'" />
           <block-menu
+            v-else
             @close="
               menu = false;
               focusedBlock = -1;
@@ -172,6 +174,7 @@
 import BlockMenu from "./BlockMenu.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import FunctionBlock from "./blocks/FunctionBlock.vue";
+import VariableMenu from "./VariableMenu.vue";
 import { computed, ref } from "vue";
 import {
   CommandType,
@@ -186,7 +189,7 @@ const menu = ref<boolean>(true);
 const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
-const mode = ref<"CHANGE" | "ADD">("ADD");
+const mode = ref<"CHANGE" | "ADD" | "VARS">("ADD");
 const showNotification = ref(false);
 const errorMSG = ref<string>("");
 
