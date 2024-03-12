@@ -19,7 +19,7 @@ class test_triggers(unittest.TestCase):
     def test_trigger_loadFromDB(self):
         test = Trigger.loadTriggerFromDatabase("Trgk2190ej849dj345j")
 
-        expected = Trigger.Trigger(id="Trgk2190ej849dj345j",data={'Dev4t3rgd34df423gfsaeft':['var', '==', '4']},ScheduleID="Schk129jd2i23kd34jf")
+        expected = Trigger.Trigger(id="Trgk2190ej849dj345j",data=['var', '==', '4'],ScheduleID="Schk129jd2i23kd34jf")
 
         self.assertEqual(test.id,expected.id)
         self.assertEqual(test.ScheduleID,expected.ScheduleID)
