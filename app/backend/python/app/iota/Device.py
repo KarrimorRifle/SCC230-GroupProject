@@ -59,10 +59,26 @@ class Device:
         dps = TUYASERVER.getdps(self.id)['result']['status']
 
         #Adds the datapoints to the mappings
+        query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
+                 "VALUES ")
+        insert = False
         for datapoint in dps:
             if(datapoint['type'] != 'Enum'):
                 self.mappings[datapoint['dp_id']] = datapoint['code']
                 self.typeMappings[datapoint['code']] = datapoint['type'].upper()
+                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
+                insert = True
+        
+        #Updates the database with the new mappings
+        if insert:
+            try:
+                query = query[:-1]
+                cursor = app.config['cursor']
+                cursor.execute(query)
+                app.config['connection'].commit()
+            except Exception as e:
+                print(f"Error executing query: {e}")
+                
         
 
     #Checks the current data against an external data, and sends any differences
@@ -118,4 +134,4 @@ def loadDeviceFromDatabase(id:str) -> Device:
     if(device == None):
         return None
 
-    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
+    return Device(id=device['DeviceID'], name=device['DeviceName'], ip=device['IpAddress'], key=device['Key'], version=device['Version'], company=device['Company'])
