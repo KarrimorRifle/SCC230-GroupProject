@@ -27,6 +27,7 @@ class Trigger:
         self.id = id
 
         self.devices = []
+        self.data = data
         for i in range(len(data)):
             self.data[i]=self.__resolveDatapoint(data[i])
         
