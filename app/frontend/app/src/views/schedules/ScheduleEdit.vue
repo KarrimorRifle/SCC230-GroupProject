@@ -1,5 +1,12 @@
 <template>
   <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+    <button
+      class="btn invis-bg"
+      id="ScheduleBackButton"
+      @click="router.push('/schedules')"
+    >
+      {{ "< BACK" }}
+    </button>
     <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
         Edit Schedule
@@ -420,5 +427,16 @@ body {
   border-color: rgb(198, 146, 14);
   border-style: solid;
   border-width: 2px;
+}
+
+#ScheduleBackButton {
+  position: absolute;
+  color: rgb(237, 237, 237);
+  border-style: solid;
+  border-color: gray;
+  background-color: rgb(45, 50, 64);
+  top: 4rem;
+  left: 0.5rem;
+  z-index: 5;
 }
 </style>
