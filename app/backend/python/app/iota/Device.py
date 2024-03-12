@@ -27,7 +27,7 @@ class Device:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, ip:str, key:str="", version:float="0.0", 
+    def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
                  company:str="Tuya", debug:bool=False):
         self.id = id
         self.name = name
