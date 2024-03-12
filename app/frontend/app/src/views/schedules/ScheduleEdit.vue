@@ -6,6 +6,7 @@
       :class="{ 'draft-color': schedule.IsDraft }"
     >
       <h2>
+        <button @click="console.log(schedule)">hi</button>
         Edit Schedule
         <div
           v-if="schedule.IsDraft"
@@ -108,7 +109,7 @@
               @delete="schedule?.Code.splice(index, 1)"
               v-model="functionBlock.Params"
               :devices="validDevices"
-              :schedule-vars="variables"
+              :schedule-vars="schedule?.VarDict"
               :highlight="focusedBlock == index"
               @change="
                 menu = true;
@@ -255,11 +256,6 @@ const validDevices = ref<Device[]>([
     },
   },
 ]);
-
-const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
-  test1: "BOOLEAN",
-  test2: "NUMBER",
-});
 
 let scheduleID = router.currentRoute.value.params.id;
 const fetchSchedule = async () => {
