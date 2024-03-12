@@ -93,14 +93,6 @@ def delete_device(account, cursor, connection, deviceID, hubID):
 
     if checkExists is None or checkExists['PermissionLevel'] < EditPermLevel:
         return({"error": "Forbidden access"}), 403
-    
-    query = ("SELECT * FROM trigger_data "
-                "WHERE DeviceID = %s")
-    cursor.execute(query, (deviceID,))
-    trigger = cursor.fetchall()
-
-    if len(trigger) > 0:
-        return({"error": f"device in use at {trigger}"}), 409
 
     query = ("DELETE FROM devices WHERE DeviceID = %s" )
     cursor.execute(query, (deviceID,))
