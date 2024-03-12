@@ -1,5 +1,9 @@
 <template>
-  <div class="nub d-flex" :style="{ width: width }">
+  <div
+    class="nub d-flex"
+    v-if="commandType != 'TRIGGER'"
+    :style="{ width: width }"
+  >
     <div
       class="card px-1 border-bottom-0 rounded-bottom-0 border-end-0 rounded-end-0"
       :style="{ 'border-color': borderColor }"
@@ -21,29 +25,44 @@
   </div>
   <div
     id="functionCodeItem"
-    class="card rounded-top-0 border-top-0 border-bottom-0"
-    :style="{ 'border-color': borderColor, width: width }"
+    class="card border-bottom-0"
+    :class="{
+      'rounded-top-0 border-top-0': commandType != 'TRIGGER',
+    }"
+    :style="{
+      'border-color': borderColor,
+      width: width,
+      'background-color': `${
+        commandType == 'TRIGGER' ? 'rgb(30, 69, 124)' : ''
+      }`,
+    }"
   >
-    <button
-      class="p-0 invis-bg"
-      id="DELETE"
-      v-if="!display"
-      @click="$emit('delete')"
-    >
-      x
-    </button>
-    <button
-      class="p-0 invis-bg"
-      id="CHANGE"
-      v-if="!display"
-      @click="$emit('change')"
-    >
-      ...
-    </button>
+    <template v-if="commandType != 'TRIGGER'">
+      <button
+        class="p-0 invis-bg"
+        id="DELETE"
+        v-if="!display"
+        @click="$emit('delete')"
+      >
+        x
+      </button>
+      <button
+        class="p-0 invis-bg"
+        id="CHANGE"
+        v-if="!display"
+        @click="$emit('change')"
+      >
+        ...
+      </button>
+    </template>
     <div class="card-body p-2">
       <div class="row d-flex justify-content-center">
         <div
-          class="col px-0 d-flex align-items-start justify-content-center col-2"
+          class="px-0 d-flex align-items-start justify-content-center"
+          :class="{
+            'col-2': commandType != 'TRIGGER',
+            'col-3': commandType == 'TRIGGER',
+          }"
         >
           <b class="pt-1" :style="{ color: borderColor }">{{ commandType }}</b>
         </div>
@@ -63,7 +82,14 @@
               v-model.number="code[0]"
             />
           </div>
-          <div v-else class="col-9 px-0">
+          <div
+            v-else
+            class="px-0"
+            :class="{
+              'col-9': commandType != 'TRIGGER',
+              'col-8': commandType == 'TRIGGER',
+            }"
+          >
             <div class="d-flex flex-column">
               <div class="input-group" v-if="display">
                 <div class="input-group-text p-0" style="width: 5rem"></div>
@@ -113,7 +139,9 @@
                     {{ item[1] }}
                   </button>
                   <variable-list-options
-                    :custom-list="list"
+                    :custom-list="
+                      getVarType(item[0]) == 'BOOLEAN' ? list.slice(0, 2) : list
+                    "
                     @option="
                       (item) => {
                         code[index * 4 + 1] = item;
@@ -265,7 +293,12 @@
     </div>
     <div
       class="card rounded-0 rounded-bottom border-top-0"
-      :style="{ 'border-color': borderColor }"
+      :style="{
+        'border-color': borderColor,
+        'background-color': `${
+          commandType == 'TRIGGER' ? 'rgb(30, 69, 124)' : ''
+        }`,
+      }"
     >
       <div class="card-body p-0 px-3 py-1"></div>
     </div>
@@ -300,12 +333,13 @@ const list = computed(() => {
   return ["=", "+=", "-=", "/=", "*="];
 });
 
-const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE"]);
+const conditionals = ref<CommandType[]>(["WHILE", "IF", "ELSE", "TRIGGER"]);
 const code = ref<string[]>(props.modelValue || ["", list.value[0], ""]);
 
 watchEffect(() => {
   if (props.modelValue) {
     code.value = props.modelValue;
+    if (code.value.length < 2) code.value = ["", "==", "0"];
   }
 });
 
@@ -379,7 +413,7 @@ const width = computed(() => {
 });
 
 // const getCode = () => {
-//   if (props.initialCode) code.value = props.initialCode;
+//   console.log(props.modelValue);
 // };
 // getCode();
 

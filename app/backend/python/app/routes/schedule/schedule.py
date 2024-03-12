@@ -271,7 +271,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    if newTriggers is not None and newTriggers != [] and hubID is not None:
+    if newTriggers is not None and newTriggers != []:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
         cursor.execute(query, (scheduleID,))
