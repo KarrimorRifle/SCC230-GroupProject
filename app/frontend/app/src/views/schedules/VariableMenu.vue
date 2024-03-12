@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid main-schedule-variable-manager px-0">
-    <button @click="console.log(modelValue)">hello</button>
     <h3>Variables</h3>
     <div v-if="Object.keys(modelValue).length > 0" class="variable-container">
       <table id="varTable" class="container-fluid">

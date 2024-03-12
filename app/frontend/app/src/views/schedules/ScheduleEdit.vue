@@ -2,7 +2,6 @@
   <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
     <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
-        <button @click="console.log(schedule)">hi</button>
         Edit Schedule
         <div
           v-if="schedule.IsDraft"
