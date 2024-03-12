@@ -98,19 +98,16 @@ def loadTriggerFromDatabase(id:str):
     trigger = cursor.fetchone()
     if(trigger!=None):
         ScheduleID = trigger['ScheduleID']
-        query = ("SELECT DeviceID, Data, ListPos FROM trigger_data "
+        query = ("SELECT Data, ListPos FROM trigger_data "
                     "WHERE TriggerID = %s")
         cursor.execute(query, (id,))
         triggerData = cursor.fetchall()
         triggerData = [row for row in triggerData]
         triggerData = sorted(triggerData, key=lambda x: x['ListPos'])
 
-        data = {}
+        data = []
         for row in triggerData:
-            if data.get(row['DeviceID']) is None:
-                data[row['DeviceID']] = []
-            
-            data[row['DeviceID']].append(row['Data'])
+            data.append(row['Data'])
 
         return Trigger(id=trigger['TriggerID'], data=data, ScheduleID=ScheduleID)
     else:
