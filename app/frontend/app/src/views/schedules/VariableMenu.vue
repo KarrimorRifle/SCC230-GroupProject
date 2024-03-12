@@ -4,16 +4,16 @@
     <h3>Variables</h3>
     <div v-if="Object.keys(modelValue).length > 0" class="variable-container">
       <table id="varTable" class="container-fluid">
-        <tr class="mb-3">
+        <tr class="mb-3 stick-top">
           <th>Variable Name</th>
           <th>Value Type</th>
           <th></th>
         </tr>
         <tr v-for="(value, key, index) in modelValue" :key="key + index">
           <td>{{ key }}</td>
-          <td class="input-group mb-2">
+          <td class="input-group">
             <button
-              class="btn dropdown-toggle container-fluid btn-secondary py-1"
+              class="btn dropdown-toggle container-fluid btn-secondary py-1 rounded-0 invis-bg border-0"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
@@ -22,7 +22,7 @@
             <ul class="dropdown-menu">
               <li>
                 <button
-                  class="dropdown-item"
+                  class="dropdown-item variable-chooser"
                   @click="modelValue[key] = 'NUMBER'"
                 >
                   NUMBER
@@ -137,14 +137,38 @@ const addNewVar = () => {
 .variable-container {
   height: 80%;
   min-height: 0;
-  max-height: 80%;
+  flex-grow: 8;
   overflow-y: scroll;
   overflow-x: hidden;
+  max-height: 65vh;
 }
 
 .variable-controller {
   max-height: 20%;
   flex-grow: 1;
   min-height: 0;
+}
+
+.variable-chooser:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#varTable > tr {
+  /* border-bottom: 1px; */
+  border-style: solid;
+  border-color: white;
+}
+
+table#varTable tr:nth-child(2n) {
+  background-color: rgb(113, 112, 146);
+}
+
+table#varTable tr:nth-child(n + 1) > td:first-child {
+  width: 60%;
+  padding-left: 2rem;
+  text-align: start;
+  border-right: 2px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.486);
 }
 </style>
