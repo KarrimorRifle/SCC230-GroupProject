@@ -67,15 +67,15 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     cursor.execute(query, (scheduleID,))
     trigger = cursor.fetchone()
 
-    triggerDict = {}
+    triggerArr = []
     if trigger is not None:
-        query = ("SELECT DeviceID, Data FROM trigger_data "
+        query = ("SELECT Data FROM trigger_data "
                     "WHERE TriggerID = %s")
         cursor.execute(query, (trigger['TriggerID'],))
         triggerData = cursor.fetchall()
 
         for data in triggerData:
-            triggerDict[data['DeviceID']] = data['Data']
+            triggerArr.append(data['Data'])
 
     code = []
     varDict = {}
@@ -122,7 +122,7 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
                'Rating': schedule['Rating'],
                'Code': code,
                'VarDict': varDict,
-               'Trigger': triggerDict}
+               'Trigger': triggerArr}
     
     return jsonify(details), 200
 
@@ -247,7 +247,7 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    if newTriggers is not None and newTriggers != {} and hubID is not None:
+    if newTriggers is not None and newTriggers != [] and hubID is not None:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
         cursor.execute(query, (scheduleID,))
@@ -281,16 +281,15 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return(jsonify({"error":"Unable to update schedule triggers", "details":f"{e}"})), 500
         
-        query = ("INSERT INTO trigger_data (TriggerID, DeviceID, Data, ListPos) "
+        query = ("INSERT INTO trigger_data (TriggerID, Data, ListPos) "
                     "VALUES ")
         values = ()
 
-        for key, val in newTriggers.items():
-            pos = 0
-            for v in val:
-                query += ("(%s,%s,%s,%s),")
-                values += (triggerID, key, v,pos,)
-                pos += 1
+        pos = 0
+        for v in newTriggers:
+            query += ("(%s,%s,%s),")
+            values += (triggerID, v,pos,)
+            pos += 1
         
         query = query[:-1]
         try:
