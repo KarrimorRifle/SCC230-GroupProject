@@ -51,6 +51,7 @@ class TestScheduleRoutes(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
+        self.assertIn('Description', data)
         self.assertIn('IsActive', data)
         self.assertIn('IsDraft', data)
         self.assertIn('IsPublic', data)
@@ -82,14 +83,14 @@ class TestScheduleRoutes(unittest.TestCase):
             }
         ]
 
-        val1 = ['Var', '==', '5']
-        val2 = ['Var2', '==', '8']
-        trigger = {'Dev4t3rgd34df423gfs': val1, 'Dev4t3rgd34df423gfs': val2}
+        trigger = ['Var', '==', '5']
 
         newName = 'Name Update Schedule3'
+        description = 'Description Update Schedule3'
 
         payload = {
             'ScheduleName': newName,
+            'Description': description,
             'IsPublic': 1,
             'IsDraft': 0,
             'IsActive': 1,
@@ -109,6 +110,7 @@ class TestScheduleRoutes(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
+        self.assertIn('Description', data)
         self.assertIn('IsActive', data)
         self.assertIn('IsDraft', data)
         self.assertIn('IsPublic', data)
@@ -117,8 +119,9 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Code', data)
         self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
-        self.assertEqual({}, data['Trigger'])
+        self.assertEqual([], data['Trigger'])
         self.assertEqual(data['ScheduleName'], newName)
+        self.assertEqual(data['Description'], description)
         self.assertEqual(data['IsPublic'], 1)
         self.assertIn(code[0], data['Code'])
         self.assertIn(code[1], data['Code'])
