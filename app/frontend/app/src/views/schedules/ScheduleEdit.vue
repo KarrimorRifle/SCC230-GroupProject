@@ -1,10 +1,6 @@
 <template>
-  <div class="main mx-0" :key="'fnasfb'">
-    <div
-      class="header"
-      v-if="schedule"
-      :class="{ 'draft-color': schedule.IsDraft }"
-    >
+  <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+    <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
         <button @click="console.log(schedule)">hi</button>
         Edit Schedule
@@ -136,7 +132,7 @@
           </div>
         </div>
         <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
-          <variable-menu v-if="mode == 'VARS'" />
+          <variable-menu v-if="mode == 'VARS'" v-model="schedule.VarDict" />
           <block-menu
             v-else
             @close="
