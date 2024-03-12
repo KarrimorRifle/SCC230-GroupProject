@@ -73,6 +73,7 @@ VALUES("Dev4t3rgd34df423gfsaeft","Test Device","12345678","192.168.0.1",1.0,"Not
 CREATE TABLE `schedules`(
     `ScheduleID` varchar(100) NOT NULL PRIMARY KEY,
     `ScheduleName` VARCHAR(255) NOT NULL,
+    `Description` VARCHAR(1020) NOT NULL DEFAULT "No Description",
     `AuthorID` varchar(100) NOT NULL,
     `CopyFrom` varchar(100),
     `HubID` varchar(100),

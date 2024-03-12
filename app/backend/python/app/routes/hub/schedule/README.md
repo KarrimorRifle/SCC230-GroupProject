@@ -22,6 +22,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
@@ -71,6 +72,7 @@ Current User must be part of hub and have permission level > 2.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
@@ -118,6 +120,7 @@ PermissionLevel > 0.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
@@ -152,6 +155,7 @@ PermissionLevel > 2.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
@@ -200,6 +204,7 @@ PermissionLevel > 1.
 
 ##### Optional Parameters:
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
     -   MUST BE THE ONLY Param PASSED EXCEPT IsDraft IF USER HAS ONLY TOGGLE ACTIVE ACCESS
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
@@ -212,6 +217,7 @@ PermissionLevel > 1.
 -	(string)ScheduleID – Unique ID to identify specified schedule
 -	(string)AuthorID - Unique ID to identify user who created specified schedule
 -	(string)ScheduleName – Name of schedule
+-   (string)Description - Description of Schedule
 -   (string)HubID - Unique ID of hub schedule is in
 -	(small int)IsActive – Holds value 0 or 1 representing active status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
