@@ -119,7 +119,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Code', data)
         self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
-        self.assertEqual([], data['Trigger'])
+        self.assertEqual(trigger, data['Trigger'])
         self.assertEqual(data['ScheduleName'], newName)
         self.assertEqual(data['Description'], description)
         self.assertEqual(data['IsPublic'], 1)
