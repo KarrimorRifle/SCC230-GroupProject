@@ -71,25 +71,31 @@
             </div>
             <div class="me-3">
               <button
-                class="btn btn-secondary btn-sm me-2"
+                class="btn btn-secondary btn-sm me-2 border-3"
                 @click="mode = 'VARS'"
               >
                 VARS
               </button>
               <button
-                class="btn btn-sm me-2"
+                class="btn btn-sm me-2 border-3"
                 @click="toggleDraft()"
                 :class="{
-                  'btn-warning': !schedule.IsDraft,
-                  'btn-secondary': schedule.IsDraft,
+                  'btn-outline-warning text-light': !schedule.IsDraft,
+                  'btn-warning': schedule.IsDraft,
                 }"
               >
                 {{ schedule.IsDraft ? "UNDRAFT" : "DRAFT" }}
               </button>
-              <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
+              <button
+                class="btn btn-success btn-sm me-2 border-3 text-light"
+                @click="saveSchedule"
+              >
                 SAVE
               </button>
-              <button class="btn btn-danger btn-sm" @click="deleteSchedule">
+              <button
+                class="btn btn-danger btn-sm border-3 text-light"
+                @click="deleteSchedule"
+              >
                 DELETE
               </button>
             </div>
