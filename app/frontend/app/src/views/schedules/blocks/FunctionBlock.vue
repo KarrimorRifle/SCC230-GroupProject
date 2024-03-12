@@ -348,7 +348,10 @@ const parseVar = (variable: string) => {
   } catch {
     return undefined;
   }
-  if (varArray[0] == "var" && props.scheduleVars) return "SCH: " + varArray[1];
+  if (varArray[0] == "var" && props.scheduleVars)
+    if (Object.keys(props.scheduleVars).includes(varArray[1]))
+      return "SCH: " + varArray[1];
+    else return;
   else {
     let index = props.devices?.findIndex((device) => device.id == varArray[0]);
     if (index != undefined && varArray[1])
