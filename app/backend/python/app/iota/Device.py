@@ -112,4 +112,4 @@ def loadDeviceFromDatabase(id:str) -> Device:
     if(device == None):
         return None
 
-    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])
+    return Device(id=device['DeviceID'], name=device['DeviceName'], key=device['Key'], ip=device['IpAddress'], company=device['Company'], version=device['Version'])
