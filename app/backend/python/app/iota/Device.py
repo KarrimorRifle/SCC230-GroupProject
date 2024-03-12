@@ -19,21 +19,24 @@ class Device:
     ##VALUES##
     #id         Holds the ID for the Device to be stored in the Database
     #name       Holds the name that the user will see for the Device
-    #isActive   Checks if the Device is currently in use
+    #ip         Holds the IP of the Device
+    #key        Holds the local key of the Device to confirm it's being accessed consentually
+    #version    Holds the API version that TinyTuya uses to communicate with the device
+    #mappings   Maps the Datapoint's number to it's code, so that the value can be accessed by name.
     #data       Holds the data for the device in a dict.
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, ip:str, key:str, version:float,
+    def __init__(self, id:str, name:str, ip:str, key:str="", version:float="0.0", 
                  company:str="Tuya", debug:bool=False):
         self.id = id
         self.name = name
 
         self.company = company
         self.ip = ip
-        self.key = key
 
         if(self.company == "Tuya"):
+            self.key = key
             self.version = version
             self.mappings = self.getMappings()
 

@@ -26,12 +26,10 @@ class Trigger:
                  canRun:bool=False, debug:bool=False):
         self.id = id
 
-        self.data = data
         self.devices = []
-        for i in range(len(self.data)):
-            self.data[i]=self.__resolveDatapoint(self.data[i])
+        for i in range(len(data)):
+            self.data[i]=self.__resolveDatapoint(data[i])
         
-
         self.ScheduleID = ScheduleID
         self.canRun = canRun
 
