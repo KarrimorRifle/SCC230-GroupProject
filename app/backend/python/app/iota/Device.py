@@ -2,8 +2,8 @@
 #Desc:          File to hold the Device Class and related Functions
 #               The Function of the Device Class is to hold information about IOT Devices
 #
-#Last Update:   2024-3-11
-#Updated By:    Aditya Khan
+#Last Update:   2024-3-10
+#Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
@@ -19,25 +19,29 @@ class Device:
     ##VALUES##
     #id         Holds the ID for the Device to be stored in the Database
     #name       Holds the name that the user will see for the Device
-    #isActive   Checks if the Device is currently in use
+    #ip         Holds the IP of the Device
+    #key        Holds the local key of the Device to confirm it's being accessed consentually
+    #version    Holds the API version that TinyTuya uses to communicate with the device
+    #mappings   Maps the Datapoint's number to it's code, so that the value can be accessed by name.
     #data       Holds the data for the device in a dict.
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, ip:str, key:str, version:float,
+    def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
                  company:str="Tuya", debug:bool=False):
         self.id = id
         self.name = name
 
         self.company = company
         self.ip = ip
-        self.key = key
 
         if(self.company == "Tuya"):
+            self.key = key
             self.version = version
             self.mappings = self.getMappings()
 
-        self.data = self.updateData()
+        self.data = {}
+        self.updateData()
 
         self.debug = debug
         
@@ -55,11 +59,17 @@ class Device:
         for datapoint in dps:
             mappings[datapoint['dp_id']] = str(datapoint['code'])
 
+    #Checks the current data against an external data, and sends any differences
+    def changeData(self, data:dict):
+        if(data != self.data):
+            for key in self.mappings.keys():
+                if(data[key] != self.data[key]):
+                    self.sendData(key, self.data[key])
+
     #Updates the Data stored in the class and database
-    def updateData(self) -> dict[str, any]:
+    def updateData(self):
         #Checks what company the device is from
         match(self.company):
-
             #If it is a Tuya Device
             case "Tuya":
                 #Creates the Device
@@ -76,18 +86,10 @@ class Device:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
 
-    #Checks the current data against an external data, and sends any differences
-    def sendAllData(self, data:dict):
-        if(data != self.data):
-            for key in self.mappings.keys():
-                if(data[key] != self.data[key]):
-                    self.sendData(key, self.data[key])
-
     #Sends data to a device
     def sendData(self, variable:str, value:any):
         #Checks what company the device is from
         match(self.company):
-
             #If it is a Tuya Device
             case "Tuya":
                 apiDevice = tuya.Device(self.id, self.ip, self.key, self.version)
@@ -96,10 +98,10 @@ class Device:
                     if(self.mappings[mapping] == variable or mapping == variable):
                         apiDevice.set_value(mapping, value, True)
             case _:
-                addToErrorLog(f"Invalid Company \"{self.deviceType}\"")
+                addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
 
-#Loads
+#Loads a Device From the Database
 def loadDeviceFromDatabase(id:str) -> Device:
     cursor = app.config['cursor']
     query = ("SELECT * FROM devices "
@@ -107,5 +109,7 @@ def loadDeviceFromDatabase(id:str) -> Device:
 
     cursor.execute(query, (id,))
     device = cursor.fetchone()
+    if(device == None):
+        return None
 
-    return Device(id=device['DeviceID'], name=device['DeviceName'], key=device['Key'], ip=device['IpAddress'], version=float(device['Version']), company=device['Company'])
+    return Device(device['DeviceID'], device['DeviceName'], device['DeviceType'], device['IpAddress'], device['HubID'])

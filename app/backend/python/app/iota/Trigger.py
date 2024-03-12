@@ -17,22 +17,75 @@ class Trigger:
     ##VALUES##
     #id         Holds the id to store the Trigger in the database
     #data       Holds the data that is needed to set off the trigger
-    #schedule   Holds the schedule that is activated when the trigger goes off
+    #devices    Holds a list of devices that the Trigger references
+    #scheduleID Holds the ID for the schedule that is activated when the trigger goes off
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, ScheduleID:str, data:dict[str, list[str]], canRun:bool=False, debug:bool=False):
+    def __init__(self, id:str, ScheduleID:str, data:list[str],
+                 canRun:bool=False, debug:bool=False):
         self.id = id
-        self.data = data
+
+        self.devices = []
+        for i in range(len(data)):
+            self.data[i]=self.__resolveDatapoint(data[i])
+        
         self.ScheduleID = ScheduleID
         self.canRun = canRun
+
         self.debug = debug
 
+    ##PUBLIC METHODS##
+    #Updates the canRun value of a Trigger in the database
     def updateCanRun(self):
         cursor = app.config['cursor']
         query = ("UPDATE triggers"
                 f"SET canRun = {1 if(self.canRun) else 0}"
                 f"WHERE TriggerID = {self.id}")
+
+    ##PRIVATE METHODS##
+    #Formats the data into an evaluable string
+    def __resolveDatapoint(self, datapoint:str):
+        datapoint=str(datapoint)
+
+        #Checks if the datapoint is an empty string
+        if(len(datapoint) == 0):
+            return '""'
+        #Checks if the datapoint is a valid number
+        try:
+            _d = float(datapoint)
+            return datapoint
+        except:
+            #Checks if the datapoint is referencing a string
+            if('.' in datapoint):
+                sDatapoint = datapoint.split(".")
+                #Checks if it is a device in the database
+                device=loadDeviceFromDatabase(sDatapoint[0])
+                if(device != None):
+                    #Adds device to the list of devices
+                    if(device not in self.devices):
+                        self.devices.append(device)
+                        #Returns the formatted string
+                        return f'self.devices[{len(self.devices)-1}].data["{sDatapoint[1]}"]'
+                    else:
+                        #Finds which device in self.devices the trigger uses
+                        for i in range(len(self.devices)):
+                            if(device == self.devices[i]):
+                                #Returns the formatted string
+                                return f'self.devices[{i}].data["{sDatapoint[1]}"]'
+                    
+        operators = ['<', '>', '<=', '>=', '==', '!=', # logical operators
+                     'True', 'False'] # boolean values
+
+        #Checks if the datapoint is an operator
+        if(datapoint not in operators):
+            #Checks if the variable is already in quotations
+            if(datapoint[0] == '"' or datapoint[0] == "'"):
+                datapoint[0] = ""
+            if(datapoint[-1] == '"' or datapoint[-1] == "'"):
+                datapoint[-1] = "" 
+        #returns the string
+        return str(datapoint)
 
 # Function creates Trigger object based on Trigger data in DB
 def loadTriggerFromDatabase(id:str):
@@ -79,11 +132,17 @@ def checkTriggers(ids:list[str]):
         with(checkTriggersSemaphore):
             #Gets all the data about the trigger
             trigger=loadTriggerFromDatabase(id)
+
+            #Updates the data in all the devices that the trigger uses 
+            for device in trigger.devices:
+                device.updateData()
+
             #Checks if the code should run
             if(eval(trigger.data)):
                 if(Trigger.canRun):
                     schedule = loadScheduleFromDatabase(trigger.ScheduleID)
                     schedule.runCode()
+
                 #Stops the trigger from running multiple times from one activation
                 trigger.canRun = False
             else:
