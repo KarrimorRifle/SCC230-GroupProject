@@ -253,7 +253,8 @@ class Schedule:
         operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
                      '+', '-', '=', '/', '*', '%', # assignment operators
                      '+=' '-=', '/=', '*=', # self-assignment operators
-                     'True', 'False'] # boolean values
+                     'True', 'False', # boolean values
+                     'AND', 'OR'] # logical connectors
 
         #Checks if the variable is an operator
         if(variable not in operators):
@@ -262,6 +263,8 @@ class Schedule:
                 variable[0] = ""
             if(variable[-1] == '"' or variable[-1] == "'"):
                 variable[-1] = "" 
+        else:
+            variable = variable.lower()
         #returns the string
         return str(variable)
 
