@@ -39,7 +39,7 @@
             </ul>
           </td>
           <td>
-            <button class="border-0 invis-bg">
+            <button class="border-0 invis-bg" @click="delete modelValue[key]">
               <img
                 src="@/assets/delete-svgrepo-com.svg"
                 alt="DELETE"
