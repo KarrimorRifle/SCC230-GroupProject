@@ -28,7 +28,7 @@ Structure shows variables and values for frontend to be familiar with.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 <br><br><br><br>
 
 ## Routes
@@ -77,7 +77,7 @@ Current User must be part of hub and have permission level > 2.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule - will be empty
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data - will be empty
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -89,11 +89,6 @@ Current User must be part of hub and have permission level > 2.
     -   LinkedCommands – List of positions of blocks linked to current block
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
-
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 
 <br><br><br>
 
@@ -129,7 +124,7 @@ PermissionLevel > 0.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -142,10 +137,6 @@ PermissionLevel > 0.
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
 
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 <br>
 
 #### POST: 
@@ -167,7 +158,7 @@ PermissionLevel > 2.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -180,10 +171,6 @@ PermissionLevel > 2.
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
 
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 <br>
 
 #### DELETE: 
@@ -219,7 +206,7 @@ PermissionLevel > 1.
     -   MUST BE THE ONLY Param PASSED EXCEPT IsActive IF USER HAS ONLY TOGGLE ACTIVE ACCESS
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
--	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Return Values:
 -	(string)ScheduleID – Unique ID to identify specified schedule
@@ -231,7 +218,7 @@ PermissionLevel > 1.
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -243,11 +230,6 @@ PermissionLevel > 1.
     -   LinkedCommands – List of positions of blocks linked to current block
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
-
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 
 <br><br><br><br>
 

@@ -11,18 +11,6 @@
 ###### *for frontend to worry about by backend
 <br>
 
-### Trigger
-
-Dictionary using valid DeviceIDs as keys and string arrays as values.
-
-No need for frontend to deal with TriggerIDs as triggers are directly connected to the schedules they are made for when updating said schedules.
-
-#### Structure:
--	(dict)Trigger – {DeviceID: data}
-    -	DeviceID(Key) – Valid ID of a connected device
-    -	Data(Value) – Array of string values (Refer to iota class docs for details on format and structure)
-<br>
-
 ### Schedule
 
 Schedule model as handled by backend for database storing. The data in DB is processed slightly differently when handed to iota manager to create and use as a schedule class object. 
@@ -41,7 +29,7 @@ Structure shows variables and values for frontend to be familiar with.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -   (dict)VarDict - Dictionary with key of variable names and value of type contained
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 <br>
 
 ### Function Block
@@ -130,7 +118,7 @@ Lists all values associated with schedule belonging to current user specified by
 -   (string)CopyFrom - Holds ID of original creator of schedule template, NULL if current Author is original creator.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -142,11 +130,6 @@ Lists all values associated with schedule belonging to current user specified by
     -   LinkedCommands – List of positions of blocks linked to current block
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
-
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 <br>
 
 #### DELETE: 
@@ -170,7 +153,7 @@ Updates specified schedule data based on passed parameters.
 -	(small int)IsDraft – Holds value 0 or 1 representing draft status of schedule
 -	(small int)IsPublic - Holds value 0 or 1 representing if schedule is public to all users
 -	(dict[])Code – list of function blocks that make up the code for specified schedule
--	(dict)Trigger – dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Return Values:
 -	(string)ScheduleID – Unique ID to identify specified schedule
@@ -183,7 +166,7 @@ Updates specified schedule data based on passed parameters.
 -	(int)Rating – Rating given by other users, NULL if IsPublic is 0 and was never 1
 -	(dict[])Code – List of function blocks that make up the code for specified schedule
 -   (dict)VarDict - Dictionary with key of variable names and value of type contained
--	(dict)Trigger – Dictionary of DeviceIDs as keys paired with string of array holding data
+-	(string[])Trigger – array holding data for trigger
 
 ##### Structure of Code:
 -	List of function block dictionaries
@@ -196,10 +179,6 @@ Updates specified schedule data based on passed parameters.
     -	Params – List of values used as parameters in the function block
         -	Refer to iota class docs by Kian for details regarding structure
 
-##### Structure of Trigger:
--	Dictionary with DeviceIDs and data
--	Trigger dictionary structure:
-    -	{DeviceID: string[], DeviceID: string[], DeviceID: string[], … }
 <br><br><br><br>
 
 ### LINK TO RELATED DOCS

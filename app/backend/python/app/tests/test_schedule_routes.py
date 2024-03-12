@@ -82,9 +82,7 @@ class TestScheduleRoutes(unittest.TestCase):
             }
         ]
 
-        val1 = ['Var', '==', '5']
-        val2 = ['Var2', '==', '8']
-        trigger = {'Dev4t3rgd34df423gfs': val1, 'Dev4t3rgd34df423gfs': val2}
+        trigger = ['Var', '==', '5']
 
         newName = 'Name Update Schedule3'
 
@@ -117,7 +115,7 @@ class TestScheduleRoutes(unittest.TestCase):
         self.assertIn('Code', data)
         self.assertIn('VarDict', data)
         self.assertIn('Trigger', data)
-        self.assertEqual({}, data['Trigger'])
+        self.assertEqual([], data['Trigger'])
         self.assertEqual(data['ScheduleName'], newName)
         self.assertEqual(data['IsPublic'], 1)
         self.assertIn(code[0], data['Code'])

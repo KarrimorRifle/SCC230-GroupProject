@@ -59,6 +59,14 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
+CREATE TABLE `device_vars`(
+    `VarID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `DeviceID` varchar(100) NOT NULL,
+    `VarName` VARCHAR(255) NOT NULL,
+    `VarType` VARCHAR(255) NOT NULL,
+    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE
+);
+
 INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
 VALUES("Dev4t3rgd34df423gfsaeft","Test Device","12345678","192.168.0.1",1.0,"NotTuya","Hubk23098jwij123msd");
 
@@ -96,16 +104,14 @@ Values("Trgk2190ej849dj345j","Schk129jd2i23kd34jf");
 
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `DeviceID` varchar(100) NOT NULL,
     `TriggerID` varchar(100) NOT NULL,
     `Data` varchar(255) NOT NULL,
     `ListPos` INT UNSIGNED NOT NULL DEFAULT 0,
-    FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE,
     FOREIGN KEY (TriggerID) REFERENCES triggers(TriggerID) ON DELETE CASCADE
 );
 
-INSERT INTO trigger_data(`TriggerID`,`DeviceID`,`Data`,`ListPos`)
-Values("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "var",0), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "==",1), ("Trgk2190ej849dj345j","Dev4t3rgd34df423gfsaeft", "4",2);
+INSERT INTO trigger_data(`TriggerID`,`Data`,`ListPos`)
+Values("Trgk2190ej849dj345j", "var",0), ("Trgk2190ej849dj345j", "==",1), ("Trgk2190ej849dj345j", "4",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,

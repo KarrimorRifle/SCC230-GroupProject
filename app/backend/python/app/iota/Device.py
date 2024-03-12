@@ -2,8 +2,8 @@
 #Desc:          File to hold the Device Class and related Functions
 #               The Function of the Device Class is to hold information about IOT Devices
 #
-#Last Update:   2024-3-11
-#Updated By:    Aditya Khan
+#Last Update:   2024-3-12
+#Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
@@ -19,47 +19,79 @@ class Device:
     ##VALUES##
     #id         Holds the ID for the Device to be stored in the Database
     #name       Holds the name that the user will see for the Device
-    #isActive   Checks if the Device is currently in use
+    #ip         Holds the IP of the Device
+    #key        Holds the local key of the Device to confirm it's being accessed consentually
+    #version    Holds the API version that TinyTuya uses to communicate with the device
+    #mappings   Maps the Datapoint's number to it's code, so that the value can be accessed by name.
     #data       Holds the data for the device in a dict.
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id:str, name:str, ip:str, key:str, version:float,
+    def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
                  company:str="Tuya", debug:bool=False):
         self.id = id
         self.name = name
 
         self.company = company
         self.ip = ip
-        self.key = key
 
         if(self.company == "Tuya"):
+            self.key = key
             self.version = version
-            self.mappings = self.getMappings()
 
-        self.data = self.updateData()
+            self.typeMappings = {}
+            self.mappings = {}
+            self.getMappings()
+            
+
+        self.data = {}
+        self.updateData()
 
         self.debug = debug
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
-    def getMappings(self) -> dict[str,str]:
+    def getMappings(self):
         #Configures the server to get the devices on the user's network
         TUYASERVER.apiDeviceID = self.id
         
         #Gets the Datapoints from the server
         dps = TUYASERVER.getdps(self.id)['result']['status']
-        mappings = {}
 
         #Adds the datapoints to the mappings
+        query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
+                 "VALUES ")
+        insert = False
         for datapoint in dps:
-            mappings[datapoint['dp_id']] = str(datapoint['code'])
+            if(datapoint['type'] != 'Enum'):
+                self.mappings[datapoint['dp_id']] = datapoint['code']
+                self.typeMappings[datapoint['code']] = datapoint['type'].upper()
+                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
+                insert = True
+        
+        #Updates the database with the new mappings
+        if insert:
+            try:
+                query = query[:-1]
+                cursor = app.config['cursor']
+                cursor.execute(query)
+                app.config['connection'].commit()
+            except Exception as e:
+                print(f"Error executing query: {e}")
+                
+        
+
+    #Checks the current data against an external data, and sends any differences
+    def changeData(self, data:dict):
+        if(data != self.data):
+            for key in self.mappings.keys():
+                if(data[key] != self.data[key]):
+                    self.sendData(key, self.data[key])
 
     #Updates the Data stored in the class and database
-    def updateData(self) -> dict[str, any]:
+    def updateData(self):
         #Checks what company the device is from
         match(self.company):
-
             #If it is a Tuya Device
             case "Tuya":
                 #Creates the Device
@@ -76,18 +108,10 @@ class Device:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
 
-    #Checks the current data against an external data, and sends any differences
-    def sendAllData(self, data:dict):
-        if(data != self.data):
-            for key in self.mappings.keys():
-                if(data[key] != self.data[key]):
-                    self.sendData(key, self.data[key])
-
     #Sends data to a device
     def sendData(self, variable:str, value:any):
         #Checks what company the device is from
         match(self.company):
-
             #If it is a Tuya Device
             case "Tuya":
                 apiDevice = tuya.Device(self.id, self.ip, self.key, self.version)
@@ -96,10 +120,10 @@ class Device:
                     if(self.mappings[mapping] == variable or mapping == variable):
                         apiDevice.set_value(mapping, value, True)
             case _:
-                addToErrorLog(f"Invalid Company \"{self.deviceType}\"")
+                addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
 
-#Loads
+#Loads a Device From the Database
 def loadDeviceFromDatabase(id:str) -> Device:
     cursor = app.config['cursor']
     query = ("SELECT * FROM devices "
@@ -107,5 +131,7 @@ def loadDeviceFromDatabase(id:str) -> Device:
 
     cursor.execute(query, (id,))
     device = cursor.fetchone()
+    if(device == None):
+        return None
 
-    return Device(id=device['DeviceID'], name=device['DeviceName'], key=device['Key'], ip=device['IpAddress'], version=float(device['Version']), company=device['Company'])
+    return Device(id=device['DeviceID'], name=device['DeviceName'], ip=device['IpAddress'], key=device['Key'], version=device['Version'], company=device['Company'])

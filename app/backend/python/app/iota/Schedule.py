@@ -2,7 +2,7 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-2-29
+#Last Update:   2024-3-12
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -230,10 +230,6 @@ class Schedule:
         variable = str(variable)
         if(len(variable) == 0):
             return '""'
-
-        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
-                     '+', '-', '=', '/', '*', '%' # assignment operators
-                     '+=' '-=', '/=', '*='] # self-assignment operators
         
         #checks if the variable is a number
         try:
@@ -254,6 +250,12 @@ class Schedule:
                         if(sVariable[0] == self.devices[i].name and sVariable[1] in self.devices[i].data.keys()):
                             return f'self.devices[{i}].data["{sVariable[1]}"]'
         
+        operators = ['<', '>', '<=', '>=', '==', '!=', # logic operators
+                     '+', '-', '=', '/', '*', '%', # assignment operators
+                     '+=' '-=', '/=', '*=', # self-assignment operators
+                     'True', 'False', # boolean values
+                     'AND', 'OR'] # logical connectors
+
         #Checks if the variable is an operator
         if(variable not in operators):
             #Checks if the variable is already in quotations
@@ -261,6 +263,8 @@ class Schedule:
                 variable[0] = ""
             if(variable[-1] == '"' or variable[-1] == "'"):
                 variable[-1] = "" 
+        else:
+            variable = variable.lower()
         #returns the string
         return str(variable)
 
