@@ -49,7 +49,7 @@
         </button>
       </li>
     </template>
-    <template v-if="scheduleVars">
+    <template v-if="scheduleVars && Object.keys(scheduleVars).length > 0">
       <li class="mt-2">
         <b>Schedule Vars</b>
       </li>

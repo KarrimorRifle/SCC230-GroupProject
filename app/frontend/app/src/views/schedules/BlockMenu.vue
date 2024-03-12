@@ -33,7 +33,7 @@ import { CommandType } from "@/modules/schedules/types";
 
 const props = defineProps<{
   endAvailable: boolean;
-  mode: "ADD" | "CHANGE";
+  mode: "ADD" | "CHANGE" | "VARS";
 }>();
 
 const commands = ref<CommandType[]>([

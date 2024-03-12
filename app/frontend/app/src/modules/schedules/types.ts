@@ -26,7 +26,7 @@ export interface Schedule {
   Rating: number; //was just one value, but instead should be a computed value
   Trigger: string[];
   Code: FunctionCode[];
-  CustomVars?: Record<string, "NUMBER" | "BOOLEAN">;
+  VarDict?: Record<string, "NUMBER" | "BOOLEAN">;
 }
 
 export interface ListSchedule {

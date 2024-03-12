@@ -1,10 +1,13 @@
 <template>
-  <div class="main mx-0" :key="'fnasfb'">
-    <div
-      class="header"
-      v-if="schedule"
-      :class="{ 'draft-color': schedule.IsDraft }"
+  <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+    <button
+      class="btn invis-bg"
+      id="ScheduleBackButton"
+      @click="router.push('/schedules')"
     >
+      {{ "< BACK" }}
+    </button>
+    <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
         Edit Schedule
         <button @click="console.log(schedule)">hi</button>
@@ -69,25 +72,31 @@
             </div>
             <div class="me-3">
               <button
-                class="btn btn-secondary btn-sm me-2"
-                @click="$router.push('/schedules')"
+                class="btn btn-secondary btn-sm me-2 border-3"
+                @click="mode = 'VARS'"
               >
-                LIST
+                VARS
               </button>
               <button
-                class="btn btn-sm me-2"
+                class="btn btn-sm me-2 border-3"
                 @click="toggleDraft()"
                 :class="{
-                  'btn-warning': !schedule.IsDraft,
-                  'btn-secondary': schedule.IsDraft,
+                  'btn-outline-warning text-light': !schedule.IsDraft,
+                  'btn-warning': schedule.IsDraft,
                 }"
               >
                 {{ schedule.IsDraft ? "UNDRAFT" : "DRAFT" }}
               </button>
-              <button class="btn btn-success btn-sm me-2" @click="saveSchedule">
+              <button
+                class="btn btn-success btn-sm me-2 border-3 text-light"
+                @click="saveSchedule"
+              >
                 SAVE
               </button>
-              <button class="btn btn-danger btn-sm" @click="deleteSchedule">
+              <button
+                class="btn btn-danger btn-sm border-3 text-light"
+                @click="deleteSchedule"
+              >
                 DELETE
               </button>
             </div>
@@ -118,7 +127,7 @@
               @delete="schedule?.Code.splice(index, 1)"
               v-model="functionBlock.Params"
               :devices="validDevices"
-              :schedule-vars="variables"
+              :schedule-vars="schedule?.VarDict"
               :highlight="focusedBlock == index"
               @change="
                 menu = true;
@@ -145,7 +154,9 @@
           </div>
         </div>
         <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
+          <variable-menu v-if="mode == 'VARS'" v-model="schedule.VarDict" />
           <block-menu
+            v-else
             @close="
               menu = false;
               focusedBlock = -1;
@@ -182,6 +193,7 @@
 import BlockMenu from "./BlockMenu.vue";
 import TriggerBlock from "./blocks/TriggerBlock.vue";
 import FunctionBlock from "./blocks/FunctionBlock.vue";
+import VariableMenu from "./VariableMenu.vue";
 import { computed, ref } from "vue";
 import {
   CommandType,
@@ -196,7 +208,7 @@ const menu = ref<boolean>(true);
 const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
-const mode = ref<"CHANGE" | "ADD">("ADD");
+const mode = ref<"CHANGE" | "ADD" | "VARS">("ADD");
 const showNotification = ref(false);
 const errorMSG = ref<string>("");
 
@@ -262,11 +274,6 @@ const validDevices = ref<Device[]>([
     },
   },
 ]);
-
-const variables = ref<Record<string, "NUMBER" | "BOOLEAN">>({
-  test1: "BOOLEAN",
-  test2: "NUMBER",
-});
 
 let scheduleID = router.currentRoute.value.params.id;
 const fetchSchedule = async () => {
@@ -436,5 +443,16 @@ body {
   border-color: rgb(198, 146, 14);
   border-style: solid;
   border-width: 2px;
+}
+
+#ScheduleBackButton {
+  position: absolute;
+  color: rgb(237, 237, 237);
+  border-style: solid;
+  border-color: gray;
+  background-color: rgb(45, 50, 64);
+  top: 4rem;
+  left: 0.5rem;
+  z-index: 5;
 }
 </style>
