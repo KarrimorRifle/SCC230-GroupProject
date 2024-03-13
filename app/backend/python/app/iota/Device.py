@@ -66,21 +66,31 @@ class Device:
     def updateMappings(self):
         if(self.debug):
             print(f"({self.id})\t Updating Mappings.")
+    
         #Configures the server to get the devices on the user's network
         TUYASERVER.apiDeviceID = self.id
         
         #Gets the Datapoints from the server
-        dps = TUYASERVER.getdps(self.id)['result']['status']
+        dps = TUYASERVER.getdps(self.id)['result']
+        readables = dps['status'] 
+        writeables = dps['funcs']
+        dps = readables + writeables
 
         #Adds the datapoints to the mappings
         query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
                  "VALUES ")
         for datapoint in dps:
+            #Changes Enums to strings, to be processed later
             if(datapoint['type'] == 'Enum'):
                 datapoint['type'] = 'STRING'
 
+            #Checks if the datapoint read-only
+            if(datapoint not in writeables):
+                self.typeMappingsIn[datapoint['code']] = datapoint['type'].upper()
+            #Checks if the datapoint is not write-only
+            elif(datapoint in readables):
+                self.typeMappingsOut[datapoint['code']] = datapoint['type'].upper()
             self.mappings[datapoint['dp_id']] = datapoint['code']
-            self.typeMappings[datapoint['code']] = datapoint['type'].upper()
 
             query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
         
