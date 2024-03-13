@@ -1,9 +1,6 @@
 # [Backend/Python/App/Iota/Trigger.py](../python/app/iota/Trigger.py)
 # Required Modules
 ## iota
-[Documentation](Iota-__init__-Documentation.md)\
-[File](../python/app/iota/__init__.py)
-
 ## iota.Device
 [Documentation](Iota-Device-Documentation.md)\
 [File](../python/app/iota/Device.py)

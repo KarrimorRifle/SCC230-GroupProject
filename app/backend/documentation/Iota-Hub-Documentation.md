@@ -8,9 +8,9 @@
 [Documentation](Iota-User-Documentation.md)\
 [File](../python/app/iota/User.py)
 
-## iota.Device
-[Documentation](Iota-Device-Documentation.md)\
-[File](../python/app/iota/Device.py)
+## server
+[Documentation]()\
+[File](../python/app/server.py)
 
 # Classes
 ## Hub

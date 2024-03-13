@@ -1,9 +1,5 @@
 # [Backend/Python/App/Iota/Device.py](../python/app/iota/Device.py)
 # Required Modules
-## iota
-[Documentation](Iota-__init__-Documentation.md)\
-[File](../python/app/iota/__init__.py)
-
 ## server
 [Documentation]()\
 [File](../python/app/server.py)

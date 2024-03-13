@@ -7,9 +7,8 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
+from server import app, addToErrorLog
 import threading
-from iota import addToErrorLog
 from iota.Device import Device
 from iota.Schedule import *
 

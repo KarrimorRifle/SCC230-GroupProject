@@ -7,8 +7,7 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
-from iota import addToErrorLog
+from server import app, addToErrorLog
 import tinytuya as tuya
 
 #Sets up the cloud server needed to connect to tuya devices
@@ -58,7 +57,8 @@ class Device:
         TUYASERVER.apiDeviceID = self.id
         
         #Gets the Datapoints from the server
-        dps = TUYASERVER.getdps(self.id)['result']['status']
+        dps = TUYASERVER.getdps(self.id)['result']
+        dps = dps['status'] + dps['functions'] 
 
         #Adds the datapoints to the mappings
         query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
