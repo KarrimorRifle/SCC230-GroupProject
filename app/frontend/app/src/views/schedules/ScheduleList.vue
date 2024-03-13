@@ -2,7 +2,6 @@
   <div class="main-container d-flex">
     <div
       class="main row bg-dark"
-      v-if="forceRenderList"
       style="overflow: hidden"
     >
       <div class="col-2 options bg-gray text-light">
@@ -198,15 +197,6 @@ const ratingToColor = (rating: number) => {
 };
 
 fetchData();
-const sleepNow = (delay: number) =>
-  new Promise((resolve) => setTimeout(resolve, delay));
-const forceRenderList = ref<boolean>(true);
-const rerender = async () => {
-  forceRenderList.value = false;
-  await sleepNow(100);
-  forceRenderList.value = true;
-};
-rerender();
 </script>
 <style lang="scss">
 .main-container {
