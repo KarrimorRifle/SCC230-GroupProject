@@ -13,7 +13,11 @@
     </div>
     <div class="mt-3"></div>
     <div class="card">
-      <div :key="account.AccountID" class="row card-body mb-2 mx-3">
+      <div
+        v-for="account in accounts"
+        :key="account.AccountID"
+        class="row card-body mb-2 mx-3"
+      >
         <div class="col-1">
           <button>
             <permissions-icon :permission-level="account.PermissionLevel" />
@@ -57,8 +61,8 @@ const setup = async () => {
   let account = await axios.get("http://localhost:5000/accounts", {
     withCredentials: true,
   });
-  // console.log(data.data);
-  // console.log(account.data);
+  console.log(data.data);
+  console.log(account.data);
   accounts.value = data.data;
   accounts.value = accounts.value.filter(
     (item) => item.AccountID != account.data.AccountID
