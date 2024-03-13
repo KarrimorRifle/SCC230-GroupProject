@@ -8,8 +8,6 @@
 ##IMPORTS##
 import string as s
 from random import choice
-from server import app
-from datetime import datetime, UTC
 
 ##FUNCTION DEFINITIONS##
 #Generates a random ID for the database to use
@@ -34,11 +32,3 @@ def genRandomID(length:int=16, ids:list[str]=[], prefix:str="", suffix:str="", d
     if(debug):
         print(f"ID '{randID}' Created.")
     return(randID)
-
-#Adds an error to the error log in the database
-def addToErrorLog(exception:str):
-    cursor = app.config['cursor']
-    timestamp = datetime.strftime(datetime.now(UTC), "%Y-%m-%d %H-%M-%S")
-    query = ("INSERT INTO error_log (Error, Time)"
-             f"VALUES ('{exception}', '{timestamp}')")
-    cursor.execute(query)
