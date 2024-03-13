@@ -1,42 +1,31 @@
 <template>
-  <div class="main-hub-viewer mx-xl-5">
-    <div class="container-fluid">
-      <p></p>
-      <div class="row hub-row">
-        <div class="col-3 text-start">
-          <label
-            for="hubName"
-            class="px-3 text-light mt-2"
-            style="margin: 0; padding: 0"
-            >Hub Name:
-          </label>
-        </div>
-        <div class="col-6">
-          <input
-            v-if="permissionLevel == 5"
-            type="text"
-            class="form-control"
-            id="hubName"
-            aria-describedby="emailHelp"
-            placeholder="Hub Name"
-            v-model="hubName"
-          />
-          <a
-            v-if="permissionLevel != 5"
-            id="HubName"
-            class="px-3 text-light mt-2"
-            style="margin: 0; padding: 0"
-            >Hub Name Here
-          </a>
-        </div>
-        <div class="col-2">
-          <button
-            v-if="permissionLevel == 5"
-            class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
-            @click="updateHub()"
-          >
-            UPDATE
-          </button>
+  <div class="main-hub-viewer mx-xl-5 d-flex">
+    <div class="container-fluid flex-grow-1">
+      <div
+        class="row hub-row px-0"
+        style="min-height: 0; max-height: 100%; height: 100%"
+      >
+        <div class="col-3 text-start bg-dark px-0"></div>
+        <div class="col-9 px-0">
+          <div class="container-fluid text-light" v-if="hub">
+            <div class="row d-flex justify-content-start mt-2">
+              <h2 class="text-start ps-3">
+                <b>HUB PAGE</b>
+              </h2>
+            </div>
+            <div class="row">
+              <div class="input-group">
+                <div class="input-group-text">Name</div>
+                <input type="text" class="form-control" v-model="hub.HubName" />
+                <button
+                  class="input-group-text btn btn-success"
+                  @click="updateHubName()"
+                >
+                  Update Name
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -46,34 +35,23 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import axios from "axios";
+import { HubBase } from "@/modules/hubs/types";
+import router from "@/router";
 
-const hubName = ref();
-const permissionLevel = ref();
+const hub = ref<HubBase>();
 
 const setup = async () => {
-  let hubID = window.location.href.slice(-19);
+  let hubID = router.currentRoute.value.params.id;
   let data = await axios.get(`http://localhost:5000/hub/${hubID}`, {
     withCredentials: true,
   });
 
   console.log(data.data);
-  hubName.value = data.data.HubName;
-  permissionLevel.value = data.data.PermissionLevel;
-  document.getElementById("HubName").innerHTML = hubName.value;
+  hub.value = data.data;
 };
 
-const updateHub = async () => {
-  let hubID = window.location.href.slice(-19);
-  await axios.patch(
-    `http://localhost:5000/hub/${hubID}`,
-    {
-      HubName: `${document.getElementById("hubName").value}`,
-    },
-    {
-      withCredentials: true,
-    }
-  );
-  setup();
+const updateHubName = () => {
+  console.log("updating");
 };
 setup();
 </script>
