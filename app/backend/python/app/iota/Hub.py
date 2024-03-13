@@ -8,8 +8,7 @@
 
 ##IMPORTS##
 from iota.Schedule import Schedule
-from iota.User import User, loadUserFromDatabase
-from server import app
+from server import app, addToErrorLog
 
 ##CLASS DEFINITIONS##
 class Hub:
