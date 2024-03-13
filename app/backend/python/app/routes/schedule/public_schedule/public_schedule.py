@@ -22,7 +22,6 @@ def save_public_schedule(account, cursor, connection, scheduleID):
         return jsonify({'error': schedule['error']}), 404
 
     newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
-    schedule['Trigger'] = None
 
     copyFrom = schedule.get('CopyFrom')
     if copyFrom is None:
