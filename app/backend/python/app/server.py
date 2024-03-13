@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector import Error
 from flask import Flask
 from flask_cors import CORS
 from routes.accounts import accounts
@@ -30,6 +31,19 @@ app.register_blueprint(hub_schedule)
 app.register_blueprint(hub_user)
 app.register_blueprint(public_schedule)
 CORS(app, supports_credentials=True)
+
+@app.errorhandler(mysql.connector.Error)
+def reattemptConnection():
+    while True:
+        try:
+            global connection
+            connection = mysql.connector.connect(
+                user = "user", password = "pass", host = "mysql", port=3306, database='DB'
+            )
+            print("DB connected")
+            break
+        except Exception as e:
+            print(f"Error connecting to DB: {e}")
 
 #Adds an error to the error log in the database
 def addToErrorLog(exception:str):
