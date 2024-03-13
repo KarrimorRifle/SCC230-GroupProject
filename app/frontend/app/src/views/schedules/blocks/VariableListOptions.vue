@@ -72,6 +72,7 @@
       </li>
     </template>
   </ul>
+  <div class="codeCover"></div>
 </template>
 <script lang="ts" setup>
 import { defineProps, defineEmits } from "vue";
