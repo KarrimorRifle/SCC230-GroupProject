@@ -151,10 +151,16 @@
                   {{ item.Rating }} / 5
                 </b>
               </div>
-              <div>
+              <div class="me-3">
                 <b>Status: </b>
                 <b :style="{ color: item.IsPublic ? 'orange' : 'green' }">
                   {{ item.IsPublic ? "Public" : "Private" }}
+                </b>
+              </div>
+              <div>
+                <b>Copied from: </b>
+                <b>
+                  {{ item.CopyFrom ?? "N/A" }}
                 </b>
               </div>
             </div>
