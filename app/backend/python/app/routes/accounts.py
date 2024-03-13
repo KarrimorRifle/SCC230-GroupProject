@@ -6,6 +6,8 @@ from iota import genRandomID
 
 accounts = Blueprint('accounts', __name__)
 
+sessionID = None
+
 
 @accounts.route("/accounts" , methods=['POST', 'PATCH', 'DELETE', 'GET'])
 def accountsResonse():
@@ -160,10 +162,12 @@ def logout():
         return jsonify({'error':"Internal server error", "details":f"{e}"}), 500
     return 200
         
-def getAccount():
+def getAccount(check=True):
+    global sessionID
+    if check:
+        sessionID = request.cookies.get('session_id')
     cursor = current_app.config['cursor']
-    connection= current_app.config['connection']
-    sessionID = request.cookies.get('session_id')
+    print(sessionID)
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
     try:
