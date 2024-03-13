@@ -6,9 +6,9 @@
         <div
           v-for="device in devices"
           :key="device.DeviceID"
-          class="row card-body mb-2 mx-3"
+          class="row card-body mb-2"
         >
-          <div class="col-6 text-start ps-3">
+          <div class="col-6 text-start ps-0">
             {{ device.DeviceName }}
           </div>
         </div>
