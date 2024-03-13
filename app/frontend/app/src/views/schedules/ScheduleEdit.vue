@@ -10,7 +10,6 @@
     <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
         Edit Schedule
-        <button @click="console.log(schedule)">hi</button>
         <div
           v-if="schedule.IsDraft"
           class="px-2 py-1 bg-warning"
