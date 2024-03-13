@@ -182,6 +182,7 @@
                       class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
                       @click="router.push(`/hubs/${hub.HubID}`)"
                     >
+                      <!-- when able make it so that the you can edit in list-->
                       EDIT
                     </button>
                     <button
