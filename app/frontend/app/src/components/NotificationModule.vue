@@ -9,44 +9,45 @@
     </button>
     <div
       class="card-body text-start rounded border"
-      :class="`bg-${colour} border-${colour}`"
+      :class="`bg-${notification.colour} border-${notification.colour}`"
       :style="{ color: textColour }"
     >
       <div class="card-title text-start">
-        <b>{{ title }}</b>
+        <b>{{ notification.title }}</b>
       </div>
-      {{ body }}
+      {{ notification.body }}
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps, withDefaults, computed, defineExpose } from "vue";
+import { ref, reactive, computed, defineExpose } from "vue";
 
-const visible = ref<boolean>(true);
-const props = withDefaults(
-  defineProps<{
-    title?: string;
-    body?: string;
-    colour?:
-      | "danger"
-      | "secondary"
-      | "info"
-      | "warning"
-      | "success"
-      | "primary";
-  }>(),
-  {
-    title: "I'm a notification!",
-    body: "I am some sample text",
-    colour: "secondary",
-  }
-);
+const visible = ref<boolean>(false);
+const notification = reactive({
+  title: "I'm a notification!",
+  body: "I am some sample text",
+  colour: "secondary" as
+    | "danger"
+    | "secondary"
+    | "info"
+    | "warning"
+    | "success"
+    | "primary",
+});
 
 const textColour = computed(() =>
-  ["info", "warning"].includes(props.colour) ? "black" : "white"
+  ["info", "warning"].includes(notification.colour) ? "black" : "white"
 );
 
-const show = async () => {
+const show = async (
+  title: string,
+  body: string,
+  colour: "danger" | "secondary" | "info" | "warning" | "success" | "primary"
+) => {
+  notification.title = title;
+  notification.body = body;
+  notification.colour = colour;
+
   visible.value = true;
   await new Promise((r) => setTimeout(r, 25000));
   visible.value = false;
