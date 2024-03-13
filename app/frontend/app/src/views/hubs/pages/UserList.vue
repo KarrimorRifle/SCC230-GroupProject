@@ -12,19 +12,62 @@
       </div>
     </div>
     <div class="mt-3"></div>
-    <div class="card">
+    <div class="card mb-2 mx-3 p-0">
       <div
         v-for="account in accounts"
         :key="account.AccountID"
-        class="row card-body mb-2 mx-3"
+        class="row card-body m-0 p-0"
       >
-        <div class="col-1">
-          <button>
+        <div class="col-1 px-0 border-end">
+          <button
+            class="container-fluid dropdown-toggle user-rank-selector py-2"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             <permissions-icon :permission-level="account.PermissionLevel" />
+            <div class="d-inline ps-1"></div>
           </button>
+          <ul class="dropdown-menu" id="level-setter">
+            <li v-if="permissionLevel == 5">
+              <button
+                class="dropdown-item"
+                @click="setPerm(4, account.AccountID)"
+              >
+                <permissions-icon :permission-level="4" />
+              </button>
+            </li>
+            <li>
+              <button
+                class="dropdown-item"
+                @click="setPerm(3, account.AccountID)"
+              >
+                <permissions-icon :permission-level="3" />
+              </button>
+            </li>
+            <li>
+              <button
+                class="dropdown-item"
+                @click="setPerm(2, account.AccountID)"
+              >
+                <permissions-icon :permission-level="2" />
+              </button>
+            </li>
+            <li>
+              <button
+                class="dropdown-item"
+                @click="setPerm(1, account.AccountID)"
+              >
+                <permissions-icon :permission-level="1" />
+              </button>
+            </li>
+          </ul>
         </div>
-        <div class="col-6 text-start ps-3">
-          {{ account.Name }}
+        <div class="col-6 text-start ps-2">
+          <b>{{ account.Name }}</b>
+          <div class="text-muted">ID: {{ account.AccountID }}</div>
+        </div>
+        <div class="col-5 border-start">
+          hellouytfgvbnjkiuygtfvhkoiuytghbkou8ytfghbkiuytfgvhjkiuytghbnkiuy
         </div>
       </div>
     </div>
@@ -32,7 +75,7 @@
   <notification-module ref="notif" />
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import { HubUser } from "@/modules/hubs/types";
 import axios from "axios";
 import router from "@/router";
@@ -41,6 +84,10 @@ import PermissionsIcon from "../components/PermissionsIcon.vue";
 
 const notif = ref<typeof NotificationModule>();
 const accounts = ref<HubUser[]>([]);
+
+const props = defineProps<{
+  permissionLevel: number;
+}>();
 
 const HubID = router.currentRoute.value.params.id;
 const setup = async () => {
@@ -61,12 +108,15 @@ const setup = async () => {
   let account = await axios.get("http://localhost:5000/accounts", {
     withCredentials: true,
   });
-  console.log(data.data);
-  console.log(account.data);
+
   accounts.value = data.data;
   accounts.value = accounts.value.filter(
     (item) => item.AccountID != account.data.AccountID
   );
+};
+
+const setPerm = (level: number, id: string) => {
+  console.log("setting");
 };
 
 setup();
@@ -78,5 +128,30 @@ div.hub-user-list-viewer {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.user-rank-selector {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+}
+
+#level-setter {
+  max-width: 4rem !important;
+  width: 4rem;
+  min-width: 0;
+}
+
+.dropdown-item {
+  padding: 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  border-bottom: 1px solid gray;
+}
+
+ul > li:last-of-type > .dropdown-item {
+  border-bottom: 0px;
 }
 </style>

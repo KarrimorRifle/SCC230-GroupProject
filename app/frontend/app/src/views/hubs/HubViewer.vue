@@ -117,7 +117,10 @@
               style="min-height: 0; max-height: 100%; height: 100%"
             >
               <div class="container-fluid d-flex flex-column">
-                <user-list v-if="location == 'users'" />
+                <user-list
+                  :permission-level="hub.PermissionLevel"
+                  v-if="location == 'users'"
+                />
               </div>
             </div>
           </div>
