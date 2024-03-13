@@ -1,0 +1,73 @@
+<template>
+  <div class="card rounded" id="notification-card" v-if="visible">
+    <button
+      class="text-white btn p-1"
+      id="remove-notif"
+      @click="visible = false"
+    >
+      x
+    </button>
+    <div
+      class="card-body text-start rounded border"
+      :class="`bg-${colour} border-${colour}`"
+      :style="{ color: textColour }"
+    >
+      <div class="card-title text-start">
+        <b>{{ title }}</b>
+      </div>
+      {{ body }}
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref, defineProps, withDefaults, computed, defineExpose } from "vue";
+
+const visible = ref<boolean>(true);
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    body?: string;
+    colour?:
+      | "danger"
+      | "secondary"
+      | "info"
+      | "warning"
+      | "success"
+      | "primary";
+  }>(),
+  {
+    title: "I'm a notification!",
+    body: "I am some sample text",
+    colour: "secondary",
+  }
+);
+
+const textColour = computed(() =>
+  ["info", "warning"].includes(props.colour) ? "black" : "white"
+);
+
+const show = async () => {
+  visible.value = true;
+  await new Promise((r) => setTimeout(r, 25000));
+  visible.value = false;
+};
+
+defineExpose({
+  show,
+});
+</script>
+<style>
+#notification-card {
+  position: absolute;
+  z-index: 10;
+  bottom: 1rem;
+  right: 1rem;
+  width: 20rem;
+}
+
+#remove-notif {
+  position: absolute;
+  top: -8px;
+  right: 0px;
+}
+</style>
