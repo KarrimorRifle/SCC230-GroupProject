@@ -8,7 +8,6 @@
 
 ##IMPORTS##
 from iota.Device import *
-from iota import addToErrorLog
 import time
 import threading
 
