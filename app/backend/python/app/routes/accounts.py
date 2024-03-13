@@ -167,7 +167,7 @@ def getAccount(check=True):
     if check:
         sessionID = request.cookies.get('session_id')
     cursor = current_app.config['cursor']
-    print(sessionID)
+
     query = ("SELECT * FROM accounts "
                 "WHERE SessionID = %s")
     try:
