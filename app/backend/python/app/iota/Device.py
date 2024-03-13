@@ -16,16 +16,17 @@ TUYASERVER = tuya.Cloud("eu", "p7ev9udc4nspppngqs9j", "eade3788ef124f97a7db3f6f0
 ##CLASS DEFINITIONS##
 class Device:
     ##VALUES##
-    #id             Holds the ID for the Device to be stored in the Database
-    #name           Holds the name that the user will see for the Device
-    #ip             Holds the IP of the Device
-    #key            Holds the local key of the Device to confirm it's being accessed consentually
-    #version        Holds the API version that TinyTuya uses to communicate with the device
-    #company        The company that the device is manufactured by
-    #mappings       Maps the Datapoint's number to it's code, so that the value can be accessed by name.
-    #typeMappings   Maps the Datapoint's code to it's Type, so that the values the user can send are restricted
-    #data           Holds the data for the device in a dict.
-    #debug          Enables print statements for debugging purpose
+    #id                 Holds the ID for the Device to be stored in the Database
+    #name               Holds the name that the user will see for the Device
+    #ip                 Holds the IP of the Device
+    #key                Holds the local key of the Device to confirm it's being accessed consentually
+    #version            Holds the API version that TinyTuya uses to communicate with the device
+    #company            The company that the device is manufactured by
+    #mappings           Maps the Datapoint's number to it's code, so that the value can be accessed by name.
+    #typeMappingsIn     Maps the Datapoint's read-only variables to their Type, so that the values the user can send are restricted
+    #typeMappingsOut    Maps the Datapoint's read-and-write variables to their Type, so that the values the user can send are restricted
+    #data               Holds the data for the device in a dict.
+    #debug              Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
@@ -40,7 +41,8 @@ class Device:
             self.key = key
             self.version = version
 
-            self.typeMappings = {}
+            self.typeMappingsIn = {}
+            self.typeMappingsOut = {}
             self.mappings = {}
             self.updateMappings()
             
@@ -51,15 +53,16 @@ class Device:
         self.debug = debug
         if(debug):
             print(f"Device Created With Values:\n"
-                  f"id:\t\t{self.id}\n"
-                  f"name:\t\t{self.name}\n"
-                  f"company:\t\t{self.company}\n"
-                  f"ip:\t\t{self.ip}\n"
-                  f"key:\t\t{self.key}\n"
-                  f"version:\t\t{self.version}\n"
-                  f"typeMappings:\t{str(self.typeMappings)[:77]}...\n"
-                  f"mappings:\t\t{str(self.mappings)[:77]}...\n"
-                  f"data:\t\t{self.data}\n")
+                  f"id:\t\t\t{self.id}\n"
+                  f"name:\t\t\t{self.name}\n"
+                  f"company:\t\t\t{self.company}\n"
+                  f"ip:\t\t\t{self.ip}\n"
+                  f"key:\t\t\t{self.key}\n"
+                  f"version:\t\t\t{self.version}\n"
+                  f"typeMappingsIn:\t\t{str(self.typeMappingsIn)[:77]}...\n"
+                  f"typeMappingsOut:\t{str(self.typeMappingsOut)[:77]}...\n"
+                  f"mappings:\t\t\t{str(self.mappings)[:77]}...\n"
+                  f"data:\t\t\t{self.data}\n")
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
