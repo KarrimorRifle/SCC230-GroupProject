@@ -21,10 +21,11 @@
           <div class="container-fluid text-light" v-if="hub">
             <div class="row d-flex justify-content-start mt-2">
               <h2 class="text-start ps-3">
-                <b>HUB PAGE</b>
+                <b v-if="hub.PermissionLevel >= 4">HUB PAGE</b>
+                <b v-else>HUB PAGE: {{ hub.HubName }}</b>
               </h2>
             </div>
-            <div class="row">
+            <div class="row" v-if="hub.PermissionLevel >= 4">
               <div class="input-group">
                 <div class="input-group-text">Name</div>
                 <input type="text" class="form-control" v-model="hub.HubName" />
