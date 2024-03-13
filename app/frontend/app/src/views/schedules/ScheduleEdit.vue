@@ -114,7 +114,7 @@
             v-model="schedule.Trigger"
             command-type="TRIGGER"
             :devices="validDevices"
-            :schedule-vars="variables"
+            :schedule-vars="schedule.VarDict"
           />
           <div
             v-for="(functionBlock, index) in schedule?.Code"

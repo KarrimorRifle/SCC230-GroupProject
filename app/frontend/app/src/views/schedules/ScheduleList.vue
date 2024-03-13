@@ -1,18 +1,13 @@
 <template>
   <div class="main-container d-flex">
-    <div
-      class="main row bg-dark"
-      style="overflow: hidden"
-    >
+    <div class="main row bg-dark" style="overflow: hidden">
       <div class="col-2 options bg-gray text-light">
         <div class="container-fluid sub-nav px-0">
           <div class="row sub-nav-title">NAV</div>
           <div
             class="row sub-nav-item border-top"
             :class="{
-              active:
-                $route.query.mode == 'personal' ||
-                $route.query.mode == undefined,
+              active: personal,
             }"
           >
             <a href="/schedules?mode=personal" class="container-fluid">
@@ -54,7 +49,11 @@
               v-model="filterValue"
             />
           </div>
-          <button class="btn btn-primary" @click="createSchedule()">
+          <button
+            class="btn btn-primary"
+            @click="createSchedule()"
+            v-if="personal"
+          >
             CREATE
           </button>
         </div>
@@ -104,9 +103,9 @@
                   </div>
                 </h4>
               </div>
-              <div class="d-flex me-2">
+              <div class="d-flex me-2" v-if="personal">
                 <a
-                  :href="'/schedule/' + item.ScheduleID"
+                  :href="'/schedules/' + item.ScheduleID"
                   class="btn btn-info me-2 btn-sm"
                   >EDIT</a
                 >
@@ -115,6 +114,32 @@
                   @click="deleteSchedule(item.ScheduleID)"
                 >
                   DELETE
+                </button>
+              </div>
+              <div v-else>
+                <a
+                  :href="'/schedule/' + item.ScheduleID"
+                  class="btn btn-outline-info border-2 text-light me-2 btn-sm"
+                  style="font-weight: 600"
+                >
+                  VIEW
+                </a>
+                <button
+                  class="btn btn-outline-danger btn-sm text-light border-2"
+                  v-if="item.info"
+                  @click="item['info'] = false"
+                >
+                  INFO
+                </button>
+                <button
+                  v-else
+                  class="btn btn-outline-secondary btn-sm text-light border-2"
+                  @click="
+                    item['info'] = true;
+                    getScheduleData(index);
+                  "
+                >
+                  INFO
                 </button>
               </div>
             </div>
@@ -133,6 +158,12 @@
                 </b>
               </div>
             </div>
+            <template v-if="item.info">
+              <hr class="m-0" />
+              <div class="card-body py-0">
+                hello!iygfbawofyawbadfghioi765tefrhtji7u6y5t4eds
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -143,6 +174,7 @@
 import { ref, computed } from "vue";
 import { ListSchedule } from "@/modules/schedules/types";
 import axios from "axios";
+import router from "@/router";
 
 const schedules = ref<ListSchedule[]>([]);
 const filterValue = ref<string>("");
@@ -152,10 +184,27 @@ const filteredSchedules = computed(() =>
   )
 );
 
+const personal = computed(
+  () =>
+    router.currentRoute.value.query.mode == "personal" ||
+    router.currentRoute.value.query.mode == undefined
+);
+
 const fetchData = async () => {
-  const data = await axios.get("http://localhost:5000/schedule", {
-    withCredentials: true,
-  });
+  let data;
+  if (personal.value)
+    data = await axios
+      .get("http://localhost:5000/schedule", {
+        withCredentials: true,
+      })
+      .catch((e) => console.log(e));
+  else if (router.currentRoute.value.query.mode == "public")
+    data = await axios
+      .get("http://localhost:5000/schedule/public", {
+        withCredentials: true,
+      })
+      .catch((e) => console.log(e));
+
   schedules.value = data.data;
   console.log(data);
 };
@@ -197,6 +246,12 @@ const ratingToColor = (rating: number) => {
 };
 
 fetchData();
+
+//public schedules functions
+
+const getScheduleData = (index: number) => {
+  console.log("test");
+};
 </script>
 <style lang="scss">
 .main-container {
