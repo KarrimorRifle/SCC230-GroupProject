@@ -41,18 +41,21 @@
       </div>
     </div>
   </div>
+  <notification-module ref="notif" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
+import NotificationModule from "@/components/NotificationModule.vue";
 
 const hub = ref<HubBase>();
+const notif = ref<typeof NotificationModule>();
 
+let hubID = router.currentRoute.value.params.id;
 const setup = async () => {
-  let hubID = router.currentRoute.value.params.id;
   let data = await axios.get(`http://localhost:5000/hub/${hubID}`, {
     withCredentials: true,
   });
@@ -61,8 +64,20 @@ const setup = async () => {
   hub.value = data.data;
 };
 
-const updateHubName = () => {
-  console.log("updating");
+const updateHubName = async () => {
+  let data = await axios
+    .patch(`http://localhost:5000/hub/${hubID}`, hub.value, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  hub.value = data.data;
+  notif.value?.show(
+    "Updated hub title",
+    "Your hub title has been succesfully updated",
+    "success"
+  );
 };
 setup();
 </script>
