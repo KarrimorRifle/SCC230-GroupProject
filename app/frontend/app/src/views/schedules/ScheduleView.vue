@@ -31,8 +31,70 @@
           DRAFT
         </div>
       </h2>
-      <div class="container-fluid">
-        <div class="row"></div>
+      <div class="container-fluid d-flex">
+        <div class="text-light">
+          <b> Author ID: {{ schedule.AuthorID }} </b>
+        </div>
+        <div>
+          <fieldset class="star-rating me-2">
+            <input
+              type="radio"
+              id="rating5"
+              name="rating"
+              value="5"
+              v-model="starRating"
+            />
+            <label for="rating5" title="5 stars">
+              {{ starRating >= 5 ? "&#9733;" : "&#9734;" }}
+            </label>
+            <input
+              type="radio"
+              id="rating4"
+              name="rating"
+              value="4"
+              v-model="starRating"
+            />
+            <label for="rating4" title="4 stars">
+              {{ starRating >= 4 ? "&#9733;" : "&#9734;" }}
+            </label>
+            <input
+              type="radio"
+              id="rating3"
+              name="rating"
+              value="3"
+              v-model="starRating"
+            />
+            <label for="rating3" title="3 stars">
+              {{ starRating >= 3 ? "&#9733;" : "&#9734;" }}
+            </label>
+            <input
+              type="radio"
+              id="rating2"
+              name="rating"
+              value="2"
+              v-model="starRating"
+            />
+            <label for="rating2" title="2 stars">
+              {{ starRating >= 2 ? "&#9733;" : "&#9734;" }}
+            </label>
+            <input
+              type="radio"
+              id="rating1"
+              name="rating"
+              value="1"
+              v-model="starRating"
+            />
+            <label for="rating1" title="1 star">
+              {{ starRating >= 1 ? "&#9733;" : "&#9734;" }}
+            </label>
+          </fieldset>
+          <button class="btn btn-success">Submit rating</button>
+        </div>
+        <div style="align-items: baseline">
+          <button class="btn btn-secondary" @click="cloneSchedule()">
+            Clone Schedule
+          </button>
+        </div>
       </div>
     </div>
     <div class="container-fluid mx-0 px-0 d-flex flex-column">
@@ -75,8 +137,8 @@ import router from "@/router";
 import axios from "axios";
 
 const schedule = ref<Schedule>();
-const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
+const starRating = ref<number>(0);
 
 let scheduleID = router.currentRoute.value.params.id;
 const fetchSchedule = async () => {
@@ -88,9 +150,10 @@ const fetchSchedule = async () => {
   );
   schedule.value = data.data;
   console.log(data.data);
-  // console.log(schedule.value?.Code);
-  if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
-    nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
+};
+
+const cloneSchedule = async () => {
+  console.log(starRating.value);
 };
 
 fetchSchedule();
@@ -178,5 +241,24 @@ body {
   background: rgba(0, 0, 0, 0);
   z-index: 4;
   top: 10rem;
+}
+
+.star-rating {
+  direction: rtl;
+  display: inline-block;
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  color: lightgray;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+  color: gold;
 }
 </style>
