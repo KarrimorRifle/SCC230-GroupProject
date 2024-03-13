@@ -64,6 +64,7 @@ CREATE TABLE `device_vars`(
     `DeviceID` varchar(100) NOT NULL,
     `VarName` VARCHAR(255) NOT NULL,
     `VarType` VARCHAR(255) NOT NULL,
+    `Writeable` TINYINT UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE
 );
 
