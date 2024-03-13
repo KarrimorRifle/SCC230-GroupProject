@@ -33,16 +33,11 @@
     <div class="container-fluid mx-0 px-0 d-flex flex-column">
       <div id="alkdas" class="row mx-0">
         <div
-          class="col p-3 scrollable21"
+          class="col p-3 scrollable21 d-flex flex-column align-items-center"
           v-if="schedule"
           style="max-height: 100%"
         >
-          <function-block
-            v-model="schedule.Trigger"
-            command-type="TRIGGER"
-            :devices="validDevices"
-            :schedule-vars="schedule.VarDict"
-          />
+          <function-block v-model="schedule.Trigger" command-type="TRIGGER" />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
@@ -52,35 +47,10 @@
               :command-type="functionBlock.CommandType"
               @delete="schedule?.Code.splice(index, 1)"
               v-model="functionBlock.Params"
-              :devices="validDevices"
               :schedule-vars="schedule?.VarDict"
               :highlight="focusedBlock == index"
-              @change="
-                menu = true;
-                mode = 'CHANGE';
-                focusedBlock = index;
-              "
             />
           </div>
-          <div style="width: 7rem" class="mt-1">
-            <button
-              style="background-color: rgba(0, 0, 0, 0); border-style: none"
-              @click="
-                menu = true;
-                mode = 'ADD';
-                focusedBlock = -1;
-              "
-            >
-              <img
-                src="../../assets/plus.svg"
-                alt=""
-                style="width: 1.8rem; height: 1.8rem"
-              />
-            </button>
-          </div>
-        </div>
-        <div class="editor-side-bar col-xl-5 col-lg-6 col-12 px-0" v-if="menu">
-          <variable-menu :readOnly="true" v-model="schedule.VarDict" />
         </div>
       </div>
     </div>
@@ -88,18 +58,11 @@
 </template>
 <script setup lang="ts">
 import FunctionBlock from "./blocks/FunctionBlock.vue";
-import VariableMenu from "./VariableMenu.vue";
-import { computed, ref } from "vue";
-import {
-  CommandType,
-  Device,
-  FunctionCode,
-  Schedule,
-} from "@/modules/schedules/types";
+import { ref } from "vue";
+import { Schedule } from "@/modules/schedules/types";
 import router from "@/router";
 import axios from "axios";
 
-const menu = ref<boolean>(true);
 const schedule = ref<Schedule>();
 const nextNum = ref<number>(0);
 const focusedBlock = ref<number>(-1);
@@ -113,7 +76,7 @@ const fetchSchedule = async () => {
     }
   );
   schedule.value = data.data;
-  // console.log(data);
+  console.log(data.data);
   // console.log(schedule.value?.Code);
   if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
     nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
