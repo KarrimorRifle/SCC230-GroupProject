@@ -57,6 +57,7 @@ class Schedule:
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, isPublic:bool=False, rating:int=1, 
                  code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
+        self.debug = debug
         self.id = id
         self.name = name
         
@@ -71,7 +72,6 @@ class Schedule:
         self.variables ={}
         self.devices = self.findDevices()
         
-        self.debug = debug
         if(debug):
             print(f"Schedule Created With Values:\n"
                   f"id:\t\t{self.id}\n"

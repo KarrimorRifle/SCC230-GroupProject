@@ -48,12 +48,9 @@ class Device:
             self.mappings = {}
 
             self.updateMappings()
-            
-
         
         self.updateData()
 
-        
         if(debug):
             print(f"Device Created With Values:\n"
                   f"id:\t\t\t{self.id}\n"
@@ -94,14 +91,12 @@ class Device:
             #Checks if the datapoint read-only
             if(datapoint not in writeables):
                 self.typeMappingsIn[datapoint['code']] = datapoint['type'].upper()
-                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}', 0),"
-                update = True
             #Checks if the datapoint is not write-only
             elif(datapoint in readables):
                 self.typeMappingsOut[datapoint['code']] = datapoint['type'].upper()
-                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}', 1),"
-                update = True
             self.mappings[datapoint['dp_id']] = datapoint['code']
+            update = True
+            query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
         
         #Updates the database with the new mappings
         try:
@@ -111,7 +106,6 @@ class Device:
                 cursor.execute(query)
                 app.config['connection'].commit()
         except Exception as e:
-            print(f"Error executing query: {e}")
             addToErrorLog(e)
                 
     #Checks the current data against an external data, and sends any differences
@@ -150,12 +144,15 @@ class Device:
 
                 #Maps the data
                 for key in newVals.keys():
-                    self.data[key] = newVals[key]
+                    try:
+                        self.data[self.mappings[int(key)]] = newVals[key]
+                    except:
+                        pass
                     if(self.debug):
-                        try:
-                            print(f"({self.id})\t Data: {self.mappings[int(key)]} Set to {newVals[key]}")
-                        except:
-                            print(f"({self.id})\t Data: UNKNOWN Set to {newVals[key]}")
+                            try:
+                                print(f"({self.id})\t Data: {self.mappings[int(key)]} Set to {newVals[key]}")
+                            except:
+                                print(f"({self.id})\t Data: UNKNOWN Set to {newVals[key]}")
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
