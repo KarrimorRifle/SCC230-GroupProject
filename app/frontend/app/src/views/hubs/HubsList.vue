@@ -180,7 +180,7 @@
                   >
                     <button
                       class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
-                      :href="`/hubs/${hub.HubID}`"
+                      @click="router.push(`/hubs/${hub.HubID}`)"
                     >
                       EDIT
                     </button>
@@ -209,6 +209,7 @@
 import { ref, computed } from "vue";
 import axios from "axios";
 import { HubsList } from "@/modules/hubs/types";
+import router from "@/router";
 
 const hubList = ref<HubsList[]>([]);
 const searchValue = ref<string>("");
