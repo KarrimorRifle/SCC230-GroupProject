@@ -147,7 +147,7 @@ CREATE TABLE `function_block_links`(
 CREATE TABLE `error_log`(
     `LogID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Error` VARCHAR(255) NOT NULL,
-    `Time` VARCHAR(100) NOT NULL DEFAULT '0000-00-00 00:00:00'
+    `Time` VARCHAR(100) NOT NULL DEFAULT "0000-00-00 00:00:00"
 );
 
 -- To reset DB delete the container and start up again
