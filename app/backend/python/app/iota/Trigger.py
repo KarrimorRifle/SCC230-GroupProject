@@ -9,7 +9,7 @@
 ##IMPORTS##
 from server import app, addToErrorLog
 import threading
-from iota.Device import Device
+from iota.Device import *
 from iota.Schedule import *
 
 #CLASS DEFINITION#
