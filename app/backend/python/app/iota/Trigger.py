@@ -25,8 +25,9 @@ class Trigger:
     ##CONSTRUCTOR##
     def __init__(self, id:str, ScheduleID:str, data:list[str],
                  canRun:bool=False, debug:bool=False):
+        self.debug = debug
         self.id = id
-
+        
         self.devices = []
         self.data = []
         for string in data:
@@ -35,7 +36,6 @@ class Trigger:
         self.ScheduleID = ScheduleID
         self.canRun = canRun
 
-        self.debug = debug
         if(debug):
             print(f"Trigger Created With Values:\n"
                   f"id:\t\t{self.id}\n"

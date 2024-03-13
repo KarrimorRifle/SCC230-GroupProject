@@ -25,6 +25,8 @@ class Hub:
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, address:str="", logs:list[str]=[],
                  users:dict[str, int]={}, schedules:list[Schedule]=[], debug:bool=False):
+        self.debug = debug
+        
         self.id = id
         self.name = name
 
@@ -35,7 +37,6 @@ class Hub:
         self.users=users
         self.schedules = schedules
         
-        self.debug = debug
         if(debug):
             print(f"Hub Created With Values:\n"
                   f"id:\t\t{self.id}\n"

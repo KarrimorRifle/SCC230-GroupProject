@@ -21,13 +21,14 @@ class User:
     ##CONSTRUCTOR##
     def __init__(self, id:str, username:str, email:str,
                  allowEmails:bool=True, debug:bool=False):
+        self.debug = debug
         self.id = id
         self.username = username
         
         self.email = email
         self.allowEmails = allowEmails
         
-        self.debug = debug
+        
         if(debug):
             print(f"User Created With Values:\n"
                   f"id:\t\t{self.id}\n"
