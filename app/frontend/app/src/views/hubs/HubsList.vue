@@ -126,36 +126,7 @@
                       'mt-2': hub.PermissionLevel == 5,
                     }"
                   >
-                    <img
-                      v-if="hub.PermissionLevel == 5"
-                      src="@/assets/permissions/5.svg"
-                      alt=""
-                      style="max-width: 2rem"
-                    />
-                    <img
-                      v-else-if="hub.PermissionLevel == 4"
-                      src="@/assets/permissions/4.svg"
-                      alt=""
-                      style="max-width: 2rem"
-                    />
-                    <img
-                      v-else-if="hub.PermissionLevel == 3"
-                      src="@/assets/permissions/3.svg"
-                      alt=""
-                      style="max-width: 2rem"
-                    />
-                    <img
-                      v-else-if="hub.PermissionLevel == 2"
-                      src="@/assets/permissions/2.svg"
-                      alt=""
-                      style="max-width: 2rem"
-                    />
-                    <img
-                      v-else-if="hub.PermissionLevel == 1"
-                      src="@/assets/permissions/1.svg"
-                      alt=""
-                      style="max-width: 2rem"
-                    />
+                    <permissions-icon :permission-level="hub.PermissionLevel" />
                   </div>
                   <div
                     class="col ps-3 d-flex border-start justify-content-start align-items-center"
@@ -180,8 +151,9 @@
                   >
                     <button
                       class="btn btn-sm btn-outline-secondary me-2 text-light border-2 d-sm-block d-none"
-                      :href="`/hubs/${hub.HubID}`"
+                      @click="router.push(`/hubs/${hub.HubID}`)"
                     >
+                      <!-- when able make it so that the you can edit in list-->
                       EDIT
                     </button>
                     <button
@@ -209,6 +181,8 @@
 import { ref, computed } from "vue";
 import axios from "axios";
 import { HubsList } from "@/modules/hubs/types";
+import router from "@/router";
+import PermissionsIcon from "./components/PermissionsIcon.vue";
 
 const hubList = ref<HubsList[]>([]);
 const searchValue = ref<string>("");
