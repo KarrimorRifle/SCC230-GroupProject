@@ -31,69 +31,76 @@
           DRAFT
         </div>
       </h2>
-      <div class="container-fluid d-flex">
-        <div class="text-light">
-          <b> Author ID: {{ schedule.AuthorID }} </b>
-        </div>
-        <div>
-          <fieldset class="star-rating me-2">
-            <input
-              type="radio"
-              id="rating5"
-              name="rating"
-              value="5"
-              v-model="starRating"
-            />
-            <label for="rating5" title="5 stars">
-              {{ starRating >= 5 ? "&#9733;" : "&#9734;" }}
-            </label>
-            <input
-              type="radio"
-              id="rating4"
-              name="rating"
-              value="4"
-              v-model="starRating"
-            />
-            <label for="rating4" title="4 stars">
-              {{ starRating >= 4 ? "&#9733;" : "&#9734;" }}
-            </label>
-            <input
-              type="radio"
-              id="rating3"
-              name="rating"
-              value="3"
-              v-model="starRating"
-            />
-            <label for="rating3" title="3 stars">
-              {{ starRating >= 3 ? "&#9733;" : "&#9734;" }}
-            </label>
-            <input
-              type="radio"
-              id="rating2"
-              name="rating"
-              value="2"
-              v-model="starRating"
-            />
-            <label for="rating2" title="2 stars">
-              {{ starRating >= 2 ? "&#9733;" : "&#9734;" }}
-            </label>
-            <input
-              type="radio"
-              id="rating1"
-              name="rating"
-              value="1"
-              v-model="starRating"
-            />
-            <label for="rating1" title="1 star">
-              {{ starRating >= 1 ? "&#9733;" : "&#9734;" }}
-            </label>
-          </fieldset>
-          <button class="btn btn-success">Submit rating</button>
-        </div>
-        <div style="align-items: baseline">
-          <button class="btn btn-secondary" @click="cloneSchedule()">
-            Clone Schedule
-          </button>
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            class="text-light col-12 col-sm-4 d-flex justify-content-md-start justify-content-center align-items-end pb-3"
+          >
+            <b> Author ID: {{ schedule.AuthorID }} </b>
+          </div>
+          <div class="col-9 col-sm-4">
+            <fieldset class="star-rating me-2">
+              <input
+                type="radio"
+                id="rating5"
+                name="rating"
+                value="5"
+                v-model="starRating"
+              />
+              <label for="rating5" title="5 stars">
+                {{ starRating >= 5 ? "&#9733;" : "&#9734;" }}
+              </label>
+              <input
+                type="radio"
+                id="rating4"
+                name="rating"
+                value="4"
+                v-model="starRating"
+              />
+              <label for="rating4" title="4 stars">
+                {{ starRating >= 4 ? "&#9733;" : "&#9734;" }}
+              </label>
+              <input
+                type="radio"
+                id="rating3"
+                name="rating"
+                value="3"
+                v-model="starRating"
+              />
+              <label for="rating3" title="3 stars">
+                {{ starRating >= 3 ? "&#9733;" : "&#9734;" }}
+              </label>
+              <input
+                type="radio"
+                id="rating2"
+                name="rating"
+                value="2"
+                v-model="starRating"
+              />
+              <label for="rating2" title="2 stars">
+                {{ starRating >= 2 ? "&#9733;" : "&#9734;" }}
+              </label>
+              <input
+                type="radio"
+                id="rating1"
+                name="rating"
+                value="1"
+                v-model="starRating"
+              />
+              <label for="rating1" title="1 star">
+                {{ starRating >= 1 ? "&#9733;" : "&#9734;" }}
+              </label>
+            </fieldset>
+            <button class="btn btn-success mb-2">Submit rating</button>
+          </div>
+          <div
+            class="col-3 col-sm-4 d-flex justify-content-md-end"
+            style="align-items: baseline"
+          >
+            <button class="btn btn-secondary mb-1" @click="cloneSchedule()">
+              Clone Schedule
+            </button>
+          </div>
         </div>
       </div>
     </div>
