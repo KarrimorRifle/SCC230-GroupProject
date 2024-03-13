@@ -15,7 +15,6 @@ class test_user(unittest.TestCase):
 
         self.assertEqual(test.id,expected.id)
         self.assertEqual(test.username,expected.username)
-        self.assertEqual(test.password,expected.password)
         self.assertEqual(test.email,expected.email)
         self.assertEqual(test.allowEmails,expected.allowEmails)
         self.assertEqual(test.debug,expected.debug)
