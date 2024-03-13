@@ -2,14 +2,14 @@
 #Desc:          File to hold the User Class and related Functions
 #               The Function of the User Class is to hold information about users
 #
-#Last Update:   2024-2-21
+#Last Update:   2024-3-13
 #Updated By:    Aditya Khan
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
+from server import app, addToErrorLog
 
-##CLASS DEFINITION##
+##CLASS DEFINITIONS##
 class User:
     ##VALUES##
     #id             Holds the ID for the user to be stored in the database
@@ -28,8 +28,15 @@ class User:
         self.allowEmails = allowEmails
         
         self.debug = debug
+        if(debug):
+            print(f"User Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"username:\t{self.username}\n"
+                  f"email:\t\t{self.email}\n"
+                  f"allowEmails:\t{self.allowEmails}\n")
 
-# Function creates User object based on User data in DB
+##FUNCTION DEFINITIONS##
+#Loads a User from the database
 def loadUserFromDatabase(id:str) -> User:
     cursor = app.config['cursor']
     query = ("SELECT * FROM accounts "

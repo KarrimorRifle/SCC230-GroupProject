@@ -2,15 +2,14 @@
 #Desc:          File to hold the Trigger Class and related Functions
 #               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
 #
-#Last Update:   2024-3-12
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
+from server import app, addToErrorLog
 import threading
-from iota import addToErrorLog
-from iota.Device import Device
+from iota.Device import *
 from iota.Schedule import *
 
 #CLASS DEFINITION#
@@ -37,6 +36,14 @@ class Trigger:
         self.canRun = canRun
 
         self.debug = debug
+        if(debug):
+            print(f"Trigger Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"isRunning:\t{self.isRunning}\n"
+                  f"ScheduleID:\t{self.ScheduleID}\n"
+                  f"canRun:\t\t{self.canRun}\n"
+                  f"devices:\t{str(self.devices)[:77]}...\n"
+                  f"data:\t\t{str(self.data)[:77]}...\n")
 
     ##PUBLIC METHODS##
     #Updates the canRun value of a Trigger in the database
@@ -44,7 +51,11 @@ class Trigger:
         cursor = app.config['cursor']
         query = ("UPDATE triggers"
                 f"SET canRun = {1 if(self.canRun) else 0}"
-                f"WHERE TriggerID = {self.id}")
+                f"WHERE TriggerID = '{self.id}'")
+        cursor.execute(query)
+
+        if(self.debug):
+            print(f"({self.id})\t Updated canRun to {self.canRun} in database")
 
     ##PRIVATE METHODS##
     #Formats the data into an evaluable string
@@ -91,7 +102,8 @@ class Trigger:
         #returns the string
         return str(datapoint)
 
-# Function creates Trigger object based on Trigger data in DB
+##FUNCTION DEFINITIONS##
+#Loads a Trigger from the database
 def loadTriggerFromDatabase(id:str):
     cursor = app.config['cursor']
 
@@ -142,8 +154,11 @@ def checkTriggers(ids:list[str]):
 
                 #Checks if the code should run
                 if(eval(' '.join(trigger.data))):
-                    if(Trigger.canRun):
+                    if(trigger.canRun):
+                        #Runs the code
                         schedule = loadScheduleFromDatabase(trigger.ScheduleID)
+                        if(trigger.debug):
+                            print(f"({trigger.id}) running Schedule '{trigger.ScheduleID}'")
                         schedule.runCode()
 
                     #Stops the trigger from running multiple times from one activation
@@ -175,3 +190,8 @@ def main():
     #Prevents exit from python trying to close infinite loop
     except:
         main()
+
+#running app
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
+    main()

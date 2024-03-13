@@ -23,6 +23,9 @@ CREATE TABLE `hubs`(
 INSERT INTO hubs(`HubID`,`HubName`)
 Values("Hubk23098jwij123msd","Test Hub");
 
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk2nj28jwij123msd","DO NOT DELETE");
+
 CREATE INDEX idx_hubs_hubName ON `hubs` (`hubName`);
 
 CREATE TABLE `accounts_hubsRelation`(
@@ -36,6 +39,12 @@ CREATE TABLE `accounts_hubsRelation`(
 
 INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
 Values("Acc89kaE64Aize3NX2j","Hubk23098jwij123msd",5);
+
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Accojk42VvlqdeBpOBc","Hubk2nj28jwij123msd",5);
+
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Acc89kaE64Aize3NX2j","Hubk2nj28jwij123msd",3);
 
 CREATE TABLE `hub_inviteTokens`(
     `TokenID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -59,11 +68,15 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("bfa2ed780d4b994c7dqalg", "Wifi Plug", ">(zZA]v_npIbO}w1", "192.168.1.61", 3.3, "Tuya", "Hubk2nj28jwij123msd");
+
 CREATE TABLE `device_vars`(
     `VarID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `DeviceID` varchar(100) NOT NULL,
     `VarName` VARCHAR(255) NOT NULL,
     `VarType` VARCHAR(255) NOT NULL,
+    `Writeable` TINYINT UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (DeviceID) REFERENCES devices(DeviceID) ON DELETE CASCADE
 );
 
@@ -142,6 +155,12 @@ CREATE TABLE `function_block_links`(
     `ScheduleID` varchar(100) NOT NULL,
     FOREIGN KEY (ScheduleID) REFERENCES schedules(ScheduleID) ON DELETE CASCADE, 
     FOREIGN KEY (ParentID) REFERENCES function_blocks(BlockID) ON DELETE CASCADE
+);
+
+CREATE TABLE `error_log`(
+    `LogID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `Error` VARCHAR(255) NOT NULL,
+    `Time` VARCHAR(100) NOT NULL DEFAULT "0000-00-00 00:00:00"
 );
 
 -- To reset DB delete the container and start up again
