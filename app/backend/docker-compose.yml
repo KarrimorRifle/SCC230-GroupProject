@@ -14,6 +14,7 @@ services:
       - custom_network
     depends_on:
       - mysql
+    restart: unless-stopped
 
   tests:
     build: ./python/
