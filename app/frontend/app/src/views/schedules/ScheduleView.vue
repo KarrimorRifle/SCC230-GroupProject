@@ -119,6 +119,11 @@
     </div>
     <div class="container-fluid mx-0 px-0 d-flex flex-column">
       <div id="alkdas" class="row mx-0">
+        <div class="col-md-3 d-md-block d-none pt-2 bg-dark">
+          <h4><b>DESCRIPTION</b></h4>
+          <hr class="mt-0" />
+          {{ schedule.Description ?? "No Description" }}
+        </div>
         <div
           class="col p-3 scrollable21 d-flex flex-column align-items-center"
           v-if="schedule"
