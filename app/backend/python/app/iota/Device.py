@@ -7,8 +7,7 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
-from iota import addToErrorLog
+from server import app, addToErrorLog
 import tinytuya as tuya
 
 #Sets up the cloud server needed to connect to tuya devices
