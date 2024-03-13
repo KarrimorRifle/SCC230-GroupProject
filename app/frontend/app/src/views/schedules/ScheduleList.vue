@@ -5,7 +5,30 @@
       v-if="forceRenderList"
       style="overflow: hidden"
     >
-      <div class="col-2 options bg-gray"></div>
+      <div class="col-2 options bg-gray text-light">
+        <div class="container-fluid sub-nav">
+          <div class="row sub-nav-item">
+            <a href="/schedules?mode=personal" class="container-fluid">
+              <img
+                src="@/assets/home.svg"
+                alt="House"
+                style="max-width: 1.5rem"
+              />
+              My Schedules
+            </a>
+          </div>
+          <div class="row sub-nav-item">
+            <a href="/schedules?mode=public" class="container-fluid">
+              <img
+                src="@/assets/earth.svg"
+                alt="earth"
+                style="max-width: 1.5rem"
+              />
+              Public Schedules
+            </a>
+          </div>
+        </div>
+      </div>
       <div class="col-10 schedules px-0">
         <h2 class="text-start text-light underlined bg-dark px-3 py-2">
           Schedules
@@ -71,7 +94,7 @@
               </div>
               <div class="d-flex me-2">
                 <a
-                  :href="'/schedules/' + item.ScheduleID"
+                  :href="'/schedule/' + item.ScheduleID"
                   class="btn btn-info me-2 btn-sm"
                   >EDIT</a
                 >
