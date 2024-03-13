@@ -90,7 +90,7 @@
         <div class="col-4 border-start">
           <button
             class="btn btn-outline-danger me-2 mt-2"
-            @click="block(account.AccountID)"
+            @click="setPerm(0, account.AccountID, account.Name)"
           >
             Block
             <div class="d-inline ps-1"></div>
@@ -102,7 +102,7 @@
           </button>
           <button
             class="btn btn-sm btn-outline-danger me-2 mt-2"
-            @click="remove(account.AccountID)"
+            @click="remove(account.AccountID, account.Name)"
           >
             Remove
             <div class="d-inline ps-1"></div>
@@ -180,21 +180,42 @@ const setPerm = async (level: number, id: string, name?: string) => {
       return;
     });
 
-  notif.value?.show(
-    "Account permission changed",
-    `${name}'s permission level was adjusted!`,
-    "success"
-  );
+  if (level != 0)
+    notif.value?.show(
+      "Account permission changed",
+      `${name}'s permission level was adjusted!`,
+      "success"
+    );
+  else
+    notif.value?.show(
+      "Account blocked",
+      `${name}'s account has been BLOCKED`,
+      "warning"
+    );
 
   setup();
 };
 
-const block = (accountID: string) => {
-  console.log("BLOCKING");
-};
+const remove = async (id: string, name: string) => {
+  let data = await axios
+    .delete(`http://localhost:5000/hub/${HubID}/user/${id}`, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to remove person",
+        "Soemthing went wrong, try again later",
+        "danger"
+      );
+      return;
+    });
 
-const remove = (accountID: string) => {
-  console.log("REMOVING");
+  notif.value?.show(
+    "Account removed",
+    `${name}'s account has been taken off the hub`,
+    "warning"
+  );
 };
 
 setup();
