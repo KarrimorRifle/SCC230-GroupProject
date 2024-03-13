@@ -48,41 +48,54 @@
         </div>
         <div class="col-9 px-0 hub-main-bg d-flex flex-column">
           <div
-            class="container-fluid text-light d-flex flex-column flex-grow-1 px-0"
+            class="container-fluid container text-light d-flex flex-column flex-grow-1"
             v-if="hub"
           >
-            <div class="row d-flex justify-content-between mb-3 mt-2 px-2">
-              <h2 class="text-start mb-0 ps-3 col">
-                <b v-if="hub.PermissionLevel >= 4">HUB PAGE</b>
-                <b v-else>HUB PAGE: {{ hub.HubName }}</b>
-              </h2>
+            <div class="row">
               <div
-                v-if="hub.PermissionLevel == 5"
-                class="col-6 d-flex justify-content-end"
+                class="container-fluid d-flex justify-content-between mb-3 mt-2 px-2"
               >
-                <div class="input-group" v-if="deleting">
-                  <input
-                    type="text"
-                    placeholder="Enter name of hub"
-                    class="form-control"
-                    v-model="deletingHubName"
-                  />
+                <h2 class="text-start mb-0 ps-3 col-lg-6 col-12">
+                  <b>
+                    {{
+                      hub.PermissionLevel >= 4
+                        ? "HUB PAGE: " + hub.HubName
+                        : "HUB PAGE"
+                    }}
+                  </b>
+                </h2>
+                <div
+                  v-if="hub.PermissionLevel == 5"
+                  class="col-lg-6 col-12 d-flex justify-content-end"
+                >
+                  <div class="input-group" v-if="deleting">
+                    <input
+                      type="text"
+                      placeholder="Enter name of hub"
+                      class="form-control"
+                      v-model="deletingHubName"
+                    />
+                    <button
+                      class="input-group-text btn btn-danger"
+                      @click="deleteHub()"
+                    >
+                      DELETE
+                    </button>
+                    <button
+                      class="input-group-text btn btn-secondary"
+                      @click="deleting = false"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                   <button
-                    class="input-group-text btn btn-danger"
-                    @click="deleteHub()"
+                    class="btn btn-danger"
+                    v-else
+                    @click="deleting = true"
                   >
                     DELETE
                   </button>
-                  <button
-                    class="input-group-text btn btn-secondary"
-                    @click="deleting = false"
-                  >
-                    Cancel
-                  </button>
                 </div>
-                <button class="btn btn-danger" v-else @click="deleting = true">
-                  DELETE
-                </button>
               </div>
             </div>
             <div class="row px-3" v-if="hub.PermissionLevel >= 4">
