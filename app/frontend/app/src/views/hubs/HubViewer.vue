@@ -5,7 +5,18 @@
         class="row hub-row px-0"
         style="min-height: 0; max-height: 100%; height: 100%"
       >
-        <div class="col-3 text-start bg-dark px-0"></div>
+        <div class="col-3 text-start bg-dark px-0">
+          <div class="container-fluid">
+            <div class="row text-light">
+              <button
+                class="btn btn-secondary border-2 text-light"
+                @click="router.push('/hubs')"
+              >
+                <b>{{ "< Hubs" }}</b>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="col-9 px-0">
           <div class="container-fluid text-light" v-if="hub">
             <div class="row d-flex justify-content-start mt-2">
