@@ -34,6 +34,7 @@ class FunctionCode():
     def __init__(self, commandType:str, number:int, linkedCommands:list=[int], params:list[str]=[]):
         self.commandType = commandType
         self.number = number
+
         self.linkedCommands = linkedCommands
         self.params = params
 
@@ -58,17 +59,28 @@ class Schedule:
                  code:list[FunctionCode] = [], isActive:bool=False, debug:bool=False):
         self.id = id
         self.name = name
+        
         self.isPublic = isPublic
-        if(isPublic):
-            self.rating = rating
+        self.rating = rating
 
         self.isActive = isActive
         self.isRunning = False
+
         self.code = code
     
         self.variables ={}
         self.devices = self.findDevices()
+        
         self.debug = debug
+        if(debug):
+            print(f"Schedule Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"name:\t\t{self.name}\n"
+                  f"isPublic:\t{self.isPublic}\n"
+                  f"isRunning:\t{self.isRunning}\n"
+                  f"code:\t\t{str(self.code)[:77]}...\n"
+                  f"variables:\t{str(self.variables)[:77]}...\n"
+                  f"devices:\t{str(self.devices)[:77]}...\n")
 
     ##PUBLIC METHODS##
     #Runs the code to completion, and resets the values needed
@@ -87,8 +99,6 @@ class Schedule:
                 try:
                     i = self.__translateSchedule(i)
                 except Exception as e:
-                    if(self.debug):
-                        print(e)
                     addToErrorLog(e)
                     break
             self.__resetCounts()
@@ -97,9 +107,13 @@ class Schedule:
           
         #Check if the code is already running
         if(not(self.isRunning)):
+            if(self.debug):
+                print(f"({self.id})\t Running Code.")
             # Start a new thread to execute the code
             thread = threading.Thread(target=runThread)
             thread.start()
+        elif(self.debug):
+            print(f"({self.id})\t Code Already Running.")
 
     #Searches the schedule to find all instances of Devices being accessed
     def findDevices(self) -> list[Device]:
@@ -123,7 +137,7 @@ class Schedule:
             evalParams.append(self.__resolveVariable(self.code[index].params[i]))
 
         if(self.debug):
-            print(f"{self.code[index].commandType + ' ' + (' '.join(evalParams)):<60}({self.id})")
+            print(f"({self.id})\t Running {self.code[index].commandType}({' '.join(evalParams)}).")
 
         #Checks the type of statement that is at code[index]
         match(self.code[index].commandType):
@@ -135,6 +149,7 @@ class Schedule:
                     #Creates an iterator variable for the current loop
                     self.variables[f"i{self.code[index].number}"] = self.code[index].hasRun
                     
+                    #Runs the code attached to the FOR loop.
                     self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
@@ -147,6 +162,7 @@ class Schedule:
                     #Creates an iterator variable for the current loop
                     self.variables[f"i{self.code[index].number}"] = self.code[index].hasRun
                     
+                    #Runs the code attached to the WHILE loop.
                     self.__runConditional(index)
 
                 #Returns the location of the end of the for loop, where the code should jump to next.
@@ -157,7 +173,7 @@ class Schedule:
                     self.code[index].hasRun+=1
                     self.__runConditional(index)
                 elif(self.debug):
-                    print(f"{'IF CONDITIONS NOT MET':<60}({self.id})")
+                    print(f"({self.id})\t IF conditions not met.")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
@@ -180,16 +196,13 @@ class Schedule:
                     self.code[index].hasRun+=1
                     self.__runConditional(index)
                 elif(self.debug):
-                    print(f"{'ELSE CONDITIONS NOT MET':<60}({self.id})")
+                    print(f"({self.id})\t ELSE conditions not met.")
                     
                 #Returns the location of the end of the for loop, where the code should jump to next.
                 return(self.__findEnd(index, self.code[index])+1)
             #Code for a set statement
             case "SET":
                 _devices = self.devices
-                if(self.debug):
-                    #print response from set statement
-                    pass
                 exec(f"{' '.join(evalParams)}")
 
                 #Checks if there are any changes
@@ -209,7 +222,7 @@ class Schedule:
     #Runs all the lines in a condition statement or loop
     def __runConditional(self, index:int):
         if(self.debug):
-            print(f"{'RUN CONDITIONAL':<60}({self.id})")
+            print(f"({self.id})\t Running Conditional.")
 
         #Creates a temporary index to run the required commands
         _index=index

@@ -57,8 +57,8 @@ class Device:
                   f"ip:\t\t{self.ip}\n"
                   f"key:\t\t{self.key}\n"
                   f"version:\t\t{self.version}\n"
-                  f"typeMappings:\t{str(self.typeMappings)[:80]}...\n"
-                  f"mappings:\t\t{str(self.mappings)[:80]}...\n"
+                  f"typeMappings:\t{str(self.typeMappings)[:77]}...\n"
+                  f"mappings:\t\t{str(self.mappings)[:77]}...\n"
                   f"data:\t\t{self.data}\n")
         
     ##PUBLIC METHODS##

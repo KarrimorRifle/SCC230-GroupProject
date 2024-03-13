@@ -28,6 +28,12 @@ class User:
         self.allowEmails = allowEmails
         
         self.debug = debug
+        if(debug):
+            print(f"User Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"username:\t{self.username}\n"
+                  f"email:\t\t{self.email}\n"
+                  f"allowEmails:\t{self.allowEmails}\n")
 
 ##FUNCTION DEFINITIONS##
 #Loads a User from the database

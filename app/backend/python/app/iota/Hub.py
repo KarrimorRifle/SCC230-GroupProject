@@ -41,9 +41,9 @@ class Hub:
                   f"id:\t\t{self.id}\n"
                   f"name:\t\t{self.name}\n"
                   f"address:\t{self.address}\n"
-                  f"logs:\t\t{str(self.logs)[:80]}...\n"
-                  f"users:\t\t{str(self.users)[:80]}...\n"
-                  f"schedules:\t{str(self.schedules)[:80]}...\n")
+                  f"logs:\t\t{str(self.logs)[:77]}...\n"
+                  f"users:\t\t{str(self.users)[:77]}...\n"
+                  f"schedules:\t{str(self.schedules)[:77]}...\n")
 
 ##FUNCTION DEFINITIONS##
 #Loads a Hub from the database
