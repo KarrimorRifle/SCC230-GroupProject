@@ -33,8 +33,7 @@ class test_user(unittest.TestCase):
             self.assertIn('DeviceID', entry)
             self.assertIn('DeviceName', entry)
             self.assertIn('Company', entry)
-            self.assertIn('ReadVars', entry)
-            self.assertIn('WriteVars', entry)
+            self.assertIn('Vars', entry)
 
     def test_get_device_details_success(self):
         response = self.client_server.post("/hub/Hubk23098jwij123msd/device", json={'DeviceID': "Dev12n312kue9fiisnaksw3", 'DeviceName': "Test Device 4", 'Key': "12343210", 'Company': "NotTuya", 'Version': 1.0, 'IpAddress': "1.0.0.4", 'HubID': "Hubk23098jwij123msd"})
@@ -53,8 +52,7 @@ class test_user(unittest.TestCase):
         self.assertIn('IpAddress', data)
         self.assertIn('HubID', data)
         self.assertIn('Company', data)
-        self.assertIn('ReadVars', data)
-        self.assertIn('WriteVars', data)
+        self.assertIn('Vars', data)
     
     def test_update_device_success(self):
         payload = {
@@ -79,8 +77,7 @@ class test_user(unittest.TestCase):
         self.assertIn('IpAddress', data)
         self.assertIn('HubID', data)
         self.assertIn('Company', data)
-        self.assertIn('ReadVars', data)
-        self.assertIn('WriteVars', data)
+        self.assertIn('Vars', data)
         self.assertEqual(data['DeviceName'], payload['DeviceName'])
         self.assertEqual(data['Key'], payload['Key'])
         self.assertEqual(data['Version'], payload['Version'])
