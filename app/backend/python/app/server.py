@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, request, jsonify, make_response
+from flask import Flask
 from flask_cors import CORS
 from routes.accounts import accounts
 from routes.schedule.schedule import schedule
