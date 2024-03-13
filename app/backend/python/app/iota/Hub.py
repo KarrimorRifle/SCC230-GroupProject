@@ -2,7 +2,7 @@
 #Desc:          File to hold the Hub Class and related Functions
 #               The Function of the Hub Class is to act as the bridge between Devices and their User 
 #
-#Last Update:   2024-2-29
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -11,7 +11,7 @@ from iota.Schedule import Schedule
 from iota.User import User, loadUserFromDatabase
 from server import app
 
-##CLASS DEFINITION##
+##CLASS DEFINITIONS##
 class Hub:
     ##VALUES##
     #id         Holds the ID for the hub to be stored in the database
@@ -37,6 +37,8 @@ class Hub:
         
         self.debug = debug
 
+##FUNCTION DEFINITIONS##
+#Loads a Hub from the database
 def loadHubFromDatabase(id:str) -> Hub:
     cursor = app.config['cursor']
     query = ("SELECT * FROM hubs WHERE HubID = %s")

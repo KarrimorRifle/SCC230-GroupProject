@@ -2,7 +2,7 @@
 #Desc:          File to hold the Device Class and related Functions
 #               The Function of the Device Class is to hold information about IOT Devices
 #
-#Last Update:   2024-3-12
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -14,7 +14,7 @@ import tinytuya as tuya
 #Sets up the cloud server needed to connect to tuya devices
 TUYASERVER = tuya.Cloud("eu", "p7ev9udc4nspppngqs9j", "eade3788ef124f97a7db3f6f000616e0")
 
-##CLASS DEFINITION##
+##CLASS DEFINITIONS##
 class Device:
     ##VALUES##
     #id             Holds the ID for the Device to be stored in the Database
@@ -124,6 +124,7 @@ class Device:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
             
+##FUNCTION DEFINITIONS##
 #Loads a Device From the Database
 def loadDeviceFromDatabase(id:str) -> Device:
     cursor = app.config['cursor']

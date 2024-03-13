@@ -2,7 +2,7 @@
 #Desc:          File to hold the Schedule Class and related Functions
 #               The Function of the Schedule Class is to run the user-defined code once a trigger is activated
 #
-#Last Update:   2024-3-12
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -275,7 +275,8 @@ class Schedule:
         #returns the string
         return str(variable)
 
-
+##FUNCTION DEFINITIONS##
+#Loads a Schedule from the database
 def loadScheduleFromDatabase(id:str) -> Schedule:
     cursor = app.config['cursor']
     query = ("SELECT * FROM schedules "

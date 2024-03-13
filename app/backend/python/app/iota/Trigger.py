@@ -2,7 +2,7 @@
 #Desc:          File to hold the Trigger Class and related Functions
 #               The Function of the Trigger Class is to Recieve information from devices and activate a schedule from it.
 #
-#Last Update:   2024-3-12
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
@@ -44,7 +44,8 @@ class Trigger:
         cursor = app.config['cursor']
         query = ("UPDATE triggers"
                 f"SET canRun = {1 if(self.canRun) else 0}"
-                f"WHERE TriggerID = {self.id}")
+                f"WHERE TriggerID = '{self.id}'")
+        cursor.execute(query)
 
     ##PRIVATE METHODS##
     #Formats the data into an evaluable string
@@ -91,7 +92,8 @@ class Trigger:
         #returns the string
         return str(datapoint)
 
-# Function creates Trigger object based on Trigger data in DB
+##FUNCTION DEFINITIONS##
+#Loads a Trigger from the database
 def loadTriggerFromDatabase(id:str):
     cursor = app.config['cursor']
 
