@@ -47,11 +47,19 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         self.assertEqual(data['IsPublic'], 1)
 
     def test_rate_public_schedule(self):
+        response = self.client_server.patch('/schedule/public/Schk129jd2i23kd34af', json={'Rating': 3})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('ScheduleID', data)
+        self.assertIn('Rating', data)
+        self.assertEqual(data['Rating'], 3)
+
         response = self.client_server.patch('/schedule/public/Schk129jd2i23kd34af', json={'Rating': 5})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertIn('ScheduleID', data)
         self.assertIn('Rating', data)
+        self.assertEqual(data['Rating'], 4)
     
     def test_rate_public_schedule_invalid_rating(self):
         response = self.client_server.patch('/schedule/public/Schk129jd2i23kd34af', json={'Rating': 6})
