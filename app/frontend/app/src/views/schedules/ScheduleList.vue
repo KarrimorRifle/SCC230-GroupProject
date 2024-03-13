@@ -2,7 +2,9 @@
   <div class="main-container d-flex">
     <div class="main row bg-dark" style="overflow: hidden">
       <div class="col-2 options bg-gray text-light">
-        <div class="container-fluid sub-nav px-0">
+        <div
+          class="container-fluid sub-nav px-0 border-bottom border-light pb-3"
+        >
           <div class="row sub-nav-title">NAV</div>
           <div
             class="row sub-nav-item border-top"
@@ -33,6 +35,76 @@
               />
               Public Schedules {{ !personal ? ">" : "" }}
             </a>
+          </div>
+        </div>
+        <h4 class="mt-2 border-bottom border-light pb-2">Filter</h4>
+        <div class="container-fluid px-0">
+          <div class="row mb-2">
+            <div class="input-group">
+              <div class="input-group-text">Status</div>
+              <button
+                class="form-control dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ statusFilter }}
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="dropdown-item" @click="statusFilter = 'DRAFT'">
+                    DRAFT
+                  </button>
+                </li>
+                <li>
+                  <button
+                    class="dropdown-item"
+                    @click="statusFilter = 'NOT DRAFT'"
+                  >
+                    NOT DRAFT
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" @click="statusFilter = 'ANY'">
+                    ANY
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row" v-if="personal">
+            <div class="input-group">
+              <div class="input-group-text">Privacy</div>
+              <button
+                class="form-control dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ privacyFilter }}
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button
+                    class="dropdown-item"
+                    @click="privacyFilter = 'PUBLIC'"
+                  >
+                    PUBLIC
+                  </button>
+                </li>
+                <li>
+                  <button
+                    class="dropdown-item"
+                    @click="privacyFilter = 'PRIVATE'"
+                  >
+                    PRIVATE
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" @click="privacyFilter = 'ANY'">
+                    ANY
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -207,10 +279,24 @@ import router from "@/router";
 const schedules = ref<ListSchedule[]>([]);
 const filterValue = ref<string>("");
 const filteredSchedules = computed(() =>
-  schedules.value.filter((item) =>
-    item.ScheduleName.toLowerCase().includes(filterValue.value.toLowerCase())
-  )
+  schedules.value
+    .filter((item) =>
+      //search filter
+      item.ScheduleName.toLowerCase().includes(filterValue.value.toLowerCase())
+    )
+    .filter((item) => {
+      //privacy filter
+      if (privacyFilter.value == "ANY") return true;
+      return privacyFilter.value == "PUBLIC" ? item.IsPublic : !item.IsPublic;
+    })
+    .filter((item) => {
+      if (statusFilter.value == "ANY") return true;
+      return statusFilter.value == "DRAFT" ? item.IsDraft : !item.IsDraft;
+    })
 );
+
+const privacyFilter = ref<"ANY" | "PUBLIC" | "PRIVATE">("ANY");
+const statusFilter = ref<"ANY" | "DRAFT" | "NOT DRAFT">("ANY");
 
 const personal = computed(
   () =>
