@@ -51,12 +51,15 @@
             class="container-fluid text-light d-flex flex-column flex-grow-1 px-0"
             v-if="hub"
           >
-            <div class="row d-flex justify-content-between mb-3 mt-2">
-              <h2 class="text-start mb-0 ps-3 col-6">
+            <div class="row d-flex justify-content-between mb-3 mt-2 px-2">
+              <h2 class="text-start mb-0 ps-3 col">
                 <b v-if="hub.PermissionLevel >= 4">HUB PAGE</b>
                 <b v-else>HUB PAGE: {{ hub.HubName }}</b>
               </h2>
-              <div class="col-6 d-flex justify-content-end">
+              <div
+                v-if="hub.PermissionLevel == 5"
+                class="col-6 d-flex justify-content-end"
+              >
                 <div class="input-group" v-if="deleting">
                   <input
                     type="text"
@@ -82,7 +85,7 @@
                 </button>
               </div>
             </div>
-            <div class="row" v-if="hub.PermissionLevel >= 4">
+            <div class="row px-3" v-if="hub.PermissionLevel >= 4">
               <div class="container-fluid">
                 <div class="input-group">
                   <div class="input-group-text">Name</div>
@@ -107,7 +110,7 @@
               class="row main-container mx-0 px-0 flex-grow-1"
               style="min-height: 0; max-height: 100%; height: 100%"
             >
-              <div class="container-fluid">
+              <div class="container-fluid d-flex flex-column">
                 <user-list v-if="location == 'users'" />
               </div>
             </div>
