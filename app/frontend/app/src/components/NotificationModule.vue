@@ -49,8 +49,6 @@ const show = async (
   notification.colour = colour;
 
   visible.value = true;
-  await new Promise((r) => setTimeout(r, 25000));
-  visible.value = false;
 };
 
 defineExpose({
