@@ -19,11 +19,36 @@
         </div>
         <div class="col-9 px-0">
           <div class="container-fluid text-light" v-if="hub">
-            <div class="row d-flex justify-content-start mt-2">
-              <h2 class="text-start ps-3">
+            <div class="row d-flex justify-content-between mb-3 mt-2">
+              <h2 class="text-start mb-0 ps-3 col-6">
                 <b v-if="hub.PermissionLevel >= 4">HUB PAGE</b>
                 <b v-else>HUB PAGE: {{ hub.HubName }}</b>
               </h2>
+              <div class="col-6 d-flex justify-content-end">
+                <div class="input-group" v-if="deleting">
+                  <input
+                    type="text"
+                    placeholder="Enter name of hub"
+                    class="form-control"
+                    v-model="deletingHubName"
+                  />
+                  <button
+                    class="input-group-text btn btn-danger"
+                    @click="deleteHub()"
+                  >
+                    DELETE
+                  </button>
+                  <button
+                    class="input-group-text btn btn-secondary"
+                    @click="deleting = false"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <button class="btn btn-danger" v-else @click="deleting = true">
+                  DELETE
+                </button>
+              </div>
             </div>
             <div class="row" v-if="hub.PermissionLevel >= 4">
               <div class="input-group">
@@ -47,13 +72,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 
 const hub = ref<HubBase>();
 const notif = ref<typeof NotificationModule>();
+const deleting = ref<boolean>(false);
+const deletingHubName = ref<string>("");
 
 let hubID = router.currentRoute.value.params.id;
 const setup = async () => {
@@ -79,6 +106,31 @@ const updateHubName = async () => {
     "Your hub title has been succesfully updated",
     "success"
   );
+};
+
+const deleteHub = () => {
+  if (deletingHubName.value != hub.value?.HubName) {
+    notif.value?.show(
+      "Delete unsuccesful",
+      "The input doesn't match the hub's name",
+      "danger"
+    );
+    return;
+  }
+  axios
+    .delete(`http://localhost:5000/hub/${hubID}`, {
+      withCredentials: true,
+    })
+    .then(() => {
+      router.push("/hubs");
+    })
+    .catch((e: AxiosError) => {
+      if (e.code == "500") console.log(e);
+      else {
+        notif.value?.show("Delete unsuccesful", e.message, "danger");
+        return;
+      }
+    });
 };
 setup();
 </script>
