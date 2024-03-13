@@ -161,7 +161,12 @@
             <template v-if="item.info">
               <hr class="m-0" />
               <div class="card-body py-0">
-                hello!iygfbawofyawbadfghioi765tefrhtji7u6y5t4eds
+                <div v-if="item.data"></div>
+                <div class="py-3" v-else>
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
               </div>
             </template>
           </div>
