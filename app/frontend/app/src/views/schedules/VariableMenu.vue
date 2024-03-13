@@ -55,7 +55,7 @@
       <br />If this is unexpected please contact us on
       <a href="tel:+447696696969">+44 7696 696969</a>
     </div>
-    <div class="variable-controller">
+    <div class="variable-controller" v-if="!readOnly">
       <div class="container-fluid">
         <div class="row">
           <div class="col-10">
@@ -98,6 +98,7 @@ const invalid = ref<boolean>(false);
 
 const props = defineProps<{
   modelValue: Record<string, "NUMBER" | "BOOLEAN">;
+  readOnly?: boolean;
 }>();
 
 let modelValue = ref(props.modelValue);
