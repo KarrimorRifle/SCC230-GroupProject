@@ -7,7 +7,7 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-from server import app
+from server import app, addToErrorLog
 
 ##CLASS DEFINITIONS##
 class User:

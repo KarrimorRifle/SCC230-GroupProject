@@ -8,6 +8,7 @@
 ##IMPORTS##
 import string as s
 from random import choice
+from datetime import datetime, UTC
 
 ##FUNCTION DEFINITIONS##
 #Generates a random ID for the database to use
@@ -32,3 +33,5 @@ def genRandomID(length:int=16, ids:list[str]=[], prefix:str="", suffix:str="", d
     if(debug):
         print(f"ID '{randID}' Created.")
     return(randID)
+
+

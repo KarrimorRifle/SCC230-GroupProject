@@ -8,6 +8,7 @@
 
 ##IMPORTS##
 from iota.Schedule import Schedule
+from iota.User import *
 from server import app, addToErrorLog
 
 ##CLASS DEFINITIONS##
@@ -22,8 +23,8 @@ class Hub:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
-                 users:dict[str, int]={}, schedules: list[Schedule]=[], debug:bool=False):
+    def __init__(self, id:str, name:str, address:str="", logs:list[str]=[],
+                 users:dict[str, int]={}, schedules:list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
 
@@ -35,6 +36,14 @@ class Hub:
         self.schedules = schedules
         
         self.debug = debug
+        if(debug):
+            print(f"Hub Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"name:\t\t{self.name}\n"
+                  f"address:\t{self.address}\n"
+                  f"logs:\t\t{str(self.logs)[:80]}...\n"
+                  f"users:\t\t{str(self.users)[:80]}...\n"
+                  f"schedules:\t{str(self.schedules)[:80]}...\n")
 
 ##FUNCTION DEFINITIONS##
 #Loads a Hub from the database

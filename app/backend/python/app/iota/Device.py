@@ -49,10 +49,23 @@ class Device:
         self.updateData()
 
         self.debug = debug
+        if(debug):
+            print(f"Device Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"name:\t\t{self.name}\n"
+                  f"company:\t\t{self.company}\n"
+                  f"ip:\t\t{self.ip}\n"
+                  f"key:\t\t{self.key}\n"
+                  f"version:\t\t{self.version}\n"
+                  f"typeMappings:\t{str(self.typeMappings)[:80]}...\n"
+                  f"mappings:\t\t{str(self.mappings)[:80]}...\n"
+                  f"data:\t\t{self.data}\n")
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
     def updateMappings(self):
+        if(self.debug):
+            print(f"({self.id})\t Updating Mappings.")
         #Configures the server to get the devices on the user's network
         TUYASERVER.apiDeviceID = self.id
         
@@ -62,30 +75,36 @@ class Device:
         #Adds the datapoints to the mappings
         query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
                  "VALUES ")
-        insert = False
         for datapoint in dps:
             if(datapoint['type'] == 'Enum'):
                 datapoint['type'] = 'STRING'
+
             self.mappings[datapoint['dp_id']] = datapoint['code']
             self.typeMappings[datapoint['code']] = datapoint['type'].upper()
+
             query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
-            insert = True
         
         #Updates the database with the new mappings
-        if insert:
-            try:
-                query = query[:-1]
-                cursor = app.config['cursor']
-                cursor.execute(query)
-                app.config['connection'].commit()
-            except Exception as e:
-                print(f"Error executing query: {e}")
+        try:
+            query = query[:-1]
+            cursor = app.config['cursor']
+            cursor.execute(query)
+            app.config['connection'].commit()
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            addToErrorLog(e)
                 
     #Checks the current data against an external data, and sends any differences
-    def changeData(self, data:dict[str, any]):
-        if(data != self.data):
+    def changeData(self, oldData:dict[str, any]):
+        #Checks if the full dataset is the same, to save time
+        if(oldData != self.data):
+            #Checks what has changed
             for key in self.mappings.keys():
-                if(data[key] != self.data[key]):
+                if(oldData[key] != self.data[key]):
+                    if(self.debug):
+                        print(f"({self.id})\t Updating {key} from '{oldData[key]}' to '{self.data[key]}'.")
+
+                    #Completes the change
                     self.sendData(key, self.data[key])
 
     #Updates the Data stored in the class and database
@@ -101,9 +120,14 @@ class Device:
                 apiDevice.updatedps(index=list(self.mappings.keys()), nowait=True)
                 newVals = apiDevice.status()['dps']
 
+                if(self.debug):
+                    print(f"({self.id})\t Fetching the data stored on a Tuya {self.version} Device at {self.ip}.")
+
                 #Maps the data
                 for key in newVals.keys():
-                    self.data[key] = newVals[key]
+                    self.data[self.mappings[key]] = newVals[key]
+                    if(self.debug):
+                            print(f"({self.id})\t Data: {self.mappings[key]} Set to {newVals[key]}")
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
@@ -119,9 +143,9 @@ class Device:
                 for mapping in self.mappings.keys():
                     if(self.mappings[mapping] == datapoint or mapping == datapoint):
                         apiDevice.set_value(mapping, value, nowait=True)
+            #Invalid Companies
             case _:
-                addToErrorLog(f"Invalid Company \"{self.company}\"")
-                return {"Error":-1}
+                addToErrorLog(f"Invalid Company '{self.company}'")
             
 ##FUNCTION DEFINITIONS##
 #Loads a Device From the Database
