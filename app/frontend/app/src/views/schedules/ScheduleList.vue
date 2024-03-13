@@ -16,7 +16,7 @@
                 alt="House"
                 style="max-width: 1.5rem"
               />
-              My Schedules {{ $route.query.mode == "personal" ? ">" : "" }}
+              My Schedules {{ personal ? ">" : "" }}
             </a>
           </div>
           <div
@@ -31,7 +31,7 @@
                 alt="earth"
                 style="max-width: 1.5rem"
               />
-              Public Schedules
+              Public Schedules {{ !personal ? ">" : "" }}
             </a>
           </div>
         </div>
