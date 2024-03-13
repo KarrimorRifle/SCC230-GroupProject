@@ -7,6 +7,10 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join('..')))
+
 from server import app, addToErrorLog
 import threading
 from iota.Device import Device
