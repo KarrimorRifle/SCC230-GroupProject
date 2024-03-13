@@ -190,4 +190,6 @@ INSERT INTO trigger_data(`TriggerID`,`Data`,`ListPos`)
 Values("Trgk0000ej849dj345k", "bfa2ed780d4b994c7dqalg.switch_1", 0), ("Trgk0000ej849dj345k", "==", 1), ("Trgk0000ej849dj345k", "True", 2);
 
 INSERT INTO function_blocks(`BlockID`,`CommandType`,`Num`,`ScheduleID`)
-Values("Blk0000111111122222", "IF", 1, "Schk000jd2i23kd34jg");
+Values("Blk0000111111122222", "IF", 1, "Schk000jd2i23kd34jg"), ("Blk0000111111122223", "SET", 2, "Schk000jd2i23kd34jg"), ("Blk0000111111122224", "END", 3, "Schk000jd2i23kd34jg"), ("Blk0000111111122225", "ELSE", 4, "Schk000jd2i23kd34jg"), ("Blk0000111111122226", "SET", 5, "Schk000jd2i23kd34jg"), ("Blk0000111111122227", "END", 6, "Schk000jd2i23kd34jg");
+
+
