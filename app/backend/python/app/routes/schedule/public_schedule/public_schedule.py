@@ -112,17 +112,13 @@ def get_public_schedules():
 
 @public_schedule.route('/schedule/public/<string:scheduleID>', methods=['GET', 'POST', 'PATCH'])
 def single_public_schedule_routes(scheduleID):
-    account = getAccount()
+    account = getAccount((request.method != 'POST'))
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
 
-    requestType = request.method
-    return single_public_schedule_route_calls(account, cursor, connection, scheduleID, requestType)
-
-def single_public_schedule_route_calls(account, cursor, connection, scheduleID, requestType):
-    if requestType == 'GET':
+    if request.method == 'GET':
         return get_one_public_schedule(account, cursor, scheduleID)
-    elif requestType == 'PATCH':
+    elif request.method == 'PATCH':
         return rate_public_schedule(account, cursor, connection, scheduleID)
     else:
         return save_public_schedule(account, cursor, connection, scheduleID)
