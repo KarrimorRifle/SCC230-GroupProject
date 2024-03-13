@@ -83,8 +83,9 @@ class Device:
         dps = readables + writeables
 
         #Adds the datapoints to the mappings
-        query = ("INSERT INTO device_vars (DeviceID, VarName, VarType) "
+        query = ("INSERT INTO device_vars (DeviceID, VarName, VarType, Writeable) "
                  "VALUES ")
+        update = False
         for datapoint in dps:
             #Changes Enums to strings, to be processed later
             if(datapoint['type'] == 'Enum'):
@@ -93,19 +94,22 @@ class Device:
             #Checks if the datapoint read-only
             if(datapoint not in writeables):
                 self.typeMappingsIn[datapoint['code']] = datapoint['type'].upper()
+                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}', 0),"
+                update = True
             #Checks if the datapoint is not write-only
             elif(datapoint in readables):
                 self.typeMappingsOut[datapoint['code']] = datapoint['type'].upper()
+                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}', 1),"
+                update = True
             self.mappings[datapoint['dp_id']] = datapoint['code']
-
-            query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
         
         #Updates the database with the new mappings
         try:
-            query = query[:-1]
-            cursor = app.config['cursor']
-            cursor.execute(query)
-            app.config['connection'].commit()
+            if(update):
+                query = query[:-1]
+                cursor = app.config['cursor']
+                cursor.execute(query)
+                app.config['connection'].commit()
         except Exception as e:
             print(f"Error executing query: {e}")
             addToErrorLog(e)

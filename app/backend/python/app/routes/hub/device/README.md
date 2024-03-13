@@ -15,7 +15,8 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)IpAddress – IP Address of Device
 -	(string)Key – Device Key
 -   (dict)Vars - All variables used by device
-    -   Vars = { (string)varName : (string)varType}
+    -   Vars = { 'Name' : (string)varName, 'Type' : (string)varType, 'Access' : (int)Writeable}
+        -   Writeable can be 0 or 1 for if user can update value of var
 -   (float)Version - Version Num of Device
 -   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
@@ -44,7 +45,8 @@ List of dict objects contaning:
 -	(string)DeviceName – Name of Device
 -	(string)Company – Company Device Belongs to
 -   (dict)Vars - All variables used by device
-    -   Vars = { (string)varName : (string)varType}
+    -   Vars = { 'Name' : (string)varName, 'Type' : (string)varType, 'Access' : (int)Writeable}
+        -   Writeable can be 0 or 1 for if user can update value of var
 
 #### POST:
 
@@ -85,7 +87,8 @@ dict object containing:
 -   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
 -   (dict)Vars - All variables used by device
-    -   Vars = { (string)varName : (string)varType}
+    -   Vars = { 'Name' : (string)varName, 'Type' : (string)varType, 'Access' : (int)Writeable}
+        -   Writeable can be 0 or 1 for if user can update value of var
 
 #### DELETE:
 
@@ -117,3 +120,6 @@ dict object containing updated values of:
 -   (float)Version - Version Num of Device
 -   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
+-   (dict)Vars - All variables used by device
+    -   Vars = { 'Name' : (string)varName, 'Type' : (string)varType, 'Access' : (int)Writeable}
+        -   Writeable can be 0 or 1 for if user can update value of var
