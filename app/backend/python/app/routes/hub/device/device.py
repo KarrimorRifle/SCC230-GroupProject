@@ -151,6 +151,11 @@ def deviceResponse(hubID):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
 
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     if request.method == 'GET':
         return get_devices(account, cursor, hubID)
     elif request.method == 'POST':
@@ -168,6 +173,11 @@ def deviceDetails(hubID,deviceID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_device_detail(account, cursor, deviceID, hubID)
