@@ -41,6 +41,35 @@
         <div class="container-fluid px-0">
           <div class="row mb-2">
             <div class="input-group">
+              <div class="input-group-text">Rating</div>
+              <button
+                class="form-control dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ ratingFilter }}
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="dropdown-item" @click="ratingFilter = 'NONE'">
+                    NONE
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" @click="ratingFilter = 'ASC'">
+                    ASC
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" @click="ratingFilter = 'DESC'">
+                    DESC
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="input-group">
               <div class="input-group-text">Status</div>
               <button
                 class="form-control dropdown-toggle"
@@ -278,8 +307,8 @@ import router from "@/router";
 
 const schedules = ref<ListSchedule[]>([]);
 const filterValue = ref<string>("");
-const filteredSchedules = computed(() =>
-  schedules.value
+const filteredSchedules = computed(() => {
+  let temp = schedules.value
     .filter((item) =>
       //search filter
       item.ScheduleName.toLowerCase().includes(filterValue.value.toLowerCase())
@@ -292,11 +321,21 @@ const filteredSchedules = computed(() =>
     .filter((item) => {
       if (statusFilter.value == "ANY") return true;
       return statusFilter.value == "DRAFT" ? item.IsDraft : !item.IsDraft;
-    })
-);
+    });
+
+  if (ratingFilter.value == "NONE") return temp;
+
+  temp.sort((sched1, sched2) =>
+    ratingFilter.value == "ASC"
+      ? sched1.Rating - sched2.Rating
+      : sched2.Rating - sched1.Rating
+  );
+  return temp;
+});
 
 const privacyFilter = ref<"ANY" | "PUBLIC" | "PRIVATE">("ANY");
 const statusFilter = ref<"ANY" | "DRAFT" | "NOT DRAFT">("ANY");
+const ratingFilter = ref<"NONE" | "ASC" | "DESC">("NONE");
 
 const personal = computed(
   () =>
