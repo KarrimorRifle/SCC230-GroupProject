@@ -114,7 +114,10 @@ def hub_route():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_hubs(account, cursor)
@@ -130,7 +133,10 @@ def single_hub_route(hubID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_one_hub(account, cursor, hubID)
