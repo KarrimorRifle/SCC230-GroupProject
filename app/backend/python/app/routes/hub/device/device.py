@@ -26,7 +26,8 @@ def get_devices(account, cursor, HubID):
 
     devices = [{k: v for k, v in device.items()} for device in devices]
     for device in devices:
-        device['Vars'] = get_device_vars(cursor, device['DeviceID'])
+        device['ReadVars'] = get_device_vars(cursor, device['DeviceID'])['read']
+        device['WriteVars'] = get_device_vars(cursor, device['DeviceID'])['write']
 
     return jsonify(devices), 200
 
@@ -35,9 +36,13 @@ def get_device_vars(cursor, deviceID):
                 "WHERE DeviceID = %s")
     cursor.execute(query, (deviceID,))
     vars = cursor.fetchall()
-    deviceVars = {}
+    deviceVars = {'read': [], 'write': []}
     for var in vars:
-        deviceVars[var['VarName']] = var['VarType']
+        if var['Writeable'] == 0:
+            deviceVars['read'].append({var['VarName']: var['VarType']})
+        else:
+            deviceVars['write'].append({var['VarName']: var['VarType']})
+            deviceVars['read'].append({var['VarName']: var['VarType']})
     return deviceVars
 
 def create_device(account, cursor, connection, hubID):
@@ -76,7 +81,8 @@ def get_device_detail(account, cursor, deviceID, hubID):
     cursor.execute(query, (deviceID, hubID,))
     device = cursor.fetchone()
     device = {k: v for k, v in device.items()}
-    device['Vars'] = get_device_vars(cursor, deviceID)
+    device['ReadVars'] = get_device_vars(cursor, deviceID)['read']
+    device['WriteVars'] = get_device_vars(cursor, deviceID)['write']
 
     if device is None:
         return({"error": "device not found"}), 404
