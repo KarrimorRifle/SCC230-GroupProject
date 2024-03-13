@@ -91,7 +91,20 @@
                 {{ starRating >= 1 ? "&#9733;" : "&#9734;" }}
               </label>
             </fieldset>
-            <button class="btn btn-success mb-2">Submit rating</button>
+            <button
+              class="btn btn-success mb-2"
+              @click="
+                axios
+                  .patch(
+                    `http://localhost:5000/schedule/public/${schedule.ScheduleID}`,
+                    { Rating: starRating },
+                    { withCredentials: true }
+                  )
+                  .catch((e) => console.log(e))
+              "
+            >
+              Submit rating
+            </button>
           </div>
           <div
             class="col-3 col-sm-4 d-flex justify-content-md-end"
