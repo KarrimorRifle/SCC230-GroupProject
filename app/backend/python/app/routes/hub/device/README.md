@@ -14,7 +14,9 @@ Structure shows variables and values for frontend to be familiar with.
 -	(string)DeviceName – Name of Device
 -	(string)IpAddress – IP Address of Device
 -	(string)Key – Device Key
--   (dict)Vars - All variables used by device
+-   (dict)ReadVars - All variables used by device that can be read
+    -   Vars = { (string)varName : (string)varType}
+-   (dict)WriteVars - All variables used by device that can be written
     -   Vars = { (string)varName : (string)varType}
 -   (float)Version - Version Num of Device
 -   (string)Company - Company Device Belongs to
@@ -43,7 +45,9 @@ List of dict objects contaning:
 -	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
 -	(string)Company – Company Device Belongs to
--   (dict)Vars - All variables used by device
+-   (dict)ReadVars - All variables used by device that can be read
+    -   Vars = { (string)varName : (string)varType}
+-   (dict)WriteVars - All variables used by device that can be written
     -   Vars = { (string)varName : (string)varType}
 
 #### POST:
@@ -84,7 +88,9 @@ dict object containing:
 -   (float)Version - Version Num of Device
 -   (string)Company - Company Device Belongs to
 -	(string)HubID – ID of the Hub the device is linked to
--   (dict)Vars - All variables used by device
+-   (dict)ReadVars - All variables used by device that can be read
+    -   Vars = { (string)varName : (string)varType}
+-   (dict)WriteVars - All variables used by device that can be written
     -   Vars = { (string)varName : (string)varType}
 
 #### DELETE:
