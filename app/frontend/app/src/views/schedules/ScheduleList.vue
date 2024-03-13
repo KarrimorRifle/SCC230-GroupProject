@@ -6,18 +6,31 @@
       style="overflow: hidden"
     >
       <div class="col-2 options bg-gray text-light">
-        <div class="container-fluid sub-nav">
-          <div class="row sub-nav-item">
+        <div class="container-fluid sub-nav px-0">
+          <div class="row sub-nav-title">NAV</div>
+          <div
+            class="row sub-nav-item border-top"
+            :class="{
+              active:
+                $route.query.mode == 'personal' ||
+                $route.query.mode == undefined,
+            }"
+          >
             <a href="/schedules?mode=personal" class="container-fluid">
               <img
                 src="@/assets/home.svg"
                 alt="House"
                 style="max-width: 1.5rem"
               />
-              My Schedules
+              My Schedules {{ $route.query.mode == "personal" ? ">" : "" }}
             </a>
           </div>
-          <div class="row sub-nav-item">
+          <div
+            class="row sub-nav-item"
+            :class="{
+              active: $route.query.mode == 'public',
+            }"
+          >
             <a href="/schedules?mode=public" class="container-fluid">
               <img
                 src="@/assets/earth.svg"
@@ -211,7 +224,7 @@ rerender();
 }
 
 .bg-gray {
-  background-color: rgb(35, 39, 49);
+  background-color: rgb(47, 55, 77);
 }
 
 .scrollable-list21 {
@@ -224,5 +237,44 @@ rerender();
   border-style: solid;
   border-width: 2px;
   border-color: rgb(166, 132, 38);
+}
+
+.sub-nav-item {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-width: 0px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+  &.active {
+    > a {
+      font-weight: 800 !important;
+    }
+
+    border-top: 1px solid white !important;
+    border-bottom: 1px solid white !important;
+    background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity));
+  }
+}
+
+.sub-nav-item > a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  text-align: center;
+
+  > img {
+    padding-bottom: 0.2rem;
+  }
+}
+
+.sub-nav-title {
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: 1.8rem;
+  // border-bottom: 1px solid white;
 }
 </style>
