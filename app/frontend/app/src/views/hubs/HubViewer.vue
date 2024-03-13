@@ -125,6 +125,7 @@
             >
               <div class="container-fluid d-flex flex-column">
                 <user-list v-if="location == 'users'" />
+                <device-list v-if="location == 'devices'" />
               </div>
             </div>
           </div>
@@ -142,6 +143,7 @@ import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 import UserList from "./pages/UserList.vue";
+import DeviceList from "./pages/DeviceList.vue";
 
 const hub = ref<HubBase>();
 const notif = ref<typeof NotificationModule>();

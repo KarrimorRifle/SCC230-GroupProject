@@ -16,3 +16,9 @@ export interface HubUser {
   Name: string;
   PermissionLevel: number;
 }
+
+export interface HubDevice {
+  DeviceID: string;
+  DeviceName: string;
+  Company: string;
+}
