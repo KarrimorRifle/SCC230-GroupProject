@@ -37,7 +37,12 @@
           v-if="schedule"
           style="max-height: 100%"
         >
-          <function-block v-model="schedule.Trigger" command-type="TRIGGER" />
+          <div class="code-cover"></div>
+          <function-block
+            v-model="schedule.Trigger"
+            command-type="TRIGGER"
+            :read-only="true"
+          />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
             :key="index"
@@ -49,6 +54,7 @@
               v-model="functionBlock.Params"
               :schedule-vars="schedule?.VarDict"
               :highlight="focusedBlock == index"
+              :read-only="true"
             />
           </div>
         </div>
@@ -158,5 +164,14 @@ body {
   top: 4rem;
   left: 0.5rem;
   z-index: 5;
+}
+
+.code-cover {
+  position: fixed;
+  width: 40rem;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  z-index: 4;
+  top: 10rem;
 }
 </style>

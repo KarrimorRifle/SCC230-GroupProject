@@ -121,6 +121,7 @@
                     {{ item[0] ? parseVar(item[0]) : "-------" }}
                   </button>
                   <variable-list-options
+                    v-if="!readOnly"
                     :devices="devices"
                     :schedule-vars="scheduleVars"
                     @chosen="
@@ -139,6 +140,7 @@
                     {{ item[1] }}
                   </button>
                   <variable-list-options
+                    v-if="!readOnly"
                     :custom-list="
                       getVarType(item[0]) == 'BOOLEAN' ? list.slice(0, 2) : list
                     "
@@ -196,7 +198,7 @@
                     :schedule-vars="scheduleVars"
                     :custom="true"
                     :type="getVarType(item[0])"
-                    v-if="getVarType(item[0])"
+                    v-if="getVarType(item[0]) && !readOnly"
                     @chosen="(value) => (code[index * 4 + 2] = value)"
                     @custom="(type) => setVarType(type, index)"
                   />
@@ -324,6 +326,7 @@ const props = defineProps<{
   scheduleVars?: Record<string, "NUMBER" | "BOOLEAN">;
   endSelectable?: boolean;
   highlight?: boolean;
+  readOnly?: boolean;
 }>();
 
 const emit = defineEmits(["update:modelValue", "delete", "change"]);
