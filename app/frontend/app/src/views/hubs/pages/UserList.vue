@@ -20,14 +20,35 @@
       >
         <div class="col-1 px-0 border-end">
           <button
-            class="container-fluid dropdown-toggle user-rank-selector py-2"
+            class="container-fluid user-rank-selector py-2"
+            :class="{
+              'dropdown-toggle':
+                permissionLevel >= 4 &&
+                account.PermissionLevel < permissionLevel,
+              disabled:
+                permissionLevel <= 3 ||
+                account.PermissionLevel > permissionLevel,
+            }"
+            :style="{
+              cursor:
+                permissionLevel >= 4 &&
+                account.PermissionLevel < permissionLevel
+                  ? 'pointer'
+                  : 'default',
+            }"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             <permissions-icon :permission-level="account.PermissionLevel" />
             <div class="d-inline ps-1"></div>
           </button>
-          <ul class="dropdown-menu" id="level-setter">
+          <ul
+            class="dropdown-menu"
+            id="level-setter"
+            v-if="
+              permissionLevel >= 4 && account.PermissionLevel < permissionLevel
+            "
+          >
             <li v-if="permissionLevel == 5">
               <button
                 class="dropdown-item"
