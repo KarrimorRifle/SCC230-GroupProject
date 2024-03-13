@@ -108,7 +108,7 @@
               style="min-height: 0; max-height: 100%; height: 100%"
             >
               <div class="container-fluid">
-                hellowethuiop9876terfdsadghjkio8iuytew
+                <user-list v-if="location == 'users'" />
               </div>
             </div>
           </div>
@@ -125,6 +125,7 @@ import axios, { AxiosError } from "axios";
 import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
+import UserList from "./pages/UserList.vue";
 
 const hub = ref<HubBase>();
 const notif = ref<typeof NotificationModule>();
