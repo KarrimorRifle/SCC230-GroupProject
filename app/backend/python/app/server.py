@@ -33,7 +33,6 @@ CORS(app, supports_credentials=True)
 
 #Adds an error to the error log in the database
 def addToErrorLog(exception:str):
-    cursor = app.config['cursor']
     timestamp = datetime.strftime(datetime.now(UTC), "%Y-%m-%d %H-%M-%S")
     query = ("INSERT INTO error_log (Error, Time)"
              f"VALUES ('{exception}', '{timestamp}')")
