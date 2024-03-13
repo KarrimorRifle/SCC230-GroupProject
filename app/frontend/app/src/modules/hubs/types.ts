@@ -10,3 +10,9 @@ export interface HubBase {
   HubName: string;
   PermissionLevel: number;
 }
+
+export interface HubUser {
+  AccountID: string;
+  Name: string;
+  PermissionLevel: number;
+}
