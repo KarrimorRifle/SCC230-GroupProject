@@ -63,6 +63,12 @@ class TestPublicScheduleRoutes(unittest.TestCase):
         response = self.client_server.post('/schedule/public/Schk129jd2i23kd34af')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
+
+        response = self.client_server.get('/schedule/public/Schk129jd2i23kd34af')
+
+        self.assertEqual(response.status_code, 200)
+        dataTwo = json.loads(response.data)
+        
         self.assertIn('ScheduleID', data)
         self.assertIn('ScheduleName', data)
         self.assertIn('Description', data)
