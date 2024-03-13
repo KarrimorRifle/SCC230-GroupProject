@@ -77,6 +77,7 @@ class test_user(unittest.TestCase):
         self.assertIn('IpAddress', data)
         self.assertIn('HubID', data)
         self.assertIn('Company', data)
+        self.assertIn('Vars', data)
         self.assertEqual(data['DeviceName'], payload['DeviceName'])
         self.assertEqual(data['Key'], payload['Key'])
         self.assertEqual(data['Version'], payload['Version'])

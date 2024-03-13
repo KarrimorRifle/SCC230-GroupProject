@@ -1,5 +1,5 @@
 <template>
-  <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+  <div class="main-page-page mx-0" :key="'fnasfb'" v-if="schedule">
     <button
       class="btn invis-bg"
       id="ScheduleBackButton"
@@ -10,7 +10,6 @@
     <div class="header" :class="{ 'draft-color': schedule.IsDraft }">
       <h2>
         Edit Schedule
-        <button @click="console.log(schedule)">hi</button>
         <div
           v-if="schedule.IsDraft"
           class="px-2 py-1 bg-warning"
@@ -115,7 +114,7 @@
             v-model="schedule.Trigger"
             command-type="TRIGGER"
             :devices="validDevices"
-            :schedule-vars="variables"
+            :schedule-vars="schedule.VarDict"
           />
           <div
             v-for="(functionBlock, index) in schedule?.Code"
@@ -381,7 +380,7 @@ const toggleDraft = () => {
 };
 </script>
 <style>
-.main {
+.main-page-page {
   width: 100%;
   background-color: rgb(45, 50, 64);
   flex-direction: column;

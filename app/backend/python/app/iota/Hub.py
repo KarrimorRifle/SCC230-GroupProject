@@ -2,16 +2,16 @@
 #Desc:          File to hold the Hub Class and related Functions
 #               The Function of the Hub Class is to act as the bridge between Devices and their User 
 #
-#Last Update:   2024-2-29
+#Last Update:   2024-3-13
 #Updated By:    Kian Tomkins
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
 from iota.Schedule import Schedule
-from iota.User import User, loadUserFromDatabase
-from server import app
+from iota.User import *
+from server import app, addToErrorLog
 
-##CLASS DEFINITION##
+##CLASS DEFINITIONS##
 class Hub:
     ##VALUES##
     #id         Holds the ID for the hub to be stored in the database
@@ -23,8 +23,8 @@ class Hub:
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
-    def __init__(self, id: str, name: str, address: str="", logs:list[str]=[],
-                 users:dict[str, int]={}, schedules: list[Schedule]=[], debug:bool=False):
+    def __init__(self, id:str, name:str, address:str="", logs:list[str]=[],
+                 users:dict[str, int]={}, schedules:list[Schedule]=[], debug:bool=False):
         self.id = id
         self.name = name
 
@@ -36,7 +36,17 @@ class Hub:
         self.schedules = schedules
         
         self.debug = debug
+        if(debug):
+            print(f"Hub Created With Values:\n"
+                  f"id:\t\t{self.id}\n"
+                  f"name:\t\t{self.name}\n"
+                  f"address:\t{self.address}\n"
+                  f"logs:\t\t{str(self.logs)[:77]}...\n"
+                  f"users:\t\t{str(self.users)[:77]}...\n"
+                  f"schedules:\t{str(self.schedules)[:77]}...\n")
 
+##FUNCTION DEFINITIONS##
+#Loads a Hub from the database
 def loadHubFromDatabase(id:str) -> Hub:
     cursor = app.config['cursor']
     query = ("SELECT * FROM hubs WHERE HubID = %s")

@@ -72,10 +72,14 @@ def rate_public_schedule(account, cursor, connection, scheduleID):
     if newRating is None:
         return jsonify({'error': 'No rating provided'}), 400
     
-    if newRating < 0 or newRating > 5:
-        return jsonify({'error': 'Rating must be between 0 and 5'}), 400
+    try:
+        newRating = int(newRating)
+        if newRating < 0 or newRating > 5:
+            return jsonify({'error': 'Rating must be between 0 and 5'}), 400
+    except ValueError:
+        return jsonify({'error': 'Invalid rating format'}), 400
     
-    newRating = int(((rating * numRated) + newRating) / (numRated + 1))
+    newRating = int(((rating * numRated) + int(newRating)) / (numRated + 1))
     numRated += 1
 
     query = ("UPDATE schedules SET Rating = %s, NumRated = %s WHERE ScheduleID = %s")

@@ -2,7 +2,7 @@ version: '3.8'
 services:
   pythonapp:
     build: ./python/
-    command: ["./wait-for-it.sh", "mysql:3306", "--", "flask", "run", "--host=0.0.0.0"]
+    command: ["bash", "-c", "./wait-for-it.sh mysql:3306 --timeout=30 --strict -- flask run --host=0.0.0.0"]
     volumes:
       - ./python:/python
     environment:

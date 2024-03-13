@@ -1,5 +1,5 @@
 <template>
-  <div id="editor" class="main p-3 d-flex editor-side-bar">
+  <div id="editor" class="main p-3 editor-side-bar">
     <h3
       class="ps-2 py-2 mb-4 rounded"
       :class="{ 'bg-success': mode == 'ADD', 'bg-warning': mode == 'CHANGE' }"

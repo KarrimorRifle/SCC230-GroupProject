@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, request, jsonify, make_response
+from flask import Flask
 from flask_cors import CORS
 from routes.accounts import accounts
 from routes.schedule.schedule import schedule
@@ -8,6 +8,7 @@ from routes.hub.device.device import device
 from routes.hub.schedule.hub_schedule import hub_schedule
 from routes.hub.user.hub_user import hub_user
 from routes.schedule.public_schedule.public_schedule import public_schedule
+from datetime import datetime, UTC
 
 #db connection
 connection = mysql.connector.connect(
@@ -30,6 +31,11 @@ app.register_blueprint(hub_user)
 app.register_blueprint(public_schedule)
 CORS(app, supports_credentials=True)
 
-#running app
-if __name__ == "__main__":
-    app.run(debug = True, port=5000)
+#Adds an error to the error log in the database
+def addToErrorLog(exception:str):
+    timestamp = datetime.strftime(datetime.now(UTC), "%Y-%m-%d %H-%M-%S")
+    query = ("INSERT INTO error_log (Error, Time)"
+             f"VALUES ('{exception}', '{timestamp}')")
+    cursor.execute(query)
+
+

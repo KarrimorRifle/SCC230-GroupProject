@@ -35,9 +35,11 @@ def get_device_vars(cursor, deviceID):
                 "WHERE DeviceID = %s")
     cursor.execute(query, (deviceID,))
     vars = cursor.fetchall()
-    deviceVars = {}
+    deviceVars = []
+
     for var in vars:
-        deviceVars[var['VarName']] = var['VarType']
+        deviceVars.append({'Name': var['VarName'], 'Type': var['VarType'], 'Access': var['Writeable']})
+    
     return deviceVars
 
 def create_device(account, cursor, connection, hubID):

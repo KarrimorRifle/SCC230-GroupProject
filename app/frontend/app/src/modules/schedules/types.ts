@@ -27,6 +27,7 @@ export interface Schedule {
   Trigger: string[];
   Code: FunctionCode[];
   VarDict?: Record<string, "NUMBER" | "BOOLEAN">;
+  Description: string;
 }
 
 export interface ListSchedule {
@@ -36,6 +37,7 @@ export interface ListSchedule {
   Rating: number;
   ScheduleID: string;
   ScheduleName: string;
+  data: any;
 }
 
 export interface Trigger {
