@@ -31,7 +31,7 @@
             <li v-if="permissionLevel == 5">
               <button
                 class="dropdown-item"
-                @click="setPerm(4, account.AccountID)"
+                @click="setPerm(4, account.AccountID, account.Name)"
               >
                 <permissions-icon :permission-level="4" />
               </button>
@@ -39,7 +39,7 @@
             <li>
               <button
                 class="dropdown-item"
-                @click="setPerm(3, account.AccountID)"
+                @click="setPerm(3, account.AccountID, account.Name)"
               >
                 <permissions-icon :permission-level="3" />
               </button>
@@ -47,7 +47,7 @@
             <li>
               <button
                 class="dropdown-item"
-                @click="setPerm(2, account.AccountID)"
+                @click="setPerm(2, account.AccountID, account.Name)"
               >
                 <permissions-icon :permission-level="2" />
               </button>
@@ -55,7 +55,7 @@
             <li>
               <button
                 class="dropdown-item"
-                @click="setPerm(1, account.AccountID)"
+                @click="setPerm(1, account.AccountID, account.Name)"
               >
                 <permissions-icon :permission-level="1" />
               </button>
@@ -115,8 +115,34 @@ const setup = async () => {
   );
 };
 
-const setPerm = (level: number, id: string) => {
-  console.log("setting");
+const setPerm = async (level: number, id: string, name?: string) => {
+  let data = await axios
+    .patch(
+      `http://localhost:5000/hub/${HubID}/user/${id}`,
+      {
+        PermissionLevel: level,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to update permissions",
+        "Soemthing went wrong, try again later",
+        "danger"
+      );
+      return;
+    });
+
+  notif.value?.show(
+    "Account permission changed",
+    `${name}'s permission level was adjusted!`,
+    "success"
+  );
+
+  setup();
 };
 
 setup();
