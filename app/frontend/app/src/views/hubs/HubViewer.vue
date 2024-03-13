@@ -46,8 +46,11 @@
             </div>
           </div>
         </div>
-        <div class="col-9 px-0 hub-main-bg">
-          <div class="container-fluid text-light" v-if="hub">
+        <div class="col-9 px-0 hub-main-bg d-flex flex-column">
+          <div
+            class="container-fluid text-light d-flex flex-column flex-grow-1 px-0"
+            v-if="hub"
+          >
             <div class="row d-flex justify-content-between mb-3 mt-2">
               <h2 class="text-start mb-0 ps-3 col-6">
                 <b v-if="hub.PermissionLevel >= 4">HUB PAGE</b>
@@ -80,15 +83,32 @@
               </div>
             </div>
             <div class="row" v-if="hub.PermissionLevel >= 4">
-              <div class="input-group">
-                <div class="input-group-text">Name</div>
-                <input type="text" class="form-control" v-model="hub.HubName" />
-                <button
-                  class="input-group-text btn btn-success"
-                  @click="updateHubName()"
-                >
-                  Update Name
-                </button>
+              <div class="container-fluid">
+                <div class="input-group">
+                  <div class="input-group-text">Name</div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="hub.HubName"
+                  />
+                  <button
+                    class="input-group-text btn btn-success"
+                    @click="updateHubName()"
+                  >
+                    Update Name
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row m-0 p-0 px-4">
+              <hr class="seperator text-light px-4 mt-3 m-0" />
+            </div>
+            <div
+              class="row main-container mx-0 px-0 flex-grow-1"
+              style="min-height: 0; max-height: 100%; height: 100%"
+            >
+              <div class="container-fluid">
+                hellowethuiop9876terfdsadghjkio8iuytew
               </div>
             </div>
           </div>
