@@ -9,6 +9,7 @@
 ##IMPORTS##
 from server import app
 import threading
+from iota import addToErrorLog
 from iota.Device import Device
 from iota.Schedule import *
 
@@ -18,7 +19,8 @@ class Trigger:
     #id         Holds the id to store the Trigger in the database
     #data       Holds the data that is needed to set off the trigger
     #devices    Holds a list of devices that the Trigger references
-    #scheduleID Holds the ID for the schedule that is activated when the trigger goes off
+    #ScheduleID Holds the ID for the schedule that is activated when the trigger goes off
+    #canRun     Whether or not a Trigger can or cannot activate it's linked schedule. 
     #debug      Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
@@ -132,23 +134,27 @@ def checkTriggers(ids:list[str]):
             #Gets all the data about the trigger
             trigger=loadTriggerFromDatabase(id)
 
-            #Updates the data in all the devices that the trigger uses 
-            for device in trigger.devices:
-                device.updateData()
+            #Checks the trigger exists
+            if(trigger != None):
+                #Updates the data in all the devices that the trigger uses 
+                for device in trigger.devices:
+                    device.updateData()
 
-            #Checks if the code should run
-            if(eval(' '.join(trigger.data))):
-                if(Trigger.canRun):
-                    schedule = loadScheduleFromDatabase(trigger.ScheduleID)
-                    schedule.runCode()
+                #Checks if the code should run
+                if(eval(' '.join(trigger.data))):
+                    if(Trigger.canRun):
+                        schedule = loadScheduleFromDatabase(trigger.ScheduleID)
+                        schedule.runCode()
 
-                #Stops the trigger from running multiple times from one activation
-                trigger.canRun = False
+                    #Stops the trigger from running multiple times from one activation
+                    trigger.canRun = False
+                else:
+                    #Allows the trigger to run again
+                    trigger.canRun = True
+                #Updates the value of canRun in the database
+                trigger.updateCanRun()
             else:
-                #Allows the trigger to run again
-                trigger.canRun = True
-            #Updates the value of canRun in the database
-            trigger.updateCanRun()
+                addToErrorLog(f"Trigger '{id}' Does not exist.")
 
     threads = []
     #Checks the ID of each thread
@@ -161,7 +167,11 @@ def checkTriggers(ids:list[str]):
     for thread in threads:
         thread.join()
 
-#continually checks Triggers.
+#Continually checks Triggers.
 def main():
-    while(True):
-        checkTriggers(getTriggerIDs())
+    try:
+        while(True):
+            checkTriggers(getTriggerIDs())
+    #Prevents exit from python trying to close infinite loop
+    except:
+        main()

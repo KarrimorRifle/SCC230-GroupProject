@@ -17,14 +17,16 @@ TUYASERVER = tuya.Cloud("eu", "p7ev9udc4nspppngqs9j", "eade3788ef124f97a7db3f6f0
 ##CLASS DEFINITION##
 class Device:
     ##VALUES##
-    #id         Holds the ID for the Device to be stored in the Database
-    #name       Holds the name that the user will see for the Device
-    #ip         Holds the IP of the Device
-    #key        Holds the local key of the Device to confirm it's being accessed consentually
-    #version    Holds the API version that TinyTuya uses to communicate with the device
-    #mappings   Maps the Datapoint's number to it's code, so that the value can be accessed by name.
-    #data       Holds the data for the device in a dict.
-    #debug      Enables print statements for debugging purpose
+    #id             Holds the ID for the Device to be stored in the Database
+    #name           Holds the name that the user will see for the Device
+    #ip             Holds the IP of the Device
+    #key            Holds the local key of the Device to confirm it's being accessed consentually
+    #version        Holds the API version that TinyTuya uses to communicate with the device
+    #company        The company that the device is manufactured by
+    #mappings       Maps the Datapoint's number to it's code, so that the value can be accessed by name.
+    #typeMappings   Maps the Datapoint's code to it's Type, so that the values the user can send are restricted
+    #data           Holds the data for the device in a dict.
+    #debug          Enables print statements for debugging purpose
 
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
@@ -41,7 +43,7 @@ class Device:
 
             self.typeMappings = {}
             self.mappings = {}
-            self.getMappings()
+            self.updateMappings()
             
 
         self.data = {}
@@ -51,7 +53,7 @@ class Device:
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
-    def getMappings(self):
+    def updateMappings(self):
         #Configures the server to get the devices on the user's network
         TUYASERVER.apiDeviceID = self.id
         
@@ -63,11 +65,12 @@ class Device:
                  "VALUES ")
         insert = False
         for datapoint in dps:
-            if(datapoint['type'] != 'Enum'):
-                self.mappings[datapoint['dp_id']] = datapoint['code']
-                self.typeMappings[datapoint['code']] = datapoint['type'].upper()
-                query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
-                insert = True
+            if(datapoint['type'] == 'Enum'):
+                datapoint['type'] = 'STRING'
+            self.mappings[datapoint['dp_id']] = datapoint['code']
+            self.typeMappings[datapoint['code']] = datapoint['type'].upper()
+            query += f"('{self.id}', '{datapoint['code']}', '{datapoint['type']}'),"
+            insert = True
         
         #Updates the database with the new mappings
         if insert:
@@ -79,10 +82,8 @@ class Device:
             except Exception as e:
                 print(f"Error executing query: {e}")
                 
-        
-
     #Checks the current data against an external data, and sends any differences
-    def changeData(self, data:dict):
+    def changeData(self, data:dict[str, any]):
         if(data != self.data):
             for key in self.mappings.keys():
                 if(data[key] != self.data[key]):
@@ -109,7 +110,7 @@ class Device:
                 return {"Error":-1}
 
     #Sends data to a device
-    def sendData(self, variable:str, value:any):
+    def sendData(self, datapoint:str, value:any):
         #Checks what company the device is from
         match(self.company):
             #If it is a Tuya Device
@@ -117,7 +118,7 @@ class Device:
                 apiDevice = tuya.Device(dev_id=self.id, address=self.ip, local_key=self.key, version=self.version)
                 #Gets the mapping
                 for mapping in self.mappings.keys():
-                    if(self.mappings[mapping] == variable or mapping == variable):
+                    if(self.mappings[mapping] == datapoint or mapping == datapoint):
                         apiDevice.set_value(mapping, value, nowait=True)
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
