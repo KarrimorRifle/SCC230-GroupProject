@@ -192,4 +192,14 @@ Values("Trgk0000ej849dj345k", "bfa2ed780d4b994c7dqalg.switch_1", 0), ("Trgk0000e
 INSERT INTO function_blocks(`BlockID`,`CommandType`,`Num`,`ScheduleID`)
 Values("Blk0000111111122222", "IF", 1, "Schk000jd2i23kd34jg"), ("Blk0000111111122223", "SET", 2, "Schk000jd2i23kd34jg"), ("Blk0000111111122224", "END", 3, "Schk000jd2i23kd34jg"), ("Blk0000111111122225", "ELSE", 4, "Schk000jd2i23kd34jg"), ("Blk0000111111122226", "SET", 5, "Schk000jd2i23kd34jg"), ("Blk0000111111122227", "END", 6, "Schk000jd2i23kd34jg");
 
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122222", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122222", "Schk000jd2i23kd34jg", 1), ("True", "Blk0000111111122222", "Schk000jd2i23kd34jg", 2);
 
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122223", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122223", "Schk000jd2i23kd34jg", 1), ("False", "Blk0000111111122223", "Schk000jd2i23kd34jg", 2);
+
+INSERT INTO function_block_links(`ParentID`,`Link`,`ScheduleID`)
+Values("Blk0000111111122224", 1, "Schk000jd2i23kd34jg"), ("Blk0000111111122227", 4, "Schk000jd2i23kd34jg");
+
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122226", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122226", "Schk000jd2i23kd34jg", 1), ("True", "Blk0000111111122226", "Schk000jd2i23kd34jg", 2);
