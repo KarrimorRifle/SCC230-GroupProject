@@ -43,6 +43,9 @@ Values("Acc89kaE64Aize3NX2j","Hubk23098jwij123msd",5);
 INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
 Values("Accojk42VvlqdeBpOBc","Hubk2nj28jwij123msd",5);
 
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Acc89kaE64Aize3NX2j","Hubk2nj28jwij123msd",3);
+
 CREATE TABLE `hub_inviteTokens`(
     `TokenID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `HubID` VARCHAR(100) NOT NULL,
