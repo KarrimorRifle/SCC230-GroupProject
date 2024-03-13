@@ -36,6 +36,7 @@ export interface ListSchedule {
   Rating: number;
   ScheduleID: string;
   ScheduleName: string;
+  data: any;
 }
 
 export interface Trigger {

@@ -136,7 +136,7 @@
                   class="btn btn-outline-secondary btn-sm text-light border-2"
                   @click="
                     item['info'] = true;
-                    getScheduleData(index);
+                    getScheduleData(item.ScheduleID);
                   "
                 >
                   INFO
@@ -161,7 +161,9 @@
             <template v-if="item.info">
               <hr class="m-0" />
               <div class="card-body py-0">
-                <div v-if="item.data"></div>
+                <div
+                  v-if="item.data && Object.keys(item.data).length > 0"
+                ></div>
                 <div class="py-3" v-else>
                   <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -211,7 +213,12 @@ const fetchData = async () => {
       .catch((e) => console.log(e));
 
   schedules.value = data.data;
-  console.log(data);
+  if (!personal.value)
+    schedules.value = schedules.value.map((item) => ({
+      ...item,
+      data: undefined,
+    }));
+  console.log(schedules.value);
 };
 
 const createSchedule = async () => {
@@ -254,8 +261,24 @@ fetchData();
 
 //public schedules functions
 
-const getScheduleData = (index: number) => {
-  console.log("test");
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const getScheduleData = async (id: string) => {
+  const data = await axios
+    .get(`http://localhost:5000/schedule/public/${id}`, {
+      withCredentials: true,
+    })
+    .catch((e) => console.log(e));
+
+  await delay(500);
+
+  schedules.value[schedules.value.findIndex((item) => item.ScheduleID == id)][
+    "data"
+  ] = data.data;
+
+  console.log(data.data);
 };
 </script>
 <style lang="scss">
