@@ -57,8 +57,8 @@
                 <b class="pt-4">
                   {{
                     hub.PermissionLevel >= 4
-                      ? " HUB PAGE: " + hub.HubName
-                      : " HUB PAGE"
+                      ? " HUB PAGE"
+                      : " HUB PAGE: " + hub.HubName
                   }}
                 </b>
               </h2>
