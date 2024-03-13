@@ -8,6 +8,7 @@ from routes.hub.device.device import device
 from routes.hub.schedule.hub_schedule import hub_schedule
 from routes.hub.user.hub_user import hub_user
 from routes.schedule.public_schedule.public_schedule import public_schedule
+from datetime import datetime, UTC
 
 #db connection
 connection = mysql.connector.connect(
@@ -29,6 +30,14 @@ app.register_blueprint(hub_schedule)
 app.register_blueprint(hub_user)
 app.register_blueprint(public_schedule)
 CORS(app, supports_credentials=True)
+
+#Adds an error to the error log in the database
+def addToErrorLog(exception:str):
+    cursor = app.config['cursor']
+    timestamp = datetime.strftime(datetime.now(UTC), "%Y-%m-%d %H-%M-%S")
+    query = ("INSERT INTO error_log (Error, Time)"
+             f"VALUES ('{exception}', '{timestamp}')")
+    cursor.execute(query)
 
 #running app
 if __name__ == "__main__":
