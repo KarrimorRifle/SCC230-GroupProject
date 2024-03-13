@@ -6,7 +6,7 @@
         style="min-height: 0; max-height: 100%; height: 100%"
       >
         <div class="col-3 text-start bg-dark px-0">
-          <div class="container-fluid">
+          <div class="container-fluid sub-nav text-light">
             <div class="row text-light">
               <button
                 class="btn btn-secondary border-2 text-light"
@@ -15,9 +15,38 @@
                 <b>{{ "< Hubs" }}</b>
               </button>
             </div>
+            <div class="row">
+              <h3 class="text-center mt-2 border-bottom">
+                <b>NAV</b>
+              </h3>
+            </div>
+            <div
+              class="row sub-nav-item"
+              :class="{ active: location == 'users' }"
+            >
+              <button @click="location = 'users'">
+                Users {{ location == "users" ? ">" : "" }}
+              </button>
+            </div>
+            <div
+              class="row sub-nav-item"
+              :class="{ active: location == 'devices' }"
+            >
+              <button @click="location = 'devices'">
+                Devices {{ location == "devices" ? ">" : "" }}
+              </button>
+            </div>
+            <div
+              class="row sub-nav-item"
+              :class="{ active: location == 'schedules' }"
+            >
+              <button @click="location = 'schedules'">
+                Schedules {{ location == "schedules" ? ">" : "" }}
+              </button>
+            </div>
           </div>
         </div>
-        <div class="col-9 px-0">
+        <div class="col-9 px-0 hub-main-bg">
           <div class="container-fluid text-light" v-if="hub">
             <div class="row d-flex justify-content-between mb-3 mt-2">
               <h2 class="text-start mb-0 ps-3 col-6">
@@ -82,6 +111,8 @@ const notif = ref<typeof NotificationModule>();
 const deleting = ref<boolean>(false);
 const deletingHubName = ref<string>("");
 
+const location = ref<"users" | "devices" | "schedules">("users");
+
 let hubID = router.currentRoute.value.params.id;
 const setup = async () => {
   let data = await axios.get(`http://localhost:5000/hub/${hubID}`, {
@@ -90,6 +121,17 @@ const setup = async () => {
 
   console.log(data.data);
   hub.value = data.data;
+
+  let tempLocation = router.currentRoute.value.query.tempLocation;
+  if (tempLocation != undefined && typeof tempLocation == "string")
+    if (["users", "devices", "schedules"].includes(tempLocation.toLowerCase()))
+      location.value = tempLocation.toLowerCase();
+    else
+      notif.value?.show(
+        "Invalid sublocation!",
+        "The location you are trying to reach is invalid",
+        "warning"
+      );
 };
 
 const updateHubName = async () => {
@@ -139,8 +181,11 @@ setup();
 .main-hub-viewer {
   display: flex;
   flex-grow: 1;
-  background-color: rgb(32, 38, 62);
   min-height: 0;
+}
+
+.hub-main-bg {
+  background-color: rgb(32, 38, 62);
 }
 
 .main-hub-viewer > div {
