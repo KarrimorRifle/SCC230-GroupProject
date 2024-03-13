@@ -1,9 +1,14 @@
 <template>
-  <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+  <div
+    class="main-page-wow mx-0"
+    :key="'fnasfb'"
+    id="fbasjfnieabhj"
+    v-if="schedule"
+  >
     <button
       class="btn invis-bg"
       id="ScheduleBackButton"
-      @click="router.push('/schedules')"
+      @click="router.push('/schedules?mode=public')"
     >
       {{ "< BACK" }}
     </button>
@@ -91,7 +96,7 @@ const fetchSchedule = async () => {
 fetchSchedule();
 </script>
 <style>
-.main {
+.main-page-wow {
   width: 100%;
   background-color: rgb(45, 50, 64);
   flex-direction: column;

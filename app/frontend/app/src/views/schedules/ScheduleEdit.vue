@@ -1,5 +1,5 @@
 <template>
-  <div class="main mx-0" :key="'fnasfb'" v-if="schedule">
+  <div class="main-page-page mx-0" :key="'fnasfb'" v-if="schedule">
     <button
       class="btn invis-bg"
       id="ScheduleBackButton"
@@ -380,7 +380,7 @@ const toggleDraft = () => {
 };
 </script>
 <style>
-.main {
+.main-page-page {
   width: 100%;
   background-color: rgb(45, 50, 64);
   flex-direction: column;
