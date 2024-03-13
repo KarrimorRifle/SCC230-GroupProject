@@ -100,7 +100,15 @@
                     { Rating: starRating },
                     { withCredentials: true }
                   )
-                  .catch((e) => console.log(e))
+                  .then(() => {
+                    showNotification('Review submitted');
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    showNotification(
+                      'Couldn\'t submit review, try again later!'
+                    );
+                  })
               "
             >
               Submit rating
@@ -153,6 +161,24 @@
       </div>
     </div>
   </div>
+  <transition v-if="notification" name="slide">
+    <div class="notification">
+      <button
+        style="
+          position: absolute;
+          top: -0.3rem;
+          right: -0.1rem;
+          background-color: rgba(0, 0, 0, 0);
+          border-style: none;
+          color: #000000;
+        "
+        @click="notification = false"
+      >
+        x
+      </button>
+      {{ errorMSG }}
+    </div>
+  </transition>
 </template>
 <script setup lang="ts">
 import FunctionBlock from "./blocks/FunctionBlock.vue";
@@ -164,6 +190,13 @@ import axios from "axios";
 const schedule = ref<Schedule>();
 const focusedBlock = ref<number>(-1);
 const starRating = ref<number>(0);
+const errorMSG = ref<string>("");
+const notification = ref<boolean>(false);
+
+const showNotification = (notif: string) => {
+  errorMSG.value = notif;
+  notification.value = true;
+};
 
 let scheduleID = router.currentRoute.value.params.id;
 const fetchSchedule = async () => {
