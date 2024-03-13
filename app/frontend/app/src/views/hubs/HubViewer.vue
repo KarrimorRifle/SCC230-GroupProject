@@ -9,20 +9,20 @@
           <div class="container-fluid sub-nav text-light">
             <div class="row text-light">
               <button
-                class="btn btn-secondary border-2 text-light"
+                class="btn btn-secondary border-2 text-light rounded-top-0 rounded-end-0"
                 @click="router.push('/hubs')"
               >
                 <b>{{ "< Hubs" }}</b>
               </button>
             </div>
             <div class="row">
-              <h3 class="text-center mt-2 border-bottom">
+              <h3 class="text-center mt-2 border-bottom mb-0">
                 <b>NAV</b>
               </h3>
             </div>
             <div
               class="row sub-nav-item"
-              :class="{ active: location == 'users' }"
+              :class="{ 'active hub-main-bg': location == 'users' }"
             >
               <button @click="location = 'users'">
                 Users {{ location == "users" ? ">" : "" }}
@@ -30,7 +30,7 @@
             </div>
             <div
               class="row sub-nav-item"
-              :class="{ active: location == 'devices' }"
+              :class="{ 'active hub-main-bg': location == 'devices' }"
             >
               <button @click="location = 'devices'">
                 Devices {{ location == "devices" ? ">" : "" }}
@@ -38,7 +38,7 @@
             </div>
             <div
               class="row sub-nav-item"
-              :class="{ active: location == 'schedules' }"
+              :class="{ 'active hub-main-bg': location == 'schedules' }"
             >
               <button @click="location = 'schedules'">
                 Schedules {{ location == "schedules" ? ">" : "" }}
@@ -195,5 +195,27 @@ setup();
 div {
   min-height: 0;
   max-height: 100%;
+}
+
+.sub-nav-item {
+  & > button {
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgb(74, 88, 89);
+    border-top: none;
+    background: rgba(0, 0, 0, 0);
+    padding: 0.8rem 0rem;
+    font-size: 1.3rem;
+    font-style: none;
+    color: gray;
+    font-weight: 100 !important;
+  }
+
+  &.active > button {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    font-weight: 700 !important;
+    color: white;
+  }
 }
 </style>
