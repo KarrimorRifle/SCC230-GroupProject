@@ -83,12 +83,35 @@
             </li>
           </ul>
         </div>
-        <div class="col-6 text-start ps-2">
+        <div class="col-7 text-start ps-2">
           <b>{{ account.Name }}</b>
           <div class="text-muted">ID: {{ account.AccountID }}</div>
         </div>
-        <div class="col-5 border-start">
-          hellouytfgvbnjkiuygtfvhkoiuytghbkou8ytfghbkiuytfgvhjkiuytghbnkiuy
+        <div class="col-4 border-start">
+          <button
+            class="btn btn-outline-danger me-2 mt-2"
+            @click="block(account.AccountID)"
+          >
+            Block
+            <div class="d-inline ps-1"></div>
+            <img
+              src="@/assets/stop.svg"
+              alt="Block user"
+              style="max-width: 1.4rem"
+            />
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger me-2 mt-2"
+            @click="remove(account.AccountID)"
+          >
+            Remove
+            <div class="d-inline ps-1"></div>
+            <img
+              src="@/assets/delete-svgrepo-com.svg"
+              alt="Remove user"
+              style="max-width: 1.5rem"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -164,6 +187,14 @@ const setPerm = async (level: number, id: string, name?: string) => {
   );
 
   setup();
+};
+
+const block = (accountID: string) => {
+  console.log("BLOCKING");
+};
+
+const remove = (accountID: string) => {
+  console.log("REMOVING");
 };
 
 setup();
