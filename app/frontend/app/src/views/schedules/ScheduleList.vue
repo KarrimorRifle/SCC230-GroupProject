@@ -159,11 +159,26 @@
               </div>
             </div>
             <template v-if="item.info">
-              <hr class="m-0" />
-              <div class="card-body py-0">
+              <!-- <hr class="m-0" /> -->
+              <div class="card-body p-0">
                 <div
                   v-if="item.data && Object.keys(item.data).length > 0"
-                ></div>
+                  class="container-fluid"
+                >
+                  <div
+                    class="text-align-start px-0 d-flex align-items-start"
+                    style="width: 100%"
+                  >
+                    <b class="me-2">Author ID: </b>{{ item.data.AuthorID }}
+                  </div>
+                  <div
+                    class="text-align-start px-0 d-flex align-items-start"
+                    style="width: 100%"
+                  >
+                    <b class="me-2">Description: </b
+                    >{{ item.data.Description ?? "N/A" }}
+                  </div>
+                </div>
                 <div class="py-3" v-else>
                   <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
