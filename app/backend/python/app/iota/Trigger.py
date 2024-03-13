@@ -7,10 +7,6 @@
 #Interpreter:   Python 3.11
 
 ##IMPORTS##
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join('..')))
-
 from server import app, addToErrorLog
 import threading
 from iota.Device import *
@@ -194,3 +190,8 @@ def main():
     #Prevents exit from python trying to close infinite loop
     except:
         main()
+
+#running app
+if __name__ == "__main__":
+    app.run(debug = True, port=5000)
+    main()
