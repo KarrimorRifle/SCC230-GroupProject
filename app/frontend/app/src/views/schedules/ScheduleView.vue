@@ -211,7 +211,17 @@ const fetchSchedule = async () => {
 };
 
 const cloneSchedule = async () => {
-  console.log(starRating.value);
+  axios
+    .post(`http://localhost:5000/schedule/public/${scheduleID}`, {
+      withCredentials: true,
+    })
+    .then(() => {
+      showNotification("Schedule cloned!");
+    })
+    .catch((e) => {
+      console.log(e);
+      showNotification("Couldn't clone schedule! try again later!");
+    });
 };
 
 fetchSchedule();
