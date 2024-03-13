@@ -116,6 +116,9 @@ CREATE TABLE `triggers`(
 INSERT INTO triggers(`TriggerID`,`ScheduleID`)
 Values("Trgk2190ej849dj345j","Schk129jd2i23kd34jf");
 
+INSERT INTO triggers(`TriggerID`,`ScheduleID`)
+Values("Trgk0000ej849dj345j","Schk129jd2i23kd34af");
+
 CREATE TABLE `trigger_data`(
     `DataID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `TriggerID` varchar(100) NOT NULL,
@@ -126,6 +129,9 @@ CREATE TABLE `trigger_data`(
 
 INSERT INTO trigger_data(`TriggerID`,`Data`,`ListPos`)
 Values("Trgk2190ej849dj345j", "var",0), ("Trgk2190ej849dj345j", "==",1), ("Trgk2190ej849dj345j", "4",2);
+
+INSERT INTO trigger_data(`TriggerID`,`Data`,`ListPos`)
+Values("Trgk0000ej849dj345j", "varA",0), ("Trgk0000ej849dj345j", ">=",1), ("Trgk0000ej849dj345j", "3",2);
 
 CREATE TABLE `function_blocks`( 
     `BlockID` varchar(100) NOT NULL PRIMARY KEY,

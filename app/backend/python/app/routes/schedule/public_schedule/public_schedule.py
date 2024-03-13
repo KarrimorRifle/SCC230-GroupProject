@@ -6,10 +6,14 @@ from ..schedule import get_schedule_detail, create_schedule, update_schedule
 public_schedule = Blueprint('public_schedule', __name__)
 
 def get_one_public_schedule(account, cursor, scheduleID):
+    if account is None:
+        return jsonify({'error': 'User not logged in'}), 401
     cursor = current_app.config['cursor']
     return get_schedule_detail(account, cursor, scheduleID, True)
 
 def save_public_schedule(account, cursor, connection, scheduleID):
+    if account is None:
+        return jsonify({'error': 'User not logged in'}), 401
     query = ("SELECT IsPublic FROM schedules WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
     isPublic = cursor.fetchone()['IsPublic']
@@ -22,7 +26,6 @@ def save_public_schedule(account, cursor, connection, scheduleID):
         return jsonify({'error': schedule['error']}), 404
 
     newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
-    schedule['Trigger'] = None
 
     copyFrom = schedule.get('CopyFrom')
     if copyFrom is None:
@@ -39,6 +42,9 @@ def save_public_schedule(account, cursor, connection, scheduleID):
     return update_schedule(account, cursor, connection, newID, schedule, True)
 
 def save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID):
+    if account is None:
+        return jsonify({'error': 'User not logged in'}), 401
+
     newID = json.loads(save_public_schedule(account, cursor, connection, scheduleID)[0].data).get('ScheduleID')
 
     query = ("UPDATE schedules SET HubID = %s WHERE ScheduleID = %s")
@@ -51,6 +57,9 @@ def save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID):
     return get_schedule_detail(account, cursor, newID, True)
 
 def rate_public_schedule(account, cursor, connection, scheduleID):
+    if account is None:
+        return jsonify({'error': 'User not logged in'}), 401
+
     query = ("SELECT IsPublic, NumRated, Rating FROM schedules WHERE ScheduleID = %s")
     cursor.execute(query, (scheduleID,))
     schedule = cursor.fetchone()
@@ -103,16 +112,16 @@ def get_public_schedules():
 
 @public_schedule.route('/schedule/public/<string:scheduleID>', methods=['GET', 'POST', 'PATCH'])
 def single_public_schedule_routes(scheduleID):
+    account = getAccount((request.method != 'POST'))
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    account = getAccount()
 
     if request.method == 'GET':
         return get_one_public_schedule(account, cursor, scheduleID)
-    elif request.method == 'POST':
-        return save_public_schedule(account, cursor, connection, scheduleID)
     elif request.method == 'PATCH':
         return rate_public_schedule(account, cursor, connection, scheduleID)
+    else:
+        return save_public_schedule(account, cursor, connection, scheduleID)
     
 @public_schedule.route('/hub/<string:hubID>/schedule/public/<string:scheduleID>', methods=['POST'])
 def public_hub_schedule_routes(hubID, scheduleID):
