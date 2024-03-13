@@ -31,11 +31,13 @@ class Device:
     ##CONSTRUCTOR##
     def __init__(self, id:str, name:str, ip:str, key:str="", version:float=0.0, 
                  company:str="Tuya", debug:bool=False):
+        self.debug = debug
         self.id = id
         self.name = name
 
         self.company = company
         self.ip = ip
+        self.data = {}
 
         if(self.company == "Tuya"):
             self.key = key
@@ -44,25 +46,26 @@ class Device:
             self.typeMappingsIn = {}
             self.typeMappingsOut = {}
             self.mappings = {}
+
             self.updateMappings()
             
 
-        self.data = {}
+        
         self.updateData()
 
-        self.debug = debug
+        
         if(debug):
             print(f"Device Created With Values:\n"
                   f"id:\t\t\t{self.id}\n"
                   f"name:\t\t\t{self.name}\n"
-                  f"company:\t\t\t{self.company}\n"
+                  f"company:\t\t{self.company}\n"
                   f"ip:\t\t\t{self.ip}\n"
                   f"key:\t\t\t{self.key}\n"
-                  f"version:\t\t\t{self.version}\n"
-                  f"typeMappingsIn:\t\t{str(self.typeMappingsIn)[:77]}...\n"
-                  f"typeMappingsOut:\t{str(self.typeMappingsOut)[:77]}...\n"
-                  f"mappings:\t\t\t{str(self.mappings)[:77]}...\n"
-                  f"data:\t\t\t{self.data}\n")
+                  f"version:\t\t{self.version}\n"
+                  f"typeMappingsIn:\t\t{str(self.typeMappingsIn)[:100]}...\n"
+                  f"typeMappingsOut:\t{str(self.typeMappingsOut)[:100]}...\n"
+                  f"mappings:\t\t{str(self.mappings)[:100]}...\n"
+                  f"data:\t\t\t{str(self.data)[:100]}...\n")
         
     ##PUBLIC METHODS##
     #Gets the mappings for Datapoint Codes to Datapoint IDs 
@@ -76,7 +79,7 @@ class Device:
         #Gets the Datapoints from the server
         dps = TUYASERVER.getdps(self.id)['result']
         readables = dps['status'] 
-        writeables = dps['funcs']
+        writeables = dps['functions']
         dps = readables + writeables
 
         #Adds the datapoints to the mappings
@@ -135,16 +138,24 @@ class Device:
 
                 #Updates The Data
                 apiDevice.updatedps(index=list(self.mappings.keys()), nowait=True)
-                newVals = apiDevice.status()['dps']
+                newVals = apiDevice.status()
+                #Checks Datapoints were retrieved
+                try:
+                    newVals = newVals['dps']
+                except:
+                    addToErrorLog(f"({self.id}) Couldn't retreive DPS. api.status() returned '{newVals}'")
 
                 if(self.debug):
                     print(f"({self.id})\t Fetching the data stored on a Tuya {self.version} Device at {self.ip}.")
 
                 #Maps the data
                 for key in newVals.keys():
-                    self.data[self.mappings[key]] = newVals[key]
+                    self.data[key] = newVals[key]
                     if(self.debug):
-                            print(f"({self.id})\t Data: {self.mappings[key]} Set to {newVals[key]}")
+                        try:
+                            print(f"({self.id})\t Data: {self.mappings[int(key)]} Set to {newVals[key]}")
+                        except:
+                            print(f"({self.id})\t Data: UNKNOWN Set to {newVals[key]}")
             case _:
                 addToErrorLog(f"Invalid Company \"{self.company}\"")
                 return {"Error":-1}
