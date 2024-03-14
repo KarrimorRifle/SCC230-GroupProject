@@ -1,11 +1,14 @@
 <template>
-  <div class="hub-device-list-viewer container-fluid flex-grow-1 pt-3">
+  <div
+    class="hub-device-list-viewer container-fluid d-flex flex-column flex-grow-1 pt-3"
+  >
     <div class="row">
       <div class="input-group col-12" :class="{ 'rounded-bottom-0': addItem }">
         <input
           class="form-control"
           :class="{ 'rounded-bottom-0': addItem }"
           type="text"
+          v-model="searchValue"
         />
         <button
           class="input-group-text dropdown-toggle"
@@ -29,7 +32,7 @@
         </ul>
         <button
           class="input-group-text btn"
-          :class="addItem ? 'btn-danger rounded-bottom-0' : 'btn-secondary'"
+          :class="addItem ? 'btn-danger rounded-bottom-0' : 'btn-success'"
           @click="addItem = !addItem"
         >
           {{ addItem ? "x" : "+" }}
@@ -76,6 +79,21 @@
         </div>
       </div>
     </div>
+    <hr class="text-secondary mx-2" />
+    <div class="flex-grow-1 container-fluid">
+      <div class="row d-flex justify-content-center pt-5 mt-5" v-if="loading">
+        <div class="spinner-border mt-2" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div class="row" v-else-if="devices.length == 0">
+        <div class="text-muted">Uh oh! looks like nothing is here...</div>
+        <div class="text-muted">
+          if this is unexpected call us on
+          <a href="tel:07696969696">+44 7696 969696</a>
+        </div>
+      </div>
+    </div>
   </div>
   <notification-module ref="notif" />
 </template>
@@ -86,12 +104,14 @@ import axios from "axios";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 
+const loading = ref<boolean>(true);
+
 const notif = ref<typeof NotificationModule>();
 const devices = ref<HubDevice[]>([]);
 const searchMode = ref<string>("name");
 const searchValue = ref<string>("");
 
-const addItem = ref<boolean>(true);
+const addItem = ref<boolean>(false);
 const newDevice = ref<NewHubDevice>({
   DeviceName: "",
   DeviceType: "",
@@ -115,6 +135,7 @@ const setup = async () => {
     });
   console.log(data.data);
   devices.value = data.data;
+  loading.value = false;
 };
 
 const addNewDevice = async () => {
