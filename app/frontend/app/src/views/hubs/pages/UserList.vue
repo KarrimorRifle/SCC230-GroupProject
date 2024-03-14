@@ -93,11 +93,16 @@
             </li>
           </ul>
         </div>
-        <div class="col-7 text-start ps-2">
+        <div class="col text-start ps-2">
           <b>{{ account.Name }}</b>
           <div class="text-muted">ID: {{ account.AccountID }}</div>
         </div>
-        <div class="col-4 border-start">
+        <div
+          class="col-4 border-start"
+          v-if="
+            permissionLevel > 3 && permissionLevel > account.PermissionLevel
+          "
+        >
           <button
             class="btn btn-outline-danger me-2 mt-2"
             @click="setPerm(0, account.AccountID, account.Name)"
