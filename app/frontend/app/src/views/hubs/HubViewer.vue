@@ -52,7 +52,7 @@
             v-if="hub"
           >
             <div class="row pb-2">
-              <h2 class="text-start mb-0 ps-3 col-lg-8 col-12">
+              <h2 class="text-lg-start text-middle mb-0 ps-3 col-lg-8 col-12">
                 <permissions-icon :permission-level="hub.PermissionLevel" />
                 <b class="pt-4">
                   {{
@@ -64,7 +64,7 @@
               </h2>
               <div
                 v-if="hub.PermissionLevel == 5"
-                class="col-lg-4 col-12 d-flex justify-content-end"
+                class="col-lg-4 col-12 d-flex justify-content-lg-end justify-content-start p-lg-0 pe-lg-2 pb-3 ps-4"
               >
                 <div class="input-group" v-if="deleting">
                   <input
