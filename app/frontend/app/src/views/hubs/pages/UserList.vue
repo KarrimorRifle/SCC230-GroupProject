@@ -15,7 +15,14 @@
       </div>
     </div>
     <div class="mt-3"></div>
-    <div class="card mb-2 mx-3 p-0">
+    <div class="row" v-if="accounts.length == 0">
+      <div class="text-muted">Uh oh! looks like nothing is here...</div>
+      <div class="text-muted">
+        if this is unexpected call us on
+        <a href="tel:07696969696">+44 7696 969696</a>
+      </div>
+    </div>
+    <div class="card mb-2 mx-3 p-0" v-else>
       <div
         v-for="account in accounts"
         :key="account.AccountID"
@@ -86,11 +93,16 @@
             </li>
           </ul>
         </div>
-        <div class="col-7 text-start ps-2">
+        <div class="col text-start ps-2">
           <b>{{ account.Name }}</b>
           <div class="text-muted">ID: {{ account.AccountID }}</div>
         </div>
-        <div class="col-4 border-start">
+        <div
+          class="col-4 border-start"
+          v-if="
+            permissionLevel > 3 && permissionLevel > account.PermissionLevel
+          "
+        >
           <button
             class="btn btn-outline-danger me-2 mt-2"
             @click="setPerm(0, account.AccountID, account.Name)"

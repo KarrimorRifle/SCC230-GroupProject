@@ -145,6 +145,10 @@
               style="min-height: 0; max-height: 100%; height: 100%"
             >
               <div class="container-fluid d-flex flex-column">
+                <device-list
+                  :permission-level="hub.PermissionLevel"
+                  v-if="location == 'devices'"
+                />
                 <user-list
                   :permission-level="hub.PermissionLevel"
                   v-if="location == 'users'"
@@ -166,6 +170,7 @@ import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 import UserList from "./pages/UserList.vue";
+import DeviceList from "./pages/DeviceList.vue";
 import PermissionsIcon from "./components/PermissionsIcon.vue";
 
 const hub = ref<HubBase>();

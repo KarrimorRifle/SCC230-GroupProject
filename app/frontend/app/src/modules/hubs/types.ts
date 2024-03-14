@@ -16,3 +16,30 @@ export interface HubUser {
   Name: string;
   PermissionLevel: number;
 }
+
+export interface HubDevice {
+  DeviceID: string;
+  DeviceName: string;
+  Company: string;
+}
+
+export interface NewHubDevice {
+  DeviceName: string;
+  DeviceType: string;
+  IpAddress?: string;
+}
+
+export interface EditingDevice {
+  DeviceID: string;
+  DeviceName: string;
+  IpAddress: string;
+  Key: string;
+  Version: number;
+  Company: string;
+  HubID: string;
+  Vars: {
+    Name: string;
+    Type: string;
+    Access: 0 | 1;
+  };
+}
