@@ -43,3 +43,12 @@ export interface EditingDevice {
     Access: 0 | 1;
   };
 }
+
+export interface HubScheduleList {
+  ScheduleID: string;
+  ScheduleName: string;
+  IsActive: boolean;
+  Author: string;
+  CopyFrom: string | null;
+  PermissionLevel: number;
+}

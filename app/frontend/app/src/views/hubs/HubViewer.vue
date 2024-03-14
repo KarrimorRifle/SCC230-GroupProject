@@ -153,6 +153,10 @@
                   :permission-level="hub.PermissionLevel"
                   v-if="location == 'users'"
                 />
+                <schedule-list
+                  :permission-level="hub.PermissionLevel"
+                  v-if="location == 'schedules'"
+                />
               </div>
             </div>
           </div>
@@ -172,6 +176,7 @@ import NotificationModule from "@/components/NotificationModule.vue";
 import UserList from "./pages/UserList.vue";
 import DeviceList from "./pages/DeviceList.vue";
 import PermissionsIcon from "./components/PermissionsIcon.vue";
+import ScheduleList from "./pages/ScheduleList.vue";
 
 const hub = ref<HubBase>();
 const notif = ref<typeof NotificationModule>();
