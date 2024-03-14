@@ -113,7 +113,10 @@
             >
               EDIT
             </button>
-            <button class="btn btn-outline-danger text-light border-2 mt-2" @click="deleteDevice(device.DeviceID)">
+            <button
+              class="btn btn-outline-danger text-light border-2 mt-2"
+              @click="deleteDevice(device.DeviceID)"
+            >
               DELETE
             </button>
           </div>
@@ -198,11 +201,11 @@ const addNewDevice = async () => {
 
 const editDevice = (id: string) => {
   console.log("edit");
-}
+};
 
 const deleteDevice = (id: string) => {
   console.log("delete");
-}
+};
 
 setup();
 </script>
