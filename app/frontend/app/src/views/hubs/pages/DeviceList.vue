@@ -13,6 +13,8 @@
             :class="{ 'rounded-bottom-0': addItem }"
             type="text"
             v-model="searchValue"
+            v-on:keyup="filterDevices()"
+            placeholder="Find device"
           />
           <button
             class="input-group-text dropdown-toggle"
@@ -220,6 +222,7 @@ const editingDevice = ref<EditingDevice>();
 
 const notif = ref<typeof NotificationModule>();
 const devices = ref<HubDevice[]>([]);
+const alldevices = ref<HubDevice[]>([]);
 const searchMode = ref<string>("name");
 const searchValue = ref<string>("");
 
@@ -249,11 +252,23 @@ const setup = async () => {
       console.log(e);
       return;
     });
-  console.log(data.data);
-  devices.value = data.data;
-  loading.value = false;
+  alldevices.value = data.data;
+  filterDevices();
 };
 
+const filterDevices = async () => {
+  if (searchMode.value == "name") {
+    devices.value = alldevices.value.filter((item) =>
+      item.DeviceName.toUpperCase().includes(searchValue.value.toUpperCase())
+    );
+    loading.value = false;
+  } else {
+    devices.value = alldevices.value.filter((item) =>
+      item.Company.toUpperCase().includes(searchValue.value.toUpperCase())
+    );
+    loading.value = false;
+  }
+};
 const addNewDevice = async () => {
   let data = await axios
     .post(`http://localhost:5000/hub/${HubID}/device`, newDevice, {
