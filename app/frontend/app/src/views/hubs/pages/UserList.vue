@@ -15,7 +15,14 @@
       </div>
     </div>
     <div class="mt-3"></div>
-    <div class="card mb-2 mx-3 p-0">
+    <div class="row" v-if="accounts.length == 0">
+      <div class="text-muted">Uh oh! looks like nothing is here...</div>
+      <div class="text-muted">
+        if this is unexpected call us on
+        <a href="tel:07696969696">+44 7696 969696</a>
+      </div>
+    </div>
+    <div class="card mb-2 mx-3 p-0" v-else>
       <div
         v-for="account in accounts"
         :key="account.AccountID"
