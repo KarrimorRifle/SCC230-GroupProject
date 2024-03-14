@@ -216,6 +216,8 @@ const remove = async (id: string, name: string) => {
     `${name}'s account has been taken off the hub`,
     "warning"
   );
+
+  setup()
 };
 
 setup();
