@@ -343,7 +343,14 @@ const code = ref<string[]>(props.modelValue || ["", list.value[0], ""]);
 watchEffect(() => {
   if (props.modelValue) {
     code.value = props.modelValue;
-    if (code.value.length < 2) code.value = ["", "==", "0"];
+    if (
+      code.value.length < 2 &&
+      props.commandType != "FOR" &&
+      props.commandType != "WAIT" &&
+      props.commandType != "END" &&
+      props.commandType != "ELSE"
+    )
+      code.value = ["", "==", "0"];
   }
 });
 
