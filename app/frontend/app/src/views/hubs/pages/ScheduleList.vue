@@ -19,8 +19,14 @@
             type="text"
             class="form-control"
             placeholder="Name of schedule"
+            v-model="searchValue"
           />
-          <button class="input-group-text btn btn-success">+</button>
+          <button
+            class="input-group-text btn btn-success"
+            @click="createSchedule"
+          >
+            +
+          </button>
         </div>
       </div>
       <div class="row mt-3" v-if="schedules && schedules.length == 0">
@@ -52,6 +58,7 @@ import axios from "axios";
 import { ref } from "vue";
 
 const schedules = ref<HubScheduleList[]>();
+const searchValue = ref<string>();
 const loading = ref<boolean>(true);
 const notif = ref<typeof NotificationModule>();
 
@@ -84,6 +91,52 @@ const setup = async () => {
   }
 };
 
+const createSchedule = async () => {
+  if (searchValue.value?.length == 0) {
+    notif.value?.show(
+      "Input a valid name",
+      "To create a schedule a name must accompany it",
+      "secondary"
+    );
+    return;
+  }
+  let data = await axios
+    .post(
+      `http://localhost:5000/hub/${HubID}/schedule`,
+      {
+        ScheduleName: searchValue.value,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to create schedule",
+        "Input a different name or try again later",
+        "danger"
+      );
+    });
+
+  if (data && data.request.status == 200) {
+    notif.value?.show(
+      "Schedule created",
+      `Schedule ${data.data.ScheduleName}, has been created`,
+      "success"
+    );
+    setup();
+    return;
+  } else {
+    console.log(data);
+    notif.value?.show(
+      "Unable to create schedule",
+      "Something went wrong, try again later",
+      "danger"
+    );
+    return;
+  }
+};
 setup();
 </script>
 <style lang="scss">
