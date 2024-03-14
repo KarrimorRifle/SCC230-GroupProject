@@ -93,6 +93,32 @@
           <a href="tel:07696969696">+44 7696 969696</a>
         </div>
       </div>
+      <div
+        class="card container"
+        v-for="device in devices"
+        :key="device.DeviceID"
+      >
+        <div class="row card-body py-0">
+          <div class="col-4 text-start py-1 border-end">
+            <b>{{ device.DeviceName }}</b>
+          </div>
+          <div class="col-5 text-start py-1 border-end">
+            <div><b>Company:</b> {{ device.Company }}</div>
+            <div class="text-muted"><b>ID:</b> {{ device.DeviceID }}</div>
+          </div>
+          <div class="col-3">
+            <button
+              class="btn btn-outline-secondary text-light border-2 mt-2 me-2"
+              @click="editDevice(device.DeviceID)"
+            >
+              EDIT
+            </button>
+            <button class="btn btn-outline-danger text-light border-2 mt-2" @click="deleteDevice(device.DeviceID)">
+              DELETE
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <notification-module ref="notif" />
@@ -169,6 +195,14 @@ const addNewDevice = async () => {
 
   setup();
 };
+
+const editDevice = (id: string) => {
+  console.log("edit");
+}
+
+const deleteDevice = (id: string) => {
+  console.log("delete");
+}
 
 setup();
 </script>
