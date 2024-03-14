@@ -345,7 +345,6 @@ const deleteDevice = (id: string) =>
 
 const saveDevice = async () => {
   delete editingDevice.value["Vars"];
-  console.log(editingDevice.value);
   let data = await axios
     .patch(
       `http://localhost:5000/hub/${HubID}/device/${editingDevice.value?.DeviceID}`,
