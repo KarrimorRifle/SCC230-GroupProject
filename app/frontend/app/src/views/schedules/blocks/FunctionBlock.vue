@@ -77,8 +77,9 @@
               v-else
               class="input-group-text p-0"
               style="width: 5rem"
+              type="number"
               :style="{ 'border-color': borderColor }"
-              placeholder="00"
+              @click="console.log(code[0])"
               v-model.number="code[0]"
             />
           </div>
@@ -342,7 +343,14 @@ const code = ref<string[]>(props.modelValue || ["", list.value[0], ""]);
 watchEffect(() => {
   if (props.modelValue) {
     code.value = props.modelValue;
-    if (code.value.length < 2) code.value = ["", "==", "0"];
+    if (
+      code.value.length < 2 &&
+      props.commandType != "FOR" &&
+      props.commandType != "WAIT" &&
+      props.commandType != "END" &&
+      props.commandType != "ELSE"
+    )
+      code.value = ["", "==", "0"];
   }
 });
 

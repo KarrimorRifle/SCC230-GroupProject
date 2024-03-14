@@ -133,7 +133,7 @@
           {{ schedule.Description ?? "No Description" }}
         </div>
         <div
-          class="col p-3 scrollable21 d-flex flex-column align-items-center"
+          class="col p-3 scrollable21 d-flex flex-column align-items-start p-5"
           v-if="schedule"
           style="max-height: 100%"
         >
