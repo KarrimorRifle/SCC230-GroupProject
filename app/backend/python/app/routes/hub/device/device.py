@@ -109,14 +109,21 @@ def delete_device(account, cursor, connection, deviceID, hubID):
 
 # Function updates device of specified ID based on input params
 def update_device(account, cursor, connection, deviceID, hubID):
-    query = ("SELECT * FROM devices "
-                "JOIN accounts_hubsRelation ON devices.HubID = accounts_hubsRelation.HubID "
-                "WHERE devices.DeviceID = %s AND devices.HubID = %s AND accounts_hubsRelation.AccountID = %s")
-    cursor.execute(query, (deviceID, hubID, account['AccountID'],))
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelation WHERE AccountID = %s AND HubID = %s")
+    cursor.execute(query, (account['AccountID'], hubID))
+    perms = cursor.fetchone()['PermissionLevel']
+
+    query = ("SELECT DeviceID FROM devices "
+              "WHERE AND HubID = %s")
+    cursor.execute(query, (deviceID, hubID))
+    #, (deviceID, hubID, account['AccountID'],)
     checkExists = cursor.fetchone()
 
-    if checkExists is None or checkExists['PermissionLevel'] < EditPermLevel:
+    if checkExists is None or perms < EditPermLevel:
         return({"error": "Forbidden access"}), 403
+    
+    if checkExists['DeviceID'] != deviceID:
+        return({"error": "Device not found"}), 404
     
     updateParams = []
     values = []
