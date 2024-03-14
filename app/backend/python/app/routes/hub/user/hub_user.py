@@ -247,7 +247,7 @@ def hub_invite_route(hubID):
 
 @hub_user.route('/hub/invite/<token>', methods=['POST'])
 def join_hub_route(token):
-    account = getAccount()
+    account = getAccount(False)
     if account is None:
         return jsonify({'error': 'Session ID is invalid'}), 401
 
