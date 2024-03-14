@@ -38,6 +38,7 @@
             class="input-group-text btn"
             :class="addItem ? 'btn-danger rounded-bottom-0' : 'btn-success'"
             @click="addItem = !addItem"
+            v-if="permissionLevel >= 4"
           >
             {{ addItem ? "x" : "+" }}
           </button>
@@ -106,11 +107,11 @@
             <div class="col-4 text-start py-1 border-end">
               <b>{{ device.DeviceName }}</b>
             </div>
-            <div class="col-5 text-start py-1 border-end">
+            <div class="col text-start py-1 border-end">
               <div><b>Company:</b> {{ device.Company }}</div>
               <div class="text-muted"><b>ID:</b> {{ device.DeviceID }}</div>
             </div>
-            <div class="col-3">
+            <div class="col-3" v-if="permissionLevel >= 4">
               <button
                 class="btn btn-outline-secondary text-light border-2 mt-2 me-2"
                 @click="editDevice(device.DeviceID)"
@@ -131,15 +132,83 @@
   </template>
   <template v-else>
     <div
-      class="hub-device-list-viewer container-fluid d-flex flex-column flex-grow-1 pt-3 bg-dark"
+      class="hub-device-list-viewer container-fluid d-flex flex-column flex-grow-1 pt-3"
+      v-if="editingDevice"
     >
-      hello
+      <h3>Edit Device Details</h3>
+      <div class="row mb-2">
+        <div class="col-12 col-lg-6 mb-2 mb-lg-0 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">Name</div>
+            <input class="form-control" v-model="editingDevice.DeviceName" />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">ID</div>
+            <input class="form-control" v-model="editingDevice.DeviceID" />
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12 col-lg-6 mb-2 mb-lg-0 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">IP</div>
+            <input class="form-control" v-model="editingDevice.IpAddress" />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">Company</div>
+            <input class="form-control" v-model="editingDevice.Company" />
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12 col-lg-6 mb-2 mb-lg-0 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">Key</div>
+            <input class="form-control" v-model="editingDevice.Key" />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 pe-0">
+          <div class="input-group">
+            <div class="input-group-text">version</div>
+            <input
+              class="form-control"
+              type="number"
+              step="0.1"
+              v-model="editingDevice.Version"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <button
+            class="btn btn-secondary me-2"
+            @click="
+              editingDevice = undefined;
+              editing = false;
+              setup();
+            "
+          >
+            Cancel
+          </button>
+          <button class="btn btn-success" @click="saveDevice">Save</button>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="spinner-border mt-5" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
   </template>
   <notification-module ref="notif" />
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import { HubDevice, NewHubDevice, EditingDevice } from "@/modules/hubs/types";
 import axios from "axios";
 import router from "@/router";
@@ -160,6 +229,10 @@ const newDevice = ref<NewHubDevice>({
   DeviceType: "",
   IpAddress: "",
 });
+
+const props = defineProps<{
+  permissionLevel: number;
+}>();
 
 const HubID = router.currentRoute.value.params.id;
 const setup = async () => {
@@ -269,6 +342,10 @@ const deleteDevice = (id: string) =>
         "danger"
       );
     });
+
+const saveDevice = () => {
+  console.log("saving");
+};
 
 setup();
 </script>
