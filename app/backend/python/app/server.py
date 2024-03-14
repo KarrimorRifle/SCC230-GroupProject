@@ -10,14 +10,35 @@ from routes.hub.schedule.hub_schedule import hub_schedule
 from routes.hub.user.hub_user import hub_user
 from routes.schedule.public_schedule.public_schedule import public_schedule
 from datetime import datetime, UTC
+from threading import Lock, Thread
+from queue import Queue
 
 #db connection
+# Create lock for cursor.execute
+execute_lock = Lock()
+
+# Create queue
+execute_queue = Queue()
+
+def execute_pending():
+    while True:
+        query = execute_queue.get()
+        with execute_lock:
+            cursor.execute(query)
+        execute_queue.task_done()
+
+# Start thread to execute pending queries
+execute_thread = Thread(target=execute_pending)
+execute_thread.daemon = True
+execute_thread.start()
+
+# Connection and cursor initialization
 connection = mysql.connector.connect(
-    user = "user", password = "pass", host = "mysql", port=3306, database='DB'
+    user="user", password="pass", host="mysql", port=3306, database='DB'
 )
 print("DB connected")
 
-cursor = connection.cursor(dictionary = True)
+cursor = connection.cursor(dictionary=True)
 
 #setting up Flask
 app = Flask(__name__)
