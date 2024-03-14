@@ -114,8 +114,8 @@ def update_device(account, cursor, connection, deviceID, hubID):
     perms = cursor.fetchone()['PermissionLevel']
 
     query = ("SELECT DeviceID FROM devices "
-              "WHERE AND HubID = %s")
-    cursor.execute(query, (deviceID, hubID))
+              "WHERE HubID = %s AND DeviceID = %s")
+    cursor.execute(query, (hubID, deviceID))
     #, (deviceID, hubID, account['AccountID'],)
     checkExists = cursor.fetchone()
 
@@ -123,7 +123,7 @@ def update_device(account, cursor, connection, deviceID, hubID):
         return({"error": "Forbidden access"}), 403
     
     if checkExists['DeviceID'] != deviceID:
-        return({"error": "Device not found"}), 404
+        return({"error": "Device not found, ID fon"}), 404
     
     updateParams = []
     values = []
@@ -136,8 +136,9 @@ def update_device(account, cursor, connection, deviceID, hubID):
         values.append(value)
     updateParams = ', '.join(updateParams)
 
-    query = (f"UPDATE devices SET {updateParams} WHERE DeviceID = %s")
-    values.extend([deviceID,])
+    query = (f"UPDATE devices SET {updateParams} "
+             "WHERE DeviceID = %s")
+    values.append(deviceID)
 
     try:
         cursor.execute(query, values)
