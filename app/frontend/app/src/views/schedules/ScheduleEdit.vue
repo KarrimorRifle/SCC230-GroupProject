@@ -253,23 +253,33 @@ const endAvailable = computed(() => {
 
 const validDevices = ref<Device[]>([
   {
-    id: "nadandin",
-    name: "Device1",
+    id: "osjuwhvaifjUfssaNDaisa",
+    name: "Smart lamp",
     isActive: true,
     data: {
-      var1: "NUMBER",
-      var2: "NUMBER",
-      var3: "BOOLEAN",
+      bright_value_v2: "NUMBER",
+      temp_value_v2: "NUMBER",
+      switch_led: "BOOLEAN",
     },
   },
   {
-    id: "NANA",
-    name: "Device2",
+    id: "FashbfyvbaIYGddbabsju",
+    name: "Motion detector",
     isActive: true,
     data: {
-      var1: "NUMBER",
-      var2: "BOOLEAN",
-      var3: "BOOLEAN",
+      motion_dectected: "BOOLEAN",
+      swwitch_motion: "BOOLEAN",
+    },
+  },
+  {
+    id: "haifbaofnjsanpodjaSFD",
+    name: "Wifi plug",
+    isActive: true,
+    data: {
+      switch_1: "BOOLEAN",
+      cur_voltage: "NUMBER",
+      cur_current: "NUMBER",
+      cur_power: "NUMBER",
     },
   },
 ]);
@@ -281,7 +291,7 @@ const fetchSchedule = async () => {
   });
   schedule.value = data.data;
   // console.log(data);
-  // console.log(schedule.value?.Code);
+  console.log(schedule.value?.Code);
   if (schedule.value && data.data.Code[schedule.value.Code.length - 1])
     nextNum.value = data.data.Code[schedule.value.Code.length - 1].Number + 1;
 };

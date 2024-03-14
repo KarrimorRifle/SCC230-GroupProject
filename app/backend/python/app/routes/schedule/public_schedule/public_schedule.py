@@ -104,6 +104,11 @@ def rate_public_schedule(account, cursor, connection, scheduleID):
 def get_public_schedules():
     cursor = current_app.config['cursor']
 
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     cursor.execute("SELECT ScheduleID, ScheduleName, IsActive, IsPublic, Rating, IsDraft, CopyFrom FROM schedules WHERE IsPublic = 1 "
                    "ORDER BY Rating DESC, ScheduleName ASC")
     schedules = cursor.fetchall()
@@ -115,6 +120,11 @@ def single_public_schedule_routes(scheduleID):
     account = getAccount((request.method != 'POST'))
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_one_public_schedule(account, cursor, scheduleID)
@@ -128,5 +138,10 @@ def public_hub_schedule_routes(hubID, scheduleID):
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
     account = getAccount()
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     return save_public_schedule_to_hub(account, cursor, connection, hubID, scheduleID)

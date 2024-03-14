@@ -192,6 +192,12 @@ def hub_get_users_route(hubID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     clear_expired_tokens(cursor, connection)
     if request.method == 'GET':
         return get_hub_users(account, cursor, hubID)
@@ -208,6 +214,12 @@ def hub_user_route(hubID, accountID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     clear_expired_tokens(cursor, connection)
     if request.method == 'DELETE':
         return remove_hub_user(account, cursor, hubID, accountID)
@@ -224,16 +236,28 @@ def hub_invite_route(hubID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     clear_expired_tokens(cursor, connection)
     return create_invite_token(account, cursor, connection, hubID)
 
 @hub_user.route('/hub/invite/<token>', methods=['POST'])
 def join_hub_route(token):
-    account = getAccount()
+    account = getAccount(False)
     if account is None:
         return jsonify({'error': 'Session ID is invalid'}), 401
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
+
+    try:
+        cursor.fetchall()
+    except:
+        pass
+
     clear_expired_tokens(cursor, connection)
     return accept_hub_invite(account, cursor, connection, token)

@@ -46,6 +46,24 @@ Values("Accojk42VvlqdeBpOBc","Hubk2nj28jwij123msd",5);
 INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
 Values("Acc89kaE64Aize3NX2j","Hubk2nj28jwij123msd",3);
 
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk23098j010123msd","View Hub");
+
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk23098j101123msd","Activate Hub");
+
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk23098j001123msd","Edit Hub");
+
+INSERT INTO hubs(`HubID`,`HubName`)
+Values("Hubk23098j100123msd","Admin Hub");
+
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Acc89kaE64Aize3NX2j","Hubk23098j010123msd",5), ("Acc89kaE64Aize3NX2j","Hubk23098j101123msd",5), ("Acc89kaE64Aize3NX2j","Hubk23098j001123msd",5), ("Acc89kaE64Aize3NX2j","Hubk23098j100123msd",5);
+
+INSERT INTO accounts_hubsRelation(`AccountID`,`HubID`,`PermissionLevel`)
+Values("Accojk42VvlqdeBpOBc","Hubk23098j010123msd",1), ("Accojk42VvlqdeBpOBc","Hubk23098j101123msd",2), ("Accojk42VvlqdeBpOBc","Hubk23098j001123msd",3), ("Accojk42VvlqdeBpOBc","Hubk23098j100123msd",4);
+
 CREATE TABLE `hub_inviteTokens`(
     `TokenID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `HubID` VARCHAR(100) NOT NULL,

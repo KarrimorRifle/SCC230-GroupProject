@@ -22,12 +22,12 @@ def get_hubs(account, cursor):
 
 # Function returns one hub linked to user specified by hubID in url
 def get_one_hub(account, cursor, hubID):
-    query = ("SELECT * FROM accounts_hubsRelation "
+    query = ("SELECT PermissionLevel FROM accounts_hubsRelation "
              "WHERE AccountID = %s AND HubID = %s")
     cursor.execute(query, (account['AccountID'], hubID,))
     hub = cursor.fetchone()
 
-    if hub is None:
+    if hub.get('PermissionLevel') is None:
         return jsonify({"error": "Hub not found"}), 404
     
     permLevel = hub['PermissionLevel']
@@ -114,7 +114,10 @@ def hub_route():
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_hubs(account, cursor)
@@ -130,7 +133,10 @@ def single_hub_route(hubID):
 
     cursor = current_app.config['cursor']
     connection = current_app.config['connection']
-    cursor.fetchall()
+    try:
+        cursor.fetchall()
+    except:
+        pass
 
     if request.method == 'GET':
         return get_one_hub(account, cursor, hubID)
