@@ -343,8 +343,42 @@ const deleteDevice = (id: string) =>
       );
     });
 
-const saveDevice = () => {
-  console.log("saving");
+const saveDevice = async () => {
+  let data = await axios
+    .patch(
+      `http://localhost:5000/hub/${HubID}/device/${editingDevice.value?.DeviceID}`,
+      editingDevice,
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Couldn't save device",
+        "Something happened, try again later",
+        "danger"
+      );
+      return;
+    });
+
+  if (data && data.request.status == 200) {
+    notif.value?.show(
+      "Device saved",
+      "Your device's details have been successfully updated",
+      "success"
+    );
+    editingDevice.value = undefined;
+    editing.value = false;
+    setup();
+    return;
+  } else {
+    notif.value?.show(
+      "Couldn't save device",
+      "Something happened, try again later",
+      "danger"
+    );
+  }
 };
 
 setup();
