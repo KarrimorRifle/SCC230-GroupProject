@@ -94,7 +94,7 @@
         </div>
       </div>
       <div
-        class="card container"
+        class="card container mb-2"
         v-for="device in devices"
         :key="device.DeviceID"
       >
@@ -203,9 +203,34 @@ const editDevice = (id: string) => {
   console.log("edit");
 };
 
-const deleteDevice = (id: string) => {
-  console.log("delete");
-};
+const deleteDevice = (id: string) =>
+  axios
+    .delete(`http://localhost:5000/hub/${HubID}/device/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      if (response.request.status == 200)
+        notif.value?.show(
+          "Device added",
+          "Your device was added to the hub!",
+          "success"
+        );
+      else
+        notif.value?.show(
+          "Something weird happened...",
+          "Something went wrong, try again later",
+          "warning"
+        );
+      setup();
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to remove device",
+        "Something went wrong, try again later",
+        "danger"
+      );
+    });
 
 setup();
 </script>
