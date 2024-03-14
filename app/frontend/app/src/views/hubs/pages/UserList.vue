@@ -2,6 +2,9 @@
   <div class="hub-user-list-viewer container-fluid flex-grow-1 pt-3">
     <div class="row">
       <div class="input-group">
+        <button class="input-group-text btn btn-success" @click="createToken()">
+          +
+        </button>
         <input
           type="text"
           class="form-control"
@@ -217,7 +220,39 @@ const remove = async (id: string, name: string) => {
     "warning"
   );
 
-  setup()
+  setup();
+};
+
+const createToken = async () => {
+  let response = await axios
+    .post(
+      `http://localhost:5000/hub/${HubID}/invite`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to create invite token",
+        "Something went wrong, try again later",
+        "danger"
+      );
+      return;
+    });
+
+  if (response && response.data) {
+    const token = response.data;
+    await navigator.clipboard.writeText(
+      `http://localhost:8080/hubs?invite=true&hub=${token.HubID}&token=${token.Token}`
+    );
+    notif.value?.show(
+      "Invite token created",
+      "The invite link has been copied to your clipboard: usable for 24 hours",
+      "success"
+    );
+  }
 };
 
 setup();
