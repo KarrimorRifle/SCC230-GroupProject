@@ -41,5 +41,5 @@ export interface EditingDevice {
     Name: string;
     Type: string;
     Access: 0 | 1;
-  }
+  };
 }

@@ -146,7 +146,7 @@ import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 
 const loading = ref<boolean>(true);
-const editing = ref<boolean>(true);
+const editing = ref<boolean>(false);
 const editingDevice = ref<EditingDevice>();
 
 const notif = ref<typeof NotificationModule>();
@@ -213,8 +213,32 @@ const addNewDevice = async () => {
   setup();
 };
 
-const editDevice = (id: string) => {
-  console.log("edit");
+const editDevice = async (id: string) => {
+  let request = await axios
+    .get(`http://localhost:5000/hub/${HubID}/device/${id}`, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Unable to get device data",
+        "Unable to retrieve data on the device, try again later",
+        "warning"
+      );
+      return;
+    });
+
+  if (request && request.request.status == 200) {
+    console.log(request.data);
+    editingDevice.value = request.data;
+    editing.value = true;
+    return;
+  } else
+    notif.value?.show(
+      "Unable to get device data",
+      "Unable to retrieve data on the device, try again later",
+      "warning"
+    );
 };
 
 const deleteDevice = (id: string) =>
