@@ -69,7 +69,6 @@ class test_user(unittest.TestCase):
         response = self.client_server.patch(url, json=payload)
 
         data = json.loads(response.data)
-        print(data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('DeviceID', data)
         self.assertIn('DeviceName', data)
