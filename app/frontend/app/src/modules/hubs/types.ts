@@ -22,3 +22,9 @@ export interface HubDevice {
   DeviceName: string;
   Company: string;
 }
+
+export interface NewHubDevice {
+  DeviceName: string;
+  DeviceType: string;
+  IpAddress?: string;
+}
