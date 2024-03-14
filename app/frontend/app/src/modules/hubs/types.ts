@@ -28,3 +28,18 @@ export interface NewHubDevice {
   DeviceType: string;
   IpAddress?: string;
 }
+
+export interface EditingDevice {
+  DeviceID: string;
+  DeviceName: string;
+  IpAddress: string;
+  Key: string;
+  Version: number;
+  Company: string;
+  HubID: string;
+  Vars: {
+    Name: string;
+    Type: string;
+    Access: 0 | 1;
+  }
+}

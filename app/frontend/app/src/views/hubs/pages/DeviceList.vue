@@ -140,13 +140,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { HubDevice, NewHubDevice } from "@/modules/hubs/types";
+import { HubDevice, NewHubDevice, EditingDevice } from "@/modules/hubs/types";
 import axios from "axios";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 
 const loading = ref<boolean>(true);
 const editing = ref<boolean>(true);
+const editingDevice = ref<EditingDevice>();
 
 const notif = ref<typeof NotificationModule>();
 const devices = ref<HubDevice[]>([]);
