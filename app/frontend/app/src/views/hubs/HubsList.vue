@@ -212,6 +212,12 @@ const setup = async () => {
 
   console.log(data.data);
   hubList.value = data.data;
+
+  if (
+    router.currentRoute.value.query.invite == "true" &&
+    typeof router.currentRoute.value.query.token == "string"
+  )
+    joinHub(router.currentRoute.value.query.token);
 };
 
 const filteredHubs = computed(() => {
@@ -305,6 +311,38 @@ const leaveHub = async (id: string) => {
   notif.value?.show("Hub left", "Succesfully able to leave hub", "success");
 
   setup();
+};
+
+const joinHub = async (HubToken: string) => {
+  let data = await axios
+    .post(
+      `http://localhost:5000/hub/invite/${HubToken}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      if (e.code == "500")
+        notif.value?.show(
+          "Unable to join hub!",
+          "Something went wrong, try again later"
+        );
+      else
+        notif.value?.show(
+          "Unable to join hub!",
+          "Something went wrong, try again later"
+        );
+      return;
+    });
+
+  if (data && data.data) router.push(`/hubs/${data.data.HubID}`);
+  else
+    notif.value?.show(
+      "WHAT!",
+      "Something strange happened? check if you did join the hub via the list!"
+    );
 };
 
 setup();
