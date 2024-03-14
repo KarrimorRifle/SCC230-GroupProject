@@ -8,6 +8,8 @@
         <input
           type="text"
           class="form-control"
+          v-model="searchValue"
+          v-on:keyup="setup()"
           placeholder="Find user by name"
         />
         <div class="input-group-text">Sort by:</div>
@@ -143,6 +145,8 @@ import PermissionsIcon from "../components/PermissionsIcon.vue";
 
 const notif = ref<typeof NotificationModule>();
 const accounts = ref<HubUser[]>([]);
+const searchMode = ref<string>("name");
+const searchValue = ref<string>("");
 
 const props = defineProps<{
   permissionLevel: number;
@@ -170,7 +174,9 @@ const setup = async () => {
 
   accounts.value = data.data;
   accounts.value = accounts.value.filter(
-    (item) => item.AccountID != account.data.AccountID
+    (item) =>
+      item.AccountID != account.data.AccountID &&
+      item.Name.toUpperCase().includes(searchValue.value.toUpperCase())
   );
 };
 

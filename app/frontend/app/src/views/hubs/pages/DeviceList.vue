@@ -13,6 +13,8 @@
             :class="{ 'rounded-bottom-0': addItem }"
             type="text"
             v-model="searchValue"
+            v-on:keyup="setup()"
+            placeholder="Find device"
           />
           <button
             class="input-group-text dropdown-toggle"
@@ -249,9 +251,17 @@ const setup = async () => {
       console.log(e);
       return;
     });
-  console.log(data.data);
-  devices.value = data.data;
-  loading.value = false;
+  if (searchMode.value == "name") {
+    devices.value = data.data.filter((item) =>
+      item.DeviceName.toUpperCase().includes(searchValue.value.toUpperCase())
+    );
+    loading.value = false;
+  } else {
+    devices.value = data.data.filter((item) =>
+      item.Company.toUpperCase().includes(searchValue.value.toUpperCase())
+    );
+    loading.value = false;
+  }
 };
 
 const addNewDevice = async () => {
