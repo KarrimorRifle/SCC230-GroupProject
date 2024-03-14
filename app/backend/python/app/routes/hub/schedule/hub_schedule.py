@@ -56,7 +56,7 @@ def add_hub_schedule(account, cursor, connection, hubID, scheduleID):
     
     schedule = json.loads(get_schedule_detail(account, cursor, scheduleID, True)[0].data)
     if schedule.get('error') is not None:
-        return jsonify({'error': 'Schedule not found'}), 404
+        return jsonify({'error': 'Schedule not found with user'}), 404
 
     newID = json.loads(create_schedule(account, cursor, connection, schedule)[0].data).get('ScheduleID')
     schedule['Trigger'] = None
@@ -116,6 +116,11 @@ def create_hub_schedule(account, cursor, connection, hubID):
 
     query = ("UPDATE schedules SET HubID = %s WHERE ScheduleID = %s")
     cursor.execute(query, (hubID, newID))
+    try:
+        connection.commit()
+    except:
+        connection.rollback()
+        return jsonify({'error': 'Error adding schedule to hub'}), 500
 
     return get_schedule_detail(account, cursor, newID, True)
 
@@ -134,7 +139,7 @@ def hub_schedule_routes(hubID):
 
     if request.method == 'GET':
         return get_hub_schedules(account, cursor, hubID)
-    elif request.method == 'POST':
+    else:
         return create_hub_schedule(account, cursor, connection, hubID)
 
 @hub_schedule.route('/hub/<hubID>/schedule/<scheduleID>', methods=['GET', 'DELETE', 'PATCH', 'POST'])
