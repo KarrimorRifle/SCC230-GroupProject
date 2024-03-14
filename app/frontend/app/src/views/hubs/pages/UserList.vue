@@ -9,7 +9,7 @@
           type="text"
           class="form-control"
           v-model="searchValue"
-          v-on:keyup="setup()"
+          v-on:keyup="filterUsers()"
           placeholder="Find user by name"
         />
         <div class="input-group-text">Sort by:</div>
@@ -145,8 +145,10 @@ import PermissionsIcon from "../components/PermissionsIcon.vue";
 
 const notif = ref<typeof NotificationModule>();
 const accounts = ref<HubUser[]>([]);
+const allAccounts = ref<HubUser[]>([]);
 const searchMode = ref<string>("name");
 const searchValue = ref<string>("");
+let account = "";
 
 const props = defineProps<{
   permissionLevel: number;
@@ -168,12 +170,16 @@ const setup = async () => {
       return;
     });
 
-  let account = await axios.get("http://localhost:5000/accounts", {
+  account = await axios.get("http://localhost:5000/accounts", {
     withCredentials: true,
   });
 
-  accounts.value = data.data;
-  accounts.value = accounts.value.filter(
+  allAccounts.value = data.data;
+  filterUsers();
+};
+
+const filterUsers = async () => {
+  accounts.value = allAccounts.value.filter(
     (item) =>
       item.AccountID != account.data.AccountID &&
       item.Name.toUpperCase().includes(searchValue.value.toUpperCase())
