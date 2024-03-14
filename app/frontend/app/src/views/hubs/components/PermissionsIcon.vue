@@ -1,5 +1,11 @@
 <template>
   <img
+    v-if="permissionLevel == 0"
+    src="@/assets/stop.svg"
+    alt=""
+    style="max-width: 2rem"
+  />
+  <img
     v-if="permissionLevel == 5"
     src="@/assets/permissions/5.svg"
     alt=""
