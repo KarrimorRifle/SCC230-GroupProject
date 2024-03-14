@@ -77,8 +77,9 @@
               v-else
               class="input-group-text p-0"
               style="width: 5rem"
+              type="number"
               :style="{ 'border-color': borderColor }"
-              placeholder="00"
+              @click="console.log(code[0])"
               v-model.number="code[0]"
             />
           </div>
