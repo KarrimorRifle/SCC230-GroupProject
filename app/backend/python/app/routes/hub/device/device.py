@@ -119,10 +119,10 @@ def update_device(account, cursor, connection, deviceID, hubID):
     #, (deviceID, hubID, account['AccountID'],)
     checkExists = cursor.fetchone()
 
-    if checkExists is None or perms < EditPermLevel:
+    if perms < EditPermLevel:
         return({"error": "Forbidden access"}), 403
     
-    if checkExists['DeviceID'] != deviceID:
+    if checkExists['DeviceID'] is None:
         return({"error": "Device not found, ID fon"}), 404
     
     updateParams = []
