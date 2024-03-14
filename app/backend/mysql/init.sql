@@ -86,9 +86,6 @@ CREATE TABLE `devices`(
     FOREIGN KEY (HubID) REFERENCES hubs(HubID) ON DELETE CASCADE
 );
 
-INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
-VALUES("bfa2ed780d4b994c7dqalg", "Wifi Plug", ">(zZA]v_npIbO}w1", "192.168.1.61", 3.3, "Tuya", "Hubk2nj28jwij123msd");
-
 CREATE TABLE `device_vars`(
     `VarID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `DeviceID` varchar(100) NOT NULL,
@@ -189,3 +186,38 @@ CREATE TABLE `error_log`(
 
 -- To reset DB delete the container and start up again
 -- if any changes were made do the last line AND `docker-compose build`
+
+-- BELOW IS FOR TESTING PURPOSES
+
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("bfa2ed780d4b994c7dqalg", "Wifi Plug", ">(zZA]v_npIbO}w1", "192.168.1.61", 3.3, "Tuya", "Hubk2nj28jwij123msd");
+
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("bfc75a91ddb8930d11rdux", "Smart Bulb", "D?2+dzIKKbTOtUH;", "192.168.1.191", 3.3, "Tuya", "Hubk2nj28jwij123msd");
+
+INSERT INTO devices(`DeviceID`,`DeviceName`,`Key`,`IpAddress`,`Version`,`Company`,`HubID`)
+VALUES("bfee19f9ec66b8914b1hmq", "PC Temperature Sensor", "}d|?0XYdtUWL7Ii[", "192.168.1.155", 3.4, "Tuya", "Hubk2nj28jwij123msd");
+
+INSERT INTO schedules(`ScheduleID`,`ScheduleName`,`AuthorID`,`HubID`, `IsActive`, `IsPublic`, `IsDraft`)
+Values("Schk000jd2i23kd34jg","Test Schedule","Accojk42VvlqdeBpOBc","Hubk2nj28jwij123msd",1,0,1);
+
+INSERT INTO triggers(`TriggerID`,`ScheduleID`)
+Values("Trgk0000ej849dj345k","Schk000jd2i23kd34jg");
+
+INSERT INTO trigger_data(`TriggerID`,`Data`,`ListPos`)
+Values("Trgk0000ej849dj345k", "bfa2ed780d4b994c7dqalg.switch_1", 0), ("Trgk0000ej849dj345k", "==", 1), ("Trgk0000ej849dj345k", "True", 2);
+
+INSERT INTO function_blocks(`BlockID`,`CommandType`,`Num`,`ScheduleID`)
+Values("Blk0000111111122222", "IF", 1, "Schk000jd2i23kd34jg"), ("Blk0000111111122223", "SET", 2, "Schk000jd2i23kd34jg"), ("Blk0000111111122224", "END", 3, "Schk000jd2i23kd34jg"), ("Blk0000111111122225", "ELSE", 4, "Schk000jd2i23kd34jg"), ("Blk0000111111122226", "SET", 5, "Schk000jd2i23kd34jg"), ("Blk0000111111122227", "END", 6, "Schk000jd2i23kd34jg");
+
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122222", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122222", "Schk000jd2i23kd34jg", 1), ("True", "Blk0000111111122222", "Schk000jd2i23kd34jg", 2);
+
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122223", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122223", "Schk000jd2i23kd34jg", 1), ("False", "Blk0000111111122223", "Schk000jd2i23kd34jg", 2);
+
+INSERT INTO function_block_links(`ParentID`,`Link`,`ScheduleID`)
+Values("Blk0000111111122224", 1, "Schk000jd2i23kd34jg"), ("Blk0000111111122227", 4, "Schk000jd2i23kd34jg");
+
+INSERT INTO function_block_params(`Value`,`FunctionBlockID`,`ScheduleID`,`ListPos`)
+Values("bfc75a91ddb8930d11rdux.switch_led", "Blk0000111111122226", "Schk000jd2i23kd34jg", 0), ("==", "Blk0000111111122226", "Schk000jd2i23kd34jg", 1), ("True", "Blk0000111111122226", "Schk000jd2i23kd34jg", 2);
