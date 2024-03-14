@@ -1,17 +1,42 @@
 <template>
   <div class="hub-device-list-viewer container-fluid flex-grow-1 pt-3">
     <div class="row">
-      <div class="mt-3"></div>
-      <div class="card">
-        <div
-          v-for="device in devices"
-          :key="device.DeviceID"
-          class="row card-body mb-2"
+      <div class="input-group col-12" :class="{ 'rounded-bottom-0': addItem }">
+        <input
+          class="form-control"
+          :class="{ 'rounded-bottom-0': addItem }"
+          type="text"
+        />
+        <button
+          class="input-group-text dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-          <div class="col-6 text-start ps-0">
-            {{ device.DeviceName }}
-          </div>
-        </div>
+          Search by:
+          {{ searchMode.charAt(0).toUpperCase() + searchMode.slice(1) }}
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <button class="dropdown-item" @click="searchMode = 'name'">
+              Name
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item" @click="searchMode = 'company'">
+              Company
+            </button>
+          </li>
+        </ul>
+        <button
+          class="input-group-text btn"
+          :class="addItem ? 'btn-danger rounded-bottom-0' : 'btn-secondary'"
+          @click="addItem = !addItem"
+        >
+          {{ addItem ? "x" : "+" }}
+        </button>
+      </div>
+      <div v-if="addItem" class="col-12 card border-top-0">
+        <div class="card-body">hello</div>
       </div>
     </div>
   </div>
@@ -26,6 +51,10 @@ import NotificationModule from "@/components/NotificationModule.vue";
 
 const notif = ref<typeof NotificationModule>();
 const devices = ref<HubDevice[]>([]);
+const searchMode = ref<string>("name");
+const searchValue = ref<string>("");
+
+const addItem = ref<boolean>(false);
 
 const HubID = router.currentRoute.value.params.id;
 const setup = async () => {
