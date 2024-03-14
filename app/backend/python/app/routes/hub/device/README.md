@@ -50,12 +50,15 @@ List of dict objects contaning:
 
 #### POST:
 
-Creates new device in the database.
+Creates new device in the database. HubID must be valid in URL.
 
 ##### Required Parameters:
+-	(string)DeviceID – Unique ID to identify specified Device
 -	(string)DeviceName – Name of Device
--	(string)DeviceType – Physical type of Device
 -	(string)IpAddress – IP Address of Device
+-	(string)Key – Device Key
+-   (float)Version - Version Num of Device
+-   (string)Company - Company Device Belongs to
 
 ##### Return Values:
 -	(string)DeviceID – Unique ID to identify specified Device
