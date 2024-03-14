@@ -51,51 +51,72 @@
             class="container-fluid container text-light d-flex flex-column flex-grow-1"
             v-if="hub"
           >
-            <div class="row">
+            <div class="row pb-2">
+              <h2 class="text-lg-start text-middle mb-0 ps-3 col-lg-8 col-12">
+                <permissions-icon :permission-level="hub.PermissionLevel" />
+                <b class="pt-4">
+                  {{
+                    hub.PermissionLevel >= 4
+                      ? " HUB PAGE"
+                      : " HUB PAGE: " + hub.HubName
+                  }}
+                </b>
+              </h2>
               <div
-                class="container-fluid d-flex justify-content-between mb-3 mt-2 px-2"
+                v-if="hub.PermissionLevel == 5"
+                class="col-lg-4 col-12 d-flex justify-content-lg-end justify-content-start p-lg-0 pe-lg-2 pb-3 ps-4"
               >
-                <h2 class="text-start mb-0 ps-3 col-lg-6 col-12">
-                  <b>
-                    {{
-                      hub.PermissionLevel >= 4
-                        ? "HUB PAGE: " + hub.HubName
-                        : "HUB PAGE"
-                    }}
-                  </b>
-                </h2>
-                <div
-                  v-if="hub.PermissionLevel == 5"
-                  class="col-lg-6 col-12 d-flex justify-content-end"
-                >
-                  <div class="input-group" v-if="deleting">
-                    <input
-                      type="text"
-                      placeholder="Enter name of hub"
-                      class="form-control"
-                      v-model="deletingHubName"
-                    />
-                    <button
-                      class="input-group-text btn btn-danger"
-                      @click="deleteHub()"
-                    >
-                      DELETE
-                    </button>
-                    <button
-                      class="input-group-text btn btn-secondary"
-                      @click="deleting = false"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                <div class="input-group" v-if="deleting">
+                  <input
+                    type="text"
+                    placeholder="Enter name of hub"
+                    class="form-control"
+                    v-model="deletingHubName"
+                  />
                   <button
-                    class="btn btn-danger"
-                    v-else
-                    @click="deleting = true"
+                    class="input-group-text btn btn-danger"
+                    @click="deleteHub()"
                   >
                     DELETE
                   </button>
+                  <button
+                    class="input-group-text btn btn-secondary"
+                    @click="deleting = false"
+                  >
+                    Cancel
+                  </button>
                 </div>
+                <button class="btn btn-danger" v-else @click="deleting = true">
+                  DELETE
+                </button>
+              </div>
+              <div
+                v-else
+                class="col-lg-4 col-12 d-flex justify-content-lg-end justify-content-start p-lg-0 pe-lg-2 pb-3 ps-4"
+              >
+                <div class="input-group" v-if="deleting">
+                  <input
+                    type="text"
+                    placeholder="Enter hub name"
+                    class="form-control"
+                    v-model="deletingHubName"
+                  />
+                  <button
+                    class="input-group-text btn btn-danger"
+                    @click="leaveHub()"
+                  >
+                    LEAVE
+                  </button>
+                  <button
+                    class="input-group-text btn btn-secondary"
+                    @click="deleting = false"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <button class="btn btn-danger" v-else @click="deleting = true">
+                  LEAVE
+                </button>
               </div>
             </div>
             <div class="row px-3" v-if="hub.PermissionLevel >= 4">
@@ -124,7 +145,10 @@
               style="min-height: 0; max-height: 100%; height: 100%"
             >
               <div class="container-fluid d-flex flex-column">
-                <user-list v-if="location == 'users'" />
+                <user-list
+                  :permission-level="hub.PermissionLevel"
+                  v-if="location == 'users'"
+                />
               </div>
             </div>
           </div>
@@ -142,6 +166,7 @@ import { HubBase } from "@/modules/hubs/types";
 import router from "@/router";
 import NotificationModule from "@/components/NotificationModule.vue";
 import UserList from "./pages/UserList.vue";
+import PermissionsIcon from "./components/PermissionsIcon.vue";
 
 const hub = ref<HubBase>();
 const notif = ref<typeof NotificationModule>();
@@ -210,6 +235,30 @@ const deleteHub = () => {
         return;
       }
     });
+};
+
+const leaveHub = async () => {
+  if (deletingHubName.value != hub.value?.HubName) {
+    notif.value?.show(
+      "Couln't leave hub",
+      "The input doesn't match the hub's name",
+      "danger"
+    );
+    return;
+  }
+  await axios
+    .delete(`http://localhost:5000/hub/${hubID}/user`, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Couln't leave hub",
+        "Server error, try again later",
+        "warning"
+      );
+    });
+  router.push("/hubs");
 };
 setup();
 </script>

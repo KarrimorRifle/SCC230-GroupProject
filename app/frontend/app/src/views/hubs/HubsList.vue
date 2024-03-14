@@ -163,6 +163,17 @@
                       DELETE
                     </button>
                   </div>
+                  <div
+                    class="col-xxl-1 col-md-2 col-4 ps-2 py-2 border-start d-flex"
+                    v-else
+                  >
+                    <button
+                      class="btn btn-sm btn-outline-danger text-light border-2"
+                      @click="leaveHub(hub.HubID)"
+                    >
+                      LEAVE
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -175,6 +186,7 @@
       </div>
     </div>
   </div>
+  <notification-module ref="notif" />
 </template>
 
 <script setup lang="ts">
@@ -183,9 +195,11 @@ import axios from "axios";
 import { HubsList } from "@/modules/hubs/types";
 import router from "@/router";
 import PermissionsIcon from "./components/PermissionsIcon.vue";
+import NotificationModule from "@/components/NotificationModule.vue";
 
 const hubList = ref<HubsList[]>([]);
 const searchValue = ref<string>("");
+const notif = ref<typeof NotificationModule>();
 
 //sorting menu
 const sortRank = ref<"NONE" | "ASC" | "DESC">("NONE");
@@ -198,6 +212,12 @@ const setup = async () => {
 
   console.log(data.data);
   hubList.value = data.data;
+
+  if (
+    router.currentRoute.value.query.invite == "true" &&
+    typeof router.currentRoute.value.query.token == "string"
+  )
+    joinHub(router.currentRoute.value.query.token);
 };
 
 const filteredHubs = computed(() => {
@@ -221,23 +241,108 @@ const filteredHubs = computed(() => {
 });
 
 const makeHub = async () => {
-  await axios.post(
-    "http://localhost:5000/hub",
-    {
-      HubName: `HUB ${hubList.value.length}`,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+  let data = await axios
+    .post(
+      "http://localhost:5000/hub",
+      {
+        HubName: `HUB ${hubList.value.length}`,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Couln't make hub",
+        "Server error, try again later",
+        "warning"
+      );
+    });
+
+  if (data && data.data) {
+    console.log(data);
+    await navigator.clipboard.writeText(
+      `http://localhost:8080/hubs/${data.data.HubID}`
+    );
+    notif.value?.show(
+      "Hub created",
+      `Created hub, ${data.data.HubID}! link copied to clipboard!`,
+      "success"
+    );
+  }
   setup();
 };
 
 const deleteHub = async (id: string) => {
-  await axios.delete(`http://localhost:5000/hub/${id}`, {
-    withCredentials: true,
-  });
+  await axios
+    .delete(`http://localhost:5000/hub/${id}`, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Couln't delete hub",
+        "Server error, try again later",
+        "warning"
+      );
+    });
+  notif.value?.show(
+    "Hub deleted",
+    "Succesfully able to removed hub",
+    "success"
+  );
   setup();
+};
+
+const leaveHub = async (id: string) => {
+  await axios
+    .delete(`http://localhost:5000/hub/${id}/user`, {
+      withCredentials: true,
+    })
+    .catch((e) => {
+      console.log(e);
+      notif.value?.show(
+        "Couln't leave hub",
+        "Server error, try again later",
+        "warning"
+      );
+    });
+  notif.value?.show("Hub left", "Succesfully able to leave hub", "success");
+
+  setup();
+};
+
+const joinHub = async (HubToken: string) => {
+  let data = await axios
+    .post(
+      `http://localhost:5000/hub/invite/${HubToken}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      if (e.code == "500")
+        notif.value?.show(
+          "Unable to join hub!",
+          "Something went wrong, try again later"
+        );
+      else
+        notif.value?.show(
+          "Unable to join hub!",
+          "Something went wrong, try again later"
+        );
+      return;
+    });
+
+  if (data && data.data) router.push(`/hubs/${data.data.HubID}`);
+  else
+    notif.value?.show(
+      "WHAT!",
+      "Something strange happened? check if you did join the hub via the list!"
+    );
 };
 
 setup();
