@@ -37,6 +37,8 @@ This is the github Repo for Group 5's SCC230 project
 
 -   Django:
     -   [Webucator Tutorial](https://www.webucator.com/article/connecting-django-and-vue/), [dev.to Tutorial](https://dev.to/ericnanhu/create-a-modern-application-with-django-and-vue-242j), [logRocket tutorial](https://blog.logrocket.com/how-to-build-vue-js-app-django-rest-framework/)
+-   Wait For it (program used to wait on the SQL server to start up)
+    -   [Github repo](https://github.com/vishnubob/wait-for-it)
 
 ## Updates & notes
 
