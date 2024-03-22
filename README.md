@@ -26,6 +26,7 @@ This is the github Repo for Group 5's SCC230 project
 -   Docker
 -   Github actions : CICD
 -   AWS / Some other server hosting solution
+-   Wait For it (program used to wait on the SQL server to start up) [Github repo](https://github.com/vishnubob/wait-for-it)
 
 ### APIs
 
