@@ -15,7 +15,7 @@ def get_schedules(account, cursor):
 
     return jsonify(schedules), 200
 
-# Function creates new schedule template and returns ID
+#TO BE UPDATED BASED ON DATABASE ID CHANGES
 def create_schedule(account, cursor, connection, schedule):
     scheduleName = schedule.get('ScheduleName')
     scheduleAuthor = schedule.get('AuthorID')
@@ -40,7 +40,6 @@ def create_schedule(account, cursor, connection, schedule):
 
     return jsonify({'ScheduleID':thisID}), 200
 
-# Function returns all details for specified schedule based on ID
 def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
@@ -108,8 +107,6 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
        
         links = []
         paramVals = []
-
-    # Code Snippet created by Blade to extract variables used in code block
     for i in range(2):
         for j in range(len(code)):
             for x in range(len(code[j]['Params'])):
@@ -141,7 +138,6 @@ def get_schedule_detail(account, cursor, scheduleID, hubCall=False):
     
     return jsonify(details), 200
 
-# Function created by Blade to update dictionary of variables in code block
 def VarDictUpdate(variable, svalue, varDict):
     try:
         if(variable in varDict):
@@ -218,7 +214,7 @@ def delete_schedule(account, cursor, connection, scheduleID, hubCall=False):
 
     return jsonify({'ScheduleID': scheduleID}), 200
 
-# Function updates schedule of specified ID based on input parameters if user is author or has permissions
+# Function updates schedule of specified ID if user is author and based on input params
 def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=False):
     query = ("SELECT ScheduleID FROM schedules "
                 "WHERE AuthorID = %s AND ScheduleID = %s")
@@ -280,7 +276,6 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return jsonify({"error" : "Schedule couldn't be updated", "details":f"{e}"}), 500
 
-    # Update triggers of a schedule
     if newTriggers is not None and newTriggers != []:
         query = ("SELECT TriggerID FROM triggers "
                  "WHERE ScheduleID = %s")
@@ -333,7 +328,6 @@ def update_schedule(account, cursor, connection, scheduleID, schedule, hubCall=F
             connection.rollback()
             return(jsonify({"error":"Unable to update schedule trigger data", "details":f"{e}"})), 500
 
-    # Update code blocks for schedule
     if newCode is None:
         return get_schedule_detail(account, cursor, scheduleID)
 
@@ -422,6 +416,7 @@ def scheduleResponse():
     cursor.close()
     connection.close()
 
+# TO BE FIXED ONCE THE DATABASE CHANGES ARE MADE WITH IDs
 @schedule.route("/schedule/<string:scheduleID>" , methods=['PATCH', 'DELETE', 'GET'])
 def scheduleDetails(scheduleID):
     #Get current user info
